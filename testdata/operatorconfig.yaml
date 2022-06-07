@@ -1,0 +1,5 @@
+peer:
+  timeouts:
+    dbMigration:
+      jobStart: 30s
+      jobCompletion: 45s

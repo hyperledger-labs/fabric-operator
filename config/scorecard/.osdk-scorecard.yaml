@@ -1,0 +1,17 @@
+scorecard:
+  output: json
+  bundle: bundle/manifests
+  plugins:
+    - basic:
+        cr-manifest:
+          - "config/samples/ibp.com_v1beta1_ibpca.yaml"
+          - "config/samples/ibp.com_v1beta1_ibpconsole.yaml"
+          - "config/samples/ibp.com_v1beta1_ibppeer.yaml"
+          - "config/samples/ibp.com_v1beta1_ibporderer.yaml"
+    - olm:
+        cr-manifest:
+          - "config/samples/ibp.com_v1beta1_ibpca.yaml"
+          - "config/samples/ibp.com_v1beta1_ibpconsole.yaml"
+          - "config/samples/ibp.com_v1beta1_ibppeer.yaml"
+          - "config/samples/ibp.com_v1beta1_ibporderer.yaml"
+        csv-path: "config/manifests/bases/fabric-opensource-operator.clusterserviceversion.yaml"

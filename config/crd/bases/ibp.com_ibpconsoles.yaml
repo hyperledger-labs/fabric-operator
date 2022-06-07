@@ -1,0 +1,804 @@
+#
+# Copyright contributors to the Hyperledger Fabric Operator project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at:
+#
+# 	  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.8.0
+  creationTimestamp: null
+  name: ibpconsoles.ibp.com
+spec:
+  group: ibp.com
+  names:
+    kind: IBPConsole
+    listKind: IBPConsoleList
+    plural: ibpconsoles
+    singular: ibpconsole
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: The Console is used to deploy and manage the CA, peer, ordering
+          nodes.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: IBPConsoleSpec defines the desired state of IBPConsole
+            properties:
+              action:
+                description: Action (Optional) is action object for trigerring actions
+                properties:
+                  restart:
+                    type: boolean
+                type: object
+              allowDefaultPassword:
+                description: AllowDefaultPassword, if true, will bypass the password
+                  reset flow on the first connection to the console GUI.  By default
+                  (false), all consoles require a password reset at the first login.
+                type: boolean
+              arch:
+                description: Arch (Optional) is the architecture of the nodes where
+                  console should be deployed
+                items:
+                  type: string
+                type: array
+              authScheme:
+                description: console settings AuthScheme is auth scheme for console
+                  access
+                type: string
+              clusterdata:
+                description: ClusterData is object cluster data information
+                properties:
+                  namespace:
+                    type: string
+                  type:
+                    description: Type provides the type of cluster
+                    type: string
+                  zones:
+                    description: Zones provides the zones available
+                    items:
+                      type: string
+                    type: array
+                type: object
+              components:
+                description: Components is database name used for components
+                type: string
+              configoverride:
+                description: ConfigOverride (Optional) is the object to provide overrides
+                properties:
+                  console:
+                    description: Console is the overrides to console configuration
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  deployer:
+                    description: Deployer is the overrides to deployer configuration
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  maxnamelength:
+                    description: MaxNameLength (Optional) is the maximum length of
+                      the name that the console can have
+                    type: integer
+                type: object
+              configtxlator:
+                description: ConfigtxlatorURL is url for configtxlator server
+                type: string
+              connectionString:
+                description: ConnectionString is connection url for backend database
+                type: string
+              crn:
+                properties:
+                  account_id:
+                    type: string
+                  c_name:
+                    type: string
+                  c_type:
+                    type: string
+                  instance_id:
+                    type: string
+                  location:
+                    type: string
+                  resource_id:
+                    type: string
+                  resource_type:
+                    type: string
+                  service_name:
+                    type: string
+                  version:
+                    type: string
+                type: object
+              deployer:
+                description: Deployer is object for deployer configs
+                properties:
+                  components_db:
+                    type: string
+                  connectionstring:
+                    type: string
+                  create_db:
+                    type: boolean
+                  domain:
+                    type: string
+                type: object
+              deployerTimeout:
+                description: DeployerTimeout is timeout value for deployer calls
+                format: int32
+                type: integer
+              deployerUrl:
+                description: DeployerURL is url for deployer server
+                type: string
+              email:
+                description: Email is the email used for initial access
+                type: string
+              featureflags:
+                description: FeatureFlags is object for feature flag settings
+                properties:
+                  capabilities_enabled:
+                    type: boolean
+                  create_channel_enabled:
+                    type: boolean
+                  dev_mode:
+                    type: boolean
+                  enable_ou_identifier:
+                    type: boolean
+                  high_availability:
+                    type: boolean
+                  hsm_enabled:
+                    type: boolean
+                  import_only_enabled:
+                    type: boolean
+                  infra_import_options:
+                    properties:
+                      platform:
+                        type: string
+                      supported_cas:
+                        items:
+                          type: string
+                        type: array
+                      supported_orderers:
+                        items:
+                          type: string
+                        type: array
+                      supported_peers:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  lifecycle2_0_enabled:
+                    type: boolean
+                  mustgather_enabled:
+                    type: boolean
+                  patch_1_4to2_x_enabled:
+                    type: boolean
+                  read_only_enabled:
+                    type: boolean
+                  remote_peer_config_enabled:
+                    type: boolean
+                  saas_enabled:
+                    type: boolean
+                  scale_raft_nodes_enabled:
+                    type: boolean
+                  templates_enabled:
+                    type: boolean
+                type: object
+              iamApiKey:
+                type: string
+              ibmid:
+                properties:
+                  client_id:
+                    type: string
+                  client_secret:
+                    type: string
+                  url:
+                    type: string
+                type: object
+              imagePullSecrets:
+                description: ImagePullSecrets (Optional) is the list of ImagePullSecrets
+                  to be used for console's deployment
+                items:
+                  type: string
+                type: array
+              images:
+                description: Images (Optional) lists the images to be used for console's
+                  deployment
+                properties:
+                  configtxlatorImage:
+                    description: ConfigtxlatorImage is the name of the configtxlator
+                      image
+                    type: string
+                  configtxlatorTag:
+                    description: ConfigtxlatorTag is the tag of the configtxlator
+                      image
+                    type: string
+                  consoleImage:
+                    description: ConsoleImage is the name of the console image
+                    type: string
+                  consoleInitImage:
+                    description: ConsoleInitImage is the name of the console init
+                      image
+                    type: string
+                  consoleInitTag:
+                    description: ConsoleInitTag is the tag of the console init image
+                    type: string
+                  consoleTag:
+                    description: ConsoleTag is the tag of the console image
+                    type: string
+                  couchdbImage:
+                    description: CouchDBImage is the name of the couchdb image
+                    type: string
+                  couchdbTag:
+                    description: CouchDBTag is the tag of the couchdb image
+                    type: string
+                  deployerImage:
+                    description: DeployerImage is the name of the deployer image
+                    type: string
+                  deployerTag:
+                    description: DeployerTag is the tag of the deployer image
+                    type: string
+                  mustgatherImage:
+                    description: MustgatherImage is the name of the mustgather image
+                    type: string
+                  mustgatherTag:
+                    description: MustgatherTag is the tag of the mustgatherTag image
+                    type: string
+                type: object
+              ingress:
+                description: Ingress (Optional) is ingress object for ingress overrides
+                properties:
+                  class:
+                    description: Class (Optional) is the class to set for ingress
+                    type: string
+                  tlsSecretName:
+                    description: TlsSecretName (Optional) is the secret name to be
+                      used for tls certificates
+                    type: string
+                type: object
+              kubeconfig:
+                format: byte
+                type: string
+              kubeconfignamespace:
+                type: string
+              kubeconfigsecretname:
+                type: string
+              license:
+                description: License should be accepted by the user to be able to
+                  setup console
+                properties:
+                  accept:
+                    description: Accept should be set to true to accept the license.
+                    enum:
+                    - true
+                    type: boolean
+                type: object
+              networkinfo:
+                description: NetworkInfo is object for network overrides
+                properties:
+                  configtxlatorPort:
+                    description: ConfigtxlatorPort is the port to access configtxlator
+                    format: int32
+                    type: integer
+                  consolePort:
+                    description: ConsolePort is the port to access the console
+                    format: int32
+                    type: integer
+                  domain:
+                    description: Domain for the components
+                    type: string
+                  proxyPort:
+                    description: ProxyPort is the port to access console proxy
+                    format: int32
+                    type: integer
+                type: object
+              password:
+                description: Password is initial password to access console
+                type: string
+              passwordSecretName:
+                description: PasswordSecretName is secretname where password is stored
+                type: string
+              proxying:
+                type: boolean
+              region:
+                description: Region (Optional) is the region of the nodes where the
+                  console should be deployed
+                type: string
+              registryURL:
+                description: RegistryURL is registry url used to pull images
+                type: string
+              replicas:
+                description: Replicas (Optional - default 1) is the number of console
+                  replicas to be setup
+                format: int32
+                type: integer
+              resources:
+                description: Resources (Optional) is the amount of resources to be
+                  provided to console deployment
+                properties:
+                  configtxlator:
+                    description: Configtxlator is the resources provided to the configtxlator
+                      container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  console:
+                    description: Console is the resources provided to the console
+                      container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  couchdb:
+                    description: CouchDB is the resources provided to the couchdb
+                      container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  deployer:
+                    description: Deployer is the resources provided to the deployer
+                      container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  init:
+                    description: Init is the resources provided to the init container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                type: object
+              segmentWriteKey:
+                type: string
+              service:
+                description: Service (Optional) is the override object for console's
+                  service
+                properties:
+                  type:
+                    description: The "type" of the service to be used
+                    type: string
+                type: object
+              serviceAccountName:
+                description: ServiceAccountName defines serviceaccount used for console
+                  deployment
+                type: string
+              sessions:
+                description: Sessions is sessions database name to use
+                type: string
+              storage:
+                description: Storage (Optional - uses default storageclass if not
+                  provided) is the override object for CA's PVC config
+                properties:
+                  console:
+                    description: Console is the configuration of the storage of the
+                      console
+                    properties:
+                      class:
+                        description: Class is the storage class
+                        type: string
+                      size:
+                        description: Size of storage
+                        type: string
+                    type: object
+                type: object
+              system:
+                description: System is system database name to use
+                type: string
+              systemChannel:
+                description: SystemChannel is default systemchannel name
+                type: string
+              tlsSecretName:
+                description: TLSSecretName is secret name to load custom tls certs
+                type: string
+              usetags:
+                description: UseTags (Optional) is a flag to switch between image
+                  digests and tags
+                type: boolean
+              version:
+                description: Version (Optional) is version for the console
+                type: string
+              versions:
+                properties:
+                  ca:
+                    additionalProperties:
+                      properties:
+                        default:
+                          type: boolean
+                        image:
+                          description: CAImages is the list of images to be used in
+                            CA deployment
+                          properties:
+                            caImage:
+                              description: CAImage is the name of the CA image
+                              type: string
+                            caInitImage:
+                              description: CAInitImage is the name of the Init image
+                              type: string
+                            caInitTag:
+                              description: CAInitTag is the tag of the Init image
+                              type: string
+                            caTag:
+                              description: CATag is the tag of the CA image
+                              type: string
+                            enrollerImage:
+                              description: EnrollerImage is the name of the init image
+                                for crypto generation
+                              type: string
+                            enrollerTag:
+                              description: EnrollerTag is the tag of the init image
+                                for crypto generation
+                              type: string
+                            hsmImage:
+                              description: HSMImage is the name of the HSM image
+                              type: string
+                            hsmTag:
+                              description: HSMTag is the tag of the HSM image
+                              type: string
+                          type: object
+                        version:
+                          type: string
+                      required:
+                      - default
+                      - version
+                      type: object
+                    type: object
+                  orderer:
+                    additionalProperties:
+                      properties:
+                        default:
+                          type: boolean
+                        image:
+                          description: OrdererImages is the list of images to be used
+                            in orderer deployment
+                          properties:
+                            enrollerImage:
+                              description: EnrollerImage is the name of the init image
+                                for crypto generation
+                              type: string
+                            enrollerTag:
+                              description: EnrollerTag is the tag of the init image
+                                for crypto generation
+                              type: string
+                            grpcwebImage:
+                              description: GRPCWebImage is the name of the grpc web
+                                proxy image
+                              type: string
+                            grpcwebTag:
+                              description: GRPCWebTag is the tag of the grpc web proxy
+                                image
+                              type: string
+                            hsmImage:
+                              description: HSMImage is the name of the hsm image
+                              type: string
+                            hsmTag:
+                              description: HSMTag is the tag of the hsm image
+                              type: string
+                            ordererImage:
+                              description: OrdererImage is the name of the orderer
+                                image
+                              type: string
+                            ordererInitImage:
+                              description: OrdererInitImage is the name of the orderer
+                                init image
+                              type: string
+                            ordererInitTag:
+                              description: OrdererInitTag is the tag of the orderer
+                                init image
+                              type: string
+                            ordererTag:
+                              description: OrdererTag is the tag of the orderer image
+                              type: string
+                          type: object
+                        version:
+                          type: string
+                      required:
+                      - default
+                      - version
+                      type: object
+                    type: object
+                  peer:
+                    additionalProperties:
+                      properties:
+                        default:
+                          type: boolean
+                        image:
+                          description: PeerImages is the list of images to be used
+                            in peer deployment
+                          properties:
+                            builderImage:
+                              description: BuilderImage is the name of the builder
+                                image
+                              type: string
+                            builderTag:
+                              description: BuilderTag is the tag of the builder image
+                              type: string
+                            chaincodeLauncherImage:
+                              description: CCLauncherImage is the name of the chaincode
+                                launcher image
+                              type: string
+                            chaincodeLauncherTag:
+                              description: CCLauncherTag is the tag of the chaincode
+                                launcher image
+                              type: string
+                            couchdbImage:
+                              description: CouchDBImage is the name of the couchdb
+                                image
+                              type: string
+                            couchdbTag:
+                              description: CouchDBTag is the tag of the couchdb image
+                              type: string
+                            dindImage:
+                              description: DindImage is the name of the dind image
+                              type: string
+                            dindTag:
+                              description: DindTag is the tag of the dind image
+                              type: string
+                            enrollerImage:
+                              description: EnrollerImage is the name of the init image
+                                for crypto generation
+                              type: string
+                            enrollerTag:
+                              description: EnrollerTag is the tag of the init image
+                                for crypto generation
+                              type: string
+                            fileTransferImage:
+                              description: FileTransferImage is the name of the file
+                                transfer image
+                              type: string
+                            fileTransferTag:
+                              description: FileTransferTag is the tag of the file
+                                transfer image
+                              type: string
+                            fluentdImage:
+                              description: FluentdImage is the name of the fluentd
+                                logger image
+                              type: string
+                            fluentdTag:
+                              description: FluentdTag is the tag of the fluentd logger
+                                image
+                              type: string
+                            goEnvImage:
+                              description: GoEnvImage is the name of the goenv image
+                              type: string
+                            goEnvTag:
+                              description: GoEnvTag is the tag of the goenv image
+                              type: string
+                            grpcwebImage:
+                              description: GRPCWebImage is the name of the grpc web
+                                proxy image
+                              type: string
+                            grpcwebTag:
+                              description: GRPCWebTag is the tag of the grpc web proxy
+                                image
+                              type: string
+                            hsmImage:
+                              description: HSMImage is the name of the hsm image
+                              type: string
+                            hsmTag:
+                              description: HSMTag is the tag of the hsm image
+                              type: string
+                            javaEnvImage:
+                              description: JavaEnvImage is the name of the javaenv
+                                image
+                              type: string
+                            javaEnvTag:
+                              description: JavaEnvTag is the tag of the javaenv image
+                              type: string
+                            nodeEnvImage:
+                              description: NodeEnvImage is the name of the nodeenv
+                                image
+                              type: string
+                            nodeEnvTag:
+                              description: NodeEnvTag is the tag of the nodeenv image
+                              type: string
+                            peerImage:
+                              description: PeerImage is the name of the peer image
+                              type: string
+                            peerInitImage:
+                              description: PeerInitImage is the name of the peer init
+                                image
+                              type: string
+                            peerInitTag:
+                              description: PeerInitTag is the tag of the peer init
+                                image
+                              type: string
+                            peerTag:
+                              description: PeerTag is the tag of the peer image
+                              type: string
+                          type: object
+                        version:
+                          type: string
+                      required:
+                      - default
+                      - version
+                      type: object
+                    type: object
+                required:
+                - ca
+                - orderer
+                - peer
+                type: object
+              zone:
+                description: Zone (Optional) is the zone of the nodes where the console
+                  should be deployed
+                type: string
+            required:
+            - license
+            - usetags
+            - version
+            type: object
+          status:
+            description: Status is the observed state of IBPConsole
+            properties:
+              errorcode:
+                description: ErrorCode is the code of classification of errors
+                type: integer
+              lastHeartbeatTime:
+                description: LastHeartbeatTime is when the controller reconciled this
+                  component
+                type: string
+              message:
+                description: Message provides a message for the status to be shown
+                  to customer
+                type: string
+              reason:
+                description: Reason provides a reason for an error
+                type: string
+              status:
+                description: Status is defined based on the current status of the
+                  component
+                type: string
+              type:
+                description: Type is true or false based on if status is valid
+                type: string
+              version:
+                description: Version is the product (IBP) version of the component
+                type: string
+              versions:
+                description: Versions is the operand version of the component
+                properties:
+                  reconciled:
+                    description: Reconciled provides the reconciled version of the
+                      operand
+                    type: string
+                required:
+                - reconciled
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

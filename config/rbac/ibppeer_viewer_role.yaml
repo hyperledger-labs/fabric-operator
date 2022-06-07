@@ -1,0 +1,20 @@
+# permissions for end users to view ibppeers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ibppeer-viewer-role
+rules:
+- apiGroups:
+  - ibp.com
+  resources:
+  - ibppeers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ibp.com
+  resources:
+  - ibppeers/status
+  verbs:
+  - get

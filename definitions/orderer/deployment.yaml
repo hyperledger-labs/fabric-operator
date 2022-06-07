@@ -1,0 +1,226 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibporderer-deployment
+spec:
+  replicas: 1
+  selector: {}
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: orgname
+                      operator: In
+                      values:
+                        - ""
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      containers:
+        - env:
+            - name: LICENSE
+              value: accept
+            - name: FABRIC_CFG_PATH
+              value: /certs/
+          image: ""
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /healthz
+              port: operations
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: orderer
+          ports:
+            - containerPort: 7050
+              name: orderer
+            - containerPort: 8443
+              name: operations
+            - containerPort: 9443
+              name: orderer-admin
+          readinessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /healthz
+              port: operations
+              scheme: HTTPS
+            initialDelaySeconds: 26
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 2000m
+              ephemeral-storage: 1G
+              memory: 4Gi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 100M
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 7051
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /healthz
+              port: operations
+              scheme: HTTPS
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 5
+          volumeMounts:
+            - mountPath: /ordererdata
+              name: orderer-data
+              subPath: data
+            - mountPath: /certs/msp/cacerts
+              name: ecert-cacerts
+            - mountPath: /certs/msp/signcerts
+              name: ecert-signcert
+            - mountPath: /certs/msp/tlscacerts
+              name: tls-cacerts
+            - mountPath: /certs/tls/keystore
+              name: tls-keystore
+            - mountPath: /certs/tls/signcerts
+              name: tls-signcert
+            - mountPath: /certs
+              name: orderer-config
+            - mountPath: /certs/msp
+              name: orderer-config
+        - env:
+            - name: LICENSE
+              value: accept
+            - name: BACKEND_ADDRESS
+              value: 127.0.0.1:7050
+            - name: SERVER_TLS_CERT_FILE
+              value: /certs/tls/signcerts/cert.pem
+            - name: SERVER_TLS_KEY_FILE
+              value: /certs/tls/keystore/key.pem
+            - name: SERVER_TLS_CLIENT_CA_FILES
+              value: /certs/msp/tlscacerts/cacert-0.pem
+            - name: SERVER_BIND_ADDRESS
+              value: 0.0.0.0
+            - name: SERVER_HTTP_DEBUG_PORT
+              value: "8080"
+            - name: SERVER_HTTP_TLS_PORT
+              value: "7443"
+            - name: BACKEND_TLS
+              value: "true"
+            - name: SERVER_HTTP_MAX_WRITE_TIMEOUT
+              value: 5m
+            - name: SERVER_HTTP_MAX_READ_TIMEOUT
+              value: 5m
+            - name: USE_WEBSOCKETS
+              value: "true"
+          image: ""
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 6
+            tcpSocket:
+              port: 7443
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          name: proxy
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 7443
+              name: https
+          readinessProbe:
+            tcpSocket:
+              port: 7443
+            initialDelaySeconds: 26
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 2000m
+              ephemeral-storage: 1G
+              memory: 4Gi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 100M
+              memory: 100Mi
+          securityContext:
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /certs/msp/tlscacerts
+              name: tls-cacerts
+            - mountPath: /certs/tls/keystore
+              name: tls-keystore
+            - mountPath: /certs/tls/signcerts
+              name: tls-signcert
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - chmod -R 775 /ordererdata/ && chown -R -H 7051:7051 /ordererdata/
+          env:
+            - name: LICENSE
+              value: accept
+          image: ""
+          imagePullPolicy: Always
+          name: init
+          resources:
+            limits:
+              cpu: 200m
+              ephemeral-storage: 1G
+              memory: 400M
+            requests:
+              cpu: 200m
+              ephemeral-storage: 100M
+              memory: 400M
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - CHOWN
+                - FOWNER
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+            runAsUser: 0
+          volumeMounts:
+            - mountPath: /ordererdata
+              name: orderer-data
+              subPath: data
+      securityContext:
+        fsGroup: 2000
+        runAsNonRoot: true
+        runAsUser: 1000
+      serviceAccountName: sample

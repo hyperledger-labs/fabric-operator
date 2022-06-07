@@ -1,0 +1,33 @@
+domain: ibp.com
+layout: go.kubebuilder.io/v3
+repo: github.com/IBM-Blockchain/fabric-operator
+projectName: fabric-opensource-operator
+resources:
+  - controller: true
+    domain: ibp.com
+    group: ibp
+    kind: IBPCA
+    path: github.com/IBM-Blockchain/fabric-operator/api/v1beta1
+    version: v1beta1
+  - controller: true
+    domain: ibp.com
+    group: ibp
+    kind: IBPPeer
+    path: github.com/IBM-Blockchain/fabric-operator/api/v1beta1
+    version: v1beta1
+  - controller: true
+    domain: ibp.com
+    group: ibp
+    kind: IBPOrderer
+    path: github.com/IBM-Blockchain/fabric-operator/api/v1beta1
+    version: v1beta1
+  - controller: true
+    domain: ibp.com
+    group: ibp
+    kind: IBPConsole
+    path: github.com/IBM-Blockchain/fabric-operator/api/v1beta1
+    version: v1beta1
+version: "3"
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
