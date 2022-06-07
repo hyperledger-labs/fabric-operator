@@ -1,0 +1,863 @@
+#
+# Copyright contributors to the Hyperledger Fabric Operator project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at:
+#
+# 	  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.8.0
+  creationTimestamp: null
+  name: ibppeers.ibp.com
+spec:
+  group: ibp.com
+  names:
+    kind: IBPPeer
+    listKind: IBPPeerList
+    plural: ibppeers
+    singular: ibppeer
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: 'IBPPeer is the Schema for the ibppeers API. Warning: Peer deployment
+          using this tile is not supported. Please use the IBP Console to deploy a
+          Peer.'
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: IBPPeerSpec defines the desired state of IBPPeer
+            properties:
+              action:
+                description: Action (Optional) is object for peer actions
+                properties:
+                  enroll:
+                    description: Enroll contains actions for triggering crypto enroll
+                    properties:
+                      ecert:
+                        description: Ecert is used to trigger enroll for ecert
+                        type: boolean
+                      tlscert:
+                        description: TLSCert is used to trigger enroll for tlscert
+                        type: boolean
+                    type: object
+                  reenroll:
+                    description: Reenroll contains actions for triggering crypto reenroll
+                    properties:
+                      ecert:
+                        description: Ecert is used to trigger reenroll for ecert
+                        type: boolean
+                      ecertNewKey:
+                        description: EcertNewKey is used to trigger reenroll for ecert
+                          and also generating a new private key
+                        type: boolean
+                      tlscert:
+                        description: TLSCert is used to trigger reenroll for tlscert
+                        type: boolean
+                      tlscertNewKey:
+                        description: TLSCertNewKey is used to trigger reenroll for
+                          tlscert and also generating a new private key
+                        type: boolean
+                    type: object
+                  restart:
+                    description: Restart action is used to restart peer deployment
+                    type: boolean
+                  upgradedbs:
+                    description: UpgradeDBs action is used to trigger peer node upgrade-dbs
+                      command
+                    type: boolean
+                type: object
+              arch:
+                description: cluster related configs Arch (Optional) is the architecture
+                  of the nodes where peer should be deployed
+                items:
+                  type: string
+                type: array
+              chaincodeBuilderConfig:
+                additionalProperties:
+                  type: string
+                description: ChaincodeBuilderConfig (Optional) is a k/v map providing
+                  a scope for template substitutions defined in chaincode-as-a-service
+                  package metadata files. The map will be serialized as JSON and set
+                  in the peer deployment CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG env
+                  variable.
+                type: object
+              configoverride:
+                description: ConfigOverride (Optional) is the object to provide overrides
+                  to core yaml config
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              customNames:
+                description: CustomNames (Optional) is to use pre-configured resources
+                  for peer's deployment
+                properties:
+                  pvc:
+                    description: PVC is the list of PVC Names to be used for peer's
+                      deployment
+                    properties:
+                      peer:
+                        description: Peer is the pvc to be used as peer's storage
+                        type: string
+                      statedb:
+                        description: StateDB is the pvc to be used as statedb's storage
+                        type: string
+                    type: object
+                type: object
+              dindArgs:
+                description: advanced configs DindArgs (Optional) is used to override
+                  args passed to dind container
+                items:
+                  type: string
+                type: array
+              disablenodeou:
+                description: DisableNodeOU (Optional) is used to switch nodeou on
+                  and off
+                type: boolean
+              domain:
+                description: proxy ip passed if not OCP, domain for OCP Domain is
+                  the sub-domain used for peer's deployment
+                type: string
+              hsm:
+                description: HSM (Optional) is DEPRECATED
+                properties:
+                  pkcs11endpoint:
+                    description: PKCS11Endpoint is DEPRECATED
+                    type: string
+                type: object
+              imagePullSecrets:
+                description: ImagePullSecrets (Optional) is the list of ImagePullSecrets
+                  to be used for peer's deployment
+                items:
+                  type: string
+                type: array
+              images:
+                description: Images (Optional) lists the images to be used for peer's
+                  deployment
+                properties:
+                  builderImage:
+                    description: BuilderImage is the name of the builder image
+                    type: string
+                  builderTag:
+                    description: BuilderTag is the tag of the builder image
+                    type: string
+                  chaincodeLauncherImage:
+                    description: CCLauncherImage is the name of the chaincode launcher
+                      image
+                    type: string
+                  chaincodeLauncherTag:
+                    description: CCLauncherTag is the tag of the chaincode launcher
+                      image
+                    type: string
+                  couchdbImage:
+                    description: CouchDBImage is the name of the couchdb image
+                    type: string
+                  couchdbTag:
+                    description: CouchDBTag is the tag of the couchdb image
+                    type: string
+                  dindImage:
+                    description: DindImage is the name of the dind image
+                    type: string
+                  dindTag:
+                    description: DindTag is the tag of the dind image
+                    type: string
+                  enrollerImage:
+                    description: EnrollerImage is the name of the init image for crypto
+                      generation
+                    type: string
+                  enrollerTag:
+                    description: EnrollerTag is the tag of the init image for crypto
+                      generation
+                    type: string
+                  fileTransferImage:
+                    description: FileTransferImage is the name of the file transfer
+                      image
+                    type: string
+                  fileTransferTag:
+                    description: FileTransferTag is the tag of the file transfer image
+                    type: string
+                  fluentdImage:
+                    description: FluentdImage is the name of the fluentd logger image
+                    type: string
+                  fluentdTag:
+                    description: FluentdTag is the tag of the fluentd logger image
+                    type: string
+                  goEnvImage:
+                    description: GoEnvImage is the name of the goenv image
+                    type: string
+                  goEnvTag:
+                    description: GoEnvTag is the tag of the goenv image
+                    type: string
+                  grpcwebImage:
+                    description: GRPCWebImage is the name of the grpc web proxy image
+                    type: string
+                  grpcwebTag:
+                    description: GRPCWebTag is the tag of the grpc web proxy image
+                    type: string
+                  hsmImage:
+                    description: HSMImage is the name of the hsm image
+                    type: string
+                  hsmTag:
+                    description: HSMTag is the tag of the hsm image
+                    type: string
+                  javaEnvImage:
+                    description: JavaEnvImage is the name of the javaenv image
+                    type: string
+                  javaEnvTag:
+                    description: JavaEnvTag is the tag of the javaenv image
+                    type: string
+                  nodeEnvImage:
+                    description: NodeEnvImage is the name of the nodeenv image
+                    type: string
+                  nodeEnvTag:
+                    description: NodeEnvTag is the tag of the nodeenv image
+                    type: string
+                  peerImage:
+                    description: PeerImage is the name of the peer image
+                    type: string
+                  peerInitImage:
+                    description: PeerInitImage is the name of the peer init image
+                    type: string
+                  peerInitTag:
+                    description: PeerInitTag is the tag of the peer init image
+                    type: string
+                  peerTag:
+                    description: PeerTag is the tag of the peer image
+                    type: string
+                type: object
+              ingress:
+                description: Ingress (Optional) is ingress object for ingress overrides
+                properties:
+                  class:
+                    description: Class (Optional) is the class to set for ingress
+                    type: string
+                  tlsSecretName:
+                    description: TlsSecretName (Optional) is the secret name to be
+                      used for tls certificates
+                    type: string
+                type: object
+              license:
+                description: License should be accepted by the user to be able to
+                  setup Peer
+                properties:
+                  accept:
+                    description: Accept should be set to true to accept the license.
+                    enum:
+                    - true
+                    type: boolean
+                type: object
+              mspID:
+                description: peer specific configs MSPID is the msp id of the peer
+                type: string
+              mspSecret:
+                description: msp data can be passed in secret on in spec MSPSecret
+                  (Optional) is secret used to store msp crypto
+                type: string
+              numSecondsWarningPeriod:
+                description: NumSecondsWarningPeriod (Optional - default 30 days)
+                  is used to define certificate expiry warning period.
+                format: int64
+                type: integer
+              peerExternalEndpoint:
+                description: PeerExternalEndpoint (Optional) is used to override peer
+                  external endpoint
+                type: string
+              region:
+                description: Region (Optional) is the region of the nodes where the
+                  peer should be deployed
+                type: string
+              registryURL:
+                description: RegistryURL is registry url used to pull images
+                type: string
+              replicas:
+                description: Replicas (Optional - default 1) is the number of peer
+                  replicas to be setup
+                format: int32
+                type: integer
+              resources:
+                description: Resources (Optional) is the amount of resources to be
+                  provided to peer deployment
+                properties:
+                  chaincodelauncher:
+                    description: CCLauncher (Optional) is the resources provided to
+                      the cclauncher container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  couchdb:
+                    description: CouchDB (Optional) is the resources provided to the
+                      couchdb container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  dind:
+                    description: DinD (Optional) is the resources provided to the
+                      dind container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  enroller:
+                    description: Enroller (Optional) is the resources provided to
+                      the enroller container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  fluentd:
+                    description: FluentD (Optional) is the resources provided to the
+                      fluentd container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  hsmdaemon:
+                    description: HSMDaemon (Optional) is the resources provided to
+                      the HSM Daemon container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  init:
+                    description: Init (Optional) is the resources provided to the
+                      init container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  peer:
+                    description: / Peer (Optional) is the resources provided to the
+                      peer container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                  proxy:
+                    description: GRPCProxy (Optional) is the resources provided to
+                      the proxy container
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                        type: object
+                    type: object
+                type: object
+              secret:
+                description: Secret is object for msp crypto
+                properties:
+                  enrollment:
+                    description: Enrollment defines enrollment part of secret spec
+                    properties:
+                      clientauth:
+                        description: ClientAuth contains client uath enrollment details
+                        properties:
+                          admincerts:
+                            description: AdminCerts is the base64 encoded admincerts
+                            items:
+                              type: string
+                            type: array
+                          cahost:
+                            description: CAHost is host part of the CA to use
+                            type: string
+                          caname:
+                            description: CAName is name of CA
+                            type: string
+                          caport:
+                            description: CAPort is port of the CA to use
+                            type: string
+                          catls:
+                            description: CATLS is tls details to talk to CA endpoint
+                            properties:
+                              cacert:
+                                description: CACert is the base64 encoded certificate
+                                type: string
+                            type: object
+                          csr:
+                            description: CSR is the CSR override object
+                            properties:
+                              hosts:
+                                description: Hosts override for CSR
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          enrollid:
+                            description: EnrollID is the enrollment username
+                            type: string
+                          enrollsecret:
+                            description: EnrollSecret is enrollment secret ( password
+                              )
+                            type: string
+                        type: object
+                      component:
+                        description: Component contains ecert enrollment details
+                        properties:
+                          admincerts:
+                            description: AdminCerts is the base64 encoded admincerts
+                            items:
+                              type: string
+                            type: array
+                          cahost:
+                            description: CAHost is host part of the CA to use
+                            type: string
+                          caname:
+                            description: CAName is name of CA
+                            type: string
+                          caport:
+                            description: CAPort is port of the CA to use
+                            type: string
+                          catls:
+                            description: CATLS is tls details to talk to CA endpoint
+                            properties:
+                              cacert:
+                                description: CACert is the base64 encoded certificate
+                                type: string
+                            type: object
+                          csr:
+                            description: CSR is the CSR override object
+                            properties:
+                              hosts:
+                                description: Hosts override for CSR
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          enrollid:
+                            description: EnrollID is the enrollment username
+                            type: string
+                          enrollsecret:
+                            description: EnrollSecret is enrollment secret ( password
+                              )
+                            type: string
+                        type: object
+                      tls:
+                        description: TLS contains tls enrollment details
+                        properties:
+                          admincerts:
+                            description: AdminCerts is the base64 encoded admincerts
+                            items:
+                              type: string
+                            type: array
+                          cahost:
+                            description: CAHost is host part of the CA to use
+                            type: string
+                          caname:
+                            description: CAName is name of CA
+                            type: string
+                          caport:
+                            description: CAPort is port of the CA to use
+                            type: string
+                          catls:
+                            description: CATLS is tls details to talk to CA endpoint
+                            properties:
+                              cacert:
+                                description: CACert is the base64 encoded certificate
+                                type: string
+                            type: object
+                          csr:
+                            description: CSR is the CSR override object
+                            properties:
+                              hosts:
+                                description: Hosts override for CSR
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          enrollid:
+                            description: EnrollID is the enrollment username
+                            type: string
+                          enrollsecret:
+                            description: EnrollSecret is enrollment secret ( password
+                              )
+                            type: string
+                        type: object
+                    type: object
+                  msp:
+                    description: MSP defines msp part of secret spec
+                    properties:
+                      clientauth:
+                        description: ClientAuth contains crypto for client auth certs
+                        properties:
+                          admincerts:
+                            description: AdminCerts is base64 encoded admincerts array
+                            items:
+                              type: string
+                            type: array
+                          cacerts:
+                            description: CACerts is base64 encoded cacerts array
+                            items:
+                              type: string
+                            type: array
+                          intermediatecerts:
+                            description: IntermediateCerts is base64 encoded intermediate
+                              certs array
+                            items:
+                              type: string
+                            type: array
+                          keystore:
+                            description: KeyStore is base64 encoded private key
+                            type: string
+                          signcerts:
+                            description: SignCerts is base64 encoded sign cert
+                            type: string
+                        type: object
+                      component:
+                        description: Component contains crypto for ecerts
+                        properties:
+                          admincerts:
+                            description: AdminCerts is base64 encoded admincerts array
+                            items:
+                              type: string
+                            type: array
+                          cacerts:
+                            description: CACerts is base64 encoded cacerts array
+                            items:
+                              type: string
+                            type: array
+                          intermediatecerts:
+                            description: IntermediateCerts is base64 encoded intermediate
+                              certs array
+                            items:
+                              type: string
+                            type: array
+                          keystore:
+                            description: KeyStore is base64 encoded private key
+                            type: string
+                          signcerts:
+                            description: SignCerts is base64 encoded sign cert
+                            type: string
+                        type: object
+                      tls:
+                        description: TLS contains crypto for tls certs
+                        properties:
+                          admincerts:
+                            description: AdminCerts is base64 encoded admincerts array
+                            items:
+                              type: string
+                            type: array
+                          cacerts:
+                            description: CACerts is base64 encoded cacerts array
+                            items:
+                              type: string
+                            type: array
+                          intermediatecerts:
+                            description: IntermediateCerts is base64 encoded intermediate
+                              certs array
+                            items:
+                              type: string
+                            type: array
+                          keystore:
+                            description: KeyStore is base64 encoded private key
+                            type: string
+                          signcerts:
+                            description: SignCerts is base64 encoded sign cert
+                            type: string
+                        type: object
+                    type: object
+                type: object
+              service:
+                description: Service (Optional) is the override object for peer's
+                  service
+                properties:
+                  type:
+                    description: The "type" of the service to be used
+                    type: string
+                type: object
+              stateDb:
+                description: StateDb (Optional) is the statedb used for peer, can
+                  be couchdb or leveldb
+                type: string
+              storage:
+                description: Storage (Optional - uses default storageclass if not
+                  provided) is the override object for peer's PVC config
+                properties:
+                  peer:
+                    description: Peer (Optional) is the configuration of the storage
+                      of the peer
+                    properties:
+                      class:
+                        description: Class is the storage class
+                        type: string
+                      size:
+                        description: Size of storage
+                        type: string
+                    type: object
+                  statedb:
+                    description: StateDB (Optional) is the configuration of the storage
+                      of the statedb
+                    properties:
+                      class:
+                        description: Class is the storage class
+                        type: string
+                      size:
+                        description: Size of storage
+                        type: string
+                    type: object
+                type: object
+              version:
+                description: FabricVersion (Optional) is fabric version for the peer
+                type: string
+              zone:
+                description: Zone (Optional) is the zone of the nodes where the peer
+                  should be deployed
+                type: string
+            required:
+            - license
+            - version
+            type: object
+          status:
+            description: IBPPeerStatus defines the observed state of IBPPeer
+            properties:
+              errorcode:
+                description: ErrorCode is the code of classification of errors
+                type: integer
+              lastHeartbeatTime:
+                description: LastHeartbeatTime is when the controller reconciled this
+                  component
+                type: string
+              message:
+                description: Message provides a message for the status to be shown
+                  to customer
+                type: string
+              reason:
+                description: Reason provides a reason for an error
+                type: string
+              status:
+                description: Status is defined based on the current status of the
+                  component
+                type: string
+              type:
+                description: Type is true or false based on if status is valid
+                type: string
+              version:
+                description: Version is the product (IBP) version of the component
+                type: string
+              versions:
+                description: Versions is the operand version of the component
+                properties:
+                  reconciled:
+                    description: Reconciled provides the reconciled version of the
+                      operand
+                    type: string
+                required:
+                - reconciled
+                type: object
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

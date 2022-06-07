@@ -1,0 +1,20 @@
+# permissions for end users to view ibporderers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ibporderer-viewer-role
+rules:
+- apiGroups:
+  - ibp.com
+  resources:
+  - ibporderers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ibp.com
+  resources:
+  - ibporderers/status
+  verbs:
+  - get

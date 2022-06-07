@@ -1,0 +1,204 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibpconsole-deployment
+spec:
+  selector: {}
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+      containers:
+        - env:
+            - name: LICENSE
+              value: accept
+          image: ""
+          imagePullPolicy: Always
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - curl -X POST -k https://localhost:3000/api/v3/requests/stop
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /api/v3/healthcheck
+              port: optools
+              scheme: HTTPS
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          name: optools
+          ports:
+            - containerPort: 3000
+              name: optools
+              protocol: TCP
+            - containerPort: 3001
+              name: proxy
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /api/v3/healthcheck
+              port: optools
+              scheme: HTTPS
+            initialDelaySeconds: 55
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 500m
+              ephemeral-storage: 1G
+              memory: 1000Mi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 100M
+              memory: 1000Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /template/
+              name: template
+        - env:
+            - name: LICENSE
+              value: accept
+            - name: CONFIGPATH
+              value: /deployer/settings.yaml
+          image: ""
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 5
+            initialDelaySeconds: 16
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 5
+          name: deployer
+          ports:
+            - containerPort: 8080
+              name: api
+              protocol: TCP
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 100m
+              ephemeral-storage: 1G
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 100M
+              memory: 200Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /deployer/
+              name: deployer-template
+        - command:
+            - sh
+            - -c
+            - configtxlator start --port=8083 --CORS=*
+          env:
+            - name: LICENSE
+              value: accept
+          image: ""
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 5
+            initialDelaySeconds: 16
+            tcpSocket:
+              port: 8083
+            timeoutSeconds: 5
+          name: configtxlator
+          ports:
+            - containerPort: 8083
+              name: configtxlator
+              protocol: TCP
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            tcpSocket:
+              port: 8083
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 25m
+              ephemeral-storage: 1G
+              memory: 50Mi
+            requests:
+              cpu: 25m
+              ephemeral-storage: 100M
+              memory: 50Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      initContainers:
+        - env:
+            - name: LICENSE
+              value: accept
+          image: ""
+          imagePullPolicy: Always
+          name: init
+          resources:
+            limits:
+              cpu: 200m
+              ephemeral-storage: 1G
+              memory: 400M
+            requests:
+              cpu: 200m
+              ephemeral-storage: 100M
+              memory: 400M
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - CHOWN
+                - FOWNER
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+            runAsUser: 0
+      securityContext:
+        fsGroup: 2000
+        runAsNonRoot: true
+        runAsUser: 1000
+      serviceAccountName: sample

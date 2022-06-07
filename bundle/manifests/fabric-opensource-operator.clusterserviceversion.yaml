@@ -1,0 +1,1889 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Seamless Upgrades
+    categories: Database
+    certified: "true"
+    containerImage: todo:update
+    createdAt: "2020-07-14T00:00:00Z"
+    description: TODO
+    operators.operatorframework.io/builder: operator-sdk-v1.19.0+git
+    operators.operatorframework.io/internal-objects: '["ibpcas.ibp.com","ibppeers.ibp.com","ibporderers.ibp.com"]'
+    operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
+    repository: ""
+  name: fabric-opensource-operator.v1.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: Certificate Authorities issue certificates for all the identities
+        to transact on the network.
+      displayName: Hyperledger Fabric CA
+      kind: IBPCA
+      name: ibpcas.ibp.com
+      resources:
+      - kind: ConfigMaps
+        name: ""
+        version: v1
+      - kind: Deployments
+        name: ""
+        version: v1
+      - kind: IBPCA
+        name: ""
+        version: v1beta1
+      - kind: IBPConsole
+        name: ""
+        version: v1beta1
+      - kind: IBPOrderer
+        name: ""
+        version: v1beta1
+      - kind: IBPPeer
+        name: ""
+        version: v1beta1
+      - kind: Ingresses
+        name: ""
+        version: v1beta1
+      - kind: PersistentVolumeClaim
+        name: ""
+        version: v1
+      - kind: Pods
+        name: ""
+        version: v1
+      - kind: Replicasets
+        name: ""
+        version: v1
+      - kind: Role
+        name: ""
+        version: v1
+      - kind: RoleBinding
+        name: ""
+        version: v1
+      - kind: Route
+        name: ""
+        version: v1
+      - kind: Secrets
+        name: ""
+        version: v1
+      - kind: ServiceAccounts
+        name: ""
+        version: v1
+      - kind: Services
+        name: ""
+        version: v1
+      specDescriptors:
+      - description: Action (Optional) is action object for trigerring actions
+        displayName: Action
+        path: action
+      - description: Renew action is object for certificate renewals
+        displayName: Renew
+        path: action.renew
+      - description: TLSCert action is used to renew TLS crypto for CA server
+        displayName: TLSCert
+        path: action.renew.tlscert
+      - description: Restart action is used to restart the running CA
+        displayName: Restart
+        path: action.restart
+      - description: Arch (Optional) is the architecture of the nodes where CA should
+          be deployed
+        displayName: Arch
+        path: arch
+      - description: ConfigOverride (Optional) is the object to provide overrides
+          to CA & TLSCA config
+        displayName: Config Override
+        path: configoverride
+      - description: CA (Optional) is the overrides to CA's configuration
+        displayName: CA
+        path: configoverride.ca
+      - description: MaxNameLength (Optional) is the maximum length of the name that
+          the CA can have
+        displayName: Max Name Length
+        path: configoverride.maxnamelength
+      - description: TLSCA (Optional) is the overrides to TLSCA's configuration
+        displayName: TLSCA
+        path: configoverride.tlsca
+      - description: CustomNames (Optional) is to use pre-configured resources for
+          CA's deployment
+        displayName: Custom Names
+        path: customNames
+      - description: PVC is the list of PVC Names to be used for CA's deployment
+        displayName: PVC
+        path: customNames.pvc
+      - description: CA is the pvc to be used as CA's storage
+        displayName: CA
+        path: customNames.pvc.ca
+      - description: Sqlite is the sqlite path to be used for CA's deployment
+        displayName: Sqlite
+        path: customNames.sqlitepath
+      - description: Domain is the sub-domain used for CA's deployment
+        displayName: Domain
+        path: domain
+      - description: HSM (Optional) is the paramters for the HSM if being used
+        displayName: HSM
+        path: hsm
+      - description: PKCS11Endpoint is the endpoint for the pkcs11 proxy
+        displayName: PKCS11 Endpoint
+        path: hsm.pkcs11endpoint
+      - description: ImagePullSecrets (Optional) is the list of ImagePullSecrets to
+          be used for CA's deployment
+        displayName: Image Pull Secrets
+        path: imagePullSecrets
+      - description: Images (Optional) lists the images to be used for CA's deployment
+        displayName: Images
+        path: images
+      - description: CAImage is the name of the CA image
+        displayName: CAImage
+        path: images.caImage
+      - description: CAInitImage is the name of the Init image
+        displayName: CAInit Image
+        path: images.caInitImage
+      - description: CAInitTag is the tag of the Init image
+        displayName: CAInit Tag
+        path: images.caInitTag
+      - description: CATag is the tag of the CA image
+        displayName: CATag
+        path: images.caTag
+      - description: EnrollerImage is the name of the init image for crypto generation
+        displayName: Enroller Image
+        path: images.enrollerImage
+      - description: EnrollerTag is the tag of the init image for crypto generation
+        displayName: Enroller Tag
+        path: images.enrollerTag
+      - description: HSMImage is the name of the HSM image
+        displayName: HSMImage
+        path: images.hsmImage
+      - description: HSMTag is the tag of the HSM image
+        displayName: HSMTag
+        path: images.hsmTag
+      - description: Ingress (Optional) is ingress object for ingress overrides
+        displayName: Ingress
+        path: ingress
+      - description: Class (Optional) is the class to set for ingress
+        displayName: Class
+        path: ingress.class
+      - description: TlsSecretName (Optional) is the secret name to be used for tls
+          certificates
+        displayName: Tls Secret Name
+        path: ingress.tlsSecretName
+      - description: License should be accepted by the user to be able to setup CA
+        displayName: License
+        path: license
+      - description: Accept should be set to true to accept the license.
+        displayName: Accept
+        path: license.accept
+        value:
+        - false
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:checkbox
+      - description: NumSecondsWarningPeriod (Optional - default 30 days) is used
+          to define certificate expiry warning period.
+        displayName: Num Seconds Warning Period
+        path: numSecondsWarningPeriod
+      - description: Region (Optional) is the region of the nodes where the CA should
+          be deployed
+        displayName: Region
+        path: region
+      - description: RegistryURL is registry url used to pull images
+        displayName: Registry URL
+        path: registryURL
+      - description: Replicas (Optional - default 1) is the number of CA replicas
+          to be setup
+        displayName: Replicas
+        path: replicas
+      - description: Resources (Optional) is the amount of resources to be provided
+          to CA deployment
+        displayName: Resources
+        path: resources
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: CA is the resources provided to the CA container
+        displayName: CA
+        path: resources.ca
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: EnrollJJob is the resources provided to the enroll job container
+        displayName: Enroll Job
+        path: resources.enrollJob
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: HSMDaemon is the resources provided to the HSM daemon container
+        displayName: HSMDaemon
+        path: resources.hsmDaemon
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Init is the resources provided to the init container
+        displayName: Init
+        path: resources.init
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Service (Optional) is the override object for CA's service
+        displayName: Service
+        path: service
+      - description: The "type" of the service to be used
+        displayName: Type
+        path: service.type
+      - description: Storage (Optional - uses default storageclass if not provided)
+          is the override object for CA's PVC config
+        displayName: Storage
+        path: storage
+      - description: CA is the configuration of the storage of the CA
+        displayName: CA
+        path: storage.ca
+      - description: Class is the storage class
+        displayName: Class
+        path: storage.ca.class
+      - description: Size of storage
+        displayName: Size
+        path: storage.ca.size
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:podCount
+      - description: FabricVersion (Optional) set the fabric version you want to use.
+        displayName: Fabric Version
+        path: version
+      - description: Zone (Optional) is the zone of the nodes where the CA should
+          be deployed
+        displayName: Zone
+        path: zone
+      statusDescriptors:
+      - description: ErrorCode is the code of classification of errors
+        displayName: Error Code
+        path: errorcode
+      - description: LastHeartbeatTime is when the controller reconciled this component
+        displayName: Last Heartbeat Time
+        path: lastHeartbeatTime
+      - description: Message provides a message for the status to be shown to customer
+        displayName: Message
+        path: message
+      - description: Reason provides a reason for an error
+        displayName: Reason
+        path: reason
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.phase:reason
+      - description: Status is defined based on the current status of the component
+        displayName: Status
+        path: status
+      - description: Type is true or false based on if status is valid
+        displayName: Type
+        path: type
+      - description: Version is the product version of the component
+        displayName: Version
+        path: version
+      - description: Versions is the operand version of the component
+        displayName: Versions
+        path: versions
+      version: v1beta1
+    - description: The Console is used to deploy and manage the CA, peer, ordering
+        nodes.
+      displayName: Fabric Operations Console
+      kind: IBPConsole
+      name: ibpconsoles.ibp.com
+      resources:
+      - kind: ConfigMaps
+        name: ""
+        version: v1
+      - kind: Deployments
+        name: ""
+        version: v1
+      - kind: IBPCA
+        name: ""
+        version: v1beta1
+      - kind: IBPConsole
+        name: ""
+        version: v1beta1
+      - kind: IBPOrderer
+        name: ""
+        version: v1beta1
+      - kind: IBPPeer
+        name: ""
+        version: v1beta1
+      - kind: Ingresses
+        name: ""
+        version: v1beta1
+      - kind: PersistentVolumeClaim
+        name: ""
+        version: v1
+      - kind: Pods
+        name: ""
+        version: v1
+      - kind: Replicasets
+        name: ""
+        version: v1
+      - kind: Role
+        name: ""
+        version: v1
+      - kind: RoleBinding
+        name: ""
+        version: v1
+      - kind: Route
+        name: ""
+        version: v1
+      - kind: Secrets
+        name: ""
+        version: v1
+      - kind: ServiceAccounts
+        name: ""
+        version: v1
+      - kind: Services
+        name: ""
+        version: v1
+      specDescriptors:
+      - description: Action (Optional) is action object for trigerring actions
+        displayName: Action
+        path: action
+      - description: Arch (Optional) is the architecture of the nodes where console
+          should be deployed
+        displayName: Arch
+        path: arch
+      - description: console settings AuthScheme is auth scheme for console access
+        displayName: Auth Scheme
+        path: authScheme
+      - description: ClusterData is object cluster data information
+        displayName: Cluster Data
+        path: clusterdata
+      - description: Components is database name used for components
+        displayName: Components
+        path: components
+      - description: ConfigOverride (Optional) is the object to provide overrides
+        displayName: Config Override
+        path: configoverride
+      - description: Console is the overrides to console configuration
+        displayName: Console
+        path: configoverride.console
+      - description: Deployer is the overrides to deployer configuration
+        displayName: Deployer
+        path: configoverride.deployer
+      - description: MaxNameLength (Optional) is the maximum length of the name that
+          the console can have
+        displayName: Max Name Length
+        path: configoverride.maxnamelength
+      - description: ConfigtxlatorURL is url for configtxlator server
+        displayName: Configtxlator URL
+        path: configtxlator
+      - description: ConnectionString is connection url for backend database
+        displayName: Connection String
+        path: connectionString
+      - description: Deployer is object for deployer configs
+        displayName: Deployer
+        path: deployer
+      - description: DeployerTimeout is timeout value for deployer calls
+        displayName: Deployer Timeout
+        path: deployerTimeout
+      - description: DeployerURL is url for deployer server
+        displayName: Deployer URL
+        path: deployerUrl
+      - description: Email is the email used for initial access
+        displayName: Email
+        path: email
+      - description: FeatureFlags is object for feature flag settings
+        displayName: Feature Flags
+        path: featureflags
+      - description: ImagePullSecrets (Optional) is the list of ImagePullSecrets to
+          be used for console's deployment
+        displayName: Image Pull Secrets
+        path: imagePullSecrets
+      - description: Images (Optional) lists the images to be used for console's deployment
+        displayName: Images
+        path: images
+      - description: ConfigtxlatorImage is the name of the configtxlator image
+        displayName: Configtxlator Image
+        path: images.configtxlatorImage
+      - description: ConfigtxlatorTag is the tag of the configtxlator image
+        displayName: Configtxlator Tag
+        path: images.configtxlatorTag
+      - description: ConsoleImage is the name of the console image
+        displayName: Console Image
+        path: images.consoleImage
+      - description: ConsoleInitImage is the name of the console init image
+        displayName: Console Init Image
+        path: images.consoleInitImage
+      - description: ConsoleInitTag is the tag of the console init image
+        displayName: Console Init Tag
+        path: images.consoleInitTag
+      - description: ConsoleTag is the tag of the console image
+        displayName: Console Tag
+        path: images.consoleTag
+      - description: CouchDBImage is the name of the couchdb image
+        displayName: Couch DBImage
+        path: images.couchdbImage
+      - description: CouchDBTag is the tag of the couchdb image
+        displayName: Couch DBTag
+        path: images.couchdbTag
+      - description: DeployerImage is the name of the deployer image
+        displayName: Deployer Image
+        path: images.deployerImage
+      - description: DeployerTag is the tag of the deployer image
+        displayName: Deployer Tag
+        path: images.deployerTag
+      - description: Ingress (Optional) is ingress object for ingress overrides
+        displayName: Ingress
+        path: ingress
+      - description: Class (Optional) is the class to set for ingress
+        displayName: Class
+        path: ingress.class
+      - description: TlsSecretName (Optional) is the secret name to be used for tls
+          certificates
+        displayName: Tls Secret Name
+        path: ingress.tlsSecretName
+      - description: License should be accepted by the user to be able to setup console
+        displayName: License
+        path: license
+      - description: Accept should be set to true to accept the license.
+        displayName: Accept
+        path: license.accept
+        value:
+        - false
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:checkbox
+      - description: NetworkInfo is object for network overrides
+        displayName: Network Info
+        path: networkinfo
+      - description: ConfigtxlatorPort is the port to access configtxlator
+        displayName: Configtxlator Port
+        path: networkinfo.configtxlatorPort
+      - description: ConsolePort is the port to access the console
+        displayName: Console Port
+        path: networkinfo.consolePort
+      - description: Domain for the components
+        displayName: Domain
+        path: networkinfo.domain
+      - description: ProxyPort is the port to access console proxy
+        displayName: Proxy Port
+        path: networkinfo.proxyPort
+      - description: Password is initial password to access console
+        displayName: Password
+        path: password
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:password
+      - description: PasswordSecretName is secretname where password is stored
+        displayName: Password Secret Name
+        path: passwordSecretName
+      - description: Region (Optional) is the region of the nodes where the console
+          should be deployed
+        displayName: Region
+        path: region
+      - description: RegistryURL is registry url used to pull images
+        displayName: Registry URL
+        path: registryURL
+      - description: Replicas (Optional - default 1) is the number of console replicas
+          to be setup
+        displayName: Replicas
+        path: replicas
+      - description: Resources (Optional) is the amount of resources to be provided
+          to console deployment
+        displayName: Resources
+        path: resources
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Configtxlator is the resources provided to the configtxlator
+          container
+        displayName: Configtxlator
+        path: resources.configtxlator
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Console is the resources provided to the console container
+        displayName: Console
+        path: resources.console
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: CouchDB is the resources provided to the couchdb container
+        displayName: Couch DB
+        path: resources.couchdb
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Deployer is the resources provided to the deployer container
+        displayName: Deployer
+        path: resources.deployer
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Init is the resources provided to the init container
+        displayName: Init
+        path: resources.init
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Service (Optional) is the override object for console's service
+        displayName: Service
+        path: service
+      - description: The "type" of the service to be used
+        displayName: Type
+        path: service.type
+      - description: ServiceAccountName defines serviceaccount used for console deployment
+        displayName: Service Account Name
+        path: serviceAccountName
+      - description: Sessions is sessions database name to use
+        displayName: Sessions
+        path: sessions
+      - description: Storage (Optional - uses default storageclass if not provided)
+          is the override object for CA's PVC config
+        displayName: Storage
+        path: storage
+      - description: Console is the configuration of the storage of the console
+        displayName: Console
+        path: storage.console
+      - description: Class is the storage class
+        displayName: Class
+        path: storage.console.class
+      - description: Size of storage
+        displayName: Size
+        path: storage.console.size
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:podCount
+      - description: System is system database name to use
+        displayName: System
+        path: system
+      - description: SystemChannel is default systemchannel name
+        displayName: System Channel
+        path: systemChannel
+      - description: TLSSecretName is secret name to load custom tls certs
+        displayName: TLSSecret Name
+        path: tlsSecretName
+      - description: Version (Optional) is version for the console
+        displayName: Version
+        path: version
+      - description: CAImage is the name of the CA image
+        displayName: CAImage
+        path: versions.ca.image.caImage
+      - description: CAInitImage is the name of the Init image
+        displayName: CAInit Image
+        path: versions.ca.image.caInitImage
+      - description: CAInitTag is the tag of the Init image
+        displayName: CAInit Tag
+        path: versions.ca.image.caInitTag
+      - description: CATag is the tag of the CA image
+        displayName: CATag
+        path: versions.ca.image.caTag
+      - description: EnrollerImage is the name of the init image for crypto generation
+        displayName: Enroller Image
+        path: versions.ca.image.enrollerImage
+      - description: EnrollerTag is the tag of the init image for crypto generation
+        displayName: Enroller Tag
+        path: versions.ca.image.enrollerTag
+      - description: HSMImage is the name of the HSM image
+        displayName: HSMImage
+        path: versions.ca.image.hsmImage
+      - description: HSMTag is the tag of the HSM image
+        displayName: HSMTag
+        path: versions.ca.image.hsmTag
+      - description: EnrollerImage is the name of the init image for crypto generation
+        displayName: Enroller Image
+        path: versions.orderer.image.enrollerImage
+      - description: EnrollerTag is the tag of the init image for crypto generation
+        displayName: Enroller Tag
+        path: versions.orderer.image.enrollerTag
+      - description: GRPCWebImage is the name of the grpc web proxy image
+        displayName: GRPCWeb Image
+        path: versions.orderer.image.grpcwebImage
+      - description: GRPCWebTag is the tag of the grpc web proxy image
+        displayName: GRPCWeb Tag
+        path: versions.orderer.image.grpcwebTag
+      - description: HSMImage is the name of the hsm image
+        displayName: HSMImage
+        path: versions.orderer.image.hsmImage
+      - description: HSMTag is the tag of the hsm image
+        displayName: HSMTag
+        path: versions.orderer.image.hsmTag
+      - description: OrdererImage is the name of the orderer image
+        displayName: Orderer Image
+        path: versions.orderer.image.ordererImage
+      - description: OrdererInitImage is the name of the orderer init image
+        displayName: Orderer Init Image
+        path: versions.orderer.image.ordererInitImage
+      - description: OrdererInitTag is the tag of the orderer init image
+        displayName: Orderer Init Tag
+        path: versions.orderer.image.ordererInitTag
+      - description: OrdererTag is the tag of the orderer image
+        displayName: Orderer Tag
+        path: versions.orderer.image.ordererTag
+      - description: BuilderImage is the name of the builder image
+        displayName: Builder Image
+        path: versions.peer.image.builderImage
+      - description: BuilderTag is the tag of the builder image
+        displayName: Builder Tag
+        path: versions.peer.image.builderTag
+      - description: CCLauncherImage is the name of the chaincode launcher image
+        displayName: CCLauncher Image
+        path: versions.peer.image.chaincodeLauncherImage
+      - description: CCLauncherTag is the tag of the chaincode launcher image
+        displayName: CCLauncher Tag
+        path: versions.peer.image.chaincodeLauncherTag
+      - description: CouchDBImage is the name of the couchdb image
+        displayName: Couch DBImage
+        path: versions.peer.image.couchdbImage
+      - description: CouchDBTag is the tag of the couchdb image
+        displayName: Couch DBTag
+        path: versions.peer.image.couchdbTag
+      - description: DindImage is the name of the dind image
+        displayName: Dind Image
+        path: versions.peer.image.dindImage
+      - description: DindTag is the tag of the dind image
+        displayName: Dind Tag
+        path: versions.peer.image.dindTag
+      - description: EnrollerImage is the name of the init image for crypto generation
+        displayName: Enroller Image
+        path: versions.peer.image.enrollerImage
+      - description: EnrollerTag is the tag of the init image for crypto generation
+        displayName: Enroller Tag
+        path: versions.peer.image.enrollerTag
+      - description: FileTransferImage is the name of the file transfer image
+        displayName: File Transfer Image
+        path: versions.peer.image.fileTransferImage
+      - description: FileTransferTag is the tag of the file transfer image
+        displayName: File Transfer Tag
+        path: versions.peer.image.fileTransferTag
+      - description: FluentdImage is the name of the fluentd logger image
+        displayName: Fluentd Image
+        path: versions.peer.image.fluentdImage
+      - description: FluentdTag is the tag of the fluentd logger image
+        displayName: Fluentd Tag
+        path: versions.peer.image.fluentdTag
+      - description: GoEnvImage is the name of the goenv image
+        displayName: Go Env Image
+        path: versions.peer.image.goEnvImage
+      - description: GoEnvTag is the tag of the goenv image
+        displayName: Go Env Tag
+        path: versions.peer.image.goEnvTag
+      - description: GRPCWebImage is the name of the grpc web proxy image
+        displayName: GRPCWeb Image
+        path: versions.peer.image.grpcwebImage
+      - description: GRPCWebTag is the tag of the grpc web proxy image
+        displayName: GRPCWeb Tag
+        path: versions.peer.image.grpcwebTag
+      - description: HSMImage is the name of the hsm image
+        displayName: HSMImage
+        path: versions.peer.image.hsmImage
+      - description: HSMTag is the tag of the hsm image
+        displayName: HSMTag
+        path: versions.peer.image.hsmTag
+      - description: JavaEnvImage is the name of the javaenv image
+        displayName: Java Env Image
+        path: versions.peer.image.javaEnvImage
+      - description: JavaEnvTag is the tag of the javaenv image
+        displayName: Java Env Tag
+        path: versions.peer.image.javaEnvTag
+      - description: NodeEnvImage is the name of the nodeenv image
+        displayName: Node Env Image
+        path: versions.peer.image.nodeEnvImage
+      - description: NodeEnvTag is the tag of the nodeenv image
+        displayName: Node Env Tag
+        path: versions.peer.image.nodeEnvTag
+      - description: PeerImage is the name of the peer image
+        displayName: Peer Image
+        path: versions.peer.image.peerImage
+      - description: PeerInitImage is the name of the peer init image
+        displayName: Peer Init Image
+        path: versions.peer.image.peerInitImage
+      - description: PeerInitTag is the tag of the peer init image
+        displayName: Peer Init Tag
+        path: versions.peer.image.peerInitTag
+      - description: PeerTag is the tag of the peer image
+        displayName: Peer Tag
+        path: versions.peer.image.peerTag
+      - description: Zone (Optional) is the zone of the nodes where the console should
+          be deployed
+        displayName: Zone
+        path: zone
+      statusDescriptors:
+      - description: ErrorCode is the code of classification of errors
+        displayName: Error Code
+        path: errorcode
+      - description: LastHeartbeatTime is when the controller reconciled this component
+        displayName: Last Heartbeat Time
+        path: lastHeartbeatTime
+      - description: Message provides a message for the status to be shown to customer
+        displayName: Message
+        path: message
+      - description: Reason provides a reason for an error
+        displayName: Reason
+        path: reason
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.phase:reason
+      - description: Status is defined based on the current status of the component
+        displayName: Status
+        path: status
+      - description: Type is true or false based on if status is valid
+        displayName: Type
+        path: type
+      - description: Version is the product version of the component
+        displayName: Version
+        path: version
+      - description: Versions is the operand version of the component
+        displayName: Versions
+        path: versions
+      version: v1beta1
+    - description: Ordering nodes create the blocks that form the ledger and send
+        them to peers.
+      displayName: Hyperledger Fabric Orderer
+      kind: IBPOrderer
+      name: ibporderers.ibp.com
+      resources:
+      - kind: ConfigMaps
+        name: ""
+        version: v1
+      - kind: Deployments
+        name: ""
+        version: v1
+      - kind: IBPCA
+        name: ""
+        version: v1beta1
+      - kind: IBPConsole
+        name: ""
+        version: v1beta1
+      - kind: IBPOrderer
+        name: ""
+        version: v1beta1
+      - kind: IBPPeer
+        name: ""
+        version: v1beta1
+      - kind: Ingresses
+        name: ""
+        version: v1beta1
+      - kind: PersistentVolumeClaim
+        name: ""
+        version: v1
+      - kind: Pods
+        name: ""
+        version: v1
+      - kind: Replicasets
+        name: ""
+        version: v1
+      - kind: Role
+        name: ""
+        version: v1
+      - kind: RoleBinding
+        name: ""
+        version: v1
+      - kind: Route
+        name: ""
+        version: v1
+      - kind: Secrets
+        name: ""
+        version: v1
+      - kind: ServiceAccounts
+        name: ""
+        version: v1
+      - kind: Services
+        name: ""
+        version: v1
+      specDescriptors:
+      - description: Action (Optional) is object for orderer actions
+        displayName: Action
+        path: action
+      - description: Enroll contains actions for triggering crypto enroll
+        displayName: Enroll
+        path: action.enroll
+      - description: Ecert is used to trigger enroll for ecert
+        displayName: Ecert
+        path: action.enroll.ecert
+      - description: Reenroll contains actions for triggering crypto reenroll
+        displayName: Reenroll
+        path: action.reenroll
+      - description: Ecert is used to trigger reenroll for ecert
+        displayName: Ecert
+        path: action.reenroll.ecert
+      - description: EcertNewKey is used to trigger reenroll for ecert and also generating
+          a new private key
+        displayName: Ecert New Key
+        path: action.reenroll.ecertNewKey
+      - description: TLSCert is used to trigger reenroll for tlscert
+        displayName: TLSCert
+        path: action.reenroll.tlscert
+      - description: TLSCertNewKey is used to trigger reenroll for tlscert and also
+          generating a new private key
+        displayName: TLSCert New Key
+        path: action.reenroll.tlscertNewKey
+      - description: Restart action is used to restart orderer deployment
+        displayName: Restart
+        path: action.restart
+      - description: Arch (Optional) is the architecture of the nodes where orderer
+          should be deployed
+        displayName: Arch
+        path: arch
+      - description: ClusterSize (Optional) number of orderers if a cluster
+        displayName: Cluster Size
+        path: clusterSize
+      - description: ClusterConfigOverride (Optional) is array of config overrides
+          for cluster
+        displayName: Cluster Config Override
+        path: clusterconfigoverride
+      - description: ClusterSecret (Optional) is array of msp crypto for cluster
+        displayName: Cluster Secret
+        path: clustersecret
+      - description: ConfigOverride (Optional) is the object to provide overrides
+          to core yaml config
+        displayName: Config Override
+        path: configoverride
+      - description: CustomNames (Optional) is to use pre-configured resources for
+          orderer's deployment
+        displayName: Custom Names
+        path: customNames
+      - description: PVC is the list of PVC Names to be used for orderer's deployment
+        displayName: PVC
+        path: customNames.pvc
+      - description: Orderer is the pvc to be used as orderer's storage
+        displayName: Orderer
+        path: customNames.pvc.orderer
+      - description: DisableNodeOU (Optional) is used to switch nodeou on and off
+        displayName: Disable Node OU
+        path: disablenodeou
+      - description: Domain is the sub-domain used for orderer's deployment
+        displayName: Domain
+        path: domain
+      - description: ExternalAddress (Optional) is used internally
+        displayName: External Address
+        path: externalAddress
+      - description: GenesisBlock (Optional) is genesis block to start the orderer
+        displayName: Genesis Block
+        path: genesisBlock
+      - description: HSM (Optional) is the paramters for the HSM if being used
+        displayName: HSM
+        path: hsm
+      - description: PKCS11Endpoint is the endpoint for the pkcs11 proxy
+        displayName: PKCS11 Endpoint
+        path: hsm.pkcs11endpoint
+      - description: ImagePullSecrets (Optional) is the list of ImagePullSecrets to
+          be used for orderer's deployment
+        displayName: Image Pull Secrets
+        path: imagePullSecrets
+      - description: Images (Optional) lists the images to be used for orderer's deployment
+        displayName: Images
+        path: images
+      - description: EnrollerImage is the name of the init image for crypto generation
+        displayName: Enroller Image
+        path: images.enrollerImage
+      - description: EnrollerTag is the tag of the init image for crypto generation
+        displayName: Enroller Tag
+        path: images.enrollerTag
+      - description: GRPCWebImage is the name of the grpc web proxy image
+        displayName: GRPCWeb Image
+        path: images.grpcwebImage
+      - description: GRPCWebTag is the tag of the grpc web proxy image
+        displayName: GRPCWeb Tag
+        path: images.grpcwebTag
+      - description: HSMImage is the name of the hsm image
+        displayName: HSMImage
+        path: images.hsmImage
+      - description: HSMTag is the tag of the hsm image
+        displayName: HSMTag
+        path: images.hsmTag
+      - description: OrdererImage is the name of the orderer image
+        displayName: Orderer Image
+        path: images.ordererImage
+      - description: OrdererInitImage is the name of the orderer init image
+        displayName: Orderer Init Image
+        path: images.ordererInitImage
+      - description: OrdererInitTag is the tag of the orderer init image
+        displayName: Orderer Init Tag
+        path: images.ordererInitTag
+      - description: OrdererTag is the tag of the orderer image
+        displayName: Orderer Tag
+        path: images.ordererTag
+      - description: Ingress (Optional) is ingress object for ingress overrides
+        displayName: Ingress
+        path: ingress
+      - description: Class (Optional) is the class to set for ingress
+        displayName: Class
+        path: ingress.class
+      - description: TlsSecretName (Optional) is the secret name to be used for tls
+          certificates
+        displayName: Tls Secret Name
+        path: ingress.tlsSecretName
+      - description: IsPrecreate (Optional) defines if orderer is in precreate state
+        displayName: Is Precreate
+        path: isprecreate
+      - description: License should be accepted by the user to be able to setup orderer
+        displayName: License
+        path: license
+      - description: Accept should be set to true to accept the license.
+        displayName: Accept
+        path: license.accept
+        value:
+        - false
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:checkbox
+      - description: ClusterLocation (Optional) is array of cluster location settings
+          for cluster
+        displayName: Cluster Location
+        path: location
+      - description: Region (Optional) is the region of the nodes where the orderer
+          should be deployed
+        displayName: Region
+        path: location[0].region
+      - description: Zone (Optional) is the zone of the nodes where the orderer should
+          be deployed
+        displayName: Zone
+        path: location[0].zone
+      - description: MSPID is the msp id of the orderer
+        displayName: MSPID
+        path: mspID
+      - description: NumSecondsWarningPeriod (Optional - default 30 days) is used
+          to define certificate expiry warning period.
+        displayName: Num Seconds Warning Period
+        path: numSecondsWarningPeriod
+      - description: NodeNumber (Optional) is the number of this node in cluster -
+          used internally
+        displayName: Node Number
+        path: number
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:number
+      - description: OrdererType is type of orderer you want to start
+        displayName: Orderer Type
+        path: ordererType
+      - description: OrgName is the organization name of the orderer
+        displayName: Org Name
+        path: orgName
+      - description: Region (Optional) is the region of the nodes where the orderer
+          should be deployed
+        displayName: Region
+        path: region
+      - description: RegistryURL is registry url used to pull images
+        displayName: Registry URL
+        path: registryURL
+      - description: Replicas (Optional - default 1) is the number of orderer replicas
+          to be setup
+        displayName: Replicas
+        path: replicas
+      - description: Resources (Optional) is the amount of resources to be provided
+          to orderer deployment
+        displayName: Resources
+        path: resources
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Enroller (Optional) is the resources provided to the enroller
+          container
+        displayName: Enroller
+        path: resources.enroller
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: HSMDaemon (Optional) is the resources provided to the HSM Daemon
+          container
+        displayName: HSMDaemon
+        path: resources.hsmdaemon
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Init (Optional) is the resources provided to the init container
+        displayName: Init
+        path: resources.init
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Orderer (Optional) is the resources provided to the orderer container
+        displayName: Orderer
+        path: resources.orderer
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: GRPCProxy (Optional) is the resources provided to the proxy container
+        displayName: GRPCProxy
+        path: resources.proxy
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Secret is object for msp crypto
+        displayName: Secret
+        path: secret
+      - description: Enrollment defines enrollment part of secret spec
+        displayName: Enrollment
+        path: secret.enrollment
+      - description: ClientAuth contains client uath enrollment details
+        displayName: Client Auth
+        path: secret.enrollment.clientauth
+      - description: AdminCerts is the base64 encoded admincerts
+        displayName: Admin Certs
+        path: secret.enrollment.clientauth.admincerts
+      - description: CAHost is host part of the CA to use
+        displayName: CAHost
+        path: secret.enrollment.clientauth.cahost
+      - description: CAName is name of CA
+        displayName: CAName
+        path: secret.enrollment.clientauth.caname
+      - description: CAPort is port of the CA to use
+        displayName: CAPort
+        path: secret.enrollment.clientauth.caport
+      - description: CATLS is tls details to talk to CA endpoint
+        displayName: CATLS
+        path: secret.enrollment.clientauth.catls
+      - description: CACert is the base64 encoded certificate
+        displayName: CACert
+        path: secret.enrollment.clientauth.catls.cacert
+      - description: CSR is the CSR override object
+        displayName: CSR
+        path: secret.enrollment.clientauth.csr
+      - description: Hosts override for CSR
+        displayName: Hosts
+        path: secret.enrollment.clientauth.csr.hosts
+      - description: EnrollID is the enrollment username
+        displayName: Enroll ID
+        path: secret.enrollment.clientauth.enrollid
+      - description: EnrollSecret is enrollment secret ( password )
+        displayName: Enroll Secret
+        path: secret.enrollment.clientauth.enrollsecret
+      - description: Component contains ecert enrollment details
+        displayName: Component
+        path: secret.enrollment.component
+      - description: AdminCerts is the base64 encoded admincerts
+        displayName: Admin Certs
+        path: secret.enrollment.component.admincerts
+      - description: CAHost is host part of the CA to use
+        displayName: CAHost
+        path: secret.enrollment.component.cahost
+      - description: CAName is name of CA
+        displayName: CAName
+        path: secret.enrollment.component.caname
+      - description: CAPort is port of the CA to use
+        displayName: CAPort
+        path: secret.enrollment.component.caport
+      - description: CATLS is tls details to talk to CA endpoint
+        displayName: CATLS
+        path: secret.enrollment.component.catls
+      - description: CACert is the base64 encoded certificate
+        displayName: CACert
+        path: secret.enrollment.component.catls.cacert
+      - description: CSR is the CSR override object
+        displayName: CSR
+        path: secret.enrollment.component.csr
+      - description: Hosts override for CSR
+        displayName: Hosts
+        path: secret.enrollment.component.csr.hosts
+      - description: EnrollID is the enrollment username
+        displayName: Enroll ID
+        path: secret.enrollment.component.enrollid
+      - description: EnrollSecret is enrollment secret ( password )
+        displayName: Enroll Secret
+        path: secret.enrollment.component.enrollsecret
+      - description: TLS contains tls enrollment details
+        displayName: TLS
+        path: secret.enrollment.tls
+      - description: AdminCerts is the base64 encoded admincerts
+        displayName: Admin Certs
+        path: secret.enrollment.tls.admincerts
+      - description: CAHost is host part of the CA to use
+        displayName: CAHost
+        path: secret.enrollment.tls.cahost
+      - description: CAName is name of CA
+        displayName: CAName
+        path: secret.enrollment.tls.caname
+      - description: CAPort is port of the CA to use
+        displayName: CAPort
+        path: secret.enrollment.tls.caport
+      - description: CATLS is tls details to talk to CA endpoint
+        displayName: CATLS
+        path: secret.enrollment.tls.catls
+      - description: CACert is the base64 encoded certificate
+        displayName: CACert
+        path: secret.enrollment.tls.catls.cacert
+      - description: CSR is the CSR override object
+        displayName: CSR
+        path: secret.enrollment.tls.csr
+      - description: Hosts override for CSR
+        displayName: Hosts
+        path: secret.enrollment.tls.csr.hosts
+      - description: EnrollID is the enrollment username
+        displayName: Enroll ID
+        path: secret.enrollment.tls.enrollid
+      - description: EnrollSecret is enrollment secret ( password )
+        displayName: Enroll Secret
+        path: secret.enrollment.tls.enrollsecret
+      - description: MSP defines msp part of secret spec
+        displayName: MSP
+        path: secret.msp
+      - description: ClientAuth contains crypto for client auth certs
+        displayName: Client Auth
+        path: secret.msp.clientauth
+      - description: AdminCerts is base64 encoded admincerts array
+        displayName: Admin Certs
+        path: secret.msp.clientauth.admincerts
+      - description: CACerts is base64 encoded cacerts array
+        displayName: CACerts
+        path: secret.msp.clientauth.cacerts
+      - description: IntermediateCerts is base64 encoded intermediate certs array
+        displayName: Intermediate Certs
+        path: secret.msp.clientauth.intermediatecerts
+      - description: KeyStore is base64 encoded private key
+        displayName: Key Store
+        path: secret.msp.clientauth.keystore
+      - description: SignCerts is base64 encoded sign cert
+        displayName: Sign Certs
+        path: secret.msp.clientauth.signcerts
+      - description: Component contains crypto for ecerts
+        displayName: Component
+        path: secret.msp.component
+      - description: AdminCerts is base64 encoded admincerts array
+        displayName: Admin Certs
+        path: secret.msp.component.admincerts
+      - description: CACerts is base64 encoded cacerts array
+        displayName: CACerts
+        path: secret.msp.component.cacerts
+      - description: IntermediateCerts is base64 encoded intermediate certs array
+        displayName: Intermediate Certs
+        path: secret.msp.component.intermediatecerts
+      - description: KeyStore is base64 encoded private key
+        displayName: Key Store
+        path: secret.msp.component.keystore
+      - description: SignCerts is base64 encoded sign cert
+        displayName: Sign Certs
+        path: secret.msp.component.signcerts
+      - description: TLS contains crypto for tls certs
+        displayName: TLS
+        path: secret.msp.tls
+      - description: AdminCerts is base64 encoded admincerts array
+        displayName: Admin Certs
+        path: secret.msp.tls.admincerts
+      - description: CACerts is base64 encoded cacerts array
+        displayName: CACerts
+        path: secret.msp.tls.cacerts
+      - description: IntermediateCerts is base64 encoded intermediate certs array
+        displayName: Intermediate Certs
+        path: secret.msp.tls.intermediatecerts
+      - description: KeyStore is base64 encoded private key
+        displayName: Key Store
+        path: secret.msp.tls.keystore
+      - description: SignCerts is base64 encoded sign cert
+        displayName: Sign Certs
+        path: secret.msp.tls.signcerts
+      - description: Service (Optional) is the override object for orderer's service
+        displayName: Service
+        path: service
+      - description: The "type" of the service to be used
+        displayName: Type
+        path: service.type
+      - description: Storage (Optional - uses default storageclass if not provided)
+          is the override object for CA's PVC config
+        displayName: Storage
+        path: storage
+      - description: Orderer (Optional) is the configuration of the storage of the
+          orderer
+        displayName: Orderer
+        path: storage.orderer
+      - description: Class is the storage class
+        displayName: Class
+        path: storage.orderer.class
+      - description: Size of storage
+        displayName: Size
+        path: storage.orderer.size
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:podCount
+      - description: SystemChannelName is the name of systemchannel
+        displayName: System Channel Name
+        path: systemChannelName
+      - description: FabricVersion (Optional) is fabric version for the orderer
+        displayName: Fabric Version
+        path: version
+      - description: Zone (Optional) is the zone of the nodes where the orderer should
+          be deployed
+        displayName: Zone
+        path: zone
+      statusDescriptors:
+      - description: ErrorCode is the code of classification of errors
+        displayName: Error Code
+        path: errorcode
+      - description: LastHeartbeatTime is when the controller reconciled this component
+        displayName: Last Heartbeat Time
+        path: lastHeartbeatTime
+      - description: Message provides a message for the status to be shown to customer
+        displayName: Message
+        path: message
+      - description: Reason provides a reason for an error
+        displayName: Reason
+        path: reason
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.phase:reason
+      - description: Status is defined based on the current status of the component
+        displayName: Status
+        path: status
+      - description: Type is true or false based on if status is valid
+        displayName: Type
+        path: type
+      - description: Version is the product version of the component
+        displayName: Version
+        path: version
+      - description: Versions is the operand version of the component
+        displayName: Versions
+        path: versions
+      version: v1beta1
+    - description: Blockchain Peer is the Schema for the ibppeers API.
+      displayName: Hyperledger Fabric Peer
+      kind: IBPPeer
+      name: ibppeers.ibp.com
+      resources:
+      - kind: ConfigMaps
+        name: ""
+        version: v1
+      - kind: Deployments
+        name: ""
+        version: v1
+      - kind: IBPCA
+        name: ""
+        version: v1beta1
+      - kind: IBPConsole
+        name: ""
+        version: v1beta1
+      - kind: IBPOrderer
+        name: ""
+        version: v1beta1
+      - kind: IBPPeer
+        name: ""
+        version: v1beta1
+      - kind: Ingresses
+        name: ""
+        version: v1beta1
+      - kind: PersistentVolumeClaim
+        name: ""
+        version: v1
+      - kind: Pods
+        name: ""
+        version: v1
+      - kind: Replicasets
+        name: ""
+        version: v1
+      - kind: Role
+        name: ""
+        version: v1
+      - kind: RoleBinding
+        name: ""
+        version: v1
+      - kind: Route
+        name: ""
+        version: v1
+      - kind: Secrets
+        name: ""
+        version: v1
+      - kind: ServiceAccounts
+        name: ""
+        version: v1
+      - kind: Services
+        name: ""
+        version: v1
+      - kind: clusterversions
+        name: ""
+        version: v1
+      specDescriptors:
+      - description: Action (Optional) is object for peer actions
+        displayName: Action
+        path: action
+      - description: Enroll contains actions for triggering crypto enroll
+        displayName: Enroll
+        path: action.enroll
+      - description: Ecert is used to trigger enroll for ecert
+        displayName: Ecert
+        path: action.enroll.ecert
+      - description: TLSCert is used to trigger enroll for tlscert
+        displayName: TLSCert
+        path: action.enroll.tlscert
+      - description: Reenroll contains actions for triggering crypto reenroll
+        displayName: Reenroll
+        path: action.reenroll
+      - description: Ecert is used to trigger reenroll for ecert
+        displayName: Ecert
+        path: action.reenroll.ecert
+      - description: EcertNewKey is used to trigger reenroll for ecert and also generating
+          a new private key
+        displayName: Ecert New Key
+        path: action.reenroll.ecertNewKey
+      - description: TLSCert is used to trigger reenroll for tlscert
+        displayName: TLSCert
+        path: action.reenroll.tlscert
+      - description: TLSCertNewKey is used to trigger reenroll for tlscert and also
+          generating a new private key
+        displayName: TLSCert New Key
+        path: action.reenroll.tlscertNewKey
+      - description: Restart action is used to restart peer deployment
+        displayName: Restart
+        path: action.restart
+      - description: UpgradeDBs action is used to trigger peer node upgrade-dbs command
+        displayName: Upgrade DBs
+        path: action.upgradedbs
+      - description: cluster related configs Arch (Optional) is the architecture of
+          the nodes where peer should be deployed
+        displayName: Arch
+        path: arch
+      - description: ConfigOverride (Optional) is the object to provide overrides
+          to core yaml config
+        displayName: Config Override
+        path: configoverride
+      - description: CustomNames (Optional) is to use pre-configured resources for
+          peer's deployment
+        displayName: Custom Names
+        path: customNames
+      - description: PVC is the list of PVC Names to be used for peer's deployment
+        displayName: PVC
+        path: customNames.pvc
+      - description: Peer is the pvc to be used as peer's storage
+        displayName: Peer
+        path: customNames.pvc.peer
+      - description: StateDB is the pvc to be used as statedb's storage
+        displayName: State DB
+        path: customNames.pvc.statedb
+      - description: advanced configs DindArgs (Optional) is used to override args
+          passed to dind container
+        displayName: Dind Args
+        path: dindArgs
+      - description: DisableNodeOU (Optional) is used to switch nodeou on and off
+        displayName: Disable Node OU
+        path: disablenodeou
+      - description: proxy ip passed if not OCP, domain for OCP Domain is the sub-domain
+          used for peer's deployment
+        displayName: Domain
+        path: domain
+      - description: HSM (Optional) is the paramters for the HSM if being used
+        displayName: HSM
+        path: hsm
+      - description: PKCS11Endpoint is the endpoint for the pkcs11 proxy
+        displayName: PKCS11 Endpoint
+        path: hsm.pkcs11endpoint
+      - description: ImagePullSecrets (Optional) is the list of ImagePullSecrets to
+          be used for peer's deployment
+        displayName: Image Pull Secrets
+        path: imagePullSecrets
+      - description: Images (Optional) lists the images to be used for peer's deployment
+        displayName: Images
+        path: images
+      - description: BuilderImage is the name of the builder image
+        displayName: Builder Image
+        path: images.builderImage
+      - description: BuilderTag is the tag of the builder image
+        displayName: Builder Tag
+        path: images.builderTag
+      - description: CCLauncherImage is the name of the chaincode launcher image
+        displayName: CCLauncher Image
+        path: images.chaincodeLauncherImage
+      - description: CCLauncherTag is the tag of the chaincode launcher image
+        displayName: CCLauncher Tag
+        path: images.chaincodeLauncherTag
+      - description: CouchDBImage is the name of the couchdb image
+        displayName: Couch DBImage
+        path: images.couchdbImage
+      - description: CouchDBTag is the tag of the couchdb image
+        displayName: Couch DBTag
+        path: images.couchdbTag
+      - description: DindImage is the name of the dind image
+        displayName: Dind Image
+        path: images.dindImage
+      - description: DindTag is the tag of the dind image
+        displayName: Dind Tag
+        path: images.dindTag
+      - description: EnrollerImage is the name of the init image for crypto generation
+        displayName: Enroller Image
+        path: images.enrollerImage
+      - description: EnrollerTag is the tag of the init image for crypto generation
+        displayName: Enroller Tag
+        path: images.enrollerTag
+      - description: FileTransferImage is the name of the file transfer image
+        displayName: File Transfer Image
+        path: images.fileTransferImage
+      - description: FileTransferTag is the tag of the file transfer image
+        displayName: File Transfer Tag
+        path: images.fileTransferTag
+      - description: FluentdImage is the name of the fluentd logger image
+        displayName: Fluentd Image
+        path: images.fluentdImage
+      - description: FluentdTag is the tag of the fluentd logger image
+        displayName: Fluentd Tag
+        path: images.fluentdTag
+      - description: GoEnvImage is the name of the goenv image
+        displayName: Go Env Image
+        path: images.goEnvImage
+      - description: GoEnvTag is the tag of the goenv image
+        displayName: Go Env Tag
+        path: images.goEnvTag
+      - description: GRPCWebImage is the name of the grpc web proxy image
+        displayName: GRPCWeb Image
+        path: images.grpcwebImage
+      - description: GRPCWebTag is the tag of the grpc web proxy image
+        displayName: GRPCWeb Tag
+        path: images.grpcwebTag
+      - description: HSMImage is the name of the hsm image
+        displayName: HSMImage
+        path: images.hsmImage
+      - description: HSMTag is the tag of the hsm image
+        displayName: HSMTag
+        path: images.hsmTag
+      - description: JavaEnvImage is the name of the javaenv image
+        displayName: Java Env Image
+        path: images.javaEnvImage
+      - description: JavaEnvTag is the tag of the javaenv image
+        displayName: Java Env Tag
+        path: images.javaEnvTag
+      - description: NodeEnvImage is the name of the nodeenv image
+        displayName: Node Env Image
+        path: images.nodeEnvImage
+      - description: NodeEnvTag is the tag of the nodeenv image
+        displayName: Node Env Tag
+        path: images.nodeEnvTag
+      - description: PeerImage is the name of the peer image
+        displayName: Peer Image
+        path: images.peerImage
+      - description: PeerInitImage is the name of the peer init image
+        displayName: Peer Init Image
+        path: images.peerInitImage
+      - description: PeerInitTag is the tag of the peer init image
+        displayName: Peer Init Tag
+        path: images.peerInitTag
+      - description: PeerTag is the tag of the peer image
+        displayName: Peer Tag
+        path: images.peerTag
+      - description: Ingress (Optional) is ingress object for ingress overrides
+        displayName: Ingress
+        path: ingress
+      - description: Class (Optional) is the class to set for ingress
+        displayName: Class
+        path: ingress.class
+      - description: TlsSecretName (Optional) is the secret name to be used for tls
+          certificates
+        displayName: Tls Secret Name
+        path: ingress.tlsSecretName
+      - description: License should be accepted by the user to be able to setup Peer
+        displayName: License
+        path: license
+      - description: Accept should be set to true to accept the license.
+        displayName: Accept
+        path: license.accept
+        value:
+        - false
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:checkbox
+      - description: peer specific configs MSPID is the msp id of the peer
+        displayName: MSPID
+        path: mspID
+      - description: msp data can be passed in secret on in spec MSPSecret (Optional)
+          is secret used to store msp crypto
+        displayName: MSPSecret
+        path: mspSecret
+      - description: NumSecondsWarningPeriod (Optional - default 30 days) is used
+          to define certificate expiry warning period.
+        displayName: Num Seconds Warning Period
+        path: numSecondsWarningPeriod
+      - description: PeerExternalEndpoint (Optional) is used to override peer external
+          endpoint
+        displayName: Peer External Endpoint
+        path: peerExternalEndpoint
+      - description: Region (Optional) is the region of the nodes where the peer should
+          be deployed
+        displayName: Region
+        path: region
+      - description: RegistryURL is registry url used to pull images
+        displayName: Registry URL
+        path: registryURL
+      - description: Replicas (Optional - default 1) is the number of peer replicas
+          to be setup
+        displayName: Replicas
+        path: replicas
+      - description: Resources (Optional) is the amount of resources to be provided
+          to peer deployment
+        displayName: Resources
+        path: resources
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: CCLauncher (Optional) is the resources provided to the cclauncher
+          container
+        displayName: CCLauncher
+        path: resources.chaincodelauncher
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: CouchDB (Optional) is the resources provided to the couchdb container
+        displayName: Couch DB
+        path: resources.couchdb
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: DinD (Optional) is the resources provided to the dind container
+        displayName: Din D
+        path: resources.dind
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Enroller (Optional) is the resources provided to the enroller
+          container
+        displayName: Enroller
+        path: resources.enroller
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: FluentD (Optional) is the resources provided to the fluentd container
+        displayName: Fluent D
+        path: resources.fluentd
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: HSMDaemon (Optional) is the resources provided to the HSM Daemon
+          container
+        displayName: HSMDaemon
+        path: resources.hsmdaemon
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Init (Optional) is the resources provided to the init container
+        displayName: Init
+        path: resources.init
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Peer (Optional) is the resources provided to the peer container
+        displayName: Peer
+        path: resources.peer
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: GRPCProxy (Optional) is the resources provided to the proxy container
+        displayName: GRPCProxy
+        path: resources.proxy
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      - description: Secret is object for msp crypto
+        displayName: Secret
+        path: secret
+      - description: Enrollment defines enrollment part of secret spec
+        displayName: Enrollment
+        path: secret.enrollment
+      - description: ClientAuth contains client uath enrollment details
+        displayName: Client Auth
+        path: secret.enrollment.clientauth
+      - description: AdminCerts is the base64 encoded admincerts
+        displayName: Admin Certs
+        path: secret.enrollment.clientauth.admincerts
+      - description: CAHost is host part of the CA to use
+        displayName: CAHost
+        path: secret.enrollment.clientauth.cahost
+      - description: CAName is name of CA
+        displayName: CAName
+        path: secret.enrollment.clientauth.caname
+      - description: CAPort is port of the CA to use
+        displayName: CAPort
+        path: secret.enrollment.clientauth.caport
+      - description: CATLS is tls details to talk to CA endpoint
+        displayName: CATLS
+        path: secret.enrollment.clientauth.catls
+      - description: CACert is the base64 encoded certificate
+        displayName: CACert
+        path: secret.enrollment.clientauth.catls.cacert
+      - description: CSR is the CSR override object
+        displayName: CSR
+        path: secret.enrollment.clientauth.csr
+      - description: Hosts override for CSR
+        displayName: Hosts
+        path: secret.enrollment.clientauth.csr.hosts
+      - description: EnrollID is the enrollment username
+        displayName: Enroll ID
+        path: secret.enrollment.clientauth.enrollid
+      - description: EnrollSecret is enrollment secret ( password )
+        displayName: Enroll Secret
+        path: secret.enrollment.clientauth.enrollsecret
+      - description: Component contains ecert enrollment details
+        displayName: Component
+        path: secret.enrollment.component
+      - description: AdminCerts is the base64 encoded admincerts
+        displayName: Admin Certs
+        path: secret.enrollment.component.admincerts
+      - description: CAHost is host part of the CA to use
+        displayName: CAHost
+        path: secret.enrollment.component.cahost
+      - description: CAName is name of CA
+        displayName: CAName
+        path: secret.enrollment.component.caname
+      - description: CAPort is port of the CA to use
+        displayName: CAPort
+        path: secret.enrollment.component.caport
+      - description: CATLS is tls details to talk to CA endpoint
+        displayName: CATLS
+        path: secret.enrollment.component.catls
+      - description: CACert is the base64 encoded certificate
+        displayName: CACert
+        path: secret.enrollment.component.catls.cacert
+      - description: CSR is the CSR override object
+        displayName: CSR
+        path: secret.enrollment.component.csr
+      - description: Hosts override for CSR
+        displayName: Hosts
+        path: secret.enrollment.component.csr.hosts
+      - description: EnrollID is the enrollment username
+        displayName: Enroll ID
+        path: secret.enrollment.component.enrollid
+      - description: EnrollSecret is enrollment secret ( password )
+        displayName: Enroll Secret
+        path: secret.enrollment.component.enrollsecret
+      - description: TLS contains tls enrollment details
+        displayName: TLS
+        path: secret.enrollment.tls
+      - description: AdminCerts is the base64 encoded admincerts
+        displayName: Admin Certs
+        path: secret.enrollment.tls.admincerts
+      - description: CAHost is host part of the CA to use
+        displayName: CAHost
+        path: secret.enrollment.tls.cahost
+      - description: CAName is name of CA
+        displayName: CAName
+        path: secret.enrollment.tls.caname
+      - description: CAPort is port of the CA to use
+        displayName: CAPort
+        path: secret.enrollment.tls.caport
+      - description: CATLS is tls details to talk to CA endpoint
+        displayName: CATLS
+        path: secret.enrollment.tls.catls
+      - description: CACert is the base64 encoded certificate
+        displayName: CACert
+        path: secret.enrollment.tls.catls.cacert
+      - description: CSR is the CSR override object
+        displayName: CSR
+        path: secret.enrollment.tls.csr
+      - description: Hosts override for CSR
+        displayName: Hosts
+        path: secret.enrollment.tls.csr.hosts
+      - description: EnrollID is the enrollment username
+        displayName: Enroll ID
+        path: secret.enrollment.tls.enrollid
+      - description: EnrollSecret is enrollment secret ( password )
+        displayName: Enroll Secret
+        path: secret.enrollment.tls.enrollsecret
+      - description: MSP defines msp part of secret spec
+        displayName: MSP
+        path: secret.msp
+      - description: ClientAuth contains crypto for client auth certs
+        displayName: Client Auth
+        path: secret.msp.clientauth
+      - description: AdminCerts is base64 encoded admincerts array
+        displayName: Admin Certs
+        path: secret.msp.clientauth.admincerts
+      - description: CACerts is base64 encoded cacerts array
+        displayName: CACerts
+        path: secret.msp.clientauth.cacerts
+      - description: IntermediateCerts is base64 encoded intermediate certs array
+        displayName: Intermediate Certs
+        path: secret.msp.clientauth.intermediatecerts
+      - description: KeyStore is base64 encoded private key
+        displayName: Key Store
+        path: secret.msp.clientauth.keystore
+      - description: SignCerts is base64 encoded sign cert
+        displayName: Sign Certs
+        path: secret.msp.clientauth.signcerts
+      - description: Component contains crypto for ecerts
+        displayName: Component
+        path: secret.msp.component
+      - description: AdminCerts is base64 encoded admincerts array
+        displayName: Admin Certs
+        path: secret.msp.component.admincerts
+      - description: CACerts is base64 encoded cacerts array
+        displayName: CACerts
+        path: secret.msp.component.cacerts
+      - description: IntermediateCerts is base64 encoded intermediate certs array
+        displayName: Intermediate Certs
+        path: secret.msp.component.intermediatecerts
+      - description: KeyStore is base64 encoded private key
+        displayName: Key Store
+        path: secret.msp.component.keystore
+      - description: SignCerts is base64 encoded sign cert
+        displayName: Sign Certs
+        path: secret.msp.component.signcerts
+      - description: TLS contains crypto for tls certs
+        displayName: TLS
+        path: secret.msp.tls
+      - description: AdminCerts is base64 encoded admincerts array
+        displayName: Admin Certs
+        path: secret.msp.tls.admincerts
+      - description: CACerts is base64 encoded cacerts array
+        displayName: CACerts
+        path: secret.msp.tls.cacerts
+      - description: IntermediateCerts is base64 encoded intermediate certs array
+        displayName: Intermediate Certs
+        path: secret.msp.tls.intermediatecerts
+      - description: KeyStore is base64 encoded private key
+        displayName: Key Store
+        path: secret.msp.tls.keystore
+      - description: SignCerts is base64 encoded sign cert
+        displayName: Sign Certs
+        path: secret.msp.tls.signcerts
+      - description: Service (Optional) is the override object for peer's service
+        displayName: Service
+        path: service
+      - description: The "type" of the service to be used
+        displayName: Type
+        path: service.type
+      - description: StateDb (Optional) is the statedb used for peer, can be couchdb
+          or leveldb
+        displayName: State Db
+        path: stateDb
+      - description: Storage (Optional - uses default storageclass if not provided)
+          is the override object for peer's PVC config
+        displayName: Storage
+        path: storage
+      - description: Peer (Optional) is the configuration of the storage of the peer
+        displayName: Peer
+        path: storage.peer
+      - description: Class is the storage class
+        displayName: Class
+        path: storage.peer.class
+      - description: Size of storage
+        displayName: Size
+        path: storage.peer.size
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:podCount
+      - description: StateDB (Optional) is the configuration of the storage of the
+          statedb
+        displayName: State DB
+        path: storage.statedb
+      - description: Class is the storage class
+        displayName: Class
+        path: storage.statedb.class
+      - description: Size of storage
+        displayName: Size
+        path: storage.statedb.size
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:podCount
+      - description: FabricVersion (Optional) is fabric version for the peer
+        displayName: Fabric Version
+        path: version
+      - description: Zone (Optional) is the zone of the nodes where the peer should
+          be deployed
+        displayName: Zone
+        path: zone
+      statusDescriptors:
+      - description: ErrorCode is the code of classification of errors
+        displayName: Error Code
+        path: errorcode
+      - description: LastHeartbeatTime is when the controller reconciled this component
+        displayName: Last Heartbeat Time
+        path: lastHeartbeatTime
+      - description: Message provides a message for the status to be shown to customer
+        displayName: Message
+        path: message
+      - description: Reason provides a reason for an error
+        displayName: Reason
+        path: reason
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.phase:reason
+      - description: Status is defined based on the current status of the component
+        displayName: Status
+        path: status
+      - description: Type is true or false based on if status is valid
+        displayName: Type
+        path: type
+      - description: Version is the product version of the component
+        displayName: Version
+        path: version
+      - description: Versions is the operand version of the component
+        displayName: Versions
+        path: versions
+      version: v1beta1
+  description: TODO
+  displayName: Fabric Opensource Operator
+  icon:
+  - base64data: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cGF0aCBkPSJNMTYsMEExNiwxNiwwLDEsMCwzMiwxNiwxNiwxNiwwLDAsMCwxNiwwWk05LDIySDdWMTBIOVptMTMsM0gxMFYyM0gyMlpNMjIsOUgxMFY3SDIyWm0zLDEzSDIzVjEwaDJaIiBzdHlsZT0iZmlsbDojMTMxNzFhIi8+PC9zdmc+Cg==
+    mediatype: image/svg+xml
+  install:
+    spec:
+      deployments:
+      - label:
+          control-plane: controller-manager
+        name: operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+              name: controller-manager
+          strategy:
+            type: Recreate
+          template:
+            metadata:
+              labels:
+                control-plane: controller-manager
+            spec:
+              affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                    - matchExpressions:
+                      - key: kubernetes.io/arch
+                        operator: In
+                        values:
+                        - amd64
+                        - s390x
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=10
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.5.0
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                resources: {}
+              - args:
+                - --metrics-addr=127.0.0.1:8080
+                - --enable-leader-election
+                command:
+                - /manager
+                image: controller:latest
+                name: manager
+                resources:
+                  limits:
+                    cpu: 100m
+                    memory: 30Mi
+                  requests:
+                    cpu: 100m
+                    memory: 20Mi
+              - command:
+                - ibp-operator
+                env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: operator
+                - name: CLUSTERTYPE
+                  value: OPENSHIFT
+                image: todo:update
+                imagePullPolicy: Always
+                livenessProbe:
+                  failureThreshold: 5
+                  initialDelaySeconds: 10
+                  tcpSocket:
+                    port: 8383
+                  timeoutSeconds: 5
+                name: operator
+                readinessProbe:
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  tcpSocket:
+                    port: 8383
+                  timeoutSeconds: 5
+                resources:
+                  limits:
+                    cpu: 100m
+                    ephemeral-storage: 1Gi
+                    memory: 200Mi
+                  requests:
+                    cpu: 100m
+                    ephemeral-storage: 100Mi
+                    memory: 200Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    add:
+                    - CHOWN
+                    - FOWNER
+                    drop:
+                    - ALL
+                  privileged: false
+                  readOnlyRootFilesystem: false
+                  runAsNonRoot: false
+                  runAsUser: 1001
+              securityContext:
+                fsGroup: 2000
+                runAsNonRoot: true
+                runAsUser: 1001
+              serviceAccountName: operator-controller-manager
+              terminationGracePeriodSeconds: 10
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: false
+    type: AllNamespaces
+  keywords:
+  - hyperledger
+  - fabric
+  maturity: alpha
+  provider:
+    name: Opensource
+  version: 1.0.0
