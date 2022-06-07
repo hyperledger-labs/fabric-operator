@@ -93,3 +93,4 @@ integration/actions/*/config
 scripts/images/clusterserviceversion.yaml
 .vscode
 .idea/
+.DS_Store
