@@ -29,9 +29,6 @@ function network_up() {
 
   init_namespace
 
-  # TODO: remove
-  create_image_pull_secret ghcr-pull-secret ghcr.io USERNAME $GITHUB_TOKEN
-
   apply_operator
   wait_for_deployment fabric-operator
 
