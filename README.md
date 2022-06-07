@@ -75,5 +75,3 @@ _Fabric, Ahoy!_
 - This is an open community project.  Be KIND to your peers.
 - Focus on **outcomes** (_where are we going_), not **mechanics** (_how will we get there_).
 - Discussion, Comments, and Action at Hyperledger Discord : [#fabric-kubernetes](https://discord.gg/hyperledger)
-
-
