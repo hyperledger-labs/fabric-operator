@@ -61,9 +61,10 @@ requiring a network route and [coredns override](scripts/cluster.sh#L153) to gui
 **Important**:
 
 Before installing the sample network, you must determine an IP address for your system which is visible to 
-pods running in Kubernetes.  While this IP will vary from system to system, here are some common guidelines:
+pods running in Kubernetes.  While this IP will vary from system to system, the address can be determined
+with the following guidelines:
 
-- For KIND on OSX, find the host IP address by resolving `host.docker.internal` on the host Docker network:
+- For KIND on OSX, find the host IP address by resolving `host.docker.internal` in a container:
 ```shell
 docker run -it --rm alpine nslookup host.docker.internal
 ```
@@ -73,16 +74,19 @@ Name:	host.docker.internal
 Address: 192.168.65.2
 ```
 
-- On systems with an embedded virtual machine (WSL, Virtualbox, VMWare, etc.), use the IP address of the
-  bridge interface for the guest VM.
-
-- On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
-
-
-After finding a suitable IP address, set the cluster ingress for the network.  E.g.: 
 ```shell
 export TEST_NETWORK_INGRESS_IPADDR=192.168.65.2
 ```
+
+- On Windows / WSL2, determine the host IP address according to [Microsoft guidelines](https://docs.microsoft.com/en-us/windows/wsl/networking):
+```shell
+export TEST_NETWORK_INGRESS_IPADDR=$(ip -json addr | jq -r '.[] | select(.ifname=="eth0") | .addr_info[] | select(.family=="inet") | .local')
+```
+
+- On systems with an embedded virtual machine (Virtualbox, VMWare, lima, etc.), use the IP address of the
+  guest bridge interface.
+
+- On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
 
 
 ## Test Network 
@@ -147,7 +151,7 @@ The operator can also be configured for use with the [fabric-builder-k8s](https:
 chaincode builder, providing smooth and immediate _Chaincode Right Now!_ deployments.
 
 Reconstruct the network with the "k8s-fabric-peer" image: 
-```yaml
+```shell
 network down
 
 export TEST_NETWORK_PEER_IMAGE=ghcr.io/hyperledgendary/k8s-fabric-peer
@@ -235,7 +239,13 @@ network console
 tail -f network-debug.log 
 ```
 
-- On OSX, there is a bug in the Golang DNS resolver, causing the Fabric binaries to stall out when resolving DNS. 
-  See [Fabric #3372](https://github.com/hyperledger/fabric/issues/3372) and [Golang #43398](https://github.com/golang/go/issues/43398).
+- View the operator logging output:
+```shell
+kubectl -n test-network logs -f deployment/fabric-operator 
+```
+
+- On OSX, there is a bug in the Golang DNS resolver ([Fabric #3372](https://github.com/hyperledger/fabric/issues/3372) and [Golang #43398](https://github.com/golang/go/issues/43398)), 
+  causing the Fabric binaries to occasionally stall out when querying DNS. 
+  This issue can cause `osnadmin` / channel join to time out, throwing an error when joining the channel. 
   Fix this by turning a build of [fabric](https://github.com/hyperledger/fabric) binaries and copying the build outputs
   from `fabric/build/bin/*` --> `sample-network/bin`
