@@ -1,12 +1,12 @@
-# Sample Network 
+# Sample Network
 
 This project uses the operator to launch a Fabric network on a local KIND or k3s cluster.
 
 - Apply `kustomization` overlays to install the Operator
-- Apply `kustomization` overlays to construct a Fabric Network 
+- Apply `kustomization` overlays to construct a Fabric Network
 - Call `peer` CLI and channel participation SDKs to administer the network
 - Deploy _Chaincode-as-a-Service_ smart contracts
-- Develop _Gateway Client_ applications on a local workstation 
+- Develop _Gateway Client_ applications on a local workstation
 
 Feedback, comments, questions, etc. at Discord : [#fabric-kubernetes](https://discord.gg/hyperledger)
 
@@ -34,33 +34,33 @@ export PATH=$PWD:$PWD/bin:$PATH
 ```
 
 
-### Ingress and DNS 
+### Ingress and DNS
 
-Fabric-operator utilizes Kubernetes `Ingress` resources to expose services behind a common, unified 
-DNS wildcard domain. In cloud-based environments, a network admin is typically responsible for 
-registering a [DNS Wildcard Record](https://en.wikipedia.org/wiki/Wildcard_DNS_record), utilizing public 
-DNS resolvers to associate a virtual domain name (e.g. `*.my-blockchain.example.com`) with the IP address 
+Fabric-operator utilizes Kubernetes `Ingress` resources to expose services behind a common, unified
+DNS wildcard domain. In cloud-based environments, a network admin is typically responsible for
+registering a [DNS Wildcard Record](https://en.wikipedia.org/wiki/Wildcard_DNS_record), utilizing public
+DNS resolvers to associate a virtual domain name (e.g. `*.my-blockchain.example.com`) with the IP address
 of a load-balancing proxy or Layer 7 appliance.
 
-In environments with a public DNS domain, set the ingress domain directly and proceed to [network setup](#test-network): 
+In environments with a public DNS domain, set the ingress domain directly and proceed to [network setup](#test-network):
 ```shell
 export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
 export TEST_NETWORK_INGRESS_DOMAIN=my-blockchain.example.com
 ```
 
 
-To enable _local development_ without a public DNS domain, the sample network has been bundled with 
-an Nginx ingress controller preconfigured in [ssl-passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) mode 
-for TLS termination directly at the Fabric nodes.  By default the ingress will expose fabric services at the 
-`*.localho.st` virtual domain, forcing all traffic from the host OS to be directed to the localhost interface 
+To enable _local development_ without a public DNS domain, the sample network has been bundled with
+an Nginx ingress controller preconfigured in [ssl-passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) mode
+for TLS termination directly at the Fabric nodes.  By default the ingress will expose fabric services at the
+`*.localho.st` virtual domain, forcing all traffic from the host OS to be directed to the localhost interface
 on 127.0.0.1.
 
-On occasion, pods running in Kubernetes will also need to connect to services at the _ingress domain_, 
+On occasion, pods running in Kubernetes will also need to connect to services at the _ingress domain_,
 requiring a network route and [coredns override](scripts/cluster.sh#L153) to guide traffic towards the ingress controller.
 
 **Important**:
 
-Before installing the sample network, you must determine an IP address for your system which is visible to 
+Before installing the sample network, you must determine an IP address for your system which is visible to
 pods running in Kubernetes.  While this IP will vary from system to system, the address can be determined
 with the following guidelines:
 
@@ -89,7 +89,7 @@ export TEST_NETWORK_INGRESS_IPADDR=$(ip -json addr | jq -r '.[] | select(.ifname
 - On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
 
 
-## Test Network 
+## Test Network
 
 Create a Kubernetes cluster, Nginx ingress, and Fabric CRDs:
 ```shell
@@ -99,15 +99,15 @@ network cluster init
 
 Launch the operator and `kustomize` a network of [CAs](config/cas), [peers](config/peers), and [orderers](config/orderers):
 ```shell
-network up 
+network up
 ```
 
 Explore Kubernetes `Pods`, `Deployments`, `Services`, `Ingress`, etc.:
 ```shell
-kubectl -n test-network get all 
+kubectl -n test-network get all
 ```
 
-## Chaincode 
+## Chaincode
 
 The operator is compatible with sample _Chaincode-as-a-Service_ smart contracts.
 
@@ -125,9 +125,9 @@ Deploy a sample contract:
 ```shell
 network cc deploy   asset-transfer-basic basic_1.0 /tmp/fabric-samples/asset-transfer-basic/chaincode-java
 
-network cc metadata asset-transfer-basic 
+network cc metadata asset-transfer-basic
 network cc invoke   asset-transfer-basic '{"Args":["InitLedger"]}'
-network cc query    asset-transfer-basic '{"Args":["ReadAsset","asset1"]}' | jq 
+network cc query    asset-transfer-basic '{"Args":["ReadAsset","asset1"]}' | jq
 ```
 
 Or set the `peer` CLI context to org1 peer1:
@@ -147,10 +147,10 @@ peer chaincode query -n asset-transfer-basic -C mychannel -c '{"Args":["org.hype
 
 ## K8s Chaincode Builder
 
-The operator can also be configured for use with the [fabric-builder-k8s](https://github.com/hyperledgendary/fabric-builder-k8s) 
+The operator can also be configured for use with the [fabric-builder-k8s](https://github.com/hyperledgendary/fabric-builder-k8s)
 chaincode builder, providing smooth and immediate _Chaincode Right Now!_ deployments.
 
-Reconstruct the network with the "k8s-fabric-peer" image: 
+Reconstruct the network with the "k8s-fabric-peer" image:
 ```shell
 network down
 
@@ -180,8 +180,9 @@ peer lifecycle \
   --package-id    ${PACKAGE_ID} \
   --sequence      1 \
   --orderer       test-network-org0-orderersnode1-orderer.localho.st:443 \
-  --tls --cafile  $PWD/temp/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem  
-  
+  --tls --cafile  $PWD/temp/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem \
+  --connTimeout   15s
+
 peer lifecycle \
   chaincode commit \
   --channelID     mychannel \
@@ -189,7 +190,8 @@ peer lifecycle \
   --version       1 \
   --sequence      1 \
   --orderer       test-network-org0-orderersnode1-orderer.localho.st:443 \
-  --tls --cafile  $PWD/temp/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem  
+  --tls --cafile  $PWD/temp/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem \
+  --connTimeout   15s
 
 ```
 
@@ -204,7 +206,7 @@ peer chaincode query -n conga-nft-contract -C mychannel -c '{"Args":["org.hyperl
 ```
 
 
-## Teardown 
+## Teardown
 
 Invariably, something in the recipe above will go awry. Look for additional diagnostics in network-debug.log and
 reset the stage with:
@@ -212,9 +214,9 @@ reset the stage with:
 ```shell
 network down
 ```
-or 
+or
 ```shell
-network unkind 
+network unkind
 ```
 
 
@@ -231,21 +233,21 @@ network console
 - [Build a network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network)
 
 
-## Troubleshooting: 
+## Troubleshooting:
 
-- The `network` script prints output and progress to a `network-debug.log` file.  An easy way to follow along 
+- The `network` script prints output and progress to a `network-debug.log` file.  An easy way to follow along
   with the progress is to open a second shell and tail the network log while running sample commands:
 ```shell
-tail -f network-debug.log 
+tail -f network-debug.log
 ```
 
 - View the operator logging output:
 ```shell
-kubectl -n test-network logs -f deployment/fabric-operator 
+kubectl -n test-network logs -f deployment/fabric-operator
 ```
 
-- On OSX, there is a bug in the Golang DNS resolver ([Fabric #3372](https://github.com/hyperledger/fabric/issues/3372) and [Golang #43398](https://github.com/golang/go/issues/43398)), 
-  causing the Fabric binaries to occasionally stall out when querying DNS. 
-  This issue can cause `osnadmin` / channel join to time out, throwing an error when joining the channel. 
+- On OSX, there is a bug in the Golang DNS resolver ([Fabric #3372](https://github.com/hyperledger/fabric/issues/3372) and [Golang #43398](https://github.com/golang/go/issues/43398)),
+  causing the Fabric binaries to occasionally stall out when querying DNS.
+  This issue can cause `osnadmin` / channel join to time out, throwing an error when joining the channel.
   Fix this by turning a build of [fabric](https://github.com/hyperledger/fabric) binaries and copying the build outputs
   from `fabric/build/bin/*` --> `sample-network/bin`

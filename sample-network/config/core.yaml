@@ -357,7 +357,7 @@ peer:
     # CLI common client config options
     client:
         # connection timeout
-        connTimeout: 10s
+        connTimeout: 15s
 
     # Delivery service related config
     deliveryclient:
@@ -366,7 +366,7 @@ peer:
         reconnectTotalTimeThreshold: 3600s
 
         # It sets the delivery service <-> ordering service node connection timeout
-        connTimeout: 10s
+        connTimeout: 15s
 
         # It sets the delivery service maximal delay between consecutive retries
         reConnectBackoffThreshold: 3600s
