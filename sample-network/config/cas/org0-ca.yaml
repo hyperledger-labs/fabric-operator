@@ -99,7 +99,7 @@ spec:
           expiry: 87600h0m0s
   customNames:
     pvc: {}
-  domain: "${DOMAIN}"
+  domain: "${INGRESS_DOMAIN}"
   images:
     caImage: ${CA_IMAGE}
     caTag: ${CA_IMAGE_LABEL}
