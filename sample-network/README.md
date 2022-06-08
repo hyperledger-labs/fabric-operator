@@ -14,6 +14,8 @@ Feedback, comments, questions, etc. at Discord : [#fabric-kubernetes](https://di
 
 ## Prerequisites:
 
+### General
+
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [jq](https://stedolan.github.io/jq/)
 - [envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html) (`brew install gettext` on OSX)
@@ -21,7 +23,16 @@ Feedback, comments, questions, etc. at Discord : [#fabric-kubernetes](https://di
 - K8s - either:
     - [KIND](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) + [Docker](https://www.docker.com) (resources: 8 CPU / 8 GRAM)
     - [Rancher Desktop](https://rancherdesktop.io) (resources: 8 CPU / 8GRAM, mobyd, and disable Traefik)
-  
+
+
+### Fabric Binaries
+
+Fabric binaries (peer, osnadmin, etc.) will be installed into the local `bin` folder.  Add these to your PATH:
+
+```shell
+export PATH=$PWD:$PWD/bin:$PATH
+```
+
 
 ### Ingress and DNS 
 
@@ -31,59 +42,47 @@ registering a [DNS Wildcard Record](https://en.wikipedia.org/wiki/Wildcard_DNS_r
 DNS resolvers to associate a virtual domain name (e.g. `*.my-blockchain.example.com`) with the IP address 
 of a load-balancing proxy or Layer 7 appliance.
 
-To enable _local development_ and systems without a DNS wildcard resolver, the sample network has been bundled with 
-an Nginx ingress controller preconfigured in [ssl-passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) mode 
-for TLS termination directly at the Fabric nodes.  By default the ingress will expose fabric services at the 
-`*.localho.st` virtual domain, forcing all traffic from the host OS to be directed to the localhost interface 
-on 127.0.0.1.
-
-However, on occasion, pods running in Kubernetes will also need to connect to services at the _ingress domain_, 
-requiring a network route and [coredns override](todo-link) to guide traffic towards the ingress controller.
-
-**Important**:
-
-Before installing the sample network, you must determine an IP address for your system which is visible _both_ to pods running in Kubernetes _AND_ to programs running on the 
-host OS.
-
-While this IP address varies from system to system, here are some common guidelines:
-
-- For KIND on OSX, find the host IP address by resolving `host.docker.internal` in a docker container.  E.g.: 
-```shell
-docker run -it --rm alpine nslookup host.docker.internal
-```
-```shell
-Non-authoritative answer:
-Name:	host.docker.internal
-Address: 192.168.65.2
-```
-- On systems with an embedded virtual machine (WSL, Virtualbox, VMWare, etc.), use the IP address of the
-  bridge interface for the guest VM.
-- On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
-
-After finding a suitable IP address, set the cluster ingress for the network.  E.g.: 
-```shell
-export TEST_NETWORK_INGRESS_IPADDR=192.168.65.2
-```
-
-Or for environments with access to a public DNS wildcard record, bypass the IP override and directly set the cluster domain: 
+In environments with a public DNS domain, set the ingress domain directly and proceed to [network setup](#test-network): 
 ```shell
 export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
 export TEST_NETWORK_INGRESS_DOMAIN=my-blockchain.example.com
 ```
 
 
-### Fabric Binaries 
+To enable _local development_ without a public DNS domain, the sample network has been bundled with 
+an Nginx ingress controller preconfigured in [ssl-passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) mode 
+for TLS termination directly at the Fabric nodes.  By default the ingress will expose fabric services at the 
+`*.localho.st` virtual domain, forcing all traffic from the host OS to be directed to the localhost interface 
+on 127.0.0.1.
 
-Fabric binaries (peer, osnadmin, etc.) will be installed into the local `bin` folder.  Add these to your PATH: 
+On occasion, pods running in Kubernetes will also need to connect to services at the _ingress domain_, 
+requiring a network route and [coredns override](scripts/cluster.sh#L153) to guide traffic towards the ingress controller.
 
+**Important**:
+
+Before installing the sample network, you must determine an IP address for your system which is visible to 
+pods running in Kubernetes.  While this IP will vary from system to system, here are some common guidelines:
+
+- For KIND on OSX, find the host IP address by resolving `host.docker.internal` on the host Docker network:
 ```shell
-export PATH=${PWD}:${PWD}/bin:$PATH
+docker run -it --rm alpine nslookup host.docker.internal
+```
+```
+Non-authoritative answer:
+Name:	host.docker.internal
+Address: 192.168.65.2
 ```
 
-On OSX, there is a bug in the Golang DNS resolver, causing the Fabric binaries to stall out when resolving DNS.
-See [Fabric #3372](https://github.com/hyperledger/fabric/issues/3372) and [Golang #43398](https://github.com/golang/go/issues/43398). 
-Fix this by turning a build of [fabric](https://github.com/hyperledger/fabric) binaries and copying the build outputs
-from `fabric/build/bin/*` --> `sample-network/bin`
+- On systems with an embedded virtual machine (WSL, Virtualbox, VMWare, etc.), use the IP address of the
+  bridge interface for the guest VM.
+
+- On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
+
+
+After finding a suitable IP address, set the cluster ingress for the network.  E.g.: 
+```shell
+export TEST_NETWORK_INGRESS_IPADDR=192.168.65.2
+```
 
 
 ## Test Network 
@@ -228,4 +227,15 @@ network console
 - [Build a network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network)
 
 
+## Troubleshooting: 
 
+- The `network` script prints output and progress to a `network-debug.log` file.  An easy way to follow along 
+  with the progress is to open a second shell and tail the network log while running sample commands:
+```shell
+tail -f network-debug.log 
+```
+
+- On OSX, there is a bug in the Golang DNS resolver, causing the Fabric binaries to stall out when resolving DNS. 
+  See [Fabric #3372](https://github.com/hyperledger/fabric/issues/3372) and [Golang #43398](https://github.com/golang/go/issues/43398).
+  Fix this by turning a build of [fabric](https://github.com/hyperledger/fabric) binaries and copying the build outputs
+  from `fabric/build/bin/*` --> `sample-network/bin`
