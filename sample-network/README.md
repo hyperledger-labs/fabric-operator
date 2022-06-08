@@ -49,26 +49,27 @@ While this IP address varies from system to system, here are some common guideli
 
 - For KIND on OSX, find the host IP address by resolving `host.docker.internal` in a docker container.  E.g.: 
 ```shell
-$ docker run -it --rm alpine nslookup host.docker.internal
-
+docker run -it --rm alpine nslookup host.docker.internal
+```
+```shell
+Non-authoritative answer:
 Name:	host.docker.internal
 Address: 192.168.65.2
 ```
-- On machines running an embedded virtual machine (WSL, Virtualbox, VMWare, etc.), use the IP address of the
+- On systems with an embedded virtual machine (WSL, Virtualbox, VMWare, etc.), use the IP address of the
   bridge interface for the guest VM.
 - On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
-- On environments with access to public DNS (e.g. IBM cloud, Fyre, EKS, etc.), use DNS: 
-```shell
-export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
-export TEST_NETWORK_INGRESS_DOMAIN=my-blockchain.example.com
-```
-
 
 After finding a suitable IP address, set the cluster ingress for the network.  E.g.: 
 ```shell
 export TEST_NETWORK_INGRESS_IPADDR=192.168.65.2
 ```
 
+Or for environments with access to a public DNS wildcard record, bypass the IP override and directly set the cluster domain: 
+```shell
+export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
+export TEST_NETWORK_INGRESS_DOMAIN=my-blockchain.example.com
+```
 
 
 ### Fabric Binaries 
