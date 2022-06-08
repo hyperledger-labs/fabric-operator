@@ -88,19 +88,19 @@ function kind_load_images() {
 }
 
 function cluster_init() {
-#  apply_fabric_crds
-#  apply_nginx_ingress
-#
-#  if [ "${STAGE_DOCKER_IMAGES}" == true ]; then
-#    pull_docker_images
-#    kind_load_images
-#  fi
+  apply_fabric_crds
+  apply_nginx_ingress
+
+  if [ "${STAGE_DOCKER_IMAGES}" == true ]; then
+    pull_docker_images
+    kind_load_images
+  fi
 
   if [ "${COREDNS_DOMAIN_OVERRIDE}" == true ]; then
     apply_coredns_domain_override
   fi
 
-#  wait_for_nginx_ingress
+  wait_for_nginx_ingress
 }
 
 function apply_fabric_crds() {
