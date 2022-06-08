@@ -113,7 +113,8 @@ function invoke_chaincode() {
     -C              $CHANNEL_NAME \
     -c              $@ \
     --orderer       ${NS}-org0-orderersnode1-orderer.${INGRESS_DOMAIN}:443 \
-    --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem
+    --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem \
+    --connTimeout   ${ORDERER_TIMEOUT}
 
   sleep 2
 }
@@ -187,7 +188,7 @@ function launch_chaincode_service() {
   local cc_image=$5
   push_fn "Launching chaincode container \"${cc_image}\""
 
-  cat << EOF | envsubst | kubectl -n $NS apply -f - 
+  cat << EOF | envsubst | kubectl -n $NS apply -f -
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -286,7 +287,8 @@ function approve_chaincode() {
     --package-id    ${cc_id} \
     --sequence      1 \
     --orderer       ${NS}-org0-orderersnode1-orderer.${INGRESS_DOMAIN}:443 \
-    --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem
+    --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem \
+    --connTimeout   ${ORDERER_TIMEOUT}
 
   pop_fn
 }
@@ -307,7 +309,8 @@ function commit_chaincode() {
     --version       1 \
     --sequence      1 \
     --orderer       ${NS}-org0-orderersnode1-orderer.${INGRESS_DOMAIN}:443 \
-    --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem
+    --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem \
+    --connTimeout   ${ORDERER_TIMEOUT}
 
   pop_fn
 }
