@@ -88,15 +88,19 @@ function kind_load_images() {
 }
 
 function cluster_init() {
-  apply_fabric_crds
-  apply_nginx_ingress
+#  apply_fabric_crds
+#  apply_nginx_ingress
+#
+#  if [ "${STAGE_DOCKER_IMAGES}" == true ]; then
+#    pull_docker_images
+#    kind_load_images
+#  fi
 
-  if [ "${STAGE_DOCKER_IMAGES}" == true ]; then
-    pull_docker_images
-    kind_load_images
+  if [ "${COREDNS_DOMAIN_OVERRIDE}" == true ]; then
+    apply_coredns_domain_override
   fi
 
-  wait_for_nginx_ingress
+#  wait_for_nginx_ingress
 }
 
 function apply_fabric_crds() {
@@ -140,6 +144,60 @@ function wait_for_nginx_ingress() {
     --for=condition=ready pod \
     --selector=app.kubernetes.io/component=controller \
     --timeout=2m
+
+  pop_fn
+}
+
+# Override the cluster DNS with a local override to refer pods to the HOST interface
+# when connecting to ingress.
+function apply_coredns_domain_override() {
+  push_fn "Applying CoreDNS overrides for ingress domain $INGRESS_DOMAIN at $TEST_NETWORK_INGRESS_IPADDR"
+
+  # todo: always set the ingress ip address (or determine if on a mac as a default)
+  # todo: use a single block of hosts { or plugin to properly set a wildcard domain alias - no rewrite + hosts
+
+  if [ -z "${TEST_NETWORK_INGRESS_IPADDR}" ]; then
+    log "TEST_NETWORK_INGRESS_IPADDR has not been set - unable to override the ingress IP address."
+    exit 1
+  fi
+
+  cat <<EOF | kubectl apply -f -
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: coredns
+  namespace: kube-system
+data:
+  Corefile: |
+    .:53 {
+        errors
+        health {
+           lameduck 5s
+        }
+        rewrite name regex (.*)\.localho\.st host.ingress.internal
+        hosts {
+          ${TEST_NETWORK_INGRESS_IPADDR} host.ingress.internal
+          fallthrough
+        }
+        ready
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+           pods insecure
+           fallthrough in-addr.arpa ip6.arpa
+           ttl 30
+        }
+        prometheus :9153
+        forward . /etc/resolv.conf {
+           max_concurrent 1000
+        }
+        cache 30
+        loop
+        reload
+        loadbalance
+    }
+EOF
+
+  kubectl -n kube-system rollout restart deployment/coredns
 
   pop_fn
 }

@@ -92,7 +92,7 @@ spec:
           expiry: 87600h0m0s
   customNames:
     pvc: {}
-  domain: "${DOMAIN}"
+  domain: "${INGRESS_DOMAIN}"
   # imagePullSecrets:
   # - regcred
   images:

@@ -125,7 +125,7 @@ function enroll_org_admin() {
   FABRIC_CA_CLIENT_HOME=${ORG_ADMIN_DIR} fabric-ca-client enroll --url ${CA_URL} --tls.certfiles ${CA_DIR}/tls-cert.pem
 
   # Construct an msp config.yaml
-  CA_CERT_NAME=${NS}-${CA_NAME}-ca-$(echo $DOMAIN | tr -s . -)-${CA_PORT}.pem
+  CA_CERT_NAME=${NS}-${CA_NAME}-ca-$(echo $INGRESS_DOMAIN | tr -s . -)-${CA_PORT}.pem
 
   create_msp_config_yaml ${CA_NAME} ${CA_CERT_NAME} ${ORG_ADMIN_DIR}/msp
 
@@ -215,7 +215,7 @@ function create_genesis_block() {
   cp ${PWD}/config/core.yaml ${TEMP_DIR}/config/
 
   # The channel configtx file needs to specify dynamic elements from the environment,
-  # for instance, the ${DOMAIN} for ingress controller and service endpoints.
+  # for instance, the ${INGRESS_DOMAIN} for ingress controller and service endpoints.
   cat ${PWD}/config/configtx-template.yaml | envsubst > ${TEMP_DIR}/config/configtx.yaml
 
   FABRIC_CFG_PATH=${TEMP_DIR}/config \
@@ -251,7 +251,7 @@ function join_channel_orderer() {
   # of identity than the Docker Compose network, which transmits the orderer NODE TLS key pair directly
 
   osnadmin channel join \
-    --orderer-address ${NS}-${org}-${orderer}-admin.${DOMAIN} \
+    --orderer-address ${NS}-${org}-${orderer}-admin.${INGRESS_DOMAIN} \
     --ca-file         ${TEMP_DIR}/channel-msp/ordererOrganizations/${org}/orderers/${org}-${orderer}/tls/signcerts/tls-cert.pem \
     --client-cert     ${TEMP_DIR}/enrollments/${org}/users/${org}admin/tls/signcerts/cert.pem \
     --client-key      ${TEMP_DIR}/enrollments/${org}/users/${org}admin/tls/keystore/key.pem \
@@ -283,7 +283,7 @@ function join_channel_peer() {
 
   peer channel join \
     --blockpath ${TEMP_DIR}/genesis_block.pb \
-    --orderer   ${NS}-org0-orderersnode1-orderer.${DOMAIN} \
+    --orderer   ${NS}-org0-orderersnode1-orderer.${INGRESS_DOMAIN} \
     --tls        \
     --cafile    ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem
 }

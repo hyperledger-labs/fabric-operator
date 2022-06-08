@@ -146,7 +146,7 @@ function export_peer_context() {
 #  export FABRIC_LOGGING_SPEC=DEBUG
 
   export FABRIC_CFG_PATH=${PWD}/config
-  export CORE_PEER_ADDRESS=${NS}-${org}-${peer}-peer.${DOMAIN}:443
+  export CORE_PEER_ADDRESS=${NS}-${org}-${peer}-peer.${INGRESS_DOMAIN}:443
   export CORE_PEER_LOCALMSPID=Org${orgnum}MSP
   export CORE_PEER_TLS_ENABLED=true
   export CORE_PEER_MSPCONFIGPATH=${TEMP_DIR}/enrollments/${org}/users/${org}admin/msp

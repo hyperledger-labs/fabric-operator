@@ -45,8 +45,9 @@ context FABRIC_CONTAINER_REGISTRY hyperledger
 context NAME                      test-network
 context NS                        $NAME
 context CLUSTER_NAME              $CLUSTER_RUNTIME
-context DOMAIN                    local.fabric.network
 context KUBE_DNS_DOMAIN           ${NS}.svc.cluster.local
+context INGRESS_DOMAIN            localho.st
+context COREDNS_DOMAIN_OVERRIDE   true
 context LOG_FILE                  network.log
 context DEBUG_FILE                network-debug.log
 context LOG_ERROR_LINES           1
@@ -55,7 +56,7 @@ context LOCAL_REGISTRY_PORT       5000
 context NGINX_HTTP_PORT           80
 context NGINX_HTTPS_PORT          443
 
-context CONSOLE_DOMAIN            $DOMAIN
+context CONSOLE_DOMAIN            ${INGRESS_DOMAIN}
 context CONSOLE_USERNAME          admin
 context CONSOLE_PASSWORD          password
 
