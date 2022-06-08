@@ -23,29 +23,50 @@ Feedback, comments, questions, etc. at Discord : [#fabric-kubernetes](https://di
     - [Rancher Desktop](https://rancherdesktop.io) (resources: 8 CPU / 8GRAM, mobyd, and disable Traefik)
   
 
-### Ingress and DNS
+### Ingress and DNS 
 
-Networks created with the operator include Ingress / Route resources to expose services at a common, 
-virtual DNS domain (e.g. `*.my-blockchain.example.com`).  For local development, the cluster includes an Nginx ingress 
-controller configured for TLS traffic in [SSL Passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) 
-mode.
+Fabric-operator utilizes Kubernetes `Ingress` resources to expose services behind a common, unified 
+DNS wildcard domain. In cloud-based environments, a network admin is typically responsible for 
+registering a [DNS Wildcard Record](https://en.wikipedia.org/wiki/Wildcard_DNS_record), utilizing public 
+DNS resolvers to associate a virtual domain name (e.g. `*.my-blockchain.example.com`) with the IP address 
+of a load-balancing proxy or Layer 7 appliance.
 
-Before installing the network, you must determine an IP address for your system which is visible _both_ to pods running in
-Kubernetes _AND_ to the host OS. In conjunction with the [Dead simple wildcard DNS for any IP Address](https://nip.io)
-resolver, the cluster IP can be used to route traffic for a virtual DNS domain to pods running in Kubernetes.
-For example, if the ingress IP is 9.160.3.138:443, Fabric services will be exposed at the DNS wildcard domain 
-`*.9-160-3-138.nip.io`.
+To enable _local development_ and systems without a DNS wildcard resolver, the sample network has been bundled with 
+an Nginx ingress controller preconfigured in [ssl-passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) mode 
+for TLS termination directly at the Fabric nodes.  By default the ingress will expose fabric services at the 
+`*.localho.st` virtual domain, forcing all traffic from the host OS to be directed to the localhost interface 
+on 127.0.0.1.
 
-- On machines connected to the IBM network, use the "9.x.y.z" tunnel address assigned by the VPN
-- On machines running Rancher, use the IP address assigned by DHCP (e.g. 192.168.0.11)
-- On machines running an embedded VM (WSL, virtualbox, VMWare, etc.), use the IP address of the bridge interface for the guest VM.
-- TODO: what about non-VPN resolvers?
+However, on occasion, pods running in Kubernetes will also need to connect to services at the _ingress domain_, 
+requiring a network route and [coredns override](todo-link) to guide traffic towards the ingress controller.
 
-E.g., use the BlueZone 9.x when connected to the IBM VPN: 
+**Important**:
+
+Before installing the sample network, you must determine an IP address for your system which is visible _both_ to pods running in Kubernetes _AND_ to programs running on the 
+host OS.
+
+While this IP address varies from system to system, here are some common guidelines:
+
+- For KIND on OSX, find the host IP address by resolving `host.docker.internal` in a docker container.  E.g.: 
 ```shell
-export TEST_NETWORK_IPADDR=$(ifconfig -a | grep "inet " | awk '{print $2}' | grep ^9\.)
+$ docker run -it --rm alpine nslookup host.docker.internal
 
-export TEST_NETWORK_DOMAIN=$(echo $TEST_NETWORK_IPADDR | tr -s '.' '-').nip.io
+Name:	host.docker.internal
+Address: 192.168.65.2
+```
+- On machines running an embedded virtual machine (WSL, Virtualbox, VMWare, etc.), use the IP address of the
+  bridge interface for the guest VM.
+- On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
+- On environments with access to public DNS (e.g. IBM cloud, Fyre, EKS, etc.), use DNS: 
+```shell
+export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
+export TEST_NETWORK_INGRESS_DOMAIN=my-blockchain.example.com
+```
+
+
+After finding a suitable IP address, set the cluster ingress for the network.  E.g.: 
+```shell
+export TEST_NETWORK_INGRESS_IPADDR=192.168.65.2
 ```
 
 
@@ -193,7 +214,6 @@ network unkind
 ```
 
 
-
 ## Appendix: Operations Console
 
 Launch the [Fabric Operations Console](https://github.com/hyperledger-labs/fabric-operations-console):
@@ -205,3 +225,6 @@ network console
 - Accept the self-signed TLS certificate
 - Log in as `admin:password`
 - [Build a network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network)
+
+
+
