@@ -130,7 +130,7 @@ Or set the `peer` CLI context to org1 peer1:
 ```shell
 export FABRIC_CFG_PATH=${PWD}/temp/config
 export CORE_PEER_LOCALMSPID=Org1MSP
-export CORE_PEER_ADDRESS=test-network-org1-peer1-peer.${TEST_NETWORK_DOMAIN}:443
+export CORE_PEER_ADDRESS=test-network-org1-peer1-peer.localho.st:443
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_MSPCONFIGPATH=${PWD}/temp/enrollments/org1/users/org1admin/msp
 export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/temp/channel-msp/peerOrganizations/org1/msp/tlscacerts/tlsca-signcert.pem
@@ -175,7 +175,7 @@ peer lifecycle \
   --version       1 \
   --package-id    ${PACKAGE_ID} \
   --sequence      1 \
-  --orderer       test-network-org0-orderersnode1-orderer.${TEST_NETWORK_DOMAIN}:443 \
+  --orderer       test-network-org0-orderersnode1-orderer.localho.st:443 \
   --tls --cafile  $PWD/temp/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem  
   
 peer lifecycle \
@@ -184,7 +184,7 @@ peer lifecycle \
   --name          conga-nft-contract \
   --version       1 \
   --sequence      1 \
-  --orderer       test-network-org0-orderersnode1-orderer.${TEST_NETWORK_DOMAIN}:443 \
+  --orderer       test-network-org0-orderersnode1-orderer.localho.st:443 \
   --tls --cafile  $PWD/temp/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem  
 
 ```
@@ -221,7 +221,7 @@ Launch the [Fabric Operations Console](https://github.com/hyperledger-labs/fabri
 network console
 ```
 
-- open `https://test-network-hlf-console-console.${TEST_NETWORK_DOMAIN}`
+- open `https://test-network-hlf-console-console.localho.st`
 - Accept the self-signed TLS certificate
 - Log in as `admin:password`
 - [Build a network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network)
