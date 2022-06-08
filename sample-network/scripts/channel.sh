@@ -282,8 +282,9 @@ function join_channel_peer() {
   export_peer_context $orgnum $peernum
 
   peer channel join \
-    --blockpath ${TEMP_DIR}/genesis_block.pb \
-    --orderer   ${NS}-org0-orderersnode1-orderer.${INGRESS_DOMAIN} \
-    --tls        \
-    --cafile    ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem
+    --blockpath   ${TEMP_DIR}/genesis_block.pb \
+    --orderer     ${NS}-org0-orderersnode1-orderer.${INGRESS_DOMAIN} \
+    --connTimeout ${ORDERER_TIMEOUT} \
+    --tls         \
+    --cafile      ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem
 }

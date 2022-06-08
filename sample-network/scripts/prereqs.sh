@@ -52,12 +52,18 @@ function check_prereqs() {
   bin/peer version &> /dev/null
   if [[ $? -ne 0 ]]; then
     echo "Downloading LATEST Fabric binaries and config"
-    curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/bootstrap.sh | bash -s -- -s -d
 
-    # remove sample config files extracted by the installation script
-    rm config/configtx.yaml
-    #rm config/core.yaml
-    rm config/orderer.yaml
+    mkdir -p $TEMP_DIR
+
+    # The download / installation of binaries will also transfer a core.yaml, which overlaps with a local configuration.
+    # Pull the binaries into a temp folder and then move them into the target location.
+    (pushd $TEMP_DIR && curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/bootstrap.sh | bash -s -- -s -d)
+    mkdir bin && mv $TEMP_DIR/bin/* bin
+
+    # delete config files transferred by the installer
+    rm $TEMP_DIR/config/configtx.yaml
+    rm $TEMP_DIR/config/core.yaml
+    rm $TEMP_DIR/config/orderer.yaml
   fi
 
   export PATH=bin:$PATH

@@ -62,6 +62,7 @@ context CONSOLE_PASSWORD          password
 
 # TODO: use new cc logic from test-network
 context CHANNEL_NAME              mychannel
+context ORDERER_TIMEOUT           10s
 context CHAINCODE_NAME            asset-transfer-basic
 context CHAINCODE_IMAGE           ghcr.io/hyperledgendary/fabric-ccaas-asset-transfer-basic:latest
 context CHAINCODE_LABEL           basic_1.0
