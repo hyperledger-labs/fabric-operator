@@ -84,7 +84,10 @@ export TEST_NETWORK_INGRESS_IPADDR=$(ip -json addr | jq -r '.[] | select(.ifname
 ```
 
 - On systems with an embedded virtual machine (Virtualbox, VMWare, lima, etc.), use the IP address of the
-  guest bridge interface.
+  guest bridge:
+```shell
+export TEST_NETWORK_INGRESS_IPADDR=$(hostname -I | cut -d " " -f 1)
+```
 
 - On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
 
@@ -235,16 +238,24 @@ network console
 
 ## Troubleshooting:
 
-- The `network` script prints output and progress to a `network-debug.log` file.  An easy way to follow along
-  with the progress is to open a second shell and tail the network log while running sample commands:
+- The `network` script prints output and progress to a `network-debug.log` file.  In a second shell:
 ```shell
 tail -f network-debug.log
 ```
 
-- View the operator logging output:
+- Tail the operator logging output:
 ```shell
 kubectl -n test-network logs -f deployment/fabric-operator
 ```
+
+- KIND running under the vagrant based [Fabric developer environment](https://github.com/hyperledgendary/fabric-devenv)
+  has problems resolving hosts on the kubernetes network domain `*.NAMESPACE.svc.cluster.local`, which is used for all
+  of the cross node/peer/orderer traffic.  As a workaround, the host suffix can be shortened, forcing the k8s-based
+  traffic to use the kube DNS:
+```shell
+export TEST_NETWORK_KUBE_DNS_DOMAIN=test-network
+```
+
 
 - On OSX, there is a bug in the Golang DNS resolver ([Fabric #3372](https://github.com/hyperledger/fabric/issues/3372) and [Golang #43398](https://github.com/golang/go/issues/43398)),
   causing the Fabric binaries to occasionally stall out when querying DNS.
