@@ -33,21 +33,23 @@ Fabric binaries (peer, osnadmin, etc.) will be installed into the local `bin` fo
 export PATH=$PWD:$PWD/bin:$PATH
 ```
 
+In the examples below, the `peer` binary will be used to invoke smart contracts on the org1-peer1 ledger.  Set the CLI context with:
+```shell
+export FABRIC_CFG_PATH=${PWD}/temp/config
+export CORE_PEER_LOCALMSPID=Org1MSP
+export CORE_PEER_ADDRESS=test-network-org1-peer1-peer.localho.st:443
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_MSPCONFIGPATH=${PWD}/temp/enrollments/org1/users/org1admin/msp
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/temp/channel-msp/peerOrganizations/org1/msp/tlscacerts/tlsca-signcert.pem
+```
+
 
 ### Ingress and DNS
 
 Fabric-operator utilizes Kubernetes `Ingress` resources to expose services behind a common, unified
-DNS wildcard domain. In cloud-based environments, a network admin is typically responsible for
-registering a [DNS Wildcard Record](https://en.wikipedia.org/wiki/Wildcard_DNS_record), utilizing public
-DNS resolvers to associate a virtual domain name (e.g. `*.my-blockchain.example.com`) with the IP address
-of a load-balancing proxy or Layer 7 appliance.
-
-In environments with a public DNS domain, set the ingress domain directly and proceed to [network setup](#test-network):
-```shell
-export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
-export TEST_NETWORK_INGRESS_DOMAIN=my-blockchain.example.com
-```
-
+DNS wildcard domain.  In typical cloud-based environments, a network admin is responsible for registering a public
+[DNS Wildcard Record](https://en.wikipedia.org/wiki/Wildcard_DNS_record), associating a virtual domain name
+(e.g. `*.my-blockchain.example.com`) with the public IP address of the cluster.
 
 To enable _local development_ without a public DNS domain, the sample network has been bundled with
 an Nginx ingress controller preconfigured in [ssl-passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) mode
@@ -58,13 +60,24 @@ on 127.0.0.1.
 On occasion, pods running in Kubernetes will also need to connect to services at the _ingress domain_,
 requiring a network route and [coredns override](scripts/cluster.sh#L153) to guide traffic towards the ingress controller.
 
-**Important**:
+
+For environments with a domain registered in public DNS, set the domain attribute and proceed to
+[network setup](#test-network):
+```shell
+export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
+export TEST_NETWORK_INGRESS_DOMAIN=my-blockchain.example.com
+```
+
+
+#### Important:
 
 Before installing the sample network, you must determine an IP address for your system which is visible to
 pods running in Kubernetes.  While this IP will vary from system to system, the address can be determined
 with the following guidelines:
 
-- For KIND on OSX, find the host IP address by resolving `host.docker.internal` in a container:
+
+#### KIND + OSX
+Find the host IP address by resolving `host.docker.internal` in a container:
 ```shell
 docker run -it --rm alpine nslookup host.docker.internal
 ```
@@ -78,25 +91,44 @@ Address: 192.168.65.2
 export TEST_NETWORK_INGRESS_IPADDR=192.168.65.2
 ```
 
-- On Windows / WSL2, determine the host IP address according to [Microsoft guidelines](https://docs.microsoft.com/en-us/windows/wsl/networking):
+#### Windows / WSL2
+Determine the host IP address according to [Microsoft guidelines](https://docs.microsoft.com/en-us/windows/wsl/networking):
 ```shell
 export TEST_NETWORK_INGRESS_IPADDR=$(ip -json addr | jq -r '.[] | select(.ifname=="eth0") | .addr_info[] | select(.family=="inet") | .local')
 ```
 
-- On systems with an embedded virtual machine (Virtualbox, VMWare, lima, etc.), use the IP address of the
-  guest bridge:
+#### Embedded VMs
+
+For embedded virtual machines such as Vagrant, VirtualBox, VMWare, lima, etc., use the IP address of the
+guest bridge interface:
 ```shell
 export TEST_NETWORK_INGRESS_IPADDR=$(hostname -I | cut -d " " -f 1)
 ```
 
-- On machines running Rancher / k3s, use the host IP address assigned by DHCP (e.g. 192.168.0.4)
+#### Rancher / k3s
+
+On machines running [Rancher / k3s](https://rancherdesktop.io), use the host IP address assigned by DHCP 
+(e.g. 192.168.1.42).
+
+In addition to ingress IP, k3s clusters require the following settings:
+```shell
+export TEST_NETWORK_INGRESS_IPADDR=$(ipconfig getifaddr en0)
+
+export TEST_NETWORK_CLUSTER_RUNTIME="k3s"
+export TEST_NETWORK_STORAGE_CLASS="local-path"
+export TEST_NETWORK_STAGE_DOCKER_IMAGES="false"
+```
 
 
 ## Test Network
 
-Create a Kubernetes cluster, Nginx ingress, and Fabric CRDs:
+Create a KIND Kubernetes cluster (skip if using Rancher / k3s):
 ```shell
 network kind
+```
+
+Install the Nginx controller and Fabric CRDs:
+```shell
 network cluster init
 ```
 
@@ -133,20 +165,11 @@ network cc invoke   asset-transfer-basic '{"Args":["InitLedger"]}'
 network cc query    asset-transfer-basic '{"Args":["ReadAsset","asset1"]}' | jq
 ```
 
-Or set the `peer` CLI context to org1 peer1:
-```shell
-export FABRIC_CFG_PATH=${PWD}/temp/config
-export CORE_PEER_LOCALMSPID=Org1MSP
-export CORE_PEER_ADDRESS=test-network-org1-peer1-peer.localho.st:443
-export CORE_PEER_TLS_ENABLED=true
-export CORE_PEER_MSPCONFIGPATH=${PWD}/temp/enrollments/org1/users/org1admin/msp
-export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/temp/channel-msp/peerOrganizations/org1/msp/tlscacerts/tlsca-signcert.pem
-```
-
-and directly interact with the contract:
+Or use the native `peer` CLI to query the contract installed on org1 / peer1:
 ```shell
 peer chaincode query -n asset-transfer-basic -C mychannel -c '{"Args":["org.hyperledger.fabric:GetMetadata"]}'
 ```
+
 
 ## K8s Chaincode Builder
 
