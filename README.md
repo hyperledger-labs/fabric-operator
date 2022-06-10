@@ -9,7 +9,7 @@ Using the operator, a Fabric network is realized in a declarative fashion by app
 `Orderer`, and `Console` resources to the Kubernetes API.  In turn, the controller executes a _reconciliation loop_, 
 orchestrating containers, storage, and configuration to achieve the desired target state.
 
-By analogy to a sailing metaphor, fabric-operator serves as the _eXecutive Officer / XO_ of a vessel.  It
+In nautical terms, fabric-operator serves as the _eXecutive Officer / XO_ of a vessel.  It
 allows you, the captain, to invest valuable time and energy formulating strategic objectives for a blockchain 
 deployment.  The operator, or XO, is responsible to enact the plan, and _"make it so."_ 
 
@@ -57,9 +57,9 @@ _Fabric, Ahoy!_
 
 ## Build a Fabric Network
 
-- Build a [sample-network](sample-network) with kubectl on a local [KIND](https://kind.sigs.k8s.io) or [k3s](https://rancherdesktop.io) cluster
-- [Build a Network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network) with the [Fabric Operations Console](https://github.com/hyperledger-labs/fabric-operations-console)
-- Automate your network with [Ansible Playbooks](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ansible) and the Console REST APIs
+- Build a [sample-network](sample-network) with Kube APIs.
+- [Build a Network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network) with the [Fabric Operations Console](https://github.com/hyperledger-labs/fabric-operations-console).
+- Automate your network with [Ansible Playbooks](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ansible) and the Console REST APIs.
 
 
 ## Build the Fabric Operator

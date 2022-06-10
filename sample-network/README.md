@@ -1,6 +1,6 @@
 # Sample Network
 
-This project uses the operator to launch a Fabric network on a local KIND or k3s cluster.
+Create a sample network with CRDs, fabric-operator, and the Kube API server:
 
 - Apply `kustomization` overlays to install the Operator
 - Apply `kustomization` overlays to construct a Fabric Network
@@ -16,68 +16,56 @@ Feedback, comments, questions, etc. at Discord : [#fabric-kubernetes](https://di
 
 ### General
 
+- Kubernetes - one of:
+  - [KIND](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) + [Docker](https://www.docker.com) (resources: 8 CPU / 8 GRAM)
+  - [Rancher Desktop](https://rancherdesktop.io) (resources: 8 CPU / 8GRAM, mobyd, and disable Traefik)
+  - Cloud instance hosted at IKS or EKS
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [jq](https://stedolan.github.io/jq/)
 - [envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html) (`brew install gettext` on OSX)
-
-- K8s - either:
-    - [KIND](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) + [Docker](https://www.docker.com) (resources: 8 CPU / 8 GRAM)
-    - [Rancher Desktop](https://rancherdesktop.io) (resources: 8 CPU / 8GRAM, mobyd, and disable Traefik)
+- Recommended: [k9s](https://k9scli.io)
 
 
-### Fabric Binaries
-
-Fabric binaries (peer, osnadmin, etc.) will be installed into the local `bin` folder.  Add these to your PATH:
-
-```shell
-export PATH=$PWD:$PWD/bin:$PATH
-```
-
-In the examples below, the `peer` binary will be used to invoke smart contracts on the org1-peer1 ledger.  Set the CLI context with:
-```shell
-export FABRIC_CFG_PATH=${PWD}/temp/config
-export CORE_PEER_LOCALMSPID=Org1MSP
-export CORE_PEER_ADDRESS=test-network-org1-peer1-peer.localho.st:443
-export CORE_PEER_TLS_ENABLED=true
-export CORE_PEER_MSPCONFIGPATH=${PWD}/temp/enrollments/org1/users/org1admin/msp
-export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/temp/channel-msp/peerOrganizations/org1/msp/tlscacerts/tlsca-signcert.pem
-```
-
-
-### Ingress and DNS
+### DNS Domain
 
 Fabric-operator utilizes Kubernetes `Ingress` resources to expose services behind a common, unified
-DNS wildcard domain.  In typical cloud-based environments, a network admin is responsible for registering a public
-[DNS Wildcard Record](https://en.wikipedia.org/wiki/Wildcard_DNS_record), associating a virtual domain name
-(e.g. `*.my-blockchain.example.com`) with the public IP address of the cluster.
-
-To enable _local development_ without a public DNS domain, the sample network has been bundled with
-an Nginx ingress controller preconfigured in [ssl-passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) mode
-for TLS termination directly at the Fabric nodes.  By default the ingress will expose fabric services at the
-`*.localho.st` virtual domain, forcing all traffic from the host OS to be directed to the localhost interface
-on 127.0.0.1.
-
-On occasion, pods running in Kubernetes will also need to connect to services at the _ingress domain_,
-requiring a network route and [coredns override](scripts/cluster.sh#L153) to guide traffic towards the ingress controller.
+DNS wildcard domain (e.g. `*.my-blockchain.example.com`).  In typical cloud-based environments, a DNS administrator
+is responsible for registering a public [DNS Wildcard Record](https://en.wikipedia.org/wiki/Wildcard_DNS_record),
+associating a virtual domain name with the IP address of a load balancer or cluster Ingress controller.
+For additional guidelines on public DNS, see [Considerations for Kubernetes Distributions](https://cloud.ibm.com/docs/blockchain-sw-252?topic=blockchain-sw-252-deploy-k8#console-deploy-k8-considerations).
 
 
 For environments with a domain registered in public DNS, set the domain attribute and proceed to
 [network setup](#test-network):
+
 ```shell
 export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
 export TEST_NETWORK_INGRESS_DOMAIN=my-blockchain.example.com
 ```
 
+To enable _local development_ without a public DNS resolver, the sample network has been bundled with
+an Nginx ingress controller preconfigured in [ssl-passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) mode
+for TLS termination directly at the Fabric nodes.  By default the ingress will expose fabric services at the
+`*.localho.st` virtual domain, forcing all traffic from the host OS to be directed to the loopback interface.
+(localho.st is a public domain with wildcard resolver to 127.0.0.1.)
 
-#### Important:
+For local development environments without write access to public DNS, set the ingress domain to the loopback interface:
+```shell
+export TEST_NETWORK_INGRESS_DOMAIN=localho.st
+```
 
-Before installing the sample network, you must determine an IP address for your system which is visible to
-pods running in Kubernetes.  While this IP will vary from system to system, the address can be determined
-with the following guidelines:
+### Ingress IP Address
+
+**Important**:
+
+Before launching the network, you must determine an IP address where pods running in Kubernetes have a 
+network route to the ingress controller.
+
+While this will vary from system to system, the ingress IP can be determined with the following guidelines:
 
 
 #### KIND + OSX
-Find the host IP address by resolving `host.docker.internal` in a container:
+For KIND clusters running on OSX, determine the ingress IP by resolving `host.docker.internal` in a container:
 ```shell
 docker run -it --rm alpine nslookup host.docker.internal
 ```
@@ -120,9 +108,43 @@ export TEST_NETWORK_STAGE_DOCKER_IMAGES="false"
 ```
 
 
+#### Amazon EKS
+
+For deployments to public cloud, run `network cluster init` and use kubectl to determine the IP address of the
+[Nginx ingress node](#amazon-kubernetes-service).
+
+In addition to ingress IP, EKS clusters require the following settings: 
+
+```shell
+export TEST_NETWORK_CLUSTER_RUNTIME="k3s"
+export TEST_NETWORK_STORAGE_CLASS="gp2"
+export TEST_NETWORK_STAGE_DOCKER_IMAGES="false"
+export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE=false
+```
+
+
+### Fabric Binaries
+
+Fabric binaries (peer, osnadmin, etc.) will be installed into the local `bin` folder.  Add these to your PATH:
+
+```shell
+export PATH=$PWD:$PWD/bin:$PATH
+```
+
+In the examples below, the `peer` binary will be used to invoke smart contracts on the org1-peer1 ledger.  Set the CLI context with:
+```shell
+export FABRIC_CFG_PATH=${PWD}/temp/config
+export CORE_PEER_LOCALMSPID=Org1MSP
+export CORE_PEER_ADDRESS=test-network-org1-peer1-peer.${TEST_NETWORK_INGRESS_DOMAIN}:443
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_MSPCONFIGPATH=${PWD}/temp/enrollments/org1/users/org1admin/msp
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/temp/channel-msp/peerOrganizations/org1/msp/tlscacerts/tlsca-signcert.pem
+```
+
+
 ## Test Network
 
-Create a KIND Kubernetes cluster (skip if using Rancher / k3s):
+Create a KIND Kubernetes cluster (skip if using Rancher or a cloud-hosted instance):
 ```shell
 network kind
 ```
@@ -205,7 +227,7 @@ peer lifecycle \
   --version       1 \
   --package-id    ${PACKAGE_ID} \
   --sequence      1 \
-  --orderer       test-network-org0-orderersnode1-orderer.localho.st:443 \
+  --orderer       test-network-org0-orderersnode1-orderer.${TEST_NETWORK_INGRESS_DOMAIN}:443 \
   --tls --cafile  $PWD/temp/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem \
   --connTimeout   15s
 
@@ -215,7 +237,7 @@ peer lifecycle \
   --name          conga-nft-contract \
   --version       1 \
   --sequence      1 \
-  --orderer       test-network-org0-orderersnode1-orderer.localho.st:443 \
+  --orderer       test-network-org0-orderersnode1-orderer.${TEST_NETWORK_INGRESS_DOMAIN}:443 \
   --tls --cafile  $PWD/temp/channel-msp/ordererOrganizations/org0/orderers/org0-orderersnode1/tls/signcerts/tls-cert.pem \
   --connTimeout   15s
 
@@ -259,8 +281,9 @@ network console
 - [Build a network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network)
 
 
-## Troubleshooting:
+## Troubleshooting Tips
 
+#### Logs
 - The `network` script prints output and progress to a `network-debug.log` file.  In a second shell:
 ```shell
 tail -f network-debug.log
@@ -270,6 +293,8 @@ tail -f network-debug.log
 ```shell
 kubectl -n test-network logs -f deployment/fabric-operator
 ```
+
+#### DNS
 
 - KIND running under the vagrant based [Fabric developer environment](https://github.com/hyperledgendary/fabric-devenv)
   has problems resolving hosts on the kubernetes network domain `*.NAMESPACE.svc.cluster.local`, which is used for all
@@ -285,3 +310,38 @@ export TEST_NETWORK_KUBE_DNS_DOMAIN=test-network
   This issue can cause `osnadmin` / channel join to time out, throwing an error when joining the channel.
   Fix this by turning a build of [fabric](https://github.com/hyperledger/fabric) binaries and copying the build outputs
   from `fabric/build/bin/*` --> `sample-network/bin`
+
+
+#### Amazon Kubernetes Service
+
+- For deployments on EKS / Amazon cloud, it is possible to route traffic to the cluster ingress using the
+  [Dead simple wildcard DNS for any IP Address](https://nip.io) service as an alternative to creating
+  a public DNS record with Route 54.  For installation to EKS instances:
+
+0. Set general properties for EKS:
+```shell
+declare -x TEST_NETWORK_CLUSTER_RUNTIME="k3s"
+declare -x TEST_NETWORK_STAGE_DOCKER_IMAGES="false"
+declare -x TEST_NETWORK_STORAGE_CLASS="gp2"
+```
+
+2. Initialize the Nginx ingress controller:
+```shell
+network cluster init
+```
+2. Determine the IP of the Ingress load balancer (EXTERNAL-IP)
+```shell
+$ kubectl -n ingress-nginx get svc/ingress-nginx-controller
+NAME                       TYPE           CLUSTER-IP   EXTERNAL-IP                                PORT(S)
+ingress-nginx-controller   LoadBalancer   10.1.1.10    xyzzy-abc123.us-east-1.elb.amazonaws.com   80:32545/TCP,443:30341/TCP
+
+$ nslookup xyzzy.us-east-1.elb.amazonaws.com
+Non-authoritative answer:
+Name:	xyzzy-abc123.us-east-1.elb.amazonaws.com
+Address: 55.1.1.101               # Not a real IP address - use this value
+```
+
+3. Deploy the network using a nip.io wildcard domain, directing hosts to the ingress EXTERNAL-IP:
+```shell
+export TEST_NETWORK_INGRESS_DOMAIN=55-1-1-101.nip.io
+```
