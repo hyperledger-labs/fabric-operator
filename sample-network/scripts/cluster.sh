@@ -91,16 +91,16 @@ function cluster_init() {
   apply_fabric_crds
   apply_nginx_ingress
 
-  if [ "${STAGE_DOCKER_IMAGES}" == true ]; then
-    pull_docker_images
-    kind_load_images
-  fi
+  wait_for_nginx_ingress
 
   if [ "${COREDNS_DOMAIN_OVERRIDE}" == true ]; then
     apply_coredns_domain_override
   fi
 
-  wait_for_nginx_ingress
+  if [ "${STAGE_DOCKER_IMAGES}" == true ]; then
+    pull_docker_images
+    kind_load_images
+  fi
 }
 
 function apply_fabric_crds() {
@@ -148,18 +148,17 @@ function wait_for_nginx_ingress() {
   pop_fn
 }
 
-# Override the cluster DNS with a local override to refer pods to the HOST interface
-# when connecting to ingress.
+# Allow pods running in kubernetes to access services at the ingress domain *.localho.st.
+#
+# This function identifies the CLUSTER-IP for the ingress controller and overrides the coredns
+# with a wildcard domain match to the IP.  Clients using public DNS will always resolve
+# *.localho.st as 127.0.0.1, routing to the ingress on the host loopback interface.  Clients
+# resolving *.localho.st on the kube DNS (e.g., pods running in the cluster) will resolve the
+# dummy DNS wildcard entry, routing to the kube internal IP address for the ingress controller.
 function apply_coredns_domain_override() {
-  push_fn "Applying CoreDNS overrides for ingress domain $INGRESS_DOMAIN at $TEST_NETWORK_INGRESS_IPADDR"
 
-  # todo: always set the ingress ip address (or determine if on a mac as a default)
-  # todo: use a single block of hosts { or plugin to properly set a wildcard domain alias - no rewrite + hosts
-
-  if [ -z "${TEST_NETWORK_INGRESS_IPADDR}" ]; then
-    log "TEST_NETWORK_INGRESS_IPADDR has not been set - unable to override the ingress IP address."
-    exit 1
-  fi
+  CLUSTER_IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o json | jq -r .spec.clusterIP)
+  push_fn "Applying CoreDNS overrides for ingress domain $INGRESS_DOMAIN at CLUSTER-IP $CLUSTER_IP"
 
   cat <<EOF | kubectl apply -f -
 ---
@@ -175,12 +174,12 @@ data:
         health {
            lameduck 5s
         }
+        ready
         rewrite name regex (.*)\.localho\.st host.ingress.internal
         hosts {
-          ${TEST_NETWORK_INGRESS_IPADDR} host.ingress.internal
+          ${CLUSTER_IP} host.ingress.internal
           fallthrough
         }
-        ready
         kubernetes cluster.local in-addr.arpa ip6.arpa {
            pods insecure
            fallthrough in-addr.arpa ip6.arpa
