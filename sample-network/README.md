@@ -245,7 +245,29 @@ export TEST_NETWORK_STORAGE_CLASS="local-path"
 
 
 ### IKS 
-For installations at IBM Cloud, use the EKS configuration settings below:
+For installations at IBM Cloud, use the following configuration settings:
+
+```shell
+export TEST_NETWORK_CLUSTER_RUNTIME="k3s"
+export TEST_NETWORK_COREDNS_DOMAIN_OVERRIDE="false"
+export TEST_NETWORK_STAGE_DOCKER_IMAGES="false"
+export TEST_NETWORK_STORAGE_CLASS="ibm-file-gold"
+```
+
+To determine the external IP address for the Nginx ingress controller:
+
+1. Run `network cluster init` to create the Nginx resources
+2. Determine the IP address for the Nginx EXTERNAL-IP: 
+```shell
+INGRESS_IPADDR=$(kubectl -n ingress-nginx get svc/ingress-nginx-controller -o json | jq -r .status.loadBalancer.ingress[0].ip)
+```
+3. Set a virtual host domain resolving `*.EXTERNAL-IP.nip.io` or a public DNS wildcard resolver:
+```shell
+export TEST_NETWORK_INGRESS_DOMAIN=$(echo $INGRESS_IPADDR | tr -s '.' '-').nip.io
+```
+
+For additional guidelines on configuring ingress and DNS, see [Considerations for Kubernetes Distributions](https://cloud.ibm.com/docs/blockchain-sw-252?topic=blockchain-sw-252-deploy-k8#console-deploy-k8-considerations).
+
 
 ### EKS 
 
@@ -273,6 +295,9 @@ INGRESS_IPADDR=$(dig $INGRESS_HOSTNAME +short)
 ```shell
 export TEST_NETWORK_INGRESS_DOMAIN=$(echo $INGRESS_IPADDR | tr -s '.' '-').nip.io
 ```
+
+For additional guidelines on configuring ingress and DNS, see [Considerations for Kubernetes Distributions](https://cloud.ibm.com/docs/blockchain-sw-252?topic=blockchain-sw-252-deploy-k8#console-deploy-k8-considerations).
+
 
 ## Vagrant: fabric-devenv 
 

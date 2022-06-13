@@ -23,3 +23,15 @@ resources:
 
 patchesStrategicMerge:
   - ingress-nginx-controller.yaml
+
+# Remove the port `appProtocol` attribute as this is not accepted by all cloud providers
+patchesJson6902:
+  - target:
+      kind: Service
+      name: ingress-nginx-controller
+      version: v1
+    patch: |-
+      - op: remove
+        path: "/spec/ports/0/appProtocol"
+      - op: remove
+        path: "/spec/ports/1/appProtocol"
