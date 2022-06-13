@@ -140,6 +140,9 @@ function delete_nginx_ingress() {
 function wait_for_nginx_ingress() {
   push_fn "Waiting for ingress controller"
 
+  # Give the ingress controller a chance to get set up in the namespace
+  sleep 5
+
   kubectl wait --namespace ingress-nginx \
     --for=condition=ready pod \
     --selector=app.kubernetes.io/component=controller \
