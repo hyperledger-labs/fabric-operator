@@ -39,16 +39,16 @@ jobs:
           - peer
           - orderer
           - console
+          - e2ev2
+          - restartmgr
+          - operatorrestart
 #          - init
 #          - migration
-#          - e2ev2
 #          - actions/ca
 #          - actions/orderer
 #          - actions/peer
 #          - autorenew
 #          - cclauncher
-#          - restartmgr
-#          - operatorrestart
 
     steps:
       - uses: actions/checkout@v3
