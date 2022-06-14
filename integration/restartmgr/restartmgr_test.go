@@ -427,7 +427,7 @@ var _ = Describe("restart manager", func() {
 			})
 		})
 
-		When("ca was restarted less than 10 min ago for config override", func() {
+		PWhen("ca was restarted less than 10 min ago for config override", func() {
 			BeforeEach(func() {
 				// Create operator-config map to indicate that peer was restarted recently for ecert reenroll
 				restartTime = time.Now().UTC().Format(time.RFC3339)

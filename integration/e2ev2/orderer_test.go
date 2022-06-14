@@ -156,7 +156,7 @@ var _ = Describe("orderer", func() {
 		})
 	})
 
-	Context("msp certs", func() {
+	PContext("msp certs", func() {
 		var (
 			podName     string
 			oldsigncert []byte
