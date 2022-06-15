@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-IMAGE ?= ghcr.io/ibm-blockchain/fabric-operator
+IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
 TAG ?= $(shell git rev-parse --short HEAD)
 ARCH ?= $(shell go env GOARCH)
 OSS_GO_VER ?= 1.17.7
