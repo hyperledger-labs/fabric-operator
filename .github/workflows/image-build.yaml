@@ -16,5 +16,5 @@ jobs:
           make image
       - name: Push
         run: |
-          docker login ghcr.io -u $GITHUB_ACTOR -p ${{ secrets.CR_TOKEN }}
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
           make image-push image-push-latest
