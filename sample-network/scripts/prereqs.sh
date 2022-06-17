@@ -57,7 +57,8 @@ function check_prereqs() {
 
     # The download / installation of binaries will also transfer a core.yaml, which overlaps with a local configuration.
     # Pull the binaries into a temp folder and then move them into the target location.
-    (pushd $TEMP_DIR && curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/bootstrap.sh | bash -s -- -s -d)
+    (pushd $TEMP_DIR && curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/bootstrap.sh \
+      | bash -s -- $FABRIC_VERSION $FABRIC_CA_VERSION -s -d)
     mkdir bin && mv $TEMP_DIR/bin/* bin
 
     # delete config files transferred by the installer
