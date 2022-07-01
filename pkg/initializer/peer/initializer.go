@@ -62,6 +62,7 @@ type Config struct {
 	CCLauncherFile         string
 	RouteFile              string
 	StoragePath            string
+	ServiceMonitorFile     string
 }
 
 //go:generate counterfeiter -o mocks/ibppeer.go -fake-name IBPPeer . IBPPeer

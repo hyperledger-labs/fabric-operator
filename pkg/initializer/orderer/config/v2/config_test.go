@@ -22,6 +22,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
+	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
 	commonapi "github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/orderer/v1"
 	v2 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/orderer/v2"
@@ -193,6 +194,37 @@ var _ = Describe("V24 Orderer Configuration", func() {
 
 		By("setting BCCSP.PKCS11.FileKeystore.KeystorePath", func() {
 			Expect(general.BCCSP.PKCS11.FileKeyStore.KeyStorePath).To(Equal("keystore2"))
+		})
+	})
+
+	Context("metrics", func() {
+		It("merges current configuration with overrides values", func() {
+			orderer, err := config.ReadOrdererFile("../../../../../testdata/init/orderer/orderer.yaml")
+			Expect(err).NotTo(HaveOccurred())
+			Expect(orderer.Metrics.Provider).To(Equal("prometheus"))
+			newWriteInterval, err := common.ParseDuration("15s")
+			Expect(err).NotTo(HaveOccurred())
+			newConfig := &config.Orderer{
+				Orderer: v2.Orderer{
+					Metrics: v1.Metrics{
+						Provider: "statsd",
+						Statsd: v1.Statsd{
+							Network:       "tcp",
+							Address:       "localhost:8080",
+							WriteInterval: newWriteInterval,
+							Prefix:        "prefix",
+						},
+					},
+				},
+			}
+			err = orderer.MergeWith(newConfig, true)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(orderer.Metrics.Provider).To(Equal("statsd"))
+			Expect(orderer.Metrics.Provider).To(Equal("statsd"))
+			Expect(orderer.Metrics.Statsd.Network).To(Equal("tcp"))
+			Expect(orderer.Metrics.Statsd.Address).To(Equal("localhost:8080"))
+			Expect(orderer.Metrics.Statsd.Prefix).To(Equal("prefix"))
+			Expect(orderer.Metrics.Statsd.WriteInterval).To(Equal(newWriteInterval))
 		})
 	})
 })

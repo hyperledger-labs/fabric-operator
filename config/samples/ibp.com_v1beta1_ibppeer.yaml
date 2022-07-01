@@ -55,3 +55,4 @@ spec:
       class: ""
       size: 5G
   version: 2.2.4
+  metricsprovider: prometheus

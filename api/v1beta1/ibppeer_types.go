@@ -151,6 +151,14 @@ type IBPPeerSpec struct {
 	// CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG env variable.
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	ChaincodeBuilderConfig ChaincodeBuilderConfig `json:"chaincodeBuilderConfig,omitempty"`
+
+	// PrometheusOperator(Optional) is used to integerate with prometheus operator for peer deployment
+	// sample usage as prometheusoperator: true
+	// specify to enable prometheusoperator, we need configoverride.metrics.provider and configoverride.operations.listenAddress works
+	// CORE_METRICS_PROVIDER should be configured as prometheus by configoverride.metrics.provider
+	// meanwhile operator port should be configured as prometheus by configoverride.operations.listenAddress
+	// and a ServiceMonitor will be created for peer
+	PrometheusOperator bool `json:"prometheusoperator,omitempty"`
 }
 
 // +k8s:openapi-gen=true

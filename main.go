@@ -151,6 +151,7 @@ func setDefaultPeerDefinitions(cfg *config.Config) {
 		Ingressv1beta1File:     filepath.Join(defaultPeerDef, "ingressv1beta1.yaml"),
 		CCLauncherFile:         filepath.Join(defaultPeerDef, "chaincode-launcher.yaml"),
 		RouteFile:              filepath.Join(defaultPeerDef, "route.yaml"),
+		ServiceMonitorFile:     filepath.Join(defaultPeerDef, "servicemonitor.yaml"),
 		StoragePath:            "/tmp/peerinit",
 	}
 }
@@ -173,6 +174,7 @@ func setDefaultOrdererDefinitions(cfg *config.Config) {
 		IngressFile:        filepath.Join(defaultOrdererDef, "ingress.yaml"),
 		Ingressv1beta1File: filepath.Join(defaultOrdererDef, "ingressv1beta1.yaml"),
 		RouteFile:          filepath.Join(defaultOrdererDef, "route.yaml"),
+		ServiceMonitorFile: filepath.Join(defaultPeerDef, "servicemonitor.yaml"),
 		StoragePath:        "/tmp/ordererinit",
 	}
 }

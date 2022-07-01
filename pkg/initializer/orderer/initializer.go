@@ -66,6 +66,7 @@ type Config struct {
 	IngressFile        string
 	Ingressv1beta1File string
 	RouteFile          string
+	ServiceMonitorFile string
 	StoragePath        string
 }
 

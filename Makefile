@@ -230,3 +230,9 @@ catalog-build: opm
 .PHONY: catalog-push
 catalog-push: ## Push the catalog image.
 	$(MAKE) docker-push IMG=$(CATALOG_IMG)
+
+prometheus-operator: ## deploy operator for prometheus
+	kubectl create -f kube-prometheus/manifests/setup
+	sleep 30
+	kubectl create -f kube-prometheus/manifests/
+

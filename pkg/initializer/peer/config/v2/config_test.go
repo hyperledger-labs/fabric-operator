@@ -20,6 +20,7 @@ package v2_test
 
 import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
+	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v1"
 	v2core "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v2"
 	v2 "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v2"
 	. "github.com/onsi/ginkgo/v2"
@@ -31,7 +32,6 @@ var _ = Describe("Peer configuration", func() {
 		core, err := v2.ReadCoreFile("../../../../../testdata/init/peer/core.yaml")
 		Expect(err).NotTo(HaveOccurred())
 		Expect(core.Peer.ID).To(Equal("jdoe"))
-
 		newConfig := &v2.Core{
 			Core: v2core.Core{
 				Peer: v2core.Peer{
@@ -124,6 +124,40 @@ var _ = Describe("Peer configuration", func() {
 		It("returns error if invalid core (besides peer.gossip.boostrap field)", func() {
 			_, err := v2.ReadCoreFile("../../../../../testdata/init/peer/core_invalid.yaml")
 			Expect(err).NotTo(HaveOccurred())
+		})
+	})
+
+	Context("metrics", func() {
+		It("merges current configuration with overrides values", func() {
+			core, err := v2.ReadCoreFile("../../../../../testdata/init/peer/core.yaml")
+			Expect(err).NotTo(HaveOccurred())
+			Expect(core.Operations.ListenAddress).To(Equal("127.0.0.1:9443"))
+			Expect(*core.Operations.TLS.Enabled).To(Equal(false))
+			Expect(core.Metrics.Provider).To(Equal("prometheus"))
+
+			newWriteInterval, err := common.ParseDuration("15s")
+			Expect(err).NotTo(HaveOccurred())
+			newConfig := &v2.Core{
+				Core: v2core.Core{
+					Metrics: v1.Metrics{
+						Provider: "statsd",
+						Statsd: v1.Statsd{
+							Network:       "tcp",
+							Address:       "localhost:8080",
+							WriteInterval: newWriteInterval,
+							Prefix:        "prefix",
+						},
+					},
+				},
+			}
+
+			err = core.MergeWith(newConfig, false)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(core.Metrics.Provider).To(Equal("statsd"))
+			Expect(core.Metrics.Statsd.Network).To(Equal("tcp"))
+			Expect(core.Metrics.Statsd.Address).To(Equal("localhost:8080"))
+			Expect(core.Metrics.Statsd.Prefix).To(Equal("prefix"))
+			Expect(core.Metrics.Statsd.WriteInterval).To(Equal(newWriteInterval))
 		})
 	})
 })
