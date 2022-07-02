@@ -26,7 +26,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca/config"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca/mocks"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util/pointer"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
 )

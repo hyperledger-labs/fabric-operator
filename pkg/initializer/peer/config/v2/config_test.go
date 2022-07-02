@@ -22,7 +22,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
 	v2core "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v2"
 	v2 "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v2"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 

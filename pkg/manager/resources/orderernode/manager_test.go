@@ -25,7 +25,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/controllers/mocks"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/orderernode"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
 	k8serror "k8s.io/apimachinery/pkg/api/errors"

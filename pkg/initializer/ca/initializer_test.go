@@ -22,7 +22,7 @@ import (
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/ca/v1"
 	initializer "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca/mocks"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
 )

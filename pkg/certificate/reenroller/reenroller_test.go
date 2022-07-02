@@ -19,25 +19,17 @@
 package reenroller_test
 
 import (
-	"encoding/pem"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
-	"net/url"
-	"os"
-	"path/filepath"
 	"time"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/certificate/reenroller"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/certificate/reenroller/mocks"
-	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/hyperledger/fabric-ca/lib"
 	"github.com/hyperledger/fabric-ca/lib/client/credential"
 	fabricx509 "github.com/hyperledger/fabric-ca/lib/client/credential/x509"
 	"github.com/hyperledger/fabric-ca/lib/tls"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
 )
@@ -48,46 +40,6 @@ const (
 )
 
 var _ = Describe("Reenroller", func() {
-	var (
-		err error
-
-		testReenroller *reenroller.Reenroller
-		config         *current.Enrollment
-		mockIdentity   *mocks.Identity
-
-		server       *httptest.Server
-		serverURL    string
-		serverCert   string
-		serverUrlObj *url.URL
-	)
-
-	BeforeSuite(func() {
-		// Start a local HTTP server
-		server = httptest.NewTLSServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-			// Test request parameters
-			Expect(req.URL.String()).To(Equal("/cainfo"))
-			return
-		}))
-
-		serverURL = server.URL
-		rawCert := server.Certificate().Raw
-		pemCert := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: rawCert})
-		serverCert = string(util.BytesToBase64(pemCert))
-
-		urlObj, err := url.Parse(serverURL)
-		Expect(err).NotTo(HaveOccurred())
-		serverUrlObj = urlObj
-
-		// Generate temporary key for reenroll test
-		keystorePath := filepath.Join(homeDir, "msp", "keystore")
-		err = os.MkdirAll(keystorePath, 0755)
-		Expect(err).NotTo(HaveOccurred())
-
-		key, err := util.Base64ToBytes(testkey)
-		Expect(err).NotTo(HaveOccurred())
-		err = ioutil.WriteFile(filepath.Join(keystorePath, "key.pem"), key, 0755)
-	})
-
 	BeforeEach(func() {
 		mockIdentity = &mocks.Identity{}
 
@@ -130,14 +82,6 @@ var _ = Describe("Reenroller", func() {
 		mockIdentity.ReenrollReturns(&lib.EnrollmentResponse{
 			Identity: lib.NewIdentity(&lib.Client{}, "caIdentity", []credential.Credential{cred}),
 		}, nil)
-	})
-
-	AfterSuite(func() {
-		// Close the server when test finishes
-		server.Close()
-
-		err = os.RemoveAll(homeDir)
-		Expect(err).NotTo(HaveOccurred())
 	})
 
 	Context("Enrollment configuration validation", func() {

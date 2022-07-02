@@ -20,7 +20,7 @@ package configtx_test
 
 import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/configtx"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 

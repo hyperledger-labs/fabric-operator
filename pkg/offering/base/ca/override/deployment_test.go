@@ -22,7 +22,7 @@ import (
 	"context"
 	"encoding/json"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -268,59 +268,56 @@ var _ = Describe("Deployment Overrides", func() {
 				Expect(*deployment.Spec.Template.Spec.Affinity).To(Equal(affinity))
 			})
 
-			Context("volumes", func() {
+			By("volumes creating a ca crypto volume", func() {
+				volume := corev1.Volume{
+					Name: "ca-crypto",
+					VolumeSource: corev1.VolumeSource{
+						Secret: &corev1.SecretVolumeSource{
+							SecretName: instance.Name + "-ca-crypto",
+						},
+					},
+				}
+				Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(volume))
+			})
 
-				By("creating a ca crypto volume", func() {
-					volume := corev1.Volume{
-						Name: "ca-crypto",
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: instance.Name + "-ca-crypto",
+			By("volumes creating a tlsca crypto volume", func() {
+				volume := corev1.Volume{
+					Name: "tlsca-crypto",
+					VolumeSource: corev1.VolumeSource{
+						Secret: &corev1.SecretVolumeSource{
+							SecretName: instance.Name + "-tlsca-crypto",
+						},
+					},
+				}
+				Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(volume))
+			})
+
+			By("volumes creating a ca config volume", func() {
+				volume := corev1.Volume{
+					Name: "ca-config",
+					VolumeSource: corev1.VolumeSource{
+						ConfigMap: &corev1.ConfigMapVolumeSource{
+							LocalObjectReference: corev1.LocalObjectReference{
+								Name: instance.Name + "-ca-config",
 							},
 						},
-					}
-					Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(volume))
-				})
+					},
+				}
+				Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(volume))
+			})
 
-				By("creating a tlsca crypto volume", func() {
-					volume := corev1.Volume{
-						Name: "tlsca-crypto",
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: instance.Name + "-tlsca-crypto",
+			By("volumes creating a tlsca config volume", func() {
+				volume := corev1.Volume{
+					Name: "tlsca-config",
+					VolumeSource: corev1.VolumeSource{
+						ConfigMap: &corev1.ConfigMapVolumeSource{
+							LocalObjectReference: corev1.LocalObjectReference{
+								Name: instance.Name + "-tlsca-config",
 							},
 						},
-					}
-					Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(volume))
-				})
-
-				By("creating a ca config volume", func() {
-					volume := corev1.Volume{
-						Name: "ca-config",
-						VolumeSource: corev1.VolumeSource{
-							ConfigMap: &corev1.ConfigMapVolumeSource{
-								LocalObjectReference: corev1.LocalObjectReference{
-									Name: instance.Name + "-ca-config",
-								},
-							},
-						},
-					}
-					Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(volume))
-				})
-
-				By("creating a tlsca config volume", func() {
-					volume := corev1.Volume{
-						Name: "tlsca-config",
-						VolumeSource: corev1.VolumeSource{
-							ConfigMap: &corev1.ConfigMapVolumeSource{
-								LocalObjectReference: corev1.LocalObjectReference{
-									Name: instance.Name + "-tlsca-config",
-								},
-							},
-						},
-					}
-					Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(volume))
-				})
+					},
+				}
+				Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(volume))
 			})
 		})
 
