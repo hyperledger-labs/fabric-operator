@@ -25,7 +25,7 @@ import (
 
 	controllermocks "github.com/IBM-Blockchain/fabric-operator/controllers/mocks"
 	config "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"

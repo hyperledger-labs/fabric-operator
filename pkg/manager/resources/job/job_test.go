@@ -23,7 +23,7 @@ import (
 	"errors"
 	"time"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/container"

@@ -33,7 +33,7 @@ import (
 	openshiftpeer "github.com/IBM-Blockchain/fabric-operator/pkg/offering/openshift/peer"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
 	"github.com/IBM-Blockchain/fabric-operator/version"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"

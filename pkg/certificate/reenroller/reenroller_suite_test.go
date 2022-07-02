@@ -19,9 +19,20 @@
 package reenroller_test
 
 import (
+	"encoding/pem"
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"os"
+	"path/filepath"
 	"testing"
 
-	. "github.com/onsi/ginkgo"
+	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/certificate/reenroller"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/certificate/reenroller/mocks"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
@@ -29,3 +40,51 @@ func TestReenroller(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Reenroller Suite")
 }
+
+var (
+	err error
+
+	testReenroller *reenroller.Reenroller
+	config         *current.Enrollment
+	mockIdentity   *mocks.Identity
+
+	server       *httptest.Server
+	serverCert   string
+	serverURL    string
+	serverUrlObj *url.URL
+)
+
+var _ = BeforeSuite(func() {
+	// Start a local HTTP server
+	server = httptest.NewTLSServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		// Test request parameters
+		Expect(req.URL.String()).To(Equal("/cainfo"))
+		return
+	}))
+
+	serverURL = server.URL
+	rawCert := server.Certificate().Raw
+	pemCert := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: rawCert})
+	serverCert = string(util.BytesToBase64(pemCert))
+
+	urlObj, err := url.Parse(serverURL)
+	Expect(err).NotTo(HaveOccurred())
+	serverUrlObj = urlObj
+
+	// Generate temporary key for reenroll test
+	keystorePath := filepath.Join(homeDir, "msp", "keystore")
+	err = os.MkdirAll(keystorePath, 0755)
+	Expect(err).NotTo(HaveOccurred())
+
+	key, err := util.Base64ToBytes(testkey)
+	Expect(err).NotTo(HaveOccurred())
+	err = ioutil.WriteFile(filepath.Join(keystorePath, "key.pem"), key, 0755)
+})
+
+var _ = AfterSuite(func() {
+	// Close the server when test finishes
+	server.Close()
+
+	err = os.RemoveAll(homeDir)
+	Expect(err).NotTo(HaveOccurred())
+})

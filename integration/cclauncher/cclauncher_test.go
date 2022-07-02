@@ -22,7 +22,7 @@ import (
 	"context"
 	"fmt"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	v2 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v2"
