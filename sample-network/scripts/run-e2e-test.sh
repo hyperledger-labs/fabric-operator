@@ -82,7 +82,7 @@ peer chaincode query -n asset-transfer-basic -C mychannel -c '{"Args":["org.hype
 network down
 
 export TEST_NETWORK_PEER_IMAGE=ghcr.io/hyperledgendary/k8s-fabric-peer
-export TEST_NETWORK_PEER_IMAGE_LABEL=v0.5.0
+export TEST_NETWORK_PEER_IMAGE_LABEL=v0.6.0
 
 network up
 network channel create
