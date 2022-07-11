@@ -18,19 +18,21 @@
 #
 
 function apply_operator() {
-
   apply_kustomization config/rbac
   apply_kustomization config/manager
 
   sleep 2
 }
 
-function network_up() {
-
+function launch_operator() {
   init_namespace
-
   apply_operator
   wait_for_deployment fabric-operator
+}
+
+function network_up() {
+
+  launch_operator
 
   launch_network_CAs
 

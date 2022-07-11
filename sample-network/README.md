@@ -137,7 +137,7 @@ Reconstruct the network with the "k8s-fabric-peer" image:
 network down
 
 export TEST_NETWORK_PEER_IMAGE=ghcr.io/hyperledgendary/k8s-fabric-peer
-export TEST_NETWORK_PEER_IMAGE_LABEL=v0.5.0
+export TEST_NETWORK_PEER_IMAGE_LABEL=v0.6.0
 
 network up
 network channel create

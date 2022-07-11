@@ -184,6 +184,11 @@ elif [ "${MODE}" == "down" ]; then
   network_down
   log "🏁 - Fabric network is down."
 
+elif [ "${MODE}" == "operator" ]; then
+  log "Launching Fabric operator"
+  launch_operator
+  log "🏁 - Operator is ready."
+
 elif [ "${MODE}" == "console" ]; then
   log "Launching Fabric Operations Console"
   console_up
