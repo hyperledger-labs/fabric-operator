@@ -32,7 +32,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/integration"
 	"github.com/IBM-Blockchain/fabric-operator/integration/helper"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
 

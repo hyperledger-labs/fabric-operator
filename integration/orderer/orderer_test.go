@@ -37,7 +37,7 @@ import (
 	config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v2"
 	baseorderer "github.com/IBM-Blockchain/fabric-operator/pkg/offering/base/orderer"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"

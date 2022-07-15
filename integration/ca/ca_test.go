@@ -33,7 +33,7 @@ import (
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/ca/v1"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util/pointer"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"

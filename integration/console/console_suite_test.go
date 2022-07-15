@@ -26,7 +26,7 @@ import (
 
 	"github.com/IBM-Blockchain/fabric-operator/integration"
 	ibpclient "github.com/IBM-Blockchain/fabric-operator/pkg/client"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/client-go/kubernetes"
