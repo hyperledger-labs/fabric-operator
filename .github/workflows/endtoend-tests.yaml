@@ -32,3 +32,6 @@ jobs:
 
       - name: Sample Network E2E Test
         run: sample-network/scripts/run-e2e-test.sh || cat sample-network/network-debug.log
+
+      - name: check k8s resources
+        run: kubectl get services --all-namespaces
