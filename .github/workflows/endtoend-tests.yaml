@@ -38,3 +38,12 @@ jobs:
 
       - name: get k8s deployment
         run: kubectl describe services org1-peer1 --namespace test-network 
+
+      - uses: actions/checkout@v3
+        with:
+          repository: prometheus-operator/kube-prometheus
+          path: kubeprometheus
+
+      - name: setup prometheus-operator
+        working-directory: kubeprometheus
+        run: kubectl create -f manifests/setup && sleep 30 && kubectl create -f manifests/
