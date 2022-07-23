@@ -37,4 +37,4 @@ jobs:
         run: kubectl get services --all-namespaces
 
       - name: get k8s deployment
-        run: kubectl describe services org1-peer1  
+        run: kubectl describe services org1-peer1 --namespace test-network 
