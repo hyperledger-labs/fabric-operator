@@ -35,3 +35,6 @@ jobs:
 
       - name: check k8s resources
         run: kubectl get services --all-namespaces
+
+      - name: get k8s deployment
+        run: kubectl describe services org1-peer1  
