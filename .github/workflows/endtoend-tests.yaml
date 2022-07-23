@@ -36,7 +36,7 @@ jobs:
       - name: check k8s resources
         run: kubectl get services --all-namespaces
 
-      - name: get k8s deployment
+      - name: get k8s service
         run: kubectl describe services org1-peer1 --namespace test-network 
 
       - uses: actions/checkout@v3
@@ -47,3 +47,6 @@ jobs:
       - name: setup prometheus-operator
         working-directory: kubeprometheus
         run: kubectl create -f manifests/setup && sleep 30 && kubectl create -f manifests/
+
+      - name: set up service monitor
+        run: kubectl apply -f peer1servicemonitor.yaml && sleep 30 && kubectl describe ServiceMonitor org1-peer1 --namespace test-network 
