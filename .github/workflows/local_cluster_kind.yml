@@ -1,0 +1,26 @@
+name: basicAssetWithTape
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: '0 0 * * 5' # https://crontab.guru/#0_0_*_*_5
+jobs:
+  basicAssetWithTape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+        with:
+          submodules: true
+      - uses: actions/setup-go@main
+        with:
+          go-version: 1.18
+      - name: install kind
+        run: go install sigs.k8s.io/kind@v0.12.0
+      - name: check version
+        run: kind version
+      - name: install kubectl
+        run: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - name: check version
+        run: kubectl version || true
+      - name: run kind
+        run: make kind
