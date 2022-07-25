@@ -12,7 +12,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: prometheus.localho.st
+    - host: prometheus.${INGRESS_DOMAIN}
       http:
         paths:
           - backend:
@@ -24,4 +24,4 @@ spec:
             pathType: ImplementationSpecific
   tls:
     - hosts:
-        - prometheus.localho.st
+        - prometheus.${INGRESS_DOMAIN}

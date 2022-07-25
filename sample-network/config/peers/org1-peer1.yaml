@@ -33,6 +33,8 @@ spec:
     peer:
       keepalive:
         minInterval: 61s
+    metrics:
+      provider: prometheus
   customNames:
     pvc: {}
   images:

@@ -102,7 +102,9 @@ function cluster_init() {
     kind_load_images
   fi
 
-  apply_prometheus
+  if [ "${PROMETHEUS_MONITORING}" == true ]; then
+    apply_prometheus
+  fi
 }
 
 function apply_fabric_crds() {
@@ -169,9 +171,11 @@ function apply_prometheus() {
 
   kubectl create -f $TEMP_DIR/kube-prometheus/manifests/ || true
 
-  # create ingress for prometheus and grafana at localho.st
-  kubectl apply -f ../config/prometheus/ingress-prometheus.yaml
-  kubectl apply -f ../config/prometheus/ingress-grafana.yaml    # TODO: need to set grafana server.ini root_url
+  # create ingress for prometheus and grafana at $INGRESS_DOMAIN
+  cat config/prometheus/ingress-prometheus.yaml | envsubst | kubectl apply -f -
+  cat config/prometheus/ingress-grafana.yaml | envsubst | kubectl apply -f -
+
+  # TODO: override grafana root_url in server.ini (secret)
 
   pop_fn
 }
@@ -184,8 +188,6 @@ function delete_prometheus() {
 
   pop_fn
 }
-
-
 
 # Allow pods running in kubernetes to access services at the ingress domain *.localho.st.
 #
@@ -243,7 +245,10 @@ EOF
 function cluster_clean() {
   delete_fabric_crds
   delete_nginx_ingress
-  delete_prometheus
+
+  if [ "${PROMETHEUS_MONITORING}" == true ]; then
+    delete_prometheus
+  fi
 }
 
 
