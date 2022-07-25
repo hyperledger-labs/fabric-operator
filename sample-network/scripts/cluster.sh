@@ -101,6 +101,8 @@ function cluster_init() {
     pull_docker_images
     kind_load_images
   fi
+
+  apply_prometheus
 }
 
 function apply_fabric_crds() {
@@ -150,6 +152,40 @@ function wait_for_nginx_ingress() {
 
   pop_fn
 }
+
+# https://prometheus-operator.dev/docs/prologue/quick-start/#deploy-kube-prometheus
+function apply_prometheus() {
+  push_fn "Applying prometheus operator"
+
+  set -x
+
+  git clone https://github.com/prometheus-operator/kube-prometheus.git $TEMP_DIR/kube-prometheus || true
+
+  # Create the namespace and CRDs, and then wait for them to be availble before creating the remaining resources
+  kubectl create -f $TEMP_DIR/kube-prometheus/manifests/setup || true
+
+  # Wait until the "servicemonitors" CRD is created. The message "No resources found" means success in this context.
+  until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
+
+  kubectl create -f $TEMP_DIR/kube-prometheus/manifests/ || true
+
+  # create ingress for prometheus and grafana at localho.st
+  kubectl apply -f ../config/prometheus/ingress-prometheus.yaml
+  kubectl apply -f ../config/prometheus/ingress-grafana.yaml    # TODO: need to set grafana server.ini root_url
+
+  pop_fn
+}
+
+function delete_prometheus() {
+  push_fn "Deleting prometheus operator"
+
+  kubectl delete --ignore-not-found=true -f $TEMP_DIR/kube-prometheus/manifests/setup
+  kubectl delete --ignore-not-found=true -f $TEMP_DIR/kube-prometheus/manifests/
+
+  pop_fn
+}
+
+
 
 # Allow pods running in kubernetes to access services at the ingress domain *.localho.st.
 #
@@ -207,6 +243,7 @@ EOF
 function cluster_clean() {
   delete_fabric_crds
   delete_nginx_ingress
+  delete_prometheus
 }
 
 
