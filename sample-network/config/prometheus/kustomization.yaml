@@ -20,6 +20,6 @@ kind: Kustomization
 
 resources:
   - servicemonitor-org1-peer1.yaml
-#  - servicemonitor-org1-peer2.yaml
+  - servicemonitor-org1-peer2.yaml
 #  - servicemonitor-org2-peer1.yaml
 #  - servicemonitor-org2-peer2.yaml

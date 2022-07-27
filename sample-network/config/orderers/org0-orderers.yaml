@@ -43,7 +43,7 @@ spec:
     - enrollment:
         component:
           caname: ca
-          cahost: test-network-org0-ca-ca.${INGRESS_DOMAIN}
+          cahost: ${NS}-org0-ca-ca.${INGRESS_DOMAIN}
           caport: "443"
           catls:
             cacert: "${ORG0_CA_CERT}"
@@ -51,7 +51,7 @@ spec:
           enrollsecret: "orderer1pw"
         tls:
           caname: tlsca
-          cahost: test-network-org0-ca-ca.${INGRESS_DOMAIN}
+          cahost: ${NS}-org0-ca-ca.${INGRESS_DOMAIN}
           caport: "443"
           catls:
             cacert: "${ORG0_CA_CERT}"
@@ -64,7 +64,7 @@ spec:
     - enrollment:
         component:
           caname: ca
-          cahost: test-network-org0-ca-ca.${INGRESS_DOMAIN}
+          cahost: ${NS}-org0-ca-ca.${INGRESS_DOMAIN}
           caport: "443"
           catls:
             cacert: "${ORG0_CA_CERT}"
@@ -72,7 +72,7 @@ spec:
           enrollsecret: "orderer2pw"
         tls:
           caname: tlsca
-          cahost: test-network-org0-ca-ca.${INGRESS_DOMAIN}
+          cahost: ${NS}-org0-ca-ca.${INGRESS_DOMAIN}
           caport: "443"
           catls:
             cacert: "${ORG0_CA_CERT}"
@@ -85,7 +85,7 @@ spec:
     - enrollment:
         component:
           caname: ca
-          cahost: test-network-org0-ca-ca.${INGRESS_DOMAIN}
+          cahost: ${NS}-org0-ca-ca.${INGRESS_DOMAIN}
           caport: "443"
           catls:
             cacert: "${ORG0_CA_CERT}"
@@ -93,7 +93,7 @@ spec:
           enrollsecret: "orderer3pw"
         tls:
           caname: tlsca
-          cahost: test-network-org0-ca-ca.${INGRESS_DOMAIN}
+          cahost: ${NS}-org0-ca-ca.${INGRESS_DOMAIN}
           caport: "443"
           catls:
             cacert: "${ORG0_CA_CERT}"

@@ -56,7 +56,7 @@ function init_namespace() {
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: test-network
+  name: ${NS}
 EOF
 
   pop_fn
