@@ -35,6 +35,7 @@ function network_up() {
   launch_operator
 
   launch_network_CAs
+  enroll_org_admins
 
   apply_network_peers
   apply_network_orderers
@@ -47,6 +48,10 @@ function network_up() {
   wait_for ibporderer org0-orderersnode1
   wait_for ibporderer org0-orderersnode2
   wait_for ibporderer org0-orderersnode3
+
+  if [ "${PROMETHEUS_MONITORING}" == true ]; then
+    apply_service_monitors
+  fi
 }
 
 function init_namespace() {
@@ -123,6 +128,34 @@ function apply_network_orderers() {
   pop_fn
 }
 
+# Create kube secrets to store the monitoring client TLS certificate and key for access
+# to the operations/metrics endpoint.
+function create_servicemonitor_tls_secret() {
+  local org=$1
+  local secret_name=${org}-servicemonitor-tls-secret
+
+  kubectl -n monitoring delete secret ${secret_name} --ignore-not-found
+
+  kubectl -n monitoring \
+    create secret \
+      generic ${secret_name} \
+      --from-file=temp/cas/${org}-ca/tlsca-signcert.pem \
+      --from-file=temp/enrollments/${org}/users/${org}admin/tls/signcerts/cert.pem \
+      --from-file=temp/enrollments/${org}/users/${org}admin/tls/keystore/key.pem
+}
+
+function apply_service_monitors() {
+  push_fn "Creating Prometheus service monitors"
+
+  create_servicemonitor_tls_secret org0
+  create_servicemonitor_tls_secret org1
+  create_servicemonitor_tls_secret org2
+
+  apply_kustomization config/prometheus
+
+  pop_fn
+}
+
 function stop_services() {
   push_fn "Stopping Fabric Services"
 
@@ -130,6 +163,7 @@ function stop_services() {
   undo_kustomization config/cas
   undo_kustomization config/peers
   undo_kustomization config/orderers
+  undo_kustomization config/prometheus
 
   # give the operator a chance to reconcile the deletion and then shut down the operator.
   sleep 10

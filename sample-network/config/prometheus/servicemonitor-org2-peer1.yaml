@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: org1-peer1
+  name: org2-peer1
   namespace: monitoring
 spec:
   namespaceSelector:
@@ -10,7 +10,7 @@ spec:
       - ${NS}
   selector:
     matchLabels:
-      app: org1-peer1
+      app: org2-peer1
   endpoints:
     - port: operations
       scheme: https
@@ -24,17 +24,17 @@ spec:
       # cert.pem : temp/enrollments/$org/users/org0admin/tls/signcerts/cert.pem
       # key.pem : temp/enrollments/$org/users/org0admin/tls/keystore/key.pem
       tlsConfig:
-        serverName: org1-peer1
+        serverName: org2-peer1
         ca:
           secret:
-            name: org1-servicemonitor-tls-secret
+            name: org2-servicemonitor-tls-secret
             key: tlsca-signcert.pem
         cert:
           secret:
-            name: org1-servicemonitor-tls-secret
+            name: org2-servicemonitor-tls-secret
             key: cert.pem
         keySecret:
-          name: org1-servicemonitor-tls-secret
+          name: org2-servicemonitor-tls-secret
           key: key.pem
 
 
