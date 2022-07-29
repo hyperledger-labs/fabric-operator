@@ -107,6 +107,15 @@ EOF
   pop_fn
 }
 
+function stop_docker_registry() {
+  push_fn "Deleting container registry \"${LOCAL_REGISTRY_NAME}\" at localhost:${LOCAL_REGISTRY_PORT}"
+
+  docker kill kind-registry || true
+  docker rm kind-registry   || true
+
+  pop_fn
+}
+
 function kind_delete() {
   push_fn "Deleting KIND cluster ${CLUSTER_NAME}"
 
@@ -119,6 +128,17 @@ function kind_init() {
   set -o errexit
 
   kind_create
-  #launch_docker_registry
+
+  if [ "${USE_LOCAL_REGISTRY}" == true ]; then
+    launch_docker_registry
+  fi
 }
 
+function kind_unkind() {
+
+  kind_delete
+
+  if [ "${USE_LOCAL_REGISTRY}" == true ]; then
+    stop_docker_registry
+  fi
+}
