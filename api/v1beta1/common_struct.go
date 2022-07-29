@@ -196,7 +196,7 @@ type License struct {
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors.x-descriptors="urn:alm:descriptor:com.tectonic.ui:checkbox"
 	// +kubebuilder:validation:Enum=true
-	Accept bool `json:"accept,omitempty"`
+	Accept bool `json:"accept"`
 }
 
 // +k8s:deepcopy-gen=true

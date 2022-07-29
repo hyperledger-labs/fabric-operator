@@ -19,10 +19,11 @@
 package v1beta1
 
 import (
-	consolev1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/console/v1"
+	"encoding/json"
+
+	consolev1 "github.com/IBM-Blockchain/fabric-operator/api/console/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // +k8s:openapi-gen=true
@@ -74,12 +75,6 @@ type IBPConsoleSpec struct {
 	// AuthScheme is auth scheme for console access
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	AuthScheme string `json:"authScheme,omitempty"`
-
-	// AllowDefaultPassword, if true, will bypass the password reset flow
-	// on the first connection to the console GUI.  By default (false), all
-	// consoles require a password reset at the first login.
-	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	AllowDefaultPassword bool `json:"allowDefaultPassword,omitempty"`
 
 	// Components is database name used for components
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
@@ -194,14 +189,14 @@ type ConsoleOverrides struct {
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:Schemaless
 	// +kubebuilder:pruning:PreserveUnknownFields
-	Console *runtime.RawExtension `json:"console,omitempty"`
+	Console *json.RawMessage `json:"console,omitempty"`
 
 	// Deployer is the overrides to deployer configuration
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:Schemaless
 	// +kubebuilder:pruning:PreserveUnknownFields
-	Deployer *runtime.RawExtension `json:"deployer,omitempty"`
+	Deployer *json.RawMessage `json:"deployer,omitempty"`
 
 	// MaxNameLength (Optional) is the maximum length of the name that the console can have
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
