@@ -1,0 +1,57 @@
+# Apache-2.0
+
+# Main justfile to run all the scripts
+#
+# To install 'just' see https://github.com/casey/just#installation
+
+
+# Ensure all properties are exported as shell env-vars
+set export
+
+# set the current directory, and the location of the test dats
+CWDIR := justfile_directory()
+
+_default:
+  @just --list
+
+# Starts and configures a local KIND cluster
+cluster:
+    #!/bin/bash
+    set -ex -o pipefail
+    
+    # create and configure the cluster
+    ./network kind
+    ./network cluster init
+
+# Installs and configures a sample Fabric Network
+network:
+    #!/bin/bash
+    set -ex -o pipefail
+    
+    # create Fabric network
+    ./network up
+
+    kubectl -n test-network get all
+
+    # create Fabric channnel
+    ./network channel create
+
+# Cluster and Fabric Network
+everything: cluster network
+
+# Install the operations console
+console:
+	#!/bin/bash
+	set -ex -o pipefail
+
+	./network console
+
+# Installs just the operator
+operator:
+	#!/bin/bash
+
+	./network operator
+
+# Removes the local cluster
+unkind:
+    ./network unkind
