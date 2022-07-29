@@ -168,6 +168,14 @@ type IBPOrdererSpec struct {
 	// ExternalAddress (Optional) is used internally
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	ExternalAddress string `json:"externalAddress,omitempty"`
+
+	// PrometheusOperator(Optional) is used to integerate with prometheus operator for orderer deployment
+	// sample usage as prometheusoperator: true
+	// specify to enable prometheusoperator, we need configoverride.metrics.provider and configoverride.operations.listenAddress works
+	// CORE_METRICS_PROVIDER should be configured as prometheus by configoverride.metrics.provider
+	// meanwhile operator port should be configured as prometheus by configoverride.operations.listenAddress
+	// and a ServiceMonitor will be created for orderer
+	PrometheusOperator bool `json:"prometheusoperator,omitempty"`
 }
 
 // IBPOrdererClusterLocation (Optional) is object of cluster location settings for cluster

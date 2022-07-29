@@ -15,40 +15,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-apiVersion: ibp.com/v1beta1
-kind: IBPOrderer
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
 metadata:
-  name: orderera
-  namespace: example
+  name: "ibporderer-service"
 spec:
-  clusterSize: 5
-  clustersecret:
-    - enrollment: {}
-    - enrollment: {}
-    - enrollment: {}
-    - enrollment: {}
-    - enrollment: {}
-  customNames:
-    pvc: {}
-  domain: ""
-  imagePullSecrets:
-    - regcred
-  license:
-    accept: false
-  location:
-    - {}
-    - {}
-    - {}
-    - {}
-    - {}
-  mspID: ordererorg
-  ordererType: etcdraft
-  orgName: ordererorg
-  storage:
-    orderer:
-      class: ""
-      size: 5G
-  systemChannelName: testchainid
-  version: 2.2.4
-  metricsprovider: prometheus
+  selector:
+    release: "operator"
+  selector:
+    matchLabels:
+      app: "ibporderer-service"
+  endpoints:
+  - port: operations
