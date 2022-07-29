@@ -163,7 +163,11 @@ function stop_services() {
   undo_kustomization config/cas
   undo_kustomization config/peers
   undo_kustomization config/orderers
-  undo_kustomization config/prometheus
+
+  if [ "${PROMETHEUS_MONITORING}" == true ]; then
+    undo_kustomization config/prometheus
+  fi
+
 
   # give the operator a chance to reconcile the deletion and then shut down the operator.
   sleep 10
