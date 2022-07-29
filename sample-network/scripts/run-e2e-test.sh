@@ -118,4 +118,4 @@ kubectl -n test-network describe pods -l app.kubernetes.io/created-by=fabric-bui
 
 peer chaincode query -n conga-nft-contract -C mychannel -c '{"Args":["org.hyperledger.fabric:GetMetadata"]}'
 
-network down
+#network down
