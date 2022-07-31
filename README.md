@@ -45,7 +45,7 @@ _Fabric, Ahoy!_
 
 - [ ] Declarative Fabric resources : `Channel`, `Chaincode`, `Organization`, `Consortium` / MSP, ... CRDs 
 - [ ] Service Mesh Overlay (Linkerd, Istio, ...) with mTLS
-- [ ] Metrics and observability with Prometheus and Grafana
+- [x] Metrics and observability with [Prometheus and Grafana](./docs/prometheus.md)
 - [ ] Operational management: Log aggregation, monitoring, alerting
 - [ ] Modular CAs (Fabric CA, cert-manager.io, Vault, letsencrypt, ...)
 - [ ] Automatic x509 certificate renewal
