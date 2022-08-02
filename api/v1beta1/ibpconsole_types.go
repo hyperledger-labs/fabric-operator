@@ -75,6 +75,12 @@ type IBPConsoleSpec struct {
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	AuthScheme string `json:"authScheme,omitempty"`
 
+	// AllowDefaultPassword, if true, will bypass the password reset flow
+	// on the first connection to the console GUI.  By default (false), all
+	// consoles require a password reset at the first login.
+	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
+	AllowDefaultPassword bool `json:"allowDefaultPassword,omitempty"`
+
 	// Components is database name used for components
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	Components string `json:"components,omitempty"`
