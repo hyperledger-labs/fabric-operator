@@ -19,10 +19,9 @@
 package v1beta1
 
 import (
-	"encoding/json"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
@@ -123,13 +122,13 @@ type ConfigOverride struct {
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:Schemaless
 	// +kubebuilder:pruning:PreserveUnknownFields
-	CA *json.RawMessage `json:"ca,omitempty"`
+	CA *runtime.RawExtension `json:"ca,omitempty"`
 	// TLSCA (Optional) is the overrides to TLSCA's configuration
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:Schemaless
 	// +kubebuilder:pruning:PreserveUnknownFields
-	TLSCA *json.RawMessage `json:"tlsca,omitempty"`
+	TLSCA *runtime.RawExtension `json:"tlsca,omitempty"`
 	// MaxNameLength (Optional) is the maximum length of the name that the CA can have
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	MaxNameLength *int `json:"maxnamelength,omitempty"`

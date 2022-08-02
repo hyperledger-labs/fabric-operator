@@ -19,10 +19,9 @@
 package v1beta1
 
 import (
-	"encoding/json"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
@@ -80,7 +79,7 @@ type IBPPeerSpec struct {
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:Schemaless
 	// +kubebuilder:pruning:PreserveUnknownFields
-	ConfigOverride *json.RawMessage `json:"configoverride,omitempty"`
+	ConfigOverride *runtime.RawExtension `json:"configoverride,omitempty"`
 
 	// HSM (Optional) is DEPRECATED
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
@@ -145,6 +144,13 @@ type IBPPeerSpec struct {
 	// Action (Optional) is object for peer actions
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	Action PeerAction `json:"action,omitempty"`
+
+	// ChaincodeBuilderConfig (Optional) is a k/v map providing a scope for template
+	// substitutions defined in chaincode-as-a-service package metadata files.
+	// The map will be serialized as JSON and set in the peer deployment
+	// CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG env variable.
+	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
+	ChaincodeBuilderConfig ChaincodeBuilderConfig `json:"chaincodeBuilderConfig,omitempty"`
 }
 
 // +k8s:openapi-gen=true
@@ -476,3 +482,9 @@ type PeerEnrollAction struct {
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	TLSCert bool `json:"tlscert,omitempty"`
 }
+
+// ChaincodeBuilderConfig defines a k/v mapping scope for template substitutions
+// referenced within a chaincode package archive.  The mapping is serialized as
+// JSON and appended to the peer env as CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG.
+// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
+type ChaincodeBuilderConfig map[string]string

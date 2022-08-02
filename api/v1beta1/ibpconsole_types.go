@@ -19,11 +19,10 @@
 package v1beta1
 
 import (
-	"encoding/json"
-
 	consolev1 "github.com/IBM-Blockchain/fabric-operator/api/console/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // +k8s:openapi-gen=true
@@ -189,14 +188,14 @@ type ConsoleOverrides struct {
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:Schemaless
 	// +kubebuilder:pruning:PreserveUnknownFields
-	Console *json.RawMessage `json:"console,omitempty"`
+	Console *runtime.RawExtension `json:"console,omitempty"`
 
 	// Deployer is the overrides to deployer configuration
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:Schemaless
 	// +kubebuilder:pruning:PreserveUnknownFields
-	Deployer *json.RawMessage `json:"deployer,omitempty"`
+	Deployer *runtime.RawExtension `json:"deployer,omitempty"`
 
 	// MaxNameLength (Optional) is the maximum length of the name that the console can have
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true

@@ -19,10 +19,9 @@
 package v1beta1
 
 import (
-	"encoding/json"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
@@ -95,7 +94,7 @@ type IBPOrdererSpec struct {
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:Schemaless
 	// +kubebuilder:pruning:PreserveUnknownFields
-	ConfigOverride *json.RawMessage `json:"configoverride,omitempty"`
+	ConfigOverride *runtime.RawExtension `json:"configoverride,omitempty"`
 
 	// HSM (Optional) is DEPRECATED
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
@@ -123,7 +122,8 @@ type IBPOrdererSpec struct {
 
 	// ClusterConfigOverride (Optional) is array of config overrides for cluster
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	ClusterConfigOverride []*json.RawMessage `json:"clusterconfigoverride,omitempty"`
+	// +kubebuilder:pruning:PreserveUnknownFields
+	ClusterConfigOverride []*runtime.RawExtension `json:"clusterconfigoverride,omitempty"`
 
 	// ClusterSecret (Optional) is array of msp crypto for cluster
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
