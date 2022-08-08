@@ -98,7 +98,47 @@ function launch_network_CAs() {
   export ORG1_CA_CERT=$(kubectl -n $NS get cm/org1-ca-connection-profile -o json | jq -r .binaryData.\"profile.json\" | base64 -d | jq -r .tls.cert)
   export ORG2_CA_CERT=$(kubectl -n $NS get cm/org2-ca-connection-profile -o json | jq -r .binaryData.\"profile.json\" | base64 -d | jq -r .tls.cert)
 
+  enroll_bootstrap_rcaadmin org0 rcaadmin rcaadminpw
+  enroll_bootstrap_rcaadmin org1 rcaadmin rcaadminpw
+  enroll_bootstrap_rcaadmin org2 rcaadmin rcaadminpw
+
   pop_fn
+}
+
+function enroll_bootstrap_rcaadmin() {
+  local org=$1
+  local username=$2
+  local password=$3
+
+  echo "Enrolling $org root CA admin $username"
+
+  ENROLLMENTS_DIR=${TEMP_DIR}/enrollments
+  ORG_ADMIN_DIR=${ENROLLMENTS_DIR}/${org}/users/${username}
+
+  # skip the enrollment if the admin certificate is available.
+  if [ -f "${ORG_ADMIN_DIR}/msp/keystore/key.pem" ]; then
+    echo "Found an existing admin enrollment at ${ORG_ADMIN_DIR}"
+    return
+  fi
+
+  # Retrieve the CA information from Kubernetes
+  CA_NAME=${org}-ca
+  CA_DIR=${TEMP_DIR}/cas/${CA_NAME}
+  CONNECTION_PROFILE=${CA_DIR}/connection-profile.json
+
+  get_connection_profile $CA_NAME $CONNECTION_PROFILE
+
+  # extract the CA enrollment URL and tls cert from the org connection profile
+  CA_AUTH=${username}:${password}
+  CA_ENDPOINT=$(jq -r .endpoints.api $CONNECTION_PROFILE)
+  CA_HOST=$(echo ${CA_ENDPOINT} | cut -d/ -f3 | tr ':' '\n' | head -1)
+  CA_PORT=$(echo ${CA_ENDPOINT} | cut -d/ -f3 | tr ':' '\n' | tail -1)
+  CA_URL=https://${CA_AUTH}@${CA_HOST}:${CA_PORT}
+
+  jq -r .tls.cert $CONNECTION_PROFILE | base64 -d >& $CA_DIR/tls-cert.pem
+
+  # enroll the admin user
+  FABRIC_CA_CLIENT_HOME=${ORG_ADMIN_DIR} fabric-ca-client enroll --url ${CA_URL} --tls.certfiles ${CA_DIR}/tls-cert.pem
 }
 
 function apply_network_peers() {
