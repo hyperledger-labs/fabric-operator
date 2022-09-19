@@ -51,7 +51,7 @@ func getDefaultVersions() *deployer.Versions {
 					PeerImage:     "hyperledger/fabric-peer",
 					PeerTag:       FabricVersion,
 					CouchDBImage:  "couchdb",
-					CouchDBTag:    "3.1.2",
+					CouchDBTag:    "3.2.2",
 					GRPCWebImage:  "ghcr.io/hyperledger-labs/grpc-web",
 					GRPCWebTag:    LatestTag,
 				},

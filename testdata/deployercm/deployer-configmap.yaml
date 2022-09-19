@@ -66,7 +66,7 @@ data:
             peerImage: fabric-peer
             peerTag: latest
             couchdbImage: fabric-couchdb
-            couchdbTag: 3.1.2
+            couchdbTag: 3.2.2
             grpcwebImage: fabric-grpcweb
             grpcwebTag: latest
 
