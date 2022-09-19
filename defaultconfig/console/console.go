@@ -31,6 +31,6 @@ func GetImages() *deployer.ConsoleImages {
 		DeployerImage:      "ghcr.io/ibm-blockchain/fabric-deployer",
 		DeployerTag:        "latest",
 		CouchDBImage:       "couchdb",
-		CouchDBTag:         "3.1.2",
+		CouchDBTag:         "3.2.2",
 	}
 }

@@ -65,7 +65,7 @@ data:
             peerImage: hyperledger/fabric-peer
             peerTag: 2.4.3
             couchdbImage: couchdb
-            couchdbTag: 3.1.2
+            couchdbTag: 3.2.2
             grpcwebImage: ghcr.io/hyperledger-labs/grpc-web
             grpcwebTag: latest
       orderer:
