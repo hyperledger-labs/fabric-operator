@@ -19,6 +19,7 @@
 package basepeer
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -827,9 +828,13 @@ func (p *Peer) ReconcileSecret(instance *current.IBPPeer) error {
 			return nil
 		}
 		return err
+	} else {
+		log.Info(fmt.Sprintf("Updating secret '%s'", name))
+		updateErr := p.UpdateSecret(instance, secret)
+		if updateErr != nil {
+			return updateErr
+		}
 	}
-
-	// TODO: If needed, update logic goes here
 
 	return nil
 }
@@ -854,6 +859,25 @@ func (p *Peer) CreateSecret(instance *current.IBPPeer) error {
 	err = p.Client.Create(context.TODO(), secret, controllerclient.CreateOption{Owner: instance, Scheme: p.Scheme})
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (p *Peer) UpdateSecret(instance *current.IBPPeer, secret *corev1.Secret) error {
+	secretData := instance.Spec.Secret
+	bytesData, err := json.Marshal(secretData)
+	if err != nil {
+		return err
+	}
+
+	if secret.Data != nil && !bytes.Equal(secret.Data["secret.json"], bytesData) {
+		secret.Data["secret.json"] = bytesData
+
+		err = p.Client.Update(context.TODO(), secret, controllerclient.UpdateOption{Owner: instance, Scheme: p.Scheme})
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
