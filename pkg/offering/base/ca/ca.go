@@ -931,9 +931,10 @@ func (ca *CA) ReconcileHSMImages(instance *current.IBPCA) bool {
 
 	updated := false
 	if hsmConfig.Library.Image != "" {
-		hsm := strings.Split(hsmConfig.Library.Image, ":")
-		image := hsm[0]
-		tag := hsm[1]
+		hsmImage := hsmConfig.Library.Image
+		lastIndex := strings.LastIndex(hsmImage, ":")
+		image := hsmImage[:lastIndex]
+		tag := hsmImage[lastIndex+1:]
 
 		if instance.Spec.Images.HSMImage != image {
 			instance.Spec.Images.HSMImage = image
