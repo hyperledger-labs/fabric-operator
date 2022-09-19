@@ -729,7 +729,8 @@ func (o *Override) CommonDeploymentOverrides(instance *current.IBPPeer, deployme
 	}
 
 	externalAddress := instance.Spec.PeerExternalEndpoint
-	if externalAddress != "" {
+	// Set external address to "do-not-set" in Peer CR spec to disable Service discovery
+	if externalAddress != "" && externalAddress != "do-not-set" {
 		peerContainer.AppendEnvIfMissing("CORE_PEER_GOSSIP_EXTERNALENDPOINT", externalAddress)
 		peerContainer.AppendEnvIfMissing("CORE_PEER_GOSSIP_ENDPOINT", externalAddress)
 		grpcContainer.AppendEnvIfMissing("EXTERNAL_ADDRESS", externalAddress)
