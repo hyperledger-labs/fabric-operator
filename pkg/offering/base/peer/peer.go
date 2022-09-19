@@ -860,6 +860,11 @@ func (p *Peer) CreateSecret(instance *current.IBPPeer) error {
 }
 
 func (p *Peer) UpdateExternalEndpoint(instance *current.IBPPeer) bool {
+	// Disable Service discovery
+	if instance.Spec.PeerExternalEndpoint == "do-not-set" {
+		return false
+	}
+
 	if instance.Spec.PeerExternalEndpoint == "" {
 		instance.Spec.PeerExternalEndpoint = instance.Namespace + "-" + instance.Name + "-peer." + instance.Spec.Domain + ":443"
 		return true
