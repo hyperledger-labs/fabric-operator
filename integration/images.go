@@ -35,7 +35,7 @@ const (
 	ConfigtxlatorImage = "hyperledger/fabric-tools"
 	ConfigtxlatorTag   = FabricVersion24
 	CouchdbImage       = "couchdb"
-	CouchdbTag         = "3.2.1"
+	CouchdbTag         = "3.2.2"
 	GrpcwebImage       = "ghcr.io/hyperledger-labs/grpc-web"
 	GrpcwebTag         = "latest"
 	ConsoleImage       = "ghcr.io/hyperledger-labs/fabric-console"
