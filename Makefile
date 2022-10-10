@@ -17,13 +17,15 @@
 #
 
 IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
-INIT_IMAGE ?= ghcr.io/hyperledger-labs/init
 TAG ?= $(shell git rev-parse --short HEAD)
 ARCH ?= $(shell go env GOARCH)
 OSS_GO_VER ?= 1.17.7
 BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 OS = $(shell go env GOOS)
-K8S_TAG = v0.6.0
+
+INIT_IMAGE ?= ghcr.io/hyperledger-labs/init
+K8S_BUILDER_TAG = v0.7.2
+INIT_TAG ?= 1.0.0
 
 DOCKER_IMAGE_REPO ?= ghcr.io
 
@@ -50,8 +52,10 @@ image: setup
 	docker tag $(IMAGE):$(TAG)-$(ARCH) $(IMAGE):latest-$(ARCH)
 
 init-image:
-	docker build --rm . -f sample-network/init/Dockerfile --build-arg K8S_TAG=$(K8S_TAG) -t $(INIT_IMAGE):latest-$(ARCH)
-	docker push $(INIT_IMAGE):latest-$(ARCH)
+	INIT_IMAGE=$(INIT_IMAGE) INIT_TAG=$(INIT_TAG) ARCH=$(ARCH) K8S_BUILDER_TAG=$(K8S_BUILDER_TAG) scripts/init-build-push.sh "build"
+
+init-image-push:
+	INIT_IMAGE=$(INIT_IMAGE) INIT_TAG=$(INIT_TAG) ARCH=$(ARCH) scripts/init-build-push.sh scripts/init-build-push.sh "push"
 
 govendor:
 	@go mod vendor

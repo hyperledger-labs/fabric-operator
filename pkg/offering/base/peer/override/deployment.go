@@ -414,6 +414,9 @@ func (o *Override) V2Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 	}
 	if instance.UsingCCLauncherImage() {
 		dirs = append(dirs, "cclauncher/")
+	} else if isV24Peer(instance) {
+		dirs = append(dirs, "/opt/hyperledger/k8s_builder")
+		cmdFormat += ` && cp -r /opt/hyperledger/k8s_builder/bin /k8s_builder/`
 	}
 
 	var directories string
@@ -454,6 +457,12 @@ func (o *Override) V2Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 		peerContainer.DeleteEnv("CORE_VM_DOCKER_ATTACHSTDOUT")
 
 		deployment.AppendEmptyDirVolumeIfMissing(fmt.Sprintf("%s-cclauncher", instance.Name), corev1.StorageMediumMemory)
+	} else if isV24Peer(instance) {
+		// This is the case where it is a 2.4.x peer and using K8S Builder as external builder
+		volumeMountName := fmt.Sprintf("%s-k8sbuilder", instance.GetName())
+		initContainer.AppendVolumeMountIfMissing(volumeMountName, "/k8s_builder")
+		peerContainer.AppendVolumeMountIfMissing(volumeMountName, "/opt/hyperledger/k8s_builder")
+		deployment.AppendEmptyDirVolumeIfMissing(fmt.Sprintf("%s-k8sbuilder", instance.Name), corev1.StorageMediumMemory)
 	}
 
 	// Append a k/v JSON substitution map to the peer env.
@@ -635,8 +644,7 @@ func (o *Override) UpdateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 		if err != nil {
 			return errors.Wrapf(err, "failed to update V2 fabric deployment for instance '%s'", instance.GetName())
 		}
-		peerVersion := version.String(instance.Spec.FabricVersion)
-		if peerVersion.EqualWithoutTag(version.V2_4_1) || peerVersion.GreaterThan(version.V2_4_1) {
+		if isV24Peer(instance) {
 			err := o.V24DeploymentUpdate(instance, deployment)
 			if err != nil {
 				return errors.Wrapf(err, "failed to update V24 fabric deployment for instance '%s'", instance.GetName())
@@ -969,4 +977,9 @@ func hsmDaemonSettings(instance *current.IBPPeer, hsmConfig *config.HSMConfig, p
 		peerCont.AppendVolumeMountStructIfMissing(*pvcMount)
 		deployment.AppendPVCVolumeIfMissing(pvcVolumeName, instance.PVCName())
 	}
+}
+
+func isV24Peer(instance *current.IBPPeer) bool {
+	peerVersion := version.String(instance.Spec.FabricVersion)
+	return peerVersion.EqualWithoutTag(version.V2_4_1) || peerVersion.GreaterThan(version.V2_4_1)
 }
