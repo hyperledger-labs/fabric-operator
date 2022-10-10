@@ -17,11 +17,13 @@
 #
 
 IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
+INIT_IMAGE ?= ghcr.io/hyperledger-labs/init
 TAG ?= $(shell git rev-parse --short HEAD)
 ARCH ?= $(shell go env GOARCH)
 OSS_GO_VER ?= 1.17.7
 BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 OS = $(shell go env GOOS)
+K8S_TAG = v0.6.0
 
 DOCKER_IMAGE_REPO ?= ghcr.io
 
@@ -46,6 +48,10 @@ build: ## Builds the starter pack
 image: setup
 	docker build --rm . -f Dockerfile $(BUILD_ARGS) -t $(IMAGE):$(TAG)-$(ARCH)
 	docker tag $(IMAGE):$(TAG)-$(ARCH) $(IMAGE):latest-$(ARCH)
+
+init-image:
+	docker build --rm . -f sample-network/init/Dockerfile --build-arg K8S_TAG=$(K8S_TAG) -t $(INIT_IMAGE):latest-$(ARCH)
+	docker push $(INIT_IMAGE):latest-$(ARCH)
 
 govendor:
 	@go mod vendor

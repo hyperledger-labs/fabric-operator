@@ -1,0 +1,16 @@
+name: Build Init image
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build and Push Init Image
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          make init-image
