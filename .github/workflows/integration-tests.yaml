@@ -60,7 +60,7 @@ jobs:
 
       - name: Set up ginkgo
         run: |
-          go get github.com/onsi/ginkgo/ginkgo
+          go get github.com/onsi/ginkgo/v2/ginkgo@latest
           go get github.com/onsi/gomega/...
 
       - name: Set up KIND k8s cluster
