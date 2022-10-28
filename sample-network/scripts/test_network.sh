@@ -166,7 +166,7 @@ function apply_network_orderers() {
 function stop_services() {
   push_fn "Stopping Fabric Services"
 
-  undo_kustomization config/consoles
+  undo_kustomization config/console
   undo_kustomization config/cas
   undo_kustomization config/peers
   undo_kustomization config/orderers
