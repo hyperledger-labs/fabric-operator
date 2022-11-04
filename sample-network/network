@@ -39,12 +39,13 @@ context CONTAINER_CLI             docker                # or nerdctl for contain
 context CONTAINER_NAMESPACE       ""                    # or "--namespace k8s.io" for containerd / nerdctl
 context STORAGE_CLASS             standard
 context KUSTOMIZE_BUILD           "kubectl kustomize"
-context STAGE_DOCKER_IMAGES       true
+context STAGE_DOCKER_IMAGES       false
 context FABRIC_CONTAINER_REGISTRY hyperledger
 
 context NAME                      test-network
 context NS                        $NAME
 context CLUSTER_NAME              $CLUSTER_RUNTIME
+context CLUSTER_IMAGE             kindest/node:v1.24.4  # Important! k8s v1.25.0 brings breaking changes.
 context KUBE_DNS_DOMAIN           ${NS}.svc.cluster.local
 context INGRESS_DOMAIN            localho.st
 context COREDNS_DOMAIN_OVERRIDE   true

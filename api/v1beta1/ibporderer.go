@@ -236,27 +236,11 @@ func (s *IBPOrdererSpec) DomainSet() bool {
 }
 
 func (s *IBPOrdererSpec) IsPrecreateOrderer() bool {
-	if s.IsPrecreate == nil {
-		return false
-	}
-
-	if *s.IsPrecreate == BoolTrue {
-		return true
-	}
-
-	return false
+	return s.IsPrecreate != nil && *s.IsPrecreate
 }
 
 func (s *IBPOrdererSpec) IsUsingChannelLess() bool {
-	if s.UseChannelLess == nil {
-		return false
-	}
-
-	if *s.UseChannelLess == BoolTrue {
-		return true
-	}
-
-	return false
+	return s.UseChannelLess != nil && *s.UseChannelLess
 }
 
 func (s *IBPOrdererSpec) GetNumSecondsWarningPeriod() int64 {
