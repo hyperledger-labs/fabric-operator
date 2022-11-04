@@ -42,33 +42,27 @@ spec:
         app.kubernetes.io/name: "hlf"
         app.kubernetes.io/instance: "hlf"
         app.kubernetes.io/managed-by: "fabric-operator"
-      annotations:
-        productName: "IBM Support for Hyperledger Fabric"
-        productID: "5d5997a033594f149a534a09802d60f1"
-        productVersion: "1.0.0"
-        productChargedContainers: ""
-        productMetric: "VIRTUAL_PROCESSOR_CORE"
     spec:
       # hostIPC: false
       # hostNetwork: false
       # hostPID: false
       serviceAccountName: hlf-operator
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - amd64
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#              - matchExpressions:
+#                  - key: kubernetes.io/arch
+#                    operator: In
+#                    values:
+#                      - amd64
       # securityContext:
       #   runAsNonRoot: true
       #   runAsUser: 1001
       #   fsGroup: 2000
 
-      imagePullSecrets:
-        - name: ghcr-pull-secret
+#      imagePullSecrets:
+#        - name: image-pull-secret
 
       containers:
         - name: fabric-operator
