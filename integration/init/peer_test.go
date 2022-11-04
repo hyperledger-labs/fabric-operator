@@ -26,7 +26,7 @@ import (
 	"path/filepath"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
-	operatorconfig "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
+	"github.com/IBM-Blockchain/fabric-operator/operatorconfig"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/common/enroller"
 	initializer "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer"
 	peerinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer"
@@ -37,6 +37,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/utils/pointer"
 )
 
 const (
@@ -98,7 +99,7 @@ var _ = Describe("Peer init", func() {
 							TLS:       msp,
 						},
 					},
-					DisableNodeOU: &current.BoolTrue,
+					DisableNodeOU: pointer.Bool(true),
 				},
 			}
 			instance.Namespace = namespace
@@ -220,7 +221,7 @@ var _ = Describe("Peer init", func() {
 							TLS:       enrollment,
 						},
 					},
-					DisableNodeOU: &current.BoolTrue,
+					DisableNodeOU: pointer.Bool(true),
 				},
 			}
 			instance.Namespace = namespace

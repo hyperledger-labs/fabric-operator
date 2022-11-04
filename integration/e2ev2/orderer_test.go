@@ -28,6 +28,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"k8s.io/utils/pointer"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
@@ -302,7 +303,7 @@ var _ = Describe("orderer", func() {
 				result.Into(ibporderer)
 
 				// Disable node ou
-				ibporderer.Spec.DisableNodeOU = &current.BoolTrue
+				ibporderer.Spec.DisableNodeOU = pointer.Bool(true)
 				bytes, err := json.Marshal(ibporderer)
 				Expect(err).NotTo(HaveOccurred())
 
