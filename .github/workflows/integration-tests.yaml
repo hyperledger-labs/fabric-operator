@@ -27,6 +27,7 @@ env:
   KUBECONFIG_PATH: /tmp/kubeconfig.yaml
   OPERATOR_NAMESPACE: inttest
   DOCKERCONFIGJSON: ${{ secrets.DOCKERCONFIGJSON }}
+  GO_VER: 1.18
 
 jobs:
   suite:
@@ -56,12 +57,11 @@ jobs:
       - name: Set up go
         uses: actions/setup-go@v3
         with:
-          go-version: "1.17.9"
+          go-version: ${{ env.GO_VER }}
 
       - name: Set up ginkgo
         run: |
-          go get github.com/onsi/ginkgo/ginkgo
-          go get github.com/onsi/gomega/...
+          go install github.com/onsi/ginkgo/ginkgo
 
       - name: Set up KIND k8s cluster
         run: |
