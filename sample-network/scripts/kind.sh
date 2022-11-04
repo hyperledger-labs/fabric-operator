@@ -33,7 +33,7 @@ function kind_create() {
 
   # the 'ipvs'proxy mode permits better HA abilities
 
-  cat <<EOF | kind create cluster --name $CLUSTER_NAME --config=-
+  cat <<EOF | kind create cluster --name $CLUSTER_NAME --image $CLUSTER_IMAGE --config=-
 ---
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
