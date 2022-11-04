@@ -28,6 +28,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"k8s.io/utils/pointer"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	orderermocks "github.com/IBM-Blockchain/fabric-operator/controllers/ibporderer/mocks"
@@ -640,7 +641,7 @@ var _ = Describe("ReconcileIBPOrderer", func() {
 						Name: instance.Name,
 					},
 				}
-				newOrderer.Spec.DisableNodeOU = &current.BoolTrue
+				newOrderer.Spec.DisableNodeOU = pointer.Bool(true)
 
 				e = event.UpdateEvent{
 					ObjectOld: oldOrderer,

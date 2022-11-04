@@ -26,6 +26,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"k8s.io/utils/pointer"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	peermocks "github.com/IBM-Blockchain/fabric-operator/controllers/ibppeer/mocks"
@@ -41,7 +42,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-	yaml "sigs.k8s.io/yaml"
+	"sigs.k8s.io/yaml"
 )
 
 var _ = Describe("ReconcileIBPPeer", func() {
@@ -606,7 +607,7 @@ var _ = Describe("ReconcileIBPPeer", func() {
 						Name: instance.Name,
 					},
 				}
-				newPeer.Spec.DisableNodeOU = &current.BoolTrue
+				newPeer.Spec.DisableNodeOU = pointer.Bool(true)
 
 				e = event.UpdateEvent{
 					ObjectOld: oldPeer,

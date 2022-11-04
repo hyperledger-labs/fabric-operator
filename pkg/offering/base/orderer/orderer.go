@@ -55,6 +55,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/utils/pointer"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
@@ -461,7 +462,7 @@ func (o *Orderer) CreateNodeCR(instance *current.IBPOrderer, number int) error {
 	if instance.Spec.IsUsingChannelLess() {
 		node.Spec.UseChannelLess = instance.Spec.UseChannelLess
 	} else {
-		node.Spec.IsPrecreate = &current.BoolTrue
+		node.Spec.IsPrecreate = pointer.Bool(true)
 	}
 	node.Spec.NodeNumber = &number
 	node.Spec.ClusterSize = 1

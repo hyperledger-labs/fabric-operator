@@ -25,6 +25,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"k8s.io/utils/pointer"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
@@ -154,7 +155,7 @@ var _ = Describe("peer", func() {
 			result.Into(peer)
 
 			// Disable node ou
-			peer.Spec.DisableNodeOU = &current.BoolTrue
+			peer.Spec.DisableNodeOU = pointer.Bool(true)
 			bytes, err = json.Marshal(peer)
 			Expect(err).NotTo(HaveOccurred())
 		})

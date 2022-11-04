@@ -43,6 +43,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/utils/pointer"
 	"sigs.k8s.io/yaml"
 )
 
@@ -813,7 +814,7 @@ func GetPeer1() *Peer {
 				MSP: testMSPSpec,
 			},
 			ConfigOverride: &runtime.RawExtension{Raw: configBytes},
-			DisableNodeOU:  &current.BoolTrue,
+			DisableNodeOU:  pointer.Bool(true),
 			FabricVersion:  integration.FabricVersion + "-1",
 		},
 	}
@@ -867,7 +868,7 @@ func GetPeer2() *Peer {
 			Secret: &current.SecretSpec{
 				MSP: testMSPSpec,
 			},
-			DisableNodeOU: &current.BoolTrue,
+			DisableNodeOU: pointer.Bool(true),
 			FabricVersion: integration.FabricVersion + "-1",
 		},
 	}
