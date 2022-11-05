@@ -71,9 +71,14 @@ func printVersion() {
 	log.Info(fmt.Sprintf("Go OS/Arch: %s/%s", runtime.GOOS, runtime.GOARCH))
 }
 
-func Operator(operatorCfg *oconfig.Config, blocking bool) error {
+func Operator(operatorCfg *oconfig.Config) error {
 	signalHandler := signals.SetupSignalHandler()
-	return OperatorWithSignal(operatorCfg, signalHandler, blocking, false)
+
+	// In local mode, the operator may be launched and debugged directly as a native process without
+	// being deployed to a Kubernetes cluster.
+	local := os.Getenv("OPERATOR_LOCAL_MODE") == "true"
+
+	return OperatorWithSignal(operatorCfg, signalHandler, true, local)
 }
 
 func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Context, blocking, local bool) error {
@@ -118,7 +123,7 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 			return err
 		}
 	} else {
-		log.Info("Installing operator in own namespace mode")
+		log.Info("Installing operator in own namespace mode", "WATCH_NAMESPACE", watchNamespace)
 		operatorNamespace = watchNamespace
 	}
 
