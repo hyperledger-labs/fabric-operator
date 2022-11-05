@@ -55,10 +55,14 @@ INT_TEST_NAME=<folder under /integration> make integration-tests
 
 ## Debug the Operator
 
-Run / debug `main.go` with env: 
-
+Launch main.go with the following environment:
 ```shell
-KUBECONFIG_PATH=$HOME/.kube/config
+export KUBECONFIG=$HOME/.kube/config
+export WATCH_NAMESPACE=test-network
+export CLUSTERTYPE=k8s
+export OPERATOR_LOCAL_MODE=true
+
+go run .
 ```
 
 
