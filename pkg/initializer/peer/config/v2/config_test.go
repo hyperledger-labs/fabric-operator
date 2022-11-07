@@ -87,7 +87,7 @@ var _ = Describe("Peer configuration", func() {
 						StartupTimeout: startupTimeout,
 						ExecuteTimeout: executeTimeout,
 						ExternalBuilders: []v2core.ExternalBuilder{
-							v2core.ExternalBuilder{
+							{
 								Path:                 "/scripts",
 								Name:                 "go-builder",
 								EnvironmentWhiteList: []string{"ENV1=Value1"},

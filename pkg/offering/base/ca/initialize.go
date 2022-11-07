@@ -500,11 +500,8 @@ func (i *Initialize) SecretExists(instance *current.IBPCA, name string) bool {
 
 	s := &corev1.Secret{}
 	err := i.Client.Get(context.TODO(), n, s)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func ConfigToBytes(c *cav1.ServerConfig) ([]byte, error) {

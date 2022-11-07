@@ -70,7 +70,7 @@ var _ = Describe("Base Orderer Deployment Overrides", func() {
 					Type:    "hsm",
 					Version: "v1",
 					MountPaths: []config.MountPath{
-						config.MountPath{
+						{
 							Name:      "hsmcrypto",
 							Secret:    "hsmcrypto",
 							MountPath: "/hsm",
@@ -93,7 +93,7 @@ var _ = Describe("Base Orderer Deployment Overrides", func() {
 								},
 							},
 						},
-						config.MountPath{
+						{
 							Name:      "hsmconfig",
 							Secret:    "hsmcrypto",
 							MountPath: "/etc/Chrystoki.conf",
@@ -231,7 +231,7 @@ var _ = Describe("Base Orderer Deployment Overrides", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			By("setting pull secret", func() {
-				Expect(deployment.Spec.Template.Spec.ImagePullSecrets).To(Equal([]corev1.LocalObjectReference{corev1.LocalObjectReference{
+				Expect(deployment.Spec.Template.Spec.ImagePullSecrets).To(Equal([]corev1.LocalObjectReference{{
 					Name: instance.Spec.ImagePullSecrets[0],
 				}}))
 			})

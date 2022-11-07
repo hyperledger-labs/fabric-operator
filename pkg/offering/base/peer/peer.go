@@ -38,7 +38,7 @@ import (
 	initializer "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer"
 	peerconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v1"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/validator"
-	controllerclient "github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources"
 	jobv1 "github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/job"
 	resourcemanager "github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/manager"
@@ -1077,11 +1077,8 @@ func (p *Peer) ConfigExists(instance *current.IBPPeer) bool {
 
 	cm := &corev1.ConfigMap{}
 	err := p.Client.Get(context.TODO(), namespacedName, cm)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (p *Peer) CheckCSRHosts(instance *current.IBPPeer, hosts []string) bool {

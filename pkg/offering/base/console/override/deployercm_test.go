@@ -56,7 +56,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 				},
 				Versions: &current.Versions{
 					CA: map[string]current.VersionCA{
-						"v1-0": current.VersionCA{
+						"v1-0": {
 							Default: true,
 							Version: "v1-0",
 							Image: current.CAImages{
@@ -66,7 +66,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								CATag:       "1.0.0",
 							},
 						},
-						"v2-0": current.VersionCA{
+						"v2-0": {
 							Default: false,
 							Version: "v2-0",
 							Image: current.CAImages{
@@ -78,7 +78,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 						},
 					},
 					Peer: map[string]current.VersionPeer{
-						"v1-0": current.VersionPeer{
+						"v1-0": {
 							Default: true,
 							Version: "v1-0",
 							Image: current.PeerImages{
@@ -96,7 +96,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								CouchDBTag:    "1.0.0",
 							},
 						},
-						"v2-0": current.VersionPeer{
+						"v2-0": {
 							Default: false,
 							Version: "v2-0",
 							Image: current.PeerImages{
@@ -118,7 +118,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 						},
 					},
 					Orderer: map[string]current.VersionOrderer{
-						"v1-0": current.VersionOrderer{
+						"v1-0": {
 							Default: true,
 							Version: "v1-0",
 							Image: current.OrdererImages{
@@ -130,7 +130,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								GRPCWebTag:       "1.0.0",
 							},
 						},
-						"v2-0": current.VersionOrderer{
+						"v2-0": {
 							Default: false,
 							Version: "v2-0",
 							Image: current.OrdererImages{
@@ -208,7 +208,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 			By("setting versions", func() {
 				expectedVersions := &current.Versions{
 					CA: map[string]current.VersionCA{
-						"v1-0": current.VersionCA{
+						"v1-0": {
 							Default: true,
 							Version: "v1-0",
 							Image: current.CAImages{
@@ -218,7 +218,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								CATag:       "1.0.0",
 							},
 						},
-						"v2-0": current.VersionCA{
+						"v2-0": {
 							Default: false,
 							Version: "v2-0",
 							Image: current.CAImages{
@@ -230,7 +230,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 						},
 					},
 					Peer: map[string]current.VersionPeer{
-						"v1-0": current.VersionPeer{
+						"v1-0": {
 							Default: true,
 							Version: "v1-0",
 							Image: current.PeerImages{
@@ -248,7 +248,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								CouchDBTag:    "1.0.0",
 							},
 						},
-						"v2-0": current.VersionPeer{
+						"v2-0": {
 							Default: false,
 							Version: "v2-0",
 							Image: current.PeerImages{
@@ -270,7 +270,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 						},
 					},
 					Orderer: map[string]current.VersionOrderer{
-						"v1-0": current.VersionOrderer{
+						"v1-0": {
 							Default: true,
 							Version: "v1-0",
 							Image: current.OrdererImages{
@@ -282,7 +282,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								GRPCWebTag:       "1.0.0",
 							},
 						},
-						"v2-0": current.VersionOrderer{
+						"v2-0": {
 							Default: false,
 							Version: "v2-0",
 							Image: current.OrdererImages{
@@ -355,7 +355,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 							Versions: &current.Versions{
 								CA: map[string]current.VersionCA{
-									"v1-0": current.VersionCA{
+									"v1-0": {
 										Image: current.CAImages{
 											CAInitImage: "ghcr.io/ibm-blockchain/ca-init-image",
 											CAInitTag:   "1.0.0",
@@ -365,7 +365,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									},
 								},
 								Peer: map[string]current.VersionPeer{
-									"v1-0": current.VersionPeer{
+									"v1-0": {
 										Image: current.PeerImages{
 											PeerInitImage: "ghcr.io/ibm-blockchain/peer-init-image",
 											PeerInitTag:   "1.0.0",
@@ -383,7 +383,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									},
 								},
 								Orderer: map[string]current.VersionOrderer{
-									"v1-0": current.VersionOrderer{
+									"v1-0": {
 										Image: current.OrdererImages{
 											OrdererInitImage: "ghcr.io/ibm-blockchain/orderer-init-image",
 											OrdererInitTag:   "1.0.0",
@@ -402,7 +402,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 				It("keeps images as passed", func() {
 					expectedVersions := &current.Versions{
 						CA: map[string]current.VersionCA{
-							"v1-0": current.VersionCA{
+							"v1-0": {
 								Image: current.CAImages{
 									CAInitImage: "ghcr.io/ibm-blockchain/ca-init-image",
 									CAInitTag:   "1.0.0-amd64",
@@ -412,7 +412,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 						},
 						Peer: map[string]current.VersionPeer{
-							"v1-0": current.VersionPeer{
+							"v1-0": {
 								Image: current.PeerImages{
 									PeerInitImage: "ghcr.io/ibm-blockchain/peer-init-image",
 									PeerInitTag:   "1.0.0-amd64",
@@ -430,7 +430,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 						},
 						Orderer: map[string]current.VersionOrderer{
-							"v1-0": current.VersionOrderer{
+							"v1-0": {
 								Image: current.OrdererImages{
 									OrdererInitImage: "ghcr.io/ibm-blockchain/orderer-init-image",
 									OrdererInitTag:   "1.0.0-amd64",
@@ -444,7 +444,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 					}
 					versions := &deployer.Versions{
 						CA: map[string]deployer.VersionCA{
-							"1.4": deployer.VersionCA{
+							"1.4": {
 								Image: deployer.CAImages{
 									CAInitImage:  "ca-init-image",
 									CAInitTag:    "1.0.0",
@@ -456,7 +456,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 						},
 						Peer: map[string]deployer.VersionPeer{
-							"1.4": deployer.VersionPeer{
+							"1.4": {
 								Image: deployer.PeerImages{
 									PeerInitImage:  "peer-init-image",
 									PeerInitTag:    "1.0.0",
@@ -480,7 +480,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 						},
 						Orderer: map[string]deployer.VersionOrderer{
-							"1.4": deployer.VersionOrderer{
+							"1.4": {
 								Image: deployer.OrdererImages{
 									OrdererInitImage:  "orderer-init-image",
 									OrdererInitTag:    "1.0.0",
@@ -554,7 +554,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							RegistryURL: "ghcr.io/ibm-blockchain/",
 							Versions: &current.Versions{
 								CA: map[string]current.VersionCA{
-									"v1-0": current.VersionCA{
+									"v1-0": {
 										Image: current.CAImages{
 											CAInitImage: "ca-init-image",
 											CAInitTag:   "1.0.0",
@@ -564,7 +564,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									},
 								},
 								Peer: map[string]current.VersionPeer{
-									"v1-0": current.VersionPeer{
+									"v1-0": {
 										Image: current.PeerImages{
 											PeerInitImage: "peer-init-image",
 											PeerInitTag:   "1.0.0",
@@ -582,7 +582,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									},
 								},
 								Orderer: map[string]current.VersionOrderer{
-									"v1-0": current.VersionOrderer{
+									"v1-0": {
 										Image: current.OrdererImages{
 											OrdererInitImage: "orderer-init-image",
 											OrdererInitTag:   "1.0.0",
@@ -601,7 +601,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 				It("prepends registry url to images", func() {
 					expectedVersions := &current.Versions{
 						CA: map[string]current.VersionCA{
-							"v1-0": current.VersionCA{
+							"v1-0": {
 								Image: current.CAImages{
 									CAInitImage: "ghcr.io/ibm-blockchain/ca-init-image",
 									CAInitTag:   "1.0.0-amd64",
@@ -611,7 +611,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 						},
 						Peer: map[string]current.VersionPeer{
-							"v1-0": current.VersionPeer{
+							"v1-0": {
 								Image: current.PeerImages{
 									PeerInitImage: "ghcr.io/ibm-blockchain/peer-init-image",
 									PeerInitTag:   "1.0.0-amd64",
@@ -629,7 +629,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 						},
 						Orderer: map[string]current.VersionOrderer{
-							"v1-0": current.VersionOrderer{
+							"v1-0": {
 								Image: current.OrdererImages{
 									OrdererInitImage: "ghcr.io/ibm-blockchain/orderer-init-image",
 									OrdererInitTag:   "1.0.0-amd64",
@@ -643,7 +643,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 					}
 					versions := &deployer.Versions{
 						CA: map[string]deployer.VersionCA{
-							"1.4": deployer.VersionCA{
+							"1.4": {
 								Image: deployer.CAImages{
 									CAInitImage:  "ca-init-image",
 									CAInitTag:    "1.0.0",
@@ -655,7 +655,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 						},
 						Peer: map[string]deployer.VersionPeer{
-							"1.4": deployer.VersionPeer{
+							"1.4": {
 								Image: deployer.PeerImages{
 									PeerInitImage:  "peer-init-image",
 									PeerInitTag:    "1.0.0",
@@ -679,7 +679,7 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 							},
 						},
 						Orderer: map[string]deployer.VersionOrderer{
-							"1.4": deployer.VersionOrderer{
+							"1.4": {
 								Image: deployer.OrdererImages{
 									OrdererInitImage:  "orderer-init-image",
 									OrdererInitTag:    "1.0.0",

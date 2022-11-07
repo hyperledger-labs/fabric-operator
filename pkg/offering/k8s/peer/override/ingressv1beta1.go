@@ -60,12 +60,12 @@ func (o *Override) CommonIngressv1beta1(instance *current.IBPPeer, ingress *netw
 
 	ingress.Spec = networkingv1beta1.IngressSpec{
 		Rules: []networkingv1beta1.IngressRule{
-			networkingv1beta1.IngressRule{
+			{
 				Host: apihost,
 				IngressRuleValue: networkingv1beta1.IngressRuleValue{
 					HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 						Paths: []networkingv1beta1.HTTPIngressPath{
-							networkingv1beta1.HTTPIngressPath{
+							{
 								Backend: networkingv1beta1.IngressBackend{
 									ServiceName: instance.GetName(),
 									ServicePort: intstr.FromString("peer-api"),
@@ -76,12 +76,12 @@ func (o *Override) CommonIngressv1beta1(instance *current.IBPPeer, ingress *netw
 					},
 				},
 			},
-			networkingv1beta1.IngressRule{
+			{
 				Host: operationshost,
 				IngressRuleValue: networkingv1beta1.IngressRuleValue{
 					HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 						Paths: []networkingv1beta1.HTTPIngressPath{
-							networkingv1beta1.HTTPIngressPath{
+							{
 								Backend: networkingv1beta1.IngressBackend{
 									ServiceName: instance.GetName(),
 									ServicePort: intstr.FromString("operations"),
@@ -92,12 +92,12 @@ func (o *Override) CommonIngressv1beta1(instance *current.IBPPeer, ingress *netw
 					},
 				},
 			},
-			networkingv1beta1.IngressRule{
+			{
 				Host: grpcwebhost,
 				IngressRuleValue: networkingv1beta1.IngressRuleValue{
 					HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 						Paths: []networkingv1beta1.HTTPIngressPath{
-							networkingv1beta1.HTTPIngressPath{
+							{
 								Backend: networkingv1beta1.IngressBackend{
 									ServiceName: instance.GetName(),
 									ServicePort: intstr.FromString("grpcweb"),
@@ -110,13 +110,13 @@ func (o *Override) CommonIngressv1beta1(instance *current.IBPPeer, ingress *netw
 			},
 		},
 		TLS: []networkingv1beta1.IngressTLS{
-			networkingv1beta1.IngressTLS{
+			{
 				Hosts: []string{apihost},
 			},
-			networkingv1beta1.IngressTLS{
+			{
 				Hosts: []string{operationshost},
 			},
-			networkingv1beta1.IngressTLS{
+			{
 				Hosts: []string{grpcwebhost},
 			},
 		},

@@ -76,7 +76,7 @@ func (c *Config) TLSMountPath() {
 	c.ServerConfig.TLS.KeyFile = filepath.Join(c.MountPath, "tls-key.pem")
 
 	certFiles := c.ServerConfig.TLS.ClientAuth.CertFiles
-	for index, _ := range certFiles {
+	for index := range certFiles {
 		certFiles[index] = filepath.Join(c.MountPath, fmt.Sprintf("tls-certfile%d.pem", index))
 	}
 	c.ServerConfig.TLS.ClientAuth.CertFiles = certFiles

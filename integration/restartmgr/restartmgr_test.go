@@ -100,11 +100,7 @@ var _ = Describe("restart manager", func() {
 						}
 
 						newPodName := pods[0].Name
-						if newPodName == podName {
-							return false
-						}
-
-						return true
+						return newPodName != podName
 					}).Should(Equal(true))
 				})
 
@@ -155,11 +151,7 @@ var _ = Describe("restart manager", func() {
 					}
 
 					newPodName := pods[0].Name
-					if newPodName == podName {
-						return true
-					}
-
-					return false
+					return newPodName == podName
 				}).Should(Equal(true))
 
 			})
@@ -194,10 +186,7 @@ var _ = Describe("restart manager", func() {
 
 					Eventually(func() bool {
 						_, err := kclient.CoreV1().ConfigMaps(namespace).Get(context.TODO(), "operator-config", metav1.GetOptions{})
-						if err != nil {
-							return false
-						}
-						return true
+						return err == nil
 					}).Should(Equal(true))
 				})
 
@@ -226,11 +215,7 @@ var _ = Describe("restart manager", func() {
 							}
 
 							newPodName := pods[0].Name
-							if newPodName == podName {
-								return true
-							}
-
-							return false
+							return newPodName == podName
 						}, 5*time.Second).Should(Equal(true))
 					})
 
@@ -313,10 +298,7 @@ var _ = Describe("restart manager", func() {
 
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().ConfigMaps(namespace).Get(context.TODO(), "operator-config", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+					return err == nil
 				}).Should(Equal(true))
 			})
 
@@ -340,11 +322,7 @@ var _ = Describe("restart manager", func() {
 						}
 
 						newPodName := pods[0].Name
-						if newPodName == podName {
-							return true
-						}
-
-						return false
+						return newPodName == podName
 					}).Should(Equal(true))
 				})
 
@@ -435,10 +413,7 @@ var _ = Describe("restart manager", func() {
 
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().ConfigMaps(namespace).Get(context.TODO(), "operator-config", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+					return err == nil
 				}).Should(Equal(true))
 			})
 
@@ -470,11 +445,7 @@ var _ = Describe("restart manager", func() {
 						}
 
 						newPodName := pods[0].Name
-						if newPodName == podName {
-							return true
-						}
-
-						return false
+						return newPodName == podName
 					}).Should(Equal(true))
 				})
 

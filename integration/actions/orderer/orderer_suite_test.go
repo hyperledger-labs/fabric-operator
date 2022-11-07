@@ -214,7 +214,7 @@ func GetOrderer(tlsCert, caHost string) *helper.Orderer {
 	Expect(err).NotTo(HaveOccurred())
 
 	nodes := []helper.Orderer{
-		helper.Orderer{
+		{
 			Name:      cr.Name + "node1",
 			Namespace: namespace,
 			CR:        cr.DeepCopy(),
@@ -225,7 +225,7 @@ func GetOrderer(tlsCert, caHost string) *helper.Orderer {
 				Client:    kclient,
 			},
 		},
-		helper.Orderer{
+		{
 			Name:      cr.Name + "node2",
 			Namespace: namespace,
 			CR:        cr.DeepCopy(),
@@ -236,7 +236,7 @@ func GetOrderer(tlsCert, caHost string) *helper.Orderer {
 				Client:    kclient,
 			},
 		},
-		helper.Orderer{
+		{
 			Name:      cr.Name + "node3",
 			Namespace: namespace,
 			CR:        cr.DeepCopy(),

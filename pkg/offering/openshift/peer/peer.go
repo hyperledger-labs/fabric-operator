@@ -183,7 +183,7 @@ func (p *Peer) Reconcile(instance *current.IBPPeer, update basepeer.Update) (com
 		"job-name": fmt.Sprintf("%s-dbmigration", instance.GetName()),
 	}, instance)
 	if jobRunning {
-		log.Info(fmt.Sprintf("Requeuing request until job completes"))
+		log.Info("Requeuing request until job completes")
 		return common.Result{
 			Result: reconcile.Result{
 				Requeue: true,

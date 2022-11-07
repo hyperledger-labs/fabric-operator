@@ -111,10 +111,8 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 				By("creating config map that contains spec", func() {
 					Eventually(func() bool {
 						_, err := kclient.CoreV1().ConfigMaps(namespace).Get(context.TODO(), ca.Name+"-spec", metav1.GetOptions{})
-						if err != nil {
-							return false
-						}
-						return true
+
+						return err == nil
 					}).Should(Equal(true))
 				})
 
@@ -436,11 +434,8 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 						}
 
 						newPodName := pods[0].Name
-						if newPodName == oldPodName {
-							return true
-						}
 
-						return false
+						return newPodName == oldPodName
 					}).Should(Equal(true))
 				})
 			})
@@ -490,11 +485,8 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 						}
 
 						newPodName := pods[0].Name
-						if newPodName == oldPodName {
-							return false
-						}
 
-						return true
+						return newPodName != oldPodName
 					}).Should(Equal(true))
 				})
 			})
@@ -688,7 +680,7 @@ func GetCA3() *CA {
 
 	caJson, err := util.ConvertToJsonMessage(caOverrides)
 	Expect(err).NotTo(HaveOccurred())
-	var replicas int32
+	var replicas int32 //nolint:gosimple
 	replicas = 3
 	name := "ibpca3"
 	cr := &current.IBPCA{

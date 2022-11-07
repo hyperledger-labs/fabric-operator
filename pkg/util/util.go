@@ -653,16 +653,12 @@ func GetResourceVerFromSecret(client Client, name, namespace string) (string, er
 func JoinMaps(m1, m2 map[string][]byte) map[string][]byte {
 	joined := map[string][]byte{}
 
-	if m1 != nil {
-		for k, v := range m1 {
-			joined[k] = v
-		}
+	for k, v := range m1 {
+		joined[k] = v
 	}
 
-	if m2 != nil {
-		for k, v := range m2 {
-			joined[k] = v
-		}
+	for k, v := range m2 {
+		joined[k] = v
 	}
 
 	return joined
@@ -847,11 +843,7 @@ func IntermediateSecretExists(client Client, namespace, secretName string) bool 
 	err := client.Get(context.TODO(), types.NamespacedName{
 		Name:      secretName,
 		Namespace: namespace}, &corev1.Secret{})
-	if err != nil {
-		return false
-	}
-
-	return true
+	return err == nil
 }
 
 func IsSecretTLSCert(secretName string) bool {

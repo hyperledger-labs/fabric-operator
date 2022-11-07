@@ -25,10 +25,10 @@ import (
 
 func GetNodeSelectorTerms(arch []string, zone, region string) []corev1.NodeSelectorTerm {
 	nodeSelectorTerms := []corev1.NodeSelectorTerm{
-		corev1.NodeSelectorTerm{
+		{
 			MatchExpressions: []corev1.NodeSelectorRequirement{},
 		},
-		corev1.NodeSelectorTerm{
+		{
 			MatchExpressions: []corev1.NodeSelectorRequirement{},
 		},
 	}
@@ -88,12 +88,12 @@ func AddRegionSelector(region string, nodeSelectorTerms *[]corev1.NodeSelectorTe
 func GetPodAntiAffinity(orgName string) *corev1.PodAntiAffinity {
 	return &corev1.PodAntiAffinity{
 		PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{
-			corev1.WeightedPodAffinityTerm{
+			{
 				Weight: 100,
 				PodAffinityTerm: corev1.PodAffinityTerm{
 					LabelSelector: &metav1.LabelSelector{
 						MatchExpressions: []metav1.LabelSelectorRequirement{
-							metav1.LabelSelectorRequirement{
+							{
 								Key:      "orgname",
 								Operator: metav1.LabelSelectorOpIn,
 								Values:   []string{orgName},

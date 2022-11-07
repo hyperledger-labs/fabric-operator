@@ -284,7 +284,7 @@ func (h *HSMDaemon) initHSMCAJob(instance *current.IBPCA, dbConfig *v1.CAConfigD
 							Secret: &corev1.SecretVolumeSource{
 								SecretName: fmt.Sprintf("%s-%s-crypto", instance.GetName(), typ),
 								Items: []corev1.KeyToPath{
-									corev1.KeyToPath{
+									{
 										Key:  "db-certfile0.pem",
 										Path: "db-certfile0.pem",
 									},

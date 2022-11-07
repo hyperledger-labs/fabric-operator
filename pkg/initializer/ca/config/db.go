@@ -119,7 +119,7 @@ func (c *Config) DBMountPath() {
 	}
 
 	certFiles := c.ServerConfig.CAConfig.DB.TLS.CertFiles
-	for index, _ := range certFiles {
+	for index := range certFiles {
 		certFiles[index] = filepath.Join(c.MountPath, fmt.Sprintf("db-certfile%d.pem", index))
 	}
 	c.ServerConfig.CAConfig.DB.TLS.CertFiles = certFiles

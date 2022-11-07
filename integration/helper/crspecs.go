@@ -276,13 +276,13 @@ func OrdererCR(namespace, domain, ordererUsername, tlsCert, caHost string) (*cur
 				OrdererInitTag:   integration.InitTag,
 			},
 			ClusterSecret: []*current.SecretSpec{
-				&current.SecretSpec{
+				{
 					Enrollment: enrollment,
 				},
-				&current.SecretSpec{
+				{
 					Enrollment: enrollment,
 				},
-				&current.SecretSpec{
+				{
 					Enrollment: enrollment,
 				},
 			},

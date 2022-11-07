@@ -64,7 +64,7 @@ var _ = Describe("Deployment Overrides", func() {
 					Type:    "hsm",
 					Version: "v1",
 					MountPaths: []config.MountPath{
-						config.MountPath{
+						{
 							Name:      "hsmcrypto",
 							Secret:    "hsmcrypto",
 							MountPath: "/hsm",
@@ -87,7 +87,7 @@ var _ = Describe("Deployment Overrides", func() {
 								},
 							},
 						},
-						config.MountPath{
+						{
 							Name:      "hsmconfig",
 							Secret:    "hsmcrypto",
 							MountPath: "/etc/Chrystoki.conf",
@@ -194,33 +194,33 @@ var _ = Describe("Deployment Overrides", func() {
 					NodeAffinity: &corev1.NodeAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
 							NodeSelectorTerms: []corev1.NodeSelectorTerm{
-								corev1.NodeSelectorTerm{
+								{
 									MatchExpressions: []corev1.NodeSelectorRequirement{
-										corev1.NodeSelectorRequirement{
+										{
 											Key:      "kubernetes.io/arch",
 											Operator: corev1.NodeSelectorOpIn,
 											Values:   instance.Spec.Arch,
 										},
-										corev1.NodeSelectorRequirement{
+										{
 											Key:      "topology.kubernetes.io/zone",
 											Operator: corev1.NodeSelectorOpIn,
 											Values:   []string{instance.Spec.Zone},
 										},
-										corev1.NodeSelectorRequirement{
+										{
 											Key:      "topology.kubernetes.io/region",
 											Operator: corev1.NodeSelectorOpIn,
 											Values:   []string{instance.Spec.Region},
 										},
 									},
 								},
-								corev1.NodeSelectorTerm{
+								{
 									MatchExpressions: []corev1.NodeSelectorRequirement{
-										corev1.NodeSelectorRequirement{
+										{
 											Key:      "failure-domain.beta.kubernetes.io/zone",
 											Operator: corev1.NodeSelectorOpIn,
 											Values:   []string{instance.Spec.Zone},
 										},
-										corev1.NodeSelectorRequirement{
+										{
 											Key:      "failure-domain.beta.kubernetes.io/region",
 											Operator: corev1.NodeSelectorOpIn,
 											Values:   []string{instance.Spec.Region},
@@ -233,12 +233,12 @@ var _ = Describe("Deployment Overrides", func() {
 				}
 				affinity.PodAntiAffinity = &corev1.PodAntiAffinity{
 					PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{
-						corev1.WeightedPodAffinityTerm{
+						{
 							Weight: 100,
 							PodAffinityTerm: corev1.PodAffinityTerm{
 								LabelSelector: &metav1.LabelSelector{
 									MatchExpressions: []metav1.LabelSelectorRequirement{
-										metav1.LabelSelectorRequirement{
+										{
 											Key:      "app",
 											Operator: metav1.LabelSelectorOpIn,
 											Values:   []string{instance.Name},
@@ -248,12 +248,12 @@ var _ = Describe("Deployment Overrides", func() {
 								TopologyKey: "topology.kubernetes.io/zone",
 							},
 						},
-						corev1.WeightedPodAffinityTerm{
+						{
 							Weight: 100,
 							PodAffinityTerm: corev1.PodAffinityTerm{
 								LabelSelector: &metav1.LabelSelector{
 									MatchExpressions: []metav1.LabelSelectorRequirement{
-										metav1.LabelSelectorRequirement{
+										{
 											Key:      "app",
 											Operator: metav1.LabelSelectorOpIn,
 											Values:   []string{instance.Name},

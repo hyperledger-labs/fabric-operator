@@ -155,7 +155,7 @@ func GetOrderer() *helper.Orderer {
 				OrdererInitTag:   integration.InitTag,
 			},
 			ClusterSecret: []*current.SecretSpec{
-				&current.SecretSpec{
+				{
 					Enrollment: enrollment,
 				},
 			},
@@ -164,7 +164,7 @@ func GetOrderer() *helper.Orderer {
 	}
 
 	nodes := []helper.Orderer{
-		helper.Orderer{
+		{
 			Name:      cr.Name + "node1",
 			Namespace: namespace,
 			CR:        cr.DeepCopy(),

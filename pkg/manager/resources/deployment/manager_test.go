@@ -63,7 +63,7 @@ var _ = Describe("Deployment manager", func() {
 				d.Spec = appsv1.DeploymentSpec{
 					Template: corev1.PodTemplateSpec{
 						Spec: corev1.PodSpec{
-							Containers: []corev1.Container{corev1.Container{
+							Containers: []corev1.Container{{
 								Name: "container",
 							}},
 						},
@@ -167,7 +167,7 @@ var _ = Describe("Deployment manager", func() {
 						},
 						Template: corev1.PodTemplateSpec{
 							Spec: corev1.PodSpec{
-								Containers: []corev1.Container{corev1.Container{
+								Containers: []corev1.Container{{
 									Name: "test-container",
 								}},
 							},

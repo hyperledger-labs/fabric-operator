@@ -228,11 +228,8 @@ func (s *IBPOrdererSpec) HSMSet() bool {
 }
 
 func (s *IBPOrdererSpec) DomainSet() bool {
-	if s.Domain != "" {
-		return true
-	}
 
-	return false
+	return s.Domain != ""
 }
 
 func (s *IBPOrdererSpec) IsPrecreateOrderer() bool {
@@ -277,8 +274,6 @@ func init() {
 }
 
 func (o *IBPOrdererStatus) HasType() bool {
-	if o.CRStatus.Type != "" {
-		return true
-	}
-	return false
+
+	return o.CRStatus.Type != ""
 }

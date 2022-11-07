@@ -34,7 +34,7 @@ var _ = Describe("HSM Config", func() {
 			Type:    "hsm",
 			Version: "v1",
 			MountPaths: []config.MountPath{
-				config.MountPath{
+				{
 					Name:      "hsmcrypto",
 					Secret:    "hsmcrypto",
 					MountPath: "/hsm",
@@ -49,7 +49,7 @@ var _ = Describe("HSM Config", func() {
 						},
 					},
 				},
-				config.MountPath{
+				{
 					Name:      "hsmconfig",
 					Secret:    "hsmcrypto",
 					MountPath: "/etc/Chrystoki.conf",

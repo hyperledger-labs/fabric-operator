@@ -176,7 +176,7 @@ func (o *Override) CreateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 
 	var certsData string
 	count := 0
-	for key, _ := range tlsCACertsSecret.Data {
+	for key := range tlsCACertsSecret.Data {
 		v := fmt.Sprintf("/certs/msp/tlscacerts/%s", key)
 		if count == 0 {
 			certsData = certsData + v
@@ -200,7 +200,7 @@ func (o *Override) CreateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 
 		var certsData string
 		count := 0
-		for key, _ := range tlsCAInterCertsSecret.Data {
+		for key := range tlsCAInterCertsSecret.Data {
 			v := fmt.Sprintf("/certs/msp/tlsintermediatecerts/%s", key)
 			if count == 0 {
 				certsData = certsData + v
@@ -821,22 +821,16 @@ func (o *Override) AdminSecretExists(instance *current.IBPPeer) bool {
 	err := o.Client.Get(context.TODO(), types.NamespacedName{
 		Name:      fmt.Sprintf("ecert-%s-admincerts", instance.Name),
 		Namespace: instance.Namespace}, secret)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (o *Override) OrdererCACertsSecretExists(instance *current.IBPPeer) bool {
 	err := o.Client.Get(context.TODO(), types.NamespacedName{
 		Name:      fmt.Sprintf("%s-orderercacerts", instance.Name),
 		Namespace: instance.Namespace}, &corev1.Secret{})
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (o *Override) GetTLSCACertsSecret(instance *current.IBPPeer, secretName string) (*corev1.Secret, error) {
@@ -872,7 +866,7 @@ func hsmInitContainer(instance *current.IBPPeer, hsmConfig *config.HSMConfig) *c
 				RunAsNonRoot: &f,
 			},
 			VolumeMounts: []corev1.VolumeMount{
-				corev1.VolumeMount{
+				{
 					Name:      "shared",
 					MountPath: mountPath,
 				},

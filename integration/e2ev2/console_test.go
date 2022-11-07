@@ -91,11 +91,8 @@ var _ = Describe("console", func() {
 						}
 
 						newPodName := pods[0].Name
-						if newPodName != podName {
-							return true
-						}
 
-						return false
+						return newPodName != podName
 					}).Should(Equal(true))
 				})
 
@@ -166,7 +163,7 @@ func GetConsole() *Console {
 			},
 			Versions: &current.Versions{
 				CA: map[string]current.VersionCA{
-					integration.FabricCAVersion: current.VersionCA{
+					integration.FabricCAVersion: {
 						Default: true,
 						Version: integration.FabricCAVersion,
 						Image: current.CAImages{
@@ -178,7 +175,7 @@ func GetConsole() *Console {
 					},
 				},
 				Peer: map[string]current.VersionPeer{
-					integration.FabricVersion: current.VersionPeer{
+					integration.FabricVersion: {
 						Default: true,
 						Version: integration.FabricVersion,
 						Image: current.PeerImages{
@@ -194,7 +191,7 @@ func GetConsole() *Console {
 					},
 				},
 				Orderer: map[string]current.VersionOrderer{
-					integration.FabricVersion: current.VersionOrderer{
+					integration.FabricVersion: {
 						Default: true,
 						Version: integration.FabricVersion,
 						Image: current.OrdererImages{

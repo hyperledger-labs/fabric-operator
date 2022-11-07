@@ -643,7 +643,7 @@ func (r *ReconcileIBPPeer) UpdateFunc(e event.UpdateEvent) bool {
 
 		update.mspUpdated = commoncontroller.MSPInfoUpdateDetected(oldPeer.Spec.Secret, newPeer.Spec.Secret)
 
-		if newPeer.Spec.Action.Restart == true {
+		if newPeer.Spec.Action.Restart {
 			update.restartNeeded = true
 		}
 
@@ -683,15 +683,15 @@ func (r *ReconcileIBPPeer) UpdateFunc(e event.UpdateEvent) bool {
 			update.migrateToV24 = true
 		}
 
-		if newPeer.Spec.Action.UpgradeDBs == true {
+		if newPeer.Spec.Action.UpgradeDBs {
 			update.upgradedbs = true
 		}
 
-		if newPeer.Spec.Action.Enroll.Ecert == true {
+		if newPeer.Spec.Action.Enroll.Ecert {
 			update.ecertEnroll = true
 		}
 
-		if newPeer.Spec.Action.Enroll.TLSCert == true {
+		if newPeer.Spec.Action.Enroll.TLSCert {
 			update.tlscertEnroll = true
 		}
 

@@ -138,7 +138,6 @@ func (c *Core) SetPKCS11Defaults(usingHSMProxy bool) {
 
 func (c *Core) SetDefaultKeyStore() {
 	// No-op
-	return
 }
 
 func (c *Core) GetMaxNameLength() *int {

@@ -20,7 +20,6 @@ package tls_test
 
 import (
 	"crypto/x509"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -51,7 +50,7 @@ var _ = Describe("generating TLS crypto", func() {
 		csr = &api.CSRInfo{
 			CN: "tls-ca",
 			Names: []cfcsr.Name{
-				cfcsr.Name{
+				{
 					C:  "United States",
 					ST: "North Carolina",
 					L:  "Raleigh",
@@ -83,7 +82,7 @@ var _ = Describe("generating TLS crypto", func() {
 			Expect(cert.Subject.OrganizationalUnit).To(Equal([]string{"Blockchain"}))
 
 			Expect(cert.DNSNames[0]).To(Equal("localhost"))
-			Expect(fmt.Sprintf("%s", cert.IPAddresses[0])).To(Equal("127.0.0.1"))
+			Expect(cert.IPAddresses[0].String()).To(Equal("127.0.0.1"))
 
 			Expect(cert.Subject).To(Equal(cert.Issuer))
 		})

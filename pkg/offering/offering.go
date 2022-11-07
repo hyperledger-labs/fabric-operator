@@ -19,7 +19,6 @@
 package offering
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -42,5 +41,5 @@ func GetType(oType string) (Type, error) {
 	case "k8s":
 		return K8S, nil
 	}
-	return "", errors.New(fmt.Sprintf("Cluster Type %s not supported", oType))
+	return "", fmt.Errorf("Cluster Type %s not supported", oType)
 }

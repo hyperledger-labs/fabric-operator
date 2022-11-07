@@ -78,11 +78,8 @@ var _ = Describe("trigger peer actions", func() {
 					}
 
 					newPodName := pods[0].Name
-					if newPodName != podName {
-						return true
-					}
 
-					return false
+					return newPodName != podName
 				}).Should(Equal(true))
 			})
 
@@ -111,11 +108,8 @@ var _ = Describe("trigger peer actions", func() {
 						}
 
 						newPodName := pods[0].Name
-						if newPodName != podName {
-							return true
-						}
 
-						return false
+						return newPodName != podName
 					}).Should(Equal(true))
 				})
 
@@ -232,11 +226,8 @@ var _ = Describe("trigger peer actions", func() {
 						}
 
 						newPodName := pods[0].Name
-						if newPodName != podName {
-							return true
-						}
 
-						return false
+						return newPodName != podName
 					}).Should(Equal(true))
 				})
 
@@ -524,10 +515,8 @@ var _ = Describe("trigger peer actions", func() {
 
 					_, err = kclient.BatchV1().Jobs(namespace).
 						Get(context.TODO(), migrationJobName, metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
@@ -551,10 +540,8 @@ var _ = Describe("trigger peer actions", func() {
 				Eventually(func() bool {
 					_, err := kclient.BatchV1().Jobs(namespace).
 						Get(context.TODO(), migrationJobName, metav1.GetOptions{})
-					if err != nil {
-						return true
-					}
-					return false
+
+					return err != nil
 				}).Should(Equal(true))
 			})
 

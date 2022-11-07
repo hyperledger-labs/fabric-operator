@@ -41,7 +41,7 @@ var _ = Describe("container", func() {
 	Context("env vars", func() {
 		BeforeEach(func() {
 			cont.Env = []corev1.EnvVar{
-				corev1.EnvVar{
+				{
 					Name:  "env1",
 					Value: "1.0",
 				},

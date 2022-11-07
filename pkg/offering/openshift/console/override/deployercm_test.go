@@ -56,7 +56,7 @@ var _ = Describe("Openshift Console Deployer Config Map Overrides", func() {
 				},
 				Versions: &current.Versions{
 					CA: map[string]current.VersionCA{
-						"1.4.6-1": current.VersionCA{
+						"1.4.6-1": {
 							Default: true,
 							Version: "1.4.6-1",
 							Image: current.CAImages{
@@ -68,7 +68,7 @@ var _ = Describe("Openshift Console Deployer Config Map Overrides", func() {
 						},
 					},
 					Peer: map[string]current.VersionPeer{
-						"1.4.6-1": current.VersionPeer{
+						"1.4.6-1": {
 							Default: true,
 							Version: "1.4.6-1",
 							Image: current.PeerImages{
@@ -90,7 +90,7 @@ var _ = Describe("Openshift Console Deployer Config Map Overrides", func() {
 						},
 					},
 					Orderer: map[string]current.VersionOrderer{
-						"1.4.6-1": current.VersionOrderer{
+						"1.4.6-1": {
 							Default: true,
 							Version: "1.4.6-1",
 							Image: current.OrdererImages{
@@ -168,7 +168,7 @@ var _ = Describe("Openshift Console Deployer Config Map Overrides", func() {
 			By("setting versions", func() {
 				expectedVersions := &current.Versions{
 					CA: map[string]current.VersionCA{
-						"1.4.6-1": current.VersionCA{
+						"1.4.6-1": {
 							Default: true,
 							Version: "1.4.6-1",
 							Image: current.CAImages{
@@ -180,7 +180,7 @@ var _ = Describe("Openshift Console Deployer Config Map Overrides", func() {
 						},
 					},
 					Peer: map[string]current.VersionPeer{
-						"1.4.6-1": current.VersionPeer{
+						"1.4.6-1": {
 							Default: true,
 							Version: "1.4.6-1",
 							Image: current.PeerImages{
@@ -202,7 +202,7 @@ var _ = Describe("Openshift Console Deployer Config Map Overrides", func() {
 						},
 					},
 					Orderer: map[string]current.VersionOrderer{
-						"1.4.6-1": current.VersionOrderer{
+						"1.4.6-1": {
 							Default: true,
 							Version: "1.4.6-1",
 							Image: current.OrdererImages{

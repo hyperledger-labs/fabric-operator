@@ -253,9 +253,8 @@ func (j *Job) WaitUntilActive(client controller.Client) error {
 }
 
 func (j *Job) WaitUntilFinished(client controller.Client) error {
-	var err error
 
-	err = wait.Poll(2*time.Second, j.Timeouts.WaitUntilFinished, func() (bool, error) {
+	err := wait.Poll(2*time.Second, j.Timeouts.WaitUntilFinished, func() (bool, error) {
 		log.Info(fmt.Sprintf("Waiting for job pod '%s' to finish", j.GetName()))
 
 		pods, err := j.getPods(client)
@@ -290,9 +289,8 @@ func (j *Job) podsTerminated(pods *corev1.PodList) bool {
 }
 
 func (j *Job) WaitUntilContainerFinished(client controller.Client, contName string) error {
-	var err error
 
-	err = wait.Poll(2*time.Second, j.Timeouts.WaitUntilFinished, func() (bool, error) {
+	err := wait.Poll(2*time.Second, j.Timeouts.WaitUntilFinished, func() (bool, error) {
 		log.Info(fmt.Sprintf("Waiting for job pod '%s' to finish", j.GetName()))
 
 		pods, err := j.getPods(client)

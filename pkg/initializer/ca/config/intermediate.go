@@ -69,7 +69,7 @@ func (c *Config) IntermediateMountPath() {
 	}
 
 	certFiles := c.ServerConfig.CAConfig.Intermediate.TLS.CertFiles
-	for index, _ := range certFiles {
+	for index := range certFiles {
 		certFiles[index] = filepath.Join(c.MountPath, fmt.Sprintf("parent-certfile%d.pem", index))
 	}
 	c.ServerConfig.CAConfig.Intermediate.TLS.CertFiles = certFiles

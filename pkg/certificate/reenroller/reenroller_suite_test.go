@@ -59,7 +59,6 @@ var _ = BeforeSuite(func() {
 	server = httptest.NewTLSServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Test request parameters
 		Expect(req.URL.String()).To(Equal("/cainfo"))
-		return
 	}))
 
 	serverURL = server.URL

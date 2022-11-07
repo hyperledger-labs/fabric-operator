@@ -86,7 +86,7 @@ func (c *ClientImpl) Create(ctx context.Context, obj k8sclient.Object, opts ...C
 
 	c.GlobalConfig.Apply(obj)
 
-	if opts != nil && len(opts) > 0 {
+	if len(opts) > 0 {
 		if err := setControllerReference(opts[0].Owner, obj, opts[0].Scheme); err != nil {
 			return err
 		}
@@ -105,7 +105,7 @@ func (c *ClientImpl) Patch(ctx context.Context, obj k8sclient.Object, patch k8sc
 
 	c.GlobalConfig.Apply(obj)
 
-	if opts != nil && len(opts) > 0 {
+	if len(opts) > 0 {
 		if opts[0].Resilient != nil {
 			return c.ResilientPatch(ctx, obj, opts[0].Resilient, opts[0].Opts...)
 		}
@@ -166,7 +166,7 @@ func (c *ClientImpl) resilientPatch(ctx context.Context, obj k8sclient.Object, s
 func (c *ClientImpl) PatchStatus(ctx context.Context, obj k8sclient.Object, patch k8sclient.Patch, opts ...PatchOption) error {
 	var patchOpts []k8sclient.PatchOption
 
-	if opts != nil && len(opts) > 0 {
+	if len(opts) > 0 {
 		if opts[0].Resilient != nil {
 			return c.ResilientPatchStatus(ctx, obj, opts[0].Resilient, opts[0].Opts...)
 		}
@@ -228,7 +228,7 @@ func (c *ClientImpl) Update(ctx context.Context, obj k8sclient.Object, opts ...U
 
 	c.GlobalConfig.Apply(obj)
 
-	if opts != nil && len(opts) > 0 {
+	if len(opts) > 0 {
 		if err := setControllerReference(opts[0].Owner, obj, opts[0].Scheme); err != nil {
 			return err
 		}
@@ -263,7 +263,7 @@ func (c *ClientImpl) Delete(ctx context.Context, obj k8sclient.Object, opts ...k
 // CreateOrUpdate does not support k8sclient.CreateOption or k8sclient.UpdateOption being passed as variadic parameters,
 // if want to use opts use Create or Update methods
 func (c *ClientImpl) CreateOrUpdate(ctx context.Context, obj k8sclient.Object, opts ...CreateOrUpdateOption) error {
-	if opts != nil && len(opts) > 0 {
+	if len(opts) > 0 {
 		if err := setControllerReference(opts[0].Owner, obj, opts[0].Scheme); err != nil {
 			return err
 		}

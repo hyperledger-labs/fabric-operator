@@ -92,7 +92,7 @@ func (c *CertificateManager) GetDurationToNextRenewalForCert(certName string, ce
 	}
 
 	renewDate := expireDate.Add(-time.Duration(numSecondsBeforeExpire) * time.Second) // Subtract num seconds from expire date
-	duration := renewDate.Sub(time.Now())                                             // Get duration between now and the renew date (negative duration means renew date < time.Now())
+	duration := time.Until(renewDate)                                                 // Get duration between now and the renew date (negative duration means renew date < time.Now())
 	if duration < 0 {
 		return time.Duration(0), nil
 	}
@@ -116,7 +116,7 @@ func (c *CertificateManager) Expires(cert []byte, numSecondsBeforeExpire int64) 
 	}
 
 	// Checks if the duration between time.Now() and the expiration date is less than or equal to the numSecondsBeforeExpire
-	if expireDate.Sub(time.Now()) <= time.Duration(numSecondsBeforeExpire)*time.Second {
+	if time.Until(expireDate) <= time.Duration(numSecondsBeforeExpire)*time.Second {
 		return true, expireDate, nil
 	}
 
@@ -245,7 +245,7 @@ func (c *CertificateManager) RenewCert(certType common.SecretType, instance Inst
 
 	var certReenroller Reenroller
 	if certType == common.ECERT && hsmEnabled && !instance.UsingHSMProxy() {
-		log.Info(fmt.Sprintf("Certificate manager renewing ecert, non-proxy HSM enabled"))
+		log.Info("Certificate manager renewing ecert, non-proxy HSM enabled")
 		hsmConfig, err := config.ReadHSMConfig(c.Client, instance)
 		if err != nil {
 			return err
@@ -312,7 +312,7 @@ func (c *CertificateManager) RenewCert(certType common.SecretType, instance Inst
 func (c *CertificateManager) UpdateSignCert(name string, cert []byte, instance v1.Object) error {
 	// Cert might not be returned from reenroll call, for example if the reenroll happens in a job which handles
 	// updating the secret when using HSM (non-proxy)
-	if cert == nil || len(cert) == 0 {
+	if len(cert) == 0 {
 		return nil
 	}
 
@@ -332,7 +332,7 @@ func (c *CertificateManager) UpdateKey(name string, key []byte, instance v1.Obje
 	// Need to ensure the value passed in for key is valid before updating.
 	// Otherwise, an empty key will end up in the secret overriding a valid key, which
 	// will cause runtime errors on nodes
-	if key == nil || len(key) == 0 {
+	if len(key) == 0 {
 		return nil
 	}
 
