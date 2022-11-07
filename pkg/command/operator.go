@@ -105,7 +105,8 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 		logf.SetLogger(*operatorCfg.Logger)
 		ctrl.SetLogger(*operatorCfg.Logger)
 	} else {
-		logf.SetLogger(zap.New())
+		// Use the unstructured log formatter when running locally.
+		logf.SetLogger(zap.New(zap.UseDevMode(local)))
 		ctrl.SetLogger(zap.New(zap.UseDevMode(true)))
 	}
 
