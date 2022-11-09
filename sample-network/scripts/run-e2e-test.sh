@@ -42,7 +42,7 @@ printenv | sort
 # Set up a cluster
 network kind
 
-# Set up ngress and CRDs
+# Set up ingress and CRDs
 network cluster init
 
 # Set up a Fabric Network
