@@ -15,6 +15,7 @@ jobs:
           scripts/install-tools.sh
           make image
       - name: Push
+        if: github.repository == 'hyperledger-labs/fabric-operator'
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
           make image-push image-push-latest
