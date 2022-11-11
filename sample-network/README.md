@@ -132,17 +132,6 @@ The operator can also be configured for use with [fabric-builder-k8s](https://gi
 providing smooth and immediate _Chaincode Right Now!_ deployments.  With the `k8s` builder, the peer node will directly
 manage the lifecycle of the chaincode pods.
 
-Reconstruct the network with the "k8s-fabric-peer" image:
-```shell
-network down
-
-export TEST_NETWORK_PEER_IMAGE=ghcr.io/hyperledgendary/k8s-fabric-peer
-export TEST_NETWORK_PEER_IMAGE_LABEL=v0.6.0
-
-network up
-network channel create
-```
-
 Download a "k8s" chaincode package:
 ```shell
 curl -fsSL https://github.com/hyperledgendary/conga-nft-contract/releases/download/v0.1.1/conga-nft-contract-v0.1.1.tgz -o conga-nft-contract-v0.1.1.tgz
