@@ -28,10 +28,12 @@
 ## getOperatorSDK
 sudo rm /usr/local/bin/operator-sdk || true
 
-sdkVersion="1.16.0"
+sdkVersion="v1.16.0"
 sdkName="operator-sdk"
+ARCH=$(go env GOARCH)
+OS=$(go env GOOS)
 
-url="https://github.com/operator-framework/operator-sdk/releases/download/${sdkVersion}/operator-sdk_linux_amd64"
+url="https://github.com/operator-framework/operator-sdk/releases/download/${sdkVersion}/operator-sdk_${OS}_${ARCH}"
 echo "Installing operator-sdk version $sdkVersion with name of $sdkName"
 wget --quiet --progress=dot:giga -t 2 -T 60 -O $sdkName $url || true
 sudo mkdir -p /usr/local/bin/
