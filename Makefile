@@ -16,27 +16,19 @@
 # limitations under the License.
 #
 
-IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
-TAG ?= $(shell git rev-parse --short HEAD)
+IMAGE ?= hyperledger-labs/fabric-operator
 ARCH ?= $(shell go env GOARCH)
-OSS_GO_VER ?= 1.17.7
-BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 OS = $(shell go env GOOS)
+VERSION ?= $(shell git rev-parse --short HEAD)
+BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+GO_VER ?= 1.17.7
 
-DOCKER_IMAGE_REPO ?= ghcr.io
+DOCKER_BUILD ?= docker build
 
 BUILD_ARGS=--build-arg ARCH=$(ARCH)
-BUILD_ARGS+=--build-arg BUILD_ID=$(TAG)
+BUILD_ARGS+=--build-arg BUILD_ID=$(VERSION)
 BUILD_ARGS+=--build-arg BUILD_DATE=$(BUILD_DATE)
-BUILD_ARGS+=--build-arg GO_VER=$(OSS_GO_VER)
-
-ifneq ($(origin TRAVIS_PULL_REQUEST),undefined)
-	ifneq ($(TRAVIS_PULL_REQUEST), false)
-		TAG=pr-$(TRAVIS_PULL_REQUEST)
-	endif
-endif
-
-NAMESPACE ?= n$(shell echo $(TAG) | tr -d "-")
+BUILD_ARGS+=--build-arg GO_VER=$(GO_VER)
 
 .PHONY: build
 
@@ -44,22 +36,13 @@ build: ## Builds the starter pack
 	mkdir -p bin && go build -o bin/operator
 
 image: setup
-	docker build --rm . -f Dockerfile $(BUILD_ARGS) -t $(IMAGE):$(TAG)-$(ARCH)
-	docker tag $(IMAGE):$(TAG)-$(ARCH) $(IMAGE):latest-$(ARCH)
+	$(DOCKER_BUILD) -f Dockerfile $(BUILD_ARGS) -t $(IMAGE) .
 
 govendor:
 	@go mod vendor
 
 setup: govendor manifests bundle generate
 
-image-push:
-	docker push $(IMAGE):$(TAG)-$(ARCH)
-
-image-push-latest:
-	docker push $(IMAGE):latest-$(ARCH)
-
-login:
-	docker login --username $(DOCKER_USERNAME) --password $(DOCKER_PASSWORD) $(DOCKER_IMAGE_REPO)
 
 #######################################
 #### part of autogenerate makefile ####
