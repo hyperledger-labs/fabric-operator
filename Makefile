@@ -16,50 +16,37 @@
 # limitations under the License.
 #
 
-IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
-TAG ?= $(shell git rev-parse --short HEAD)
+IMAGE ?= hyperledger-labs/fabric-operator
 ARCH ?= $(shell go env GOARCH)
-OSS_GO_VER ?= 1.17.7
-BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 OS = $(shell go env GOOS)
+SEMREV_LABEL ?= v1.0.0-$(shell git rev-parse --short HEAD)
+BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+GO_VER ?= 1.18.4
 
-DOCKER_IMAGE_REPO ?= ghcr.io
+# For compatibility with legacy install-fabric.sh conventions, strip the
+# leading semrev 'v' character when preparing dist and release artifacts.
+VERSION=$(shell echo $(SEMREV_LABEL) | sed -e  's/^v\(.*\)/\1/')
 
-BUILD_ARGS=--build-arg ARCH=$(ARCH)
-BUILD_ARGS+=--build-arg BUILD_ID=$(TAG)
+
+DOCKER_BUILD ?= docker build
+
+BUILD_ARGS+=--build-arg BUILD_ID=$(VERSION)
 BUILD_ARGS+=--build-arg BUILD_DATE=$(BUILD_DATE)
-BUILD_ARGS+=--build-arg GO_VER=$(OSS_GO_VER)
-
-ifneq ($(origin TRAVIS_PULL_REQUEST),undefined)
-	ifneq ($(TRAVIS_PULL_REQUEST), false)
-		TAG=pr-$(TRAVIS_PULL_REQUEST)
-	endif
-endif
-
-NAMESPACE ?= n$(shell echo $(TAG) | tr -d "-")
+BUILD_ARGS+=--build-arg GO_VER=$(GO_VER)
 
 .PHONY: build
 
-build: ## Builds the starter pack
+build:
 	mkdir -p bin && go build -o bin/operator
 
 image: setup
-	docker build --rm . -f Dockerfile $(BUILD_ARGS) -t $(IMAGE):$(TAG)-$(ARCH)
-	docker tag $(IMAGE):$(TAG)-$(ARCH) $(IMAGE):latest-$(ARCH)
+	$(DOCKER_BUILD) -f Dockerfile $(BUILD_ARGS) -t $(IMAGE) .
 
 govendor:
 	@go mod vendor
 
 setup: govendor manifests bundle generate
 
-image-push:
-	docker push $(IMAGE):$(TAG)-$(ARCH)
-
-image-push-latest:
-	docker push $(IMAGE):latest-$(ARCH)
-
-login:
-	docker login --username $(DOCKER_USERNAME) --password $(DOCKER_PASSWORD) $(DOCKER_IMAGE_REPO)
 
 #######################################
 #### part of autogenerate makefile ####
@@ -156,14 +143,6 @@ vet:
 generate: controller-gen
 	$(CONTROLLER_GEN) object:headerFile="boilerplate/boilerplate.go.txt" paths="./..."
 
-# Build the docker image
-docker-build: test
-	docker build . -t ${IMG}
-
-# Push the docker image
-docker-push:
-	docker push ${IMG}
-
 # find or download controller-gen
 # download controller-gen if necessary
 controller-gen:
@@ -188,7 +167,7 @@ ifeq (, $(shell which kustomize))
 	KUSTOMIZE_GEN_TMP_DIR=$$(mktemp -d) ;\
 	cd $$KUSTOMIZE_GEN_TMP_DIR ;\
 	go mod init tmp ;\
-	go install sigs.k8s.io/kustomize/kustomize/v3@v3.5.4 ;\
+	go install sigs.k8s.io/kustomize/kustomize/v4@v4.5.7 ;\
 	rm -rf $$KUSTOMIZE_GEN_TMP_DIR ;\
 	}
 KUSTOMIZE=$(GOBIN)/kustomize
