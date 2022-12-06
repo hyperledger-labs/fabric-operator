@@ -1,5 +1,3 @@
-ARG ARCH
-ARG REGISTRY
 ARG GO_VER
 
 ########## Build operator binary ##########
@@ -19,6 +17,7 @@ COPY definitions /definitions
 COPY config/crd/bases /deploy/crds
 COPY defaultconfig /defaultconfig
 COPY docker-entrypoint.sh .
+
 RUN microdnf update \
     && microdnf install -y \
     shadow-utils \
