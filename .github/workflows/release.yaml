@@ -1,6 +1,8 @@
 name: Release Operator
 
 on:
+  pull_request:
+    branches: [ release-1.0 ]
   push:
     tags: [ v1.* ]
 
