@@ -9,11 +9,11 @@ metadata:
     containerImage: todo:update
     createdAt: "2020-07-14T00:00:00Z"
     description: TODO
-    operators.operatorframework.io/builder: operator-sdk-v1.19.0+git
+    operators.operatorframework.io/builder: operator-sdk-v1.24.1
     operators.operatorframework.io/internal-objects: '["ibpcas.ibp.com","ibppeers.ibp.com","ibporderers.ibp.com"]'
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
     repository: ""
-  name: fabric-opensource-operator.v1.0.0
+  name: fabric-opensource-operator.v1.0.0-9726bb6
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1886,4 +1886,4 @@ spec:
   maturity: alpha
   provider:
     name: Opensource
-  version: 1.0.0
+  version: 1.0.0-9726bb6
