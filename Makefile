@@ -19,7 +19,7 @@
 IMAGE ?= hyperledger-labs/fabric-operator
 ARCH ?= $(shell go env GOARCH)
 OS = $(shell go env GOOS)
-VERSION ?= $(shell git rev-parse --short HEAD)
+VERSION ?= v1.0.0-$(shell git rev-parse --short HEAD)
 BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 GO_VER ?= 1.17.7
 
@@ -171,7 +171,7 @@ ifeq (, $(shell which kustomize))
 	KUSTOMIZE_GEN_TMP_DIR=$$(mktemp -d) ;\
 	cd $$KUSTOMIZE_GEN_TMP_DIR ;\
 	go mod init tmp ;\
-	go install sigs.k8s.io/kustomize/kustomize/v3@v3.5.4 ;\
+	go install sigs.k8s.io/kustomize/kustomize/v4@v4.5.7 ;\
 	rm -rf $$KUSTOMIZE_GEN_TMP_DIR ;\
 	}
 KUSTOMIZE=$(GOBIN)/kustomize
