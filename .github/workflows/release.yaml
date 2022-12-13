@@ -1,0 +1,91 @@
+name: Release Operator
+
+on:
+  pull_request:
+    branches: [ release-1.0 ]
+  push:
+    tags: [ v1.* ]
+
+env:
+  GO_VER: 1.18.4
+  GO_TAGS: ""
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  SEMREV_LABEL: ${{ github.ref_name }}
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-20.04
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          buildkitd-flags: --debug
+          config-inline: |
+            [worker.oci]
+              max-parallelism = 1
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to the GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}
+
+      - name: Build and push
+        id: push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          push: ${{ github.event_name != 'pull_request' }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            GO_VER=${{ env.GO_VER }}
+            GO_TAGS=${{ env.GO_TAGS }}
+            BUILD_ID=${{ env.SEMREV_LABEL }}
+            BUILD_DATE=${{ env.BUILD_DATE }}
+
+
+  create-release:
+    name: Create GitHub Release
+    needs: [ build-and-push-image ]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Release Operator Version
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: "true"
+          bodyFile: release_notes/${{ env.SEMREV_LABEL }}.md
+          tag: ${{ env.SEMREV_LABEL }}
+          token: ${{ secrets.GITHUB_TOKEN }}
