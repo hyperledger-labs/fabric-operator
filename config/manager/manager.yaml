@@ -42,6 +42,7 @@ spec:
     metadata:
       labels:
         control-plane: controller-manager
+        name: controller-manager
     spec:
       containers:
         - command:
