@@ -22,9 +22,9 @@ metadata:
   name: operator
 subjects:
   - kind: ServiceAccount
-    name: operator
-    namespace: placeholder
+    name: controller-manager
+    namespace: system
 roleRef:
   kind: ClusterRole
-  name: operator
+  name: manager-role
   apiGroup: rbac.authorization.k8s.io
