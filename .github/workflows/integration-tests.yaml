@@ -71,7 +71,12 @@ jobs:
       - name: Install Fabric CRDs
         run: |
           kubectl kustomize config/crd | kubectl apply -f -
-
+      - name: Add hosts to /etc/hosts
+        run: |
+          sudo echo "127.0.0.1 inttestca-ibpca1-ca.vcap.me" | sudo tee -a /etc/hosts
+          sudo echo "127.0.0.1 inttestca-ibpca2-ca.vcap.me" | sudo tee -a /etc/hosts
+          sudo echo "127.0.0.1 inttestca-ibpca3-ca.vcap.me" | sudo tee -a /etc/hosts
+          sudo echo "127.0.0.1 inttestca-interca-ca.vcap.me" | sudo tee -a /etc/hosts
       - name: Run ${{ matrix.suite }} integration tests
         run: make integration-tests
 #        run: |
