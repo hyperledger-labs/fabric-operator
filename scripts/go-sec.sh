@@ -18,10 +18,6 @@
 # limitations under the License.
 #
 
-RELEASE=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/securego/gosec/releases/latest | jq -r .tag_name)
-
-echo "Latest Gosec release determined to be $RELEASE... Installing..."
-
 curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOPATH)/bin $RELEASE
 
 gosec ./...
