@@ -88,10 +88,6 @@ var _ = AfterSuite(func() {
 		return
 	}
 
-	if strings.ToLower(os.Getenv("SAVE_TEST")) == "true" {
-		return
-	}
-
 	err := integration.Cleanup(GinkgoWriter, kclient, namespace)
 	Expect(err).NotTo(HaveOccurred())
 })
