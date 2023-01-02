@@ -106,7 +106,7 @@ If for some reason you can't seem to mangle an image into KIND, build, tag, and 
 the `localhost:5000` container registry.  (Or use Rancher/k3s.)
 
 
-## What's up with Ingress, vcap.me, and nip.io domains?
+## What's up with Ingress, localho.st, vcap.me, and nip.io domains?
 
 Fabric Operator uses Kube Ingress to route traffic through a common, DNS wildcard domain (e.g. *.my-network.example.com.)
 In cloud-native environments, where a DNS wildcard domain resolvers are readily available, it is possible to 
@@ -115,11 +115,13 @@ map a top-level A record to a single IP address bound to the cluster ingress.
 Unfortunately it is _exceedingly annoying_ to emulate a top-level A wildcard DNS domain in a way that can be visible
 to pods running in a Docker network (e.g. KIND) AND to the host OS using the same domain alias and IP.
 
-Two solutions available are: 
+Alternate solutions available:
+
+- Use the `*.localho.st` domain alias for your Fabric network, mapping all sub-domains and hosts to 127.0.0.1.
 
 - Use the `*.vcap.me` domain alias for your Fabric network, mapping to 127.0.0.1 in all cases.  This is convenient for
   scenarios where pods in the cluster will have no need to traverse the ingress (e.g. in integration testing).
-
+  (Update: vcap.me stopped resolving host names some time in late 2022.)
 
 - Use the [Dead simple wildcard DNS for any IP Address](https://nip.io) *.nip.io domain for the cluster, providing 
   full flexibility for the IP address of the ingress port.
