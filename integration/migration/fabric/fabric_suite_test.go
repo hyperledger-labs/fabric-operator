@@ -56,7 +56,7 @@ const (
 	defaultConsoleDef     = "../../../definitions/console"
 	FabricBinaryVersion   = "2.2.3"
 	FabricCABinaryVersion = "1.5.1"
-	domain                = "vcap.me"
+	domain                = "localho.st"
 )
 
 var (
