@@ -88,6 +88,7 @@ type CAConfig struct {
 	CSP          *BCCSP                 `json:"bccsp,omitempty"`
 	Intermediate IntermediateCA         `json:"intermediate,omitempty"`
 	CRL          CRLConfig              `json:"crl,omitempty"`
+	Idemix       IdemixConfig           `json:"idemix,omitempty"`
 
 	// Optional client config for an intermediate server which acts as a client
 	// of the root (or parent) server
@@ -341,6 +342,18 @@ type CRLConfig struct {
 	// The number of hours specified by this property is added to the UTC time, resulting time
 	// is used to set the 'Next Update' date of the CRL
 	Expiry commonapi.Duration `json:"expiry,omitempty"`
+}
+
+// IdemixConfig encapsulates Idemix related the configuration options
+type IdemixConfig struct {
+	Curve                    string `json:"curve,omitempty"`
+	IssuerPublicKeyfile      string `json:"issuerpublickeyfile,omitempty"`
+	IssuerSecretKeyfile      string `json:"issuersecretkeyfile,omitempty"`
+	RevocationPublicKeyfile  string `json:"revocationpublickeyfile,omitempty"`
+	RevocationPrivateKeyfile string `json:"revocationprivatekeyfile,omitempty"`
+	RHPoolSize               int    `json:"rhpoolsize,omitempty"`
+	NonceExpiration          string `json:"nonceexpiration,omitempty"`
+	NonceSweepInterval       string `json:"noncesweepinterval,omitempty"`
 }
 
 // Options contains configuration for the operations system
