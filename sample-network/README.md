@@ -202,10 +202,11 @@ network unkind
 ```
 ## Hyperledger explorer
 To setup explorer follow below steps
+```shell
 cd explorer/
 source  explorer.sh (it will launch explorer at https://explorer.localho.st/)
 source clean.sh (it will remove the explorer)
-
+```
 ## Appendix: Operations Console
 
 Launch the [Fabric Operations Console](https://github.com/hyperledger-labs/fabric-operations-console):
