@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: explorer-config
+data:
+  network.json: |-
+      {
+      "name": "test-network",
+      "version": "1.0.0",
+      "client": {
+        "tlsEnable": true,
+        "adminCredential": {
+          "id": "exploreradmin",
+          "password": "exploreradminpw"
+        },
+        "enableAuthentication": true,
+        "organization": "Org1MSP",
+        "connection": {
+          "timeout": {
+            "peer": {
+              "endorser": "300"
+            },
+            "orderer": "300"
+          }
+        }
+      },
+      "channels": {
+        "mychannel": {
+          "peers": {
+            "peer0-org1": {}
+          },
+          "connection": {
+            "timeout": {
+              "peer": {
+                "endorser": "6000",
+                "eventHub": "6000",
+                "eventReg": "6000"
+              }
+            }
+          }
+        }
+      },
+      "organizations": {
+        "Org1MSP": {
+          "mspid": "Org1MSP",
+          "adminPrivateKey": {
+            "path": "/organizations/key.pem"
+          },
+          "peers": [
+            "peer0-org1"
+          ],
+          "signedCert": {
+            "path": "/organizations/cert.pem"
+          }
+        }
+      },
+      "peers": {
+        "peer0-org1": {
+          "tlsCACerts": {
+            "path": "/organizations/tlsca-signcert.pem"
+          },
+          "url": "grpcs://test-network-org1-peer1-peer.localho.st:443"
+        }
+      }
+      }
+
+  config.json: |- 
+      {
+      "network-configs": {
+        "test-network": {
+          "name": "test-network",
+          "profile": "./test-network.json"
+        }
+      },
+      "license": "Apache-2.0"
+      }
