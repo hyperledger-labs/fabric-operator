@@ -200,7 +200,11 @@ or
 ```shell
 network unkind
 ```
-
+## Hyperledger explorer
+To setup explorer follow below steps
+cd explorer/
+source  explorer.sh (it will launch explorer at https://explorer.localho.st/)
+source clean.sh (it will remove the explorer)
 
 ## Appendix: Operations Console
 
