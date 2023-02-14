@@ -139,6 +139,10 @@ fmt:
 vet:
 	@scripts/checks.sh
 
+# Run go sec against code
+go-sec:
+	@scripts/go-sec.sh
+
 # Generate code
 generate: controller-gen
 	$(CONTROLLER_GEN) object:headerFile="boilerplate/boilerplate.go.txt" paths="./..."

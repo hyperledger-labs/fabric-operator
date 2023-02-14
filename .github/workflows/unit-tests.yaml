@@ -39,6 +39,6 @@ jobs:
       - name: license header checks
         run: scripts/check-license.sh
       - name: gosec
-        run: scripts/go-sec.sh
+        run: make go-sec
       - name: run tests
         run: make test
