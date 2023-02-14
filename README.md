@@ -31,7 +31,7 @@ _Fabric, Ahoy!_
 - [x] It configures Fabric networks with native Fabric CLI binaries
 - [x] It configures Fabric networks with CI/CD and git-ops best-practices
 - [x] It deploys _Chaincode Now!!!_  (integrated `ccaas` and `k8s` external builders) 
-- [x] It detects expiring and expired x509 certificates
+- [x] It detects and automatically re-enrolls TLS certificates 
 - [x] It will provide migration and future LTS revision support
 - [x] It manages hybrid cloud, multi-org, and multi-cluster Fabric networks
 - [x] It runs on pure containerd _and_ mobyd (no dependencies on Docker/DIND)
@@ -48,7 +48,6 @@ _Fabric, Ahoy!_
 - [x] Metrics and observability with [Prometheus and Grafana](./docs/prometheus.md)
 - [ ] Operational management: Log aggregation, monitoring, alerting
 - [ ] Modular CAs (Fabric CA, cert-manager.io, Vault, letsencrypt, ...)
-- [ ] Automatic x509 certificate renewal
 - [ ] Backup / Recovery / Upgrade 
 - [ ] Idemixer, Token SDK, BFT Orderer
 - [ ] Layer II blockchain integration (Cactus, Weaver, Token SDK, ...)
@@ -57,6 +56,7 @@ _Fabric, Ahoy!_
 
 ## Build a Fabric Network
 
+- Build a [multi-org](sample-network-multi-org) network on a local KIND development cluster. 
 - Build a [sample-network](sample-network) with Kube APIs.
 - [Build a Network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network) with the [Fabric Operations Console](https://github.com/hyperledger-labs/fabric-operations-console).
 - Automate your network with [Ansible Playbooks](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ansible) and the Console REST APIs.

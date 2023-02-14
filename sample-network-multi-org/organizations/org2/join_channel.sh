@@ -1,5 +1,6 @@
+#!/usr/bin/env bash
 #
-# Copyright contributors to the Hyperledger Fabric Operator project
+# Copyright contributors to the Hyperledgendary Kubernetes Test Network project
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -15,30 +16,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+set -euo pipefail
+. scripts/utils.sh
 
-name: unit-tests
+#
+# Bind all org2 services to the "org2" namespace
+#
+export NAMESPACE=org2
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+#
+# Join peer1 to the channel
+#
+print "joining org2 peer1 to $CHANNEL_NAME"
+appear_as Org2MSP org2 peer1
+peer channel join --blockpath channel-config/${CHANNEL_NAME}_genesis_block.pb
 
-env:
-  GO_VER: 1.18
-
-jobs:
-  make-checks:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VER }}
-      - name: license header checks
-        run: scripts/check-license.sh
-      - name: gosec
-        run: make go-sec
-      - name: run tests
-        run: make test
+#
+# Join peer2 to the channel
+#
+print "joining org2 peer2 to $CHANNEL_NAME"
+appear_as Org2MSP org2 peer2
+peer channel join --blockpath channel-config/${CHANNEL_NAME}_genesis_block.pb

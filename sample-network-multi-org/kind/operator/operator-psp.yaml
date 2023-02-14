@@ -15,30 +15,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-name: unit-tests
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-env:
-  GO_VER: 1.18
-
-jobs:
-  make-checks:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VER }}
-      - name: license header checks
-        run: scripts/check-license.sh
-      - name: gosec
-        run: make go-sec
-      - name: run tests
-        run: make test
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: ibm-hlfsupport-psp
+spec:
+  hostIPC: false
+  hostNetwork: false
+  hostPID: false
+  privileged: true
+  allowPrivilegeEscalation: true
+  readOnlyRootFilesystem: false
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  runAsUser:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  requiredDropCapabilities:
+    - ALL
+  allowedCapabilities:
+    - NET_BIND_SERVICE
+    - CHOWN
+    - DAC_OVERRIDE
+    - SETGID
+    - SETUID
+    - FOWNER
+  volumes:
+    - '*'
