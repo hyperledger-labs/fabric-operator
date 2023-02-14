@@ -6,4 +6,4 @@
 |-------------------|-----------|----------------|
 | Josh Kneubuhl | [@jkneubuh](https://github.com/jkneubuh) | jkneubuhl#5919 |
 | Ratnakar Asara | [@asararatnakar](https://github.com/asararatnakar) | ratnakar#3494 |
-| David Enyeart | [@denyeart](https://github.com/denyeart) | denyeart#0989 |
+| Shoaeb Jindani | [@shoaebjindani](https://github.com/shoaebjindani) | shoaebmjindani#9890 |
