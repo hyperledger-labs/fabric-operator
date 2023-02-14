@@ -838,7 +838,11 @@ func IsTCPReachable(url string) bool {
 		return false
 	}
 
-	defer conn.Close()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			return
+		}
+	}()
 
 	return true
 }
