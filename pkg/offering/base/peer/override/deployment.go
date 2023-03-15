@@ -709,6 +709,13 @@ func (o *Override) CommonDeploymentOverrides(instance *current.IBPPeer, deployme
 			}
 		}
 
+		if resourcesRequest.Init != nil {
+			err = initContainer.UpdateResources(resourcesRequest.Init)
+			if err != nil {
+				return errors.Wrap(err, "resource update for init failed")
+			}
+		}
+
 		if instance.UsingCouchDB() {
 			couchdb := deployment.MustGetContainer(COUCHDB)
 			if resourcesRequest.CouchDB != nil {
