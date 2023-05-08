@@ -64,7 +64,8 @@ import (
 )
 
 const (
-	NODE = "node"
+	NODE                    = "node"
+	DaysToSecondsConversion = int64(24 * 60 * 60)
 )
 
 type Override interface {
@@ -1716,5 +1717,224 @@ func (n *Node) HandleRestart(instance *current.IBPOrderer, update Update) error 
 func (n *Node) CustomLogic(instance *current.IBPOrderer, update Update) (*current.CRStatus, *common.Result, error) {
 	var status *current.CRStatus
 	var err error
+	if !n.CanSetCertificateTimer(instance, update) {
+		log.Info("Certificate update detected but all nodes not yet deployed, requeuing request...")
+		return status, &common.Result{
+			Result: reconcile.Result{
+				Requeue: true,
+			},
+		}, nil
+	}
+
+	// Check if crypto needs to be backed up before an update overrides exisitng secrets
+	if update.CryptoBackupNeeded() {
+		log.Info("Performing backup of TLS and ecert crypto")
+		err = common.BackupCrypto(n.Client, n.Scheme, instance, n.GetLabels(instance))
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to backup TLS and ecert crypto")
+		}
+	}
+
+	status, err = n.CheckCertificates(instance)
+	if err != nil {
+		return status, nil, errors.Wrap(err, "failed to check for expiring certificates")
+	}
+
+	if update.CertificateCreated() {
+		log.Info(fmt.Sprintf("%s certificate was created, setting timer for certificate renewal", update.GetCreatedCertType()))
+		err = n.SetCertificateTimer(instance, update.GetCreatedCertType())
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
+
+	if update.EcertUpdated() {
+		log.Info("Ecert was updated, setting timer for certificate renewal")
+		err = n.SetCertificateTimer(instance, commoninit.ECERT)
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
+
+	if update.TLSCertUpdated() {
+		log.Info("TLS cert was updated, setting timer for certificate renewal")
+		err = n.SetCertificateTimer(instance, commoninit.TLS)
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
 	return status, nil, err
+
+}
+
+func (n *Node) CheckCertificates(instance *current.IBPOrderer) (*current.CRStatus, error) {
+	numSecondsBeforeExpire := instance.Spec.GetNumSecondsWarningPeriod()
+	statusType, message, err := n.CertificateManager.CheckCertificatesForExpire(instance, numSecondsBeforeExpire)
+	if err != nil {
+		return nil, err
+	}
+
+	crStatus := &current.CRStatus{
+		Type:    statusType,
+		Message: message,
+	}
+
+	switch statusType {
+	case current.Deployed:
+		crStatus.Reason = "allPodsRunning"
+		if message == "" {
+			crStatus.Message = "allPodsRunning"
+		}
+	default:
+		crStatus.Reason = "certRenewalRequired"
+	}
+
+	return crStatus, nil
+}
+
+func (n *Node) SetCertificateTimer(instance *current.IBPOrderer, certType commoninit.SecretType) error {
+	certName := fmt.Sprintf("%s-%s-signcert", certType, instance.Name)
+	numSecondsBeforeExpire := instance.Spec.GetNumSecondsWarningPeriod()
+	duration, err := n.CertificateManager.GetDurationToNextRenewal(certType, instance, numSecondsBeforeExpire)
+	if err != nil {
+		return err
+	}
+
+	log.Info((fmt.Sprintf("Creating timer to renew %s %d days before it expires", certName, int(numSecondsBeforeExpire/DaysToSecondsConversion))))
+
+	if n.RenewCertTimers[certName] != nil {
+		n.RenewCertTimers[certName].Stop()
+		n.RenewCertTimers[certName] = nil
+	}
+	n.RenewCertTimers[certName] = time.AfterFunc(duration, func() {
+		// Check certs for updated status & set status so that reconcile is triggered after cert renewal. Reconcile loop will handle
+		// checking certs again to determine whether instance status can return to Deployed
+		err := n.UpdateCRStatus(instance)
+		if err != nil {
+			log.Error(err, "failed to update CR status")
+		}
+
+		// get instance
+		instanceLatest := &current.IBPOrderer{}
+		err = n.Client.Get(context.TODO(), types.NamespacedName{Namespace: instance.Namespace, Name: instance.Name}, instanceLatest)
+		if err != nil {
+			log.Error(err, "failed to get latest instance")
+			return
+		}
+
+		// Orderer TLS certs can be auto-renewed for 1.4.9+ or 2.2.1+ orderers
+		if certType == commoninit.TLS {
+			// if renewal is disabled
+			if n.Config.Operator.Orderer.Renewals.DisableTLScert {
+				log.Info(fmt.Sprintf("%s cannot be auto-renewed because orderer tls renewal is disabled", certName))
+				return
+			}
+			switch version.GetMajorReleaseVersion(instanceLatest.Spec.FabricVersion) {
+			case version.V2:
+				if version.String(instanceLatest.Spec.FabricVersion).LessThan("2.2.1") {
+					log.Info(fmt.Sprintf("%s cannot be auto-renewed because v2 orderer is less than 2.2.1, force renewal required", certName))
+					return
+				}
+			case version.V1:
+				if version.String(instanceLatest.Spec.FabricVersion).LessThan("1.4.9") {
+					log.Info(fmt.Sprintf("%s cannot be auto-renewed because v1.4 orderer less than 1.4.9, force renewal required", certName))
+					return
+				}
+			default:
+				log.Info(fmt.Sprintf("%s cannot be auto-renewed, force renewal required", certName))
+				return
+			}
+		}
+
+		err = common.BackupCrypto(n.Client, n.Scheme, instance, n.GetLabels(instance))
+		if err != nil {
+			log.Error(err, "failed to backup crypto before renewing cert")
+			return
+		}
+
+		err = n.RenewCert(certType, instanceLatest, false)
+		if err != nil {
+			log.Info(fmt.Sprintf("Failed to renew %s certificate: %s, status of %s remaining in Warning phase", certType, err, instanceLatest.GetName()))
+			return
+		}
+		log.Info(fmt.Sprintf("%s renewal complete", certName))
+	})
+
+	return nil
+}
+
+// NOTE: This is called by the timer's subroutine when it goes off, not during a reconcile loop.
+// Therefore, it won't be overriden by the "SetStatus" method in ibporderer_controller.go
+func (n *Node) UpdateCRStatus(instance *current.IBPOrderer) error {
+	status, err := n.CheckCertificates(instance)
+	if err != nil {
+		return errors.Wrap(err, "failed to check certificates")
+	}
+
+	// Get most up-to-date instance at the time of update
+	updatedInstance := &current.IBPOrderer{}
+	err = n.Client.Get(context.TODO(), types.NamespacedName{Name: instance.Name, Namespace: instance.Namespace}, updatedInstance)
+	if err != nil {
+		return errors.Wrap(err, "failed to get new instance")
+	}
+
+	// Don't trigger reconcile if status remaining the same
+	if updatedInstance.Status.Type == status.Type && updatedInstance.Status.Reason == status.Reason && updatedInstance.Status.Message == status.Message {
+		return nil
+	}
+
+	updatedInstance.Status.Type = status.Type
+	updatedInstance.Status.Reason = status.Reason
+	updatedInstance.Status.Message = status.Message
+	updatedInstance.Status.Status = current.True
+	updatedInstance.Status.LastHeartbeatTime = time.Now().String()
+
+	log.Info(fmt.Sprintf("Updating status of IBPOrderer node %s to %s phase", instance.Name, status.Type))
+	err = n.Client.UpdateStatus(context.TODO(), updatedInstance)
+	if err != nil {
+		return errors.Wrapf(err, "failed to update status to %s phase", status.Type)
+	}
+
+	return nil
+}
+
+// This function checks whether the parent orderer node (if parent exists) or node itself  is in
+// Deployed or Warning state. We don't want to set a timer to renew certifictes before all nodes
+// are Deployed as a certificate renewal updates the parent status to Warning while renewing.
+func (n *Node) CanSetCertificateTimer(instance *current.IBPOrderer, update Update) bool {
+	if update.CertificateCreated() || update.CertificateUpdated() {
+		parentName := instance.Labels["parent"]
+		if parentName == "" {
+			// If parent not found, check individual node
+			if !(instance.Status.Type == current.Deployed || instance.Status.Type == current.Warning) {
+				log.Info(fmt.Sprintf("%s has no parent, node not yet deployed", instance.Name))
+				return false
+			} else {
+				log.Info(fmt.Sprintf("%s has no parent, node is deployed", instance.Name))
+				return true
+			}
+		}
+
+		nn := types.NamespacedName{
+			Name:      parentName,
+			Namespace: instance.GetNamespace(),
+		}
+
+		parentInstance := &current.IBPOrderer{}
+		err := n.Client.Get(context.TODO(), nn, parentInstance)
+		if err != nil {
+			log.Error(err, fmt.Sprintf("%s parent not found", instance.Name))
+			return false
+		}
+
+		// If parent not yet deployed, but cert update detected, then prevent timer from being set until parent
+		// (and subequently all child nodes) are deployed
+		if !(parentInstance.Status.Type == current.Deployed || parentInstance.Status.Type == current.Warning) {
+			log.Info(fmt.Sprintf("%s has parent, parent not yet deployed", instance.Name))
+			return false
+		}
+	}
+
+	log.Info(fmt.Sprintf("%s has parent, parent is deployed", instance.Name))
+	return true
 }
