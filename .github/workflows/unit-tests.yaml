@@ -39,8 +39,7 @@ jobs:
           go-version: ${{ env.GO_VER }}
       - name: license header checks
         run: scripts/check-license.sh
-      # TODO: run in hyperledger-labs
-      # - name: gosec
-      #   run: scripts/go-sec.sh
+      - name: gosec
+        run: scripts/go-sec.sh
       - name: run tests
         run: make test
