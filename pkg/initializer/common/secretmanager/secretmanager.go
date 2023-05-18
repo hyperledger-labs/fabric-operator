@@ -155,7 +155,7 @@ func (s *SecretManager) CreateIntermediateCertsSecret(name string, instance v1.O
 }
 
 func (s *SecretManager) CreateSignCert(name string, instance v1.Object, cert []byte) error {
-	if cert == nil || len(cert) == 0 {
+	if len(cert) == 0 {
 		return nil
 	}
 

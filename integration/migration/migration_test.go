@@ -149,12 +149,12 @@ var _ = PDescribe("migrating", func() {
 				Spec: corev1.ServiceSpec{
 					Type: corev1.ServiceTypeNodePort,
 					Ports: []corev1.ServicePort{
-						corev1.ServicePort{
+						{
 							Name:     "http",
 							Port:     int32(7054),
 							NodePort: httpNodePort,
 						},
-						corev1.ServicePort{
+						{
 							Name:     "operations",
 							Port:     int32(9443),
 							NodePort: operationNodePort,
@@ -170,11 +170,11 @@ var _ = PDescribe("migrating", func() {
 			ingress := &networkingv1.Ingress{
 				Spec: networkingv1.IngressSpec{
 					Rules: []networkingv1.IngressRule{
-						networkingv1.IngressRule{
+						{
 							IngressRuleValue: networkingv1.IngressRuleValue{
 								HTTP: &networkingv1.HTTPIngressRuleValue{
 									Paths: []networkingv1.HTTPIngressPath{
-										networkingv1.HTTPIngressPath{
+										{
 											Backend: networkingv1.IngressBackend{
 												Service: &networkingv1.IngressServiceBackend{
 													Name: "camigration-service",
@@ -246,10 +246,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					secret, err = kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "camigration-oldstate", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(secret.Data["camigration-service"]).NotTo(Equal(""))
@@ -265,10 +263,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					service, err = kclient.CoreV1().Services(namespace).Get(context.TODO(), "camigration", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(service.Spec.Ports[0].NodePort).To(Equal(httpNodePort))
@@ -284,10 +280,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					ingress, err = kclient.NetworkingV1().Ingresses(namespace).Get(context.TODO(), "camigration", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(ingress.Spec.Rules[0].HTTP.Paths[0].Backend.Service.Name).To(Equal("camigration"))
@@ -353,12 +347,12 @@ var _ = PDescribe("migrating", func() {
 				Spec: corev1.ServiceSpec{
 					Type: corev1.ServiceTypeNodePort,
 					Ports: []corev1.ServicePort{
-						corev1.ServicePort{
+						{
 							Name:     "http",
 							Port:     int32(7054),
 							NodePort: httpNodePort,
 						},
-						corev1.ServicePort{
+						{
 							Name:     "operations",
 							Port:     int32(9443),
 							NodePort: operationNodePort,
@@ -374,11 +368,11 @@ var _ = PDescribe("migrating", func() {
 			ingress := &networkingv1.Ingress{
 				Spec: networkingv1.IngressSpec{
 					Rules: []networkingv1.IngressRule{
-						networkingv1.IngressRule{
+						{
 							IngressRuleValue: networkingv1.IngressRuleValue{
 								HTTP: &networkingv1.HTTPIngressRuleValue{
 									Paths: []networkingv1.HTTPIngressPath{
-										networkingv1.HTTPIngressPath{
+										{
 											Backend: networkingv1.IngressBackend{
 												Service: &networkingv1.IngressServiceBackend{
 													Name: "consolemigration-service",
@@ -459,10 +453,8 @@ var _ = PDescribe("migrating", func() {
 
 			Eventually(func() bool {
 				_, err := kclient.CoreV1().Services(namespace).Get(context.TODO(), "consolemigration-service", metav1.GetOptions{})
-				if err != nil {
-					return false
-				}
-				return true
+
+				return err == nil
 			}).Should(Equal(false))
 
 			By("creating a secret with state of current resources before migration", func() {
@@ -471,10 +463,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					secret, err = kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "consolemigration-oldstate", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(secret.Data["consolemigration-service"]).NotTo(Equal(""))
@@ -490,10 +480,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					service, err = kclient.CoreV1().Services(namespace).Get(context.TODO(), "consolemigration", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(service.Spec.Ports[0].NodePort).To(Equal(httpNodePort))
@@ -506,10 +494,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					ingress, err = kclient.NetworkingV1().Ingresses(namespace).Get(context.TODO(), "consolemigration", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(ingress.Spec.Rules[0].HTTP.Paths[0].Backend.Service.Name).To(Equal("consolemigration"))
@@ -588,22 +574,22 @@ var _ = PDescribe("migrating", func() {
 				Spec: corev1.ServiceSpec{
 					Type: corev1.ServiceTypeNodePort,
 					Ports: []corev1.ServicePort{
-						corev1.ServicePort{
+						{
 							Name:     "peer-api",
 							Port:     int32(7051),
 							NodePort: peerApiNodePort,
 						},
-						corev1.ServicePort{
+						{
 							Name:     "operations",
 							Port:     int32(9443),
 							NodePort: operationNodePort,
 						},
-						corev1.ServicePort{
+						{
 							Name:     "grpcweb-debug",
 							Port:     int32(8080),
 							NodePort: grpcwebDebugNodePort,
 						},
-						corev1.ServicePort{
+						{
 							Name:     "grpcweb",
 							Port:     int32(7443),
 							NodePort: grpcwebNodePort,
@@ -619,11 +605,11 @@ var _ = PDescribe("migrating", func() {
 			ingress := &networkingv1.Ingress{
 				Spec: networkingv1.IngressSpec{
 					Rules: []networkingv1.IngressRule{
-						networkingv1.IngressRule{
+						{
 							IngressRuleValue: networkingv1.IngressRuleValue{
 								HTTP: &networkingv1.HTTPIngressRuleValue{
 									Paths: []networkingv1.HTTPIngressPath{
-										networkingv1.HTTPIngressPath{
+										{
 											Backend: networkingv1.IngressBackend{
 												Service: &networkingv1.IngressServiceBackend{
 													Name: "peermigration-service",
@@ -675,10 +661,8 @@ var _ = PDescribe("migrating", func() {
 
 				secret := &corev1.Secret{}
 				err := client.Get(context.TODO(), namespacedName, secret)
-				if err != nil {
-					return false
-				}
-				return true
+
+				return err == nil
 			}).Should(Equal(true))
 
 			mspSecret = &initsecret.Secret{}
@@ -696,10 +680,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					secret, err = kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "peermigration-oldstate", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(secret.Data["peermigration-service"]).NotTo(Equal(""))
@@ -709,70 +691,56 @@ var _ = PDescribe("migrating", func() {
 			By("creating ecert ca certs secret", func() {
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "ecert-peermigration-cacerts", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
 			By("creating ecert keystore secret", func() {
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "ecert-peermigration-keystore", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
 			By("creating ecert signcert secret", func() {
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "ecert-peermigration-signcert", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
 			By("creating ecert admin cert secret", func() {
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "ecert-peermigration-admincerts", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
 			By("creating tls ca certs secret", func() {
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "tls-peermigration-cacerts", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
 			By("creating tls keystore certs secret", func() {
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "tls-peermigration-keystore", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
 			By("creating tls signcert secret", func() {
 				Eventually(func() bool {
 					_, err := kclient.CoreV1().Secrets(namespace).Get(context.TODO(), "tls-peermigration-signcert", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
@@ -782,10 +750,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					service, err = kclient.CoreV1().Services(namespace).Get(context.TODO(), "peermigration", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(service.Spec.Ports[0].NodePort).To(Equal(peerApiNodePort))
@@ -803,10 +769,8 @@ var _ = PDescribe("migrating", func() {
 
 				Eventually(func() bool {
 					ingress, err = kclient.NetworkingV1().Ingresses(namespace).Get(context.TODO(), "peermigration", metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 
 				Expect(ingress.Spec.Rules[0].HTTP.Paths[0].Backend.Service.Name).To(Equal("peermigration"))
@@ -888,10 +852,8 @@ var _ = PDescribe("migrating", func() {
 
 				secret := &corev1.Secret{}
 				err := client.Get(context.TODO(), namespacedName, secret)
-				if err != nil {
-					return false
-				}
-				return true
+
+				return err == nil
 			}).Should(Equal(true))
 
 			mspSecret = &initsecret.Secret{}
@@ -908,11 +870,11 @@ var _ = PDescribe("migrating", func() {
 			ingress := &networkingv1.Ingress{
 				Spec: networkingv1.IngressSpec{
 					Rules: []networkingv1.IngressRule{
-						networkingv1.IngressRule{
+						{
 							IngressRuleValue: networkingv1.IngressRuleValue{
 								HTTP: &networkingv1.HTTPIngressRuleValue{
 									Paths: []networkingv1.HTTPIngressPath{
-										networkingv1.HTTPIngressPath{
+										{
 											Backend: networkingv1.IngressBackend{
 												Service: &networkingv1.IngressServiceBackend{
 													Name: "camigration-service",
@@ -957,10 +919,8 @@ var _ = PDescribe("migrating", func() {
 
 			Eventually(func() bool {
 				_, err := kclient.CoreV1().ConfigMaps(namespace).Get(context.TODO(), "orderer-migrationnode1-config", metav1.GetOptions{})
-				if err != nil {
-					return true
-				}
-				return false
+
+				return err != nil
 			}).Should(Equal(true))
 		})
 	})
@@ -974,7 +934,7 @@ func CreateServiceWithRetry(service *corev1.Service, retryNumber int) (int32, in
 		}
 		if strings.Contains(err.Error(), "provided port is already allocated") {
 			fmt.Fprintf(GinkgoWriter, "encountered port error: %s, trying again\n", err)
-			for i, _ := range service.Spec.Ports {
+			for i := range service.Spec.Ports {
 				service.Spec.Ports[i].NodePort = RandomNodePort()
 			}
 			CreateServiceWithRetry(service, retryNumber-1)
@@ -992,7 +952,7 @@ func CreatePeerServiceWithRetry(service *corev1.Service, retryNumber int) (int32
 		}
 		if strings.Contains(err.Error(), "provided port is already allocated") {
 			fmt.Fprintf(GinkgoWriter, "encountered port error: %s, trying again\n", err)
-			for i, _ := range service.Spec.Ports {
+			for i := range service.Spec.Ports {
 				service.Spec.Ports[i].NodePort = RandomNodePort()
 			}
 			CreatePeerServiceWithRetry(service, retryNumber-1)

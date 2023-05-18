@@ -79,7 +79,7 @@ func (e *HSMDaemonEnroller) PingCA(timeout time.Duration) error {
 
 // Enroll reaches out the CA to get back a signed certificate
 func (e *HSMDaemonEnroller) Enroll() (*config.Response, error) {
-	log.Info(fmt.Sprintf("Enrolling using HSM Daemon"))
+	log.Info("Enrolling using HSM Daemon")
 	// Deleting CA client config is an unfortunate requirement since the ca client
 	// config map was not properly deleted after a successfull reenrollment request.
 	// This is problematic when recreating a resource with same name, as it will

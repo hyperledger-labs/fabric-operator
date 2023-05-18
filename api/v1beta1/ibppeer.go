@@ -137,11 +137,8 @@ func (s *IBPPeer) IsHSMEnabled() bool {
 }
 
 func (s *IBPPeer) UsingCouchDB() bool {
-	if strings.ToLower(s.Spec.StateDb) == "couchdb" {
-		return true
-	}
 
-	return false
+	return strings.ToLower(s.Spec.StateDb) == "couchdb"
 }
 
 func (s *IBPPeer) GetPullSecrets() []corev1.LocalObjectReference {
@@ -252,19 +249,13 @@ func (s *IBPPeerSpec) HSMSet() bool {
 }
 
 func (s *IBPPeerSpec) DomainSet() bool {
-	if s.Domain != "" {
-		return true
-	}
 
-	return false
+	return s.Domain != ""
 }
 
 func (s *IBPPeerSpec) UsingLevelDB() bool {
-	if strings.ToLower(s.StateDb) == "leveldb" {
-		return true
-	}
 
-	return false
+	return strings.ToLower(s.StateDb) == "leveldb"
 }
 
 func (s *IBPPeerSpec) GetNumSecondsWarningPeriod() int64 {
@@ -277,10 +268,8 @@ func (s *IBPPeerSpec) GetNumSecondsWarningPeriod() int64 {
 }
 
 func (p *IBPPeerStatus) HasType() bool {
-	if p.CRStatus.Type != "" {
-		return true
-	}
-	return false
+
+	return p.CRStatus.Type != ""
 }
 
 func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch string) {

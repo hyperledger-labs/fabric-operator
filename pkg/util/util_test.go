@@ -369,7 +369,7 @@ var _ = Describe("Util", func() {
 
 		BeforeEach(func() {
 			pullSecrets = []corev1.LocalObjectReference{
-				corev1.LocalObjectReference{
+				{
 					Name: "pullsecret1",
 				},
 			}

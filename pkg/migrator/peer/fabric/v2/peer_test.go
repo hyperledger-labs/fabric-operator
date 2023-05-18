@@ -109,7 +109,7 @@ var _ = Describe("V2 peer migrator", func() {
 
 		configMapManager.GetCoreConfigReturns(&corev1.ConfigMap{
 			BinaryData: map[string][]byte{
-				"core.yaml": []byte{},
+				"core.yaml": {},
 			},
 		}, nil)
 
@@ -163,10 +163,10 @@ var _ = Describe("V2 peer migrator", func() {
 				if strings.Contains(opts[0].(*k8sclient.ListOptions).LabelSelector.String(), "job-name") {
 					pods := obj.(*corev1.PodList)
 					pods.Items = []corev1.Pod{
-						corev1.Pod{
+						{
 							Status: corev1.PodStatus{
 								ContainerStatuses: []corev1.ContainerStatus{
-									corev1.ContainerStatus{
+									{
 										State: corev1.ContainerState{
 											Terminated: &corev1.ContainerStateTerminated{},
 										},
@@ -319,7 +319,7 @@ var _ = Describe("V2 peer migrator", func() {
 				switch obj.(type) {
 				case *current.IBPConsoleList:
 					list := obj.(*current.IBPConsoleList)
-					list.Items = []current.IBPConsole{current.IBPConsole{}}
+					list.Items = []current.IBPConsole{{}}
 				}
 
 				return nil

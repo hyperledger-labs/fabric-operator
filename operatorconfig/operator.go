@@ -59,7 +59,7 @@ func LoadFromConfigMap(nn k8sclient.ObjectKey, key string, client Client, operat
 func load(config []byte, operator *Operator) error {
 	// If no config bytes passed, we can assume that a config file (config map) for operator
 	// does not exist and we can skip the unmarshal step.
-	if config != nil && len(config) > 0 {
+	if len(config) > 0 {
 		if err := yaml.Unmarshal(config, operator); err != nil {
 			return err
 		}

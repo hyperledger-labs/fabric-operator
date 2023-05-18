@@ -351,7 +351,7 @@ func (o *Override) CreateCouchdbContainer() container.Container {
 		Image:           "",
 		ImagePullPolicy: "Always",
 		Env: []corev1.EnvVar{
-			corev1.EnvVar{
+			{
 				Name:  "LICENSE",
 				Value: "accept",
 			},
@@ -368,7 +368,7 @@ func (o *Override) CreateCouchdbContainer() container.Container {
 			},
 		},
 		Ports: []corev1.ContainerPort{
-			corev1.ContainerPort{
+			{
 				Name:          "http",
 				ContainerPort: 5984,
 			},

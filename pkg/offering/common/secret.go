@@ -130,7 +130,7 @@ func getCACertBytes(prefix common.SecretType, client k8sclient.Client, instance 
 	}
 
 	if secret.Data == nil || len(secret.Data) == 0 {
-		return nil, errors.New(fmt.Sprintf("%s cacert secret is blank", prefix))
+		return nil, fmt.Errorf("%s cacert secret is blank", prefix)
 	}
 
 	var certs [][]byte

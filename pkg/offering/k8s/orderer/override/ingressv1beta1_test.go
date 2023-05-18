@@ -68,7 +68,7 @@ var _ = Describe("K8s Orderer Ingress Overrides", func() {
 					IngressRuleValue: networkingv1beta1.IngressRuleValue{
 						HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 							Paths: []networkingv1beta1.HTTPIngressPath{
-								networkingv1beta1.HTTPIngressPath{
+								{
 									Backend: networkingv1beta1.IngressBackend{
 										ServiceName: instance.GetName(),
 										ServicePort: intstr.FromString("orderer-grpc"),
@@ -84,7 +84,7 @@ var _ = Describe("K8s Orderer Ingress Overrides", func() {
 					IngressRuleValue: networkingv1beta1.IngressRuleValue{
 						HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 							Paths: []networkingv1beta1.HTTPIngressPath{
-								networkingv1beta1.HTTPIngressPath{
+								{
 									Backend: networkingv1beta1.IngressBackend{
 										ServiceName: instance.GetName(),
 										ServicePort: intstr.FromString("operations"),
@@ -100,7 +100,7 @@ var _ = Describe("K8s Orderer Ingress Overrides", func() {
 					IngressRuleValue: networkingv1beta1.IngressRuleValue{
 						HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 							Paths: []networkingv1beta1.HTTPIngressPath{
-								networkingv1beta1.HTTPIngressPath{
+								{
 									Backend: networkingv1beta1.IngressBackend{
 										ServiceName: instance.GetName(),
 										ServicePort: intstr.FromString("grpcweb"),

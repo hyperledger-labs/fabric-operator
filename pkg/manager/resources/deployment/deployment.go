@@ -126,7 +126,7 @@ func (d *Deployment) SetServiceAccountName(name string) {
 }
 
 func (d *Deployment) SetImagePullSecrets(pullSecrets []string) {
-	if pullSecrets != nil && len(pullSecrets) > 0 {
+	if len(pullSecrets) > 0 {
 		d.Deployment.Spec.Template.Spec.ImagePullSecrets = []corev1.LocalObjectReference{}
 
 		for _, pullSecret := range pullSecrets {

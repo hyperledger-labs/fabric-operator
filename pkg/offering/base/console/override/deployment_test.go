@@ -160,7 +160,7 @@ var _ = Describe("Base Console Deployment Overrides", func() {
 
 				By("image pull secret", func() {
 					Expect(deployment.Spec.Template.Spec.ImagePullSecrets).To(Equal([]corev1.LocalObjectReference{
-						corev1.LocalObjectReference{
+						{
 							Name: instanceWithTags.Spec.ImagePullSecrets[0],
 						},
 					}))

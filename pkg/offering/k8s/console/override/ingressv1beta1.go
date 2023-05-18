@@ -58,12 +58,12 @@ func (o *Override) CommonIngressv1beta1(instance *current.IBPConsole, ingress *n
 
 	ingress.Spec = networkingv1beta1.IngressSpec{
 		Rules: []networkingv1beta1.IngressRule{
-			networkingv1beta1.IngressRule{
+			{
 				Host: consolehost,
 				IngressRuleValue: networkingv1beta1.IngressRuleValue{
 					HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 						Paths: []networkingv1beta1.HTTPIngressPath{
-							networkingv1beta1.HTTPIngressPath{
+							{
 								Backend: networkingv1beta1.IngressBackend{
 									ServiceName: instance.GetName(),
 									ServicePort: intstr.FromString("optools"),
@@ -76,7 +76,7 @@ func (o *Override) CommonIngressv1beta1(instance *current.IBPConsole, ingress *n
 			},
 		},
 		TLS: []networkingv1beta1.IngressTLS{
-			networkingv1beta1.IngressTLS{
+			{
 				Hosts: []string{consolehost},
 			},
 		},

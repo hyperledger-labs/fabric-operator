@@ -74,7 +74,7 @@ func (c *Config) OperationsMountPath() {
 	c.ServerConfig.Operations.TLS.KeyFile = filepath.Join(c.MountPath, "operations-key.pem")
 
 	certFiles := c.ServerConfig.Operations.TLS.ClientCACertFiles
-	for index, _ := range certFiles {
+	for index := range certFiles {
 		certFiles[index] = filepath.Join(c.MountPath, fmt.Sprintf("operations-certfile%d.pem", index))
 	}
 	c.ServerConfig.Operations.TLS.ClientCACertFiles = certFiles

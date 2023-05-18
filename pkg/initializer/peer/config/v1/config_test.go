@@ -87,7 +87,7 @@ var _ = Describe("Peer configuration", func() {
 					},
 					DeliveryClient: v1.DeliveryClient{
 						AddressOverrides: []v1.AddressOverride{
-							v1.AddressOverride{
+							{
 								From:        "old",
 								To:          "new",
 								CACertsFile: certB64,
@@ -449,10 +449,10 @@ var _ = Describe("Peer configuration", func() {
 		// Handlers
 		By("setting Handlers.AuthFilters", func() {
 			Expect(peerConfig.Handlers.AuthFilters).To(Equal([]v1.HandlerConfig{
-				v1.HandlerConfig{
+				{
 					Name: "DefaultAuth",
 				},
-				v1.HandlerConfig{
+				{
 					Name: "ExpirationCheck",
 				},
 			}))
@@ -460,7 +460,7 @@ var _ = Describe("Peer configuration", func() {
 
 		By("setting Handlers.Decorators", func() {
 			Expect(peerConfig.Handlers.Decorators).To(Equal([]v1.HandlerConfig{
-				v1.HandlerConfig{
+				{
 					Name: "DefaultDecorator",
 				},
 			}))
@@ -535,7 +535,7 @@ var _ = Describe("Peer configuration", func() {
 			Expect(core.Peer.ID).To(Equal("jdoe"))
 
 			addressOverrides := []v1.AddressOverride{
-				v1.AddressOverride{
+				{
 					From:        "address_old",
 					To:          "address_new",
 					CACertsFile: certB64,

@@ -656,11 +656,11 @@ func (r *ReconcileIBPCA) UpdateFunc(e event.UpdateEvent) bool {
 			}
 		}
 
-		if newCA.Spec.Action.Restart == true {
+		if newCA.Spec.Action.Restart {
 			update.restartNeeded = true
 		}
 
-		if newCA.Spec.Action.Renew.TLSCert == true {
+		if newCA.Spec.Action.Renew.TLSCert {
 			update.renewTLSCert = true
 		}
 

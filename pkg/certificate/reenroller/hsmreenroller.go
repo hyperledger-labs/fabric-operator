@@ -368,7 +368,7 @@ func (r *HSMReenroller) initHSMJob(instance Instance, hsmConfig *config.HSMConfi
 					ImagePullSecrets:   util.AppendImagePullSecretIfMissing(instance.GetPullSecrets(), hsmConfig.BuildPullSecret()),
 					RestartPolicy:      corev1.RestartPolicyNever,
 					InitContainers: []corev1.Container{
-						corev1.Container{
+						{
 							Name:            "hsm-client",
 							Image:           hsmConfig.Library.Image,
 							ImagePullPolicy: corev1.PullAlways,
@@ -382,7 +382,7 @@ func (r *HSMReenroller) initHSMJob(instance Instance, hsmConfig *config.HSMConfi
 								RunAsNonRoot: &f,
 							},
 							VolumeMounts: []corev1.VolumeMount{
-								corev1.VolumeMount{
+								{
 									Name:      "shared",
 									MountPath: mountPath,
 								},
@@ -402,7 +402,7 @@ func (r *HSMReenroller) initHSMJob(instance Instance, hsmConfig *config.HSMConfi
 						},
 					},
 					Containers: []corev1.Container{
-						corev1.Container{
+						{
 							Name:            "init",
 							Image:           instance.EnrollerImage(),
 							ImagePullPolicy: corev1.PullAlways,
@@ -416,22 +416,22 @@ func (r *HSMReenroller) initHSMJob(instance Instance, hsmConfig *config.HSMConfi
 								fmt.Sprintf("/usr/local/bin/enroller node reenroll %s %s %s %s %s %s %s %s %s %t", r.HomeDir, "/tmp/fabric-ca-client-config.yaml", r.Config.CAHost, r.Config.CAPort, r.Config.CAName, instance.GetName(), instance.GetNamespace(), r.Config.EnrollID, fmt.Sprintf("%s/cert.pem", r.HomeDir), r.NewKey),
 							},
 							VolumeMounts: []corev1.VolumeMount{
-								corev1.VolumeMount{
+								{
 									Name:      "tlscertfile",
 									MountPath: fmt.Sprintf("%s/tlsCert.pem", r.HomeDir),
 									SubPath:   "tlsCert.pem",
 								},
-								corev1.VolumeMount{
+								{
 									Name:      "certfile",
 									MountPath: fmt.Sprintf("%s/cert.pem", r.HomeDir),
 									SubPath:   "cert.pem",
 								},
-								corev1.VolumeMount{
+								{
 									Name:      "clientconfig",
 									MountPath: fmt.Sprintf("/tmp/%s", "fabric-ca-client-config.yaml"),
 									SubPath:   "fabric-ca-client-config.yaml",
 								},
-								corev1.VolumeMount{
+								{
 									Name:      "shared",
 									MountPath: "/hsm/lib",
 									SubPath:   "hsm",
@@ -440,7 +440,7 @@ func (r *HSMReenroller) initHSMJob(instance Instance, hsmConfig *config.HSMConfi
 						},
 					},
 					Volumes: []corev1.Volume{
-						corev1.Volume{
+						{
 							Name: "shared",
 							VolumeSource: corev1.VolumeSource{
 								EmptyDir: &corev1.EmptyDirVolumeSource{
@@ -448,7 +448,7 @@ func (r *HSMReenroller) initHSMJob(instance Instance, hsmConfig *config.HSMConfi
 								},
 							},
 						},
-						corev1.Volume{
+						{
 							Name: "tlscertfile",
 							VolumeSource: corev1.VolumeSource{
 								Secret: &corev1.SecretVolumeSource{
@@ -456,7 +456,7 @@ func (r *HSMReenroller) initHSMJob(instance Instance, hsmConfig *config.HSMConfi
 								},
 							},
 						},
-						corev1.Volume{
+						{
 							Name: "certfile",
 							VolumeSource: corev1.VolumeSource{
 								Secret: &corev1.SecretVolumeSource{
@@ -464,7 +464,7 @@ func (r *HSMReenroller) initHSMJob(instance Instance, hsmConfig *config.HSMConfi
 								},
 							},
 						},
-						corev1.Volume{
+						{
 							Name: "clientconfig",
 							VolumeSource: corev1.VolumeSource{
 								ConfigMap: &corev1.ConfigMapVolumeSource{

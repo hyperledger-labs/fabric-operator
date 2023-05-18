@@ -90,11 +90,8 @@ func (ca *CA) HealthCheck(url string, cert []byte) bool {
 	}
 
 	_, err := client.Get(url)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (ca *CA) ConnectionProfile() (*current.CAConnectionProfile, error) {

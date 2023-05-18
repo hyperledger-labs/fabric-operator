@@ -124,7 +124,7 @@ func VerifyIngressCommonOverridesv1beta1(instance *current.IBPPeer, ingress *net
 			IngressRuleValue: networkingv1beta1.IngressRuleValue{
 				HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 					Paths: []networkingv1beta1.HTTPIngressPath{
-						networkingv1beta1.HTTPIngressPath{
+						{
 							Backend: networkingv1beta1.IngressBackend{
 								ServiceName: instance.GetName(),
 								ServicePort: intstr.FromString("peer-api"),
@@ -140,7 +140,7 @@ func VerifyIngressCommonOverridesv1beta1(instance *current.IBPPeer, ingress *net
 			IngressRuleValue: networkingv1beta1.IngressRuleValue{
 				HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 					Paths: []networkingv1beta1.HTTPIngressPath{
-						networkingv1beta1.HTTPIngressPath{
+						{
 							Backend: networkingv1beta1.IngressBackend{
 								ServiceName: instance.GetName(),
 								ServicePort: intstr.FromString("operations"),
@@ -156,7 +156,7 @@ func VerifyIngressCommonOverridesv1beta1(instance *current.IBPPeer, ingress *net
 			IngressRuleValue: networkingv1beta1.IngressRuleValue{
 				HTTP: &networkingv1beta1.HTTPIngressRuleValue{
 					Paths: []networkingv1beta1.HTTPIngressPath{
-						networkingv1beta1.HTTPIngressPath{
+						{
 							Backend: networkingv1beta1.IngressBackend{
 								ServiceName: instance.GetName(),
 								ServicePort: intstr.FromString("grpcweb"),

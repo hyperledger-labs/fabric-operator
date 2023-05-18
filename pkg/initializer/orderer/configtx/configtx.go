@@ -32,7 +32,7 @@ import (
 func GetGenesisDefaults() *TopLevel {
 	return &TopLevel{
 		Profiles: map[string]*Profile{
-			"Initial": &Profile{
+			"Initial": {
 				Orderer: &Orderer{
 					Organizations: []*Organization{},
 					OrdererType:   "etcdraft",
@@ -57,19 +57,19 @@ func GetGenesisDefaults() *TopLevel {
 						"V1_4_2": true,
 					},
 					Policies: map[string]*Policy{
-						"Readers": &Policy{
+						"Readers": {
 							Type: "ImplicitMeta",
 							Rule: "ANY Readers",
 						},
-						"Writers": &Policy{
+						"Writers": {
 							Type: "ImplicitMeta",
 							Rule: "ANY Writers",
 						},
-						"Admins": &Policy{
+						"Admins": {
 							Type: "ImplicitMeta",
 							Rule: "ANY Admins",
 						},
-						"BlockValidation": &Policy{
+						"BlockValidation": {
 							Type: "ImplicitMeta",
 							Rule: "ANY Writers",
 						},
@@ -77,21 +77,21 @@ func GetGenesisDefaults() *TopLevel {
 				},
 
 				Consortiums: map[string]*Consortium{
-					"SampleConsortium": &Consortium{},
+					"SampleConsortium": {},
 				},
 				Capabilities: map[string]bool{
 					"V1_4_3": true,
 				},
 				Policies: map[string]*Policy{
-					"Readers": &Policy{
+					"Readers": {
 						Type: "ImplicitMeta",
 						Rule: "ANY Readers",
 					},
-					"Writers": &Policy{
+					"Writers": {
 						Type: "ImplicitMeta",
 						Rule: "ANY Writers",
 					},
-					"Admins": &Policy{
+					"Admins": {
 						Type: "ImplicitMeta",
 						Rule: "MAJORITY Admins",
 					},

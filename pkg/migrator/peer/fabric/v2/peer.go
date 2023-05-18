@@ -136,7 +136,7 @@ func (m *Migrate) UpdateConfig(instance metav1.Object, version string) error {
 	core.VM.Endpoint = ""
 
 	core.Chaincode.ExternalBuilders = []v2peer.ExternalBuilder{
-		v2peer.ExternalBuilder{
+		{
 			Name: "ibp-builder",
 			Path: "/usr/local",
 			EnvironmentWhiteList: []string{

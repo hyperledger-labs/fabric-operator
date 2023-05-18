@@ -124,11 +124,8 @@ func (m *Manager) Exists(instance v1.Object) bool {
 
 	ingress := &networkingv1.Ingress{}
 	err := m.Client.Get(context.TODO(), types.NamespacedName{Name: name, Namespace: instance.GetNamespace()}, ingress)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (m *Manager) Delete(instance v1.Object) error {

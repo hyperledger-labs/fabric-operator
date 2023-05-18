@@ -62,12 +62,12 @@ func (o *Override) CommonIngress(instance *current.IBPOrderer, ingress *networki
 	pathType := networkingv1.PathTypeImplementationSpecific
 	ingress.Spec = networkingv1.IngressSpec{
 		Rules: []networkingv1.IngressRule{
-			networkingv1.IngressRule{
+			{
 				Host: apihost,
 				IngressRuleValue: networkingv1.IngressRuleValue{
 					HTTP: &networkingv1.HTTPIngressRuleValue{
 						Paths: []networkingv1.HTTPIngressPath{
-							networkingv1.HTTPIngressPath{
+							{
 								Backend: networkingv1.IngressBackend{
 									Service: &networkingv1.IngressServiceBackend{
 										Name: instance.GetName(),
@@ -83,12 +83,12 @@ func (o *Override) CommonIngress(instance *current.IBPOrderer, ingress *networki
 					},
 				},
 			},
-			networkingv1.IngressRule{
+			{
 				Host: operationshost,
 				IngressRuleValue: networkingv1.IngressRuleValue{
 					HTTP: &networkingv1.HTTPIngressRuleValue{
 						Paths: []networkingv1.HTTPIngressPath{
-							networkingv1.HTTPIngressPath{
+							{
 								Backend: networkingv1.IngressBackend{
 									Service: &networkingv1.IngressServiceBackend{
 										Name: instance.GetName(),
@@ -104,12 +104,12 @@ func (o *Override) CommonIngress(instance *current.IBPOrderer, ingress *networki
 					},
 				},
 			},
-			networkingv1.IngressRule{
+			{
 				Host: grpcwebhost,
 				IngressRuleValue: networkingv1.IngressRuleValue{
 					HTTP: &networkingv1.HTTPIngressRuleValue{
 						Paths: []networkingv1.HTTPIngressPath{
-							networkingv1.HTTPIngressPath{
+							{
 								Backend: networkingv1.IngressBackend{
 									Service: &networkingv1.IngressServiceBackend{
 										Name: instance.GetName(),
@@ -127,13 +127,13 @@ func (o *Override) CommonIngress(instance *current.IBPOrderer, ingress *networki
 			},
 		},
 		TLS: []networkingv1.IngressTLS{
-			networkingv1.IngressTLS{
+			{
 				Hosts: []string{apihost},
 			},
-			networkingv1.IngressTLS{
+			{
 				Hosts: []string{operationshost},
 			},
-			networkingv1.IngressTLS{
+			{
 				Hosts: []string{grpcwebhost},
 			},
 		},
@@ -142,12 +142,12 @@ func (o *Override) CommonIngress(instance *current.IBPOrderer, ingress *networki
 	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 		adminhost := instance.Namespace + "-" + instance.Name + "-admin" + "." + instance.Spec.Domain
 		adminIngressRule := []networkingv1.IngressRule{
-			networkingv1.IngressRule{
+			{
 				Host: adminhost,
 				IngressRuleValue: networkingv1.IngressRuleValue{
 					HTTP: &networkingv1.HTTPIngressRuleValue{
 						Paths: []networkingv1.HTTPIngressPath{
-							networkingv1.HTTPIngressPath{
+							{
 								Backend: networkingv1.IngressBackend{
 									Service: &networkingv1.IngressServiceBackend{
 										Name: instance.GetName(),
@@ -166,7 +166,7 @@ func (o *Override) CommonIngress(instance *current.IBPOrderer, ingress *networki
 		}
 
 		admintls := []networkingv1.IngressTLS{
-			networkingv1.IngressTLS{
+			{
 				Hosts: []string{adminhost},
 			},
 		}

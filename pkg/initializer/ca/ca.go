@@ -241,11 +241,8 @@ func (ca *CA) IsPostgresReachable(db lib.CAConfigDB) bool {
 	defer cancel()
 
 	err = sqldb.PingContext(ctx)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 // ViperUnmarshal as this is what fabric-ca uses when it reads it's configuration
@@ -421,10 +418,8 @@ func (ca *CA) IsBeingUpdated() {
 }
 
 func (ca *CA) IsHSMEnabled() bool {
-	if ca.Config.UsingPKCS11() {
-		return true
-	}
-	return false
+
+	return ca.Config.UsingPKCS11()
 }
 
 func (ca *CA) HealthCheck(parentURL, certPath string) error {

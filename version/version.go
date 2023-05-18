@@ -93,11 +93,7 @@ func GetMajorReleaseVersion(version string) string {
 }
 
 func stripVersionPrefix(version string) string {
-	version = strings.ToLower(version)
-	if strings.HasPrefix(version, "v") {
-		version = strings.TrimPrefix(version, "v")
-	}
-	return version
+	return strings.TrimPrefix(strings.ToLower(version), "v")
 }
 
 func newVersion(version string) *Version {

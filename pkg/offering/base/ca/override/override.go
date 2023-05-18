@@ -83,10 +83,10 @@ func (o *Override) GetNodeAffinity(instance *current.IBPCA) *corev1.NodeAffinity
 	region := instance.Spec.Region
 
 	nodeSelectorTerms := []corev1.NodeSelectorTerm{
-		corev1.NodeSelectorTerm{
+		{
 			MatchExpressions: []corev1.NodeSelectorRequirement{},
 		},
-		corev1.NodeSelectorTerm{
+		{
 			MatchExpressions: []corev1.NodeSelectorRequirement{},
 		},
 	}
@@ -111,12 +111,12 @@ func (o *Override) GetNodeAffinity(instance *current.IBPCA) *corev1.NodeAffinity
 func (o *Override) GetPodAntiAffinity(instance *current.IBPCA) *corev1.PodAntiAffinity {
 	antiaffinity := &corev1.PodAntiAffinity{
 		PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{
-			corev1.WeightedPodAffinityTerm{
+			{
 				Weight: 100,
 				PodAffinityTerm: corev1.PodAffinityTerm{
 					LabelSelector: &metav1.LabelSelector{
 						MatchExpressions: []metav1.LabelSelectorRequirement{
-							metav1.LabelSelectorRequirement{
+							{
 								Key:      "app",
 								Operator: metav1.LabelSelectorOpIn,
 								Values:   []string{instance.GetName()},
@@ -126,12 +126,12 @@ func (o *Override) GetPodAntiAffinity(instance *current.IBPCA) *corev1.PodAntiAf
 					TopologyKey: "topology.kubernetes.io/zone",
 				},
 			},
-			corev1.WeightedPodAffinityTerm{
+			{
 				Weight: 100,
 				PodAffinityTerm: corev1.PodAffinityTerm{
 					LabelSelector: &metav1.LabelSelector{
 						MatchExpressions: []metav1.LabelSelectorRequirement{
-							metav1.LabelSelectorRequirement{
+							{
 								Key:      "app",
 								Operator: metav1.LabelSelectorOpIn,
 								Values:   []string{instance.GetName()},
@@ -150,7 +150,7 @@ func (o *Override) GetPodAntiAffinity(instance *current.IBPCA) *corev1.PodAntiAf
 			PodAffinityTerm: corev1.PodAffinityTerm{
 				LabelSelector: &metav1.LabelSelector{
 					MatchExpressions: []metav1.LabelSelectorRequirement{
-						metav1.LabelSelectorRequirement{
+						{
 							Key:      "app",
 							Operator: metav1.LabelSelectorOpIn,
 							Values:   []string{instance.GetName()},

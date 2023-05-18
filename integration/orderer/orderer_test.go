@@ -188,10 +188,8 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 					for _, node := range orderer1nodes {
 						Eventually(func() bool {
 							_, err := kclient.CoreV1().ConfigMaps(namespace).Get(context.TODO(), node.Name+"-spec", metav1.GetOptions{})
-							if err != nil {
-								return false
-							}
-							return true
+
+							return err == nil
 						}).Should(Equal(true))
 					}
 				})
@@ -364,11 +362,7 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 								ordererConfig, err := config.ReadOrdererFromBytes(configBytes)
 								Expect(err).NotTo(HaveOccurred())
 
-								if ordererConfig.FileLedger.Location == "/temp" {
-									return true
-								}
-
-								return false
+								return ordererConfig.FileLedger.Location == "/temp"
 							}).Should(Equal(true))
 						})
 					}
@@ -499,10 +493,8 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 					for _, node := range orderer5nodes {
 						Eventually(func() bool {
 							_, err := kclient.CoreV1().ConfigMaps(namespace).Get(context.TODO(), node.Name+"-spec", metav1.GetOptions{})
-							if err != nil {
-								return false
-							}
-							return true
+
+							return err == nil
 						}).Should(Equal(true))
 					}
 				})
@@ -819,11 +811,8 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 						}
 
 						newPodName := pods[0].Name
-						if newPodName == oldPodName {
-							return true
-						}
 
-						return false
+						return newPodName == oldPodName
 					}).Should(Equal(true))
 				})
 			})
@@ -868,11 +857,8 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 						}
 
 						newPodName := pods[0].Name
-						if newPodName == oldPodName {
-							return false
-						}
 
-						return true
+						return newPodName != oldPodName
 					}).Should(Equal(true))
 				})
 			})
@@ -925,7 +911,7 @@ func GetOrderer() (*Orderer, []Orderer) {
 				OrdererInitTag:   integration.InitTag,
 			},
 			ClusterSecret: []*current.SecretSpec{
-				&current.SecretSpec{
+				{
 					MSP: testMSPSpec,
 				},
 			},
@@ -947,7 +933,7 @@ func GetOrderer() (*Orderer, []Orderer) {
 	cr.Name = name
 
 	nodes := []Orderer{
-		Orderer{
+		{
 			Name:     name + "node1",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1001,13 +987,13 @@ func GetOrderer2() (*Orderer, []Orderer) {
 				OrdererInitTag:   integration.InitTag,
 			},
 			ClusterSecret: []*current.SecretSpec{
-				&current.SecretSpec{
+				{
 					MSP: testMSPSpec,
 				},
-				&current.SecretSpec{
+				{
 					MSP: testMSPSpec,
 				},
-				&current.SecretSpec{
+				{
 					MSP: testMSPSpec,
 				},
 			},
@@ -1030,7 +1016,7 @@ func GetOrderer2() (*Orderer, []Orderer) {
 	cr.Name = name
 
 	nodes := []Orderer{
-		Orderer{
+		{
 			Name:     name + "node1",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1040,7 +1026,7 @@ func GetOrderer2() (*Orderer, []Orderer) {
 				Client:    kclient,
 			},
 		},
-		Orderer{
+		{
 			Name:     name + "node2",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1050,7 +1036,7 @@ func GetOrderer2() (*Orderer, []Orderer) {
 				Client:    kclient,
 			},
 		},
-		Orderer{
+		{
 			Name:     name + "node3",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1109,11 +1095,11 @@ func GetOrderer3() (*Orderer, []Orderer) {
 				MSP: testMSPSpec,
 			},
 			ClusterLocation: []current.IBPOrdererClusterLocation{
-				current.IBPOrdererClusterLocation{
+				{
 					Zone:   "dal1",
 					Region: "us-south1",
 				},
-				current.IBPOrdererClusterLocation{
+				{
 					Zone:   "dal2",
 					Region: "us-south2",
 				},
@@ -1125,7 +1111,7 @@ func GetOrderer3() (*Orderer, []Orderer) {
 	cr.Name = name
 
 	nodes := []Orderer{
-		Orderer{
+		{
 			Name:     name + "node1",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1179,13 +1165,13 @@ func GetOrderer4() (*Orderer, []Orderer) {
 				OrdererInitTag:   integration.InitTag,
 			},
 			ClusterSecret: []*current.SecretSpec{
-				&current.SecretSpec{
+				{
 					MSP: testMSPSpec,
 				},
-				&current.SecretSpec{
+				{
 					MSP: testMSPSpec,
 				},
-				&current.SecretSpec{
+				{
 					MSP: testMSPSpec,
 				},
 			},
@@ -1208,7 +1194,7 @@ func GetOrderer4() (*Orderer, []Orderer) {
 	cr.Name = name
 
 	nodes := []Orderer{
-		Orderer{
+		{
 			Name:     name + "node1",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1218,7 +1204,7 @@ func GetOrderer4() (*Orderer, []Orderer) {
 				Client:    kclient,
 			},
 		},
-		Orderer{
+		{
 			Name:     name + "node2",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1228,7 +1214,7 @@ func GetOrderer4() (*Orderer, []Orderer) {
 				Client:    kclient,
 			},
 		},
-		Orderer{
+		{
 			Name:     name + "node3",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1284,7 +1270,7 @@ func GetOrderer5() (*Orderer, []Orderer) {
 				OrdererInitTag:   integration.InitTag,
 			},
 			ClusterSecret: []*current.SecretSpec{
-				&current.SecretSpec{
+				{
 					MSP: testMSPSpec,
 				},
 			},
@@ -1305,7 +1291,7 @@ func GetOrderer5() (*Orderer, []Orderer) {
 	cr.Name = name
 
 	nodes := []Orderer{
-		Orderer{
+		{
 			Name:     name + "node1",
 			CR:       cr.DeepCopy(),
 			NodeName: fmt.Sprintf("%s%s%d", name, baseorderer.NODE, 1),
@@ -1388,11 +1374,8 @@ func (orderer *Orderer) allInitSecretsExist() bool {
 
 	name = prefix + "-keystore"
 	_, err = kclient.CoreV1().Secrets(namespace).Get(context.TODO(), name, metav1.GetOptions{})
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (o *Orderer) DeploymentExists() bool {

@@ -99,10 +99,8 @@ var _ = Describe("Fabric peer migration", func() {
 
 					_, err = kclient.BatchV1().Jobs(namespace).
 						Get(context.TODO(), dbmigrationJobName, metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 

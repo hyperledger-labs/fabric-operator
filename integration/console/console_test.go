@@ -484,7 +484,7 @@ func GetConsole() *Console {
 			},
 			Versions: &current.Versions{
 				CA: map[string]current.VersionCA{
-					integration.FabricCAVersion: current.VersionCA{
+					integration.FabricCAVersion: {
 						Default: true,
 						Version: integration.FabricCAVersion,
 						Image: current.CAImages{
@@ -496,7 +496,7 @@ func GetConsole() *Console {
 					},
 				},
 				Peer: map[string]current.VersionPeer{
-					integration.FabricVersion: current.VersionPeer{
+					integration.FabricVersion: {
 						Default: true,
 						Version: integration.FabricVersion,
 						Image: current.PeerImages{
@@ -512,7 +512,7 @@ func GetConsole() *Console {
 					},
 				},
 				Orderer: map[string]current.VersionOrderer{
-					integration.FabricVersion: current.VersionOrderer{
+					integration.FabricVersion: {
 						Default: true,
 						Version: integration.FabricVersion,
 						Image: current.OrdererImages{
@@ -579,7 +579,7 @@ func GetConsole2() *Console {
 			},
 			Versions: &current.Versions{
 				CA: map[string]current.VersionCA{
-					integration.FabricCAVersion: current.VersionCA{
+					integration.FabricCAVersion: {
 						Default: true,
 						Version: integration.FabricCAVersion,
 						Image: current.CAImages{
@@ -591,7 +591,7 @@ func GetConsole2() *Console {
 					},
 				},
 				Peer: map[string]current.VersionPeer{
-					integration.FabricVersion: current.VersionPeer{
+					integration.FabricVersion: {
 						Default: true,
 						Version: integration.FabricVersion,
 						Image: current.PeerImages{
@@ -607,7 +607,7 @@ func GetConsole2() *Console {
 					},
 				},
 				Orderer: map[string]current.VersionOrderer{
-					integration.FabricVersion: current.VersionOrderer{
+					integration.FabricVersion: {
 						Default: true,
 						Version: integration.FabricVersion,
 						Image: current.OrdererImages{

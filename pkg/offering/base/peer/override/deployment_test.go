@@ -80,7 +80,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Type:    "hsm",
 					Version: "v1",
 					MountPaths: []config.MountPath{
-						config.MountPath{
+						{
 							Name:      "hsmcrypto",
 							Secret:    "hsmcrypto",
 							MountPath: "/hsm",
@@ -103,7 +103,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 								},
 							},
 						},
-						config.MountPath{
+						{
 							Name:      "hsmconfig",
 							Secret:    "hsmcrypto",
 							MountPath: "/etc/Chrystoki.conf",
@@ -653,9 +653,8 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 
 	Context("update", func() {
 		BeforeEach(func() {
-			var err error
 
-			err = overrider.CreateCouchDBContainers(instance, deployment)
+			err := overrider.CreateCouchDBContainers(instance, deployment)
 			Expect(err).NotTo(HaveOccurred())
 		})
 

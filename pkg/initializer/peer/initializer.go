@@ -152,9 +152,8 @@ func (i *Initializer) CoreConfigMap() *CoreConfigMap {
 }
 
 func (i *Initializer) Update(overrides CoreConfig, peer IBPPeer) (*Response, error) {
-	var err error
 
-	err = peer.OverrideConfig(overrides)
+	err := peer.OverrideConfig(overrides)
 	if err != nil {
 		return nil, err
 	}

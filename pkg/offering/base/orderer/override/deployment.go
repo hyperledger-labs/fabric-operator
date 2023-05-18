@@ -325,11 +325,8 @@ func (o *Override) AdminSecretExists(instance *current.IBPOrderer) bool {
 	err := o.Client.Get(context.TODO(), types.NamespacedName{
 		Name:      fmt.Sprintf("ecert-%s-admincerts", instance.Name),
 		Namespace: instance.Namespace}, secret)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func hsmInitContainer(instance *current.IBPOrderer, hsmConfig *config.HSMConfig) *container.Container {
@@ -354,7 +351,7 @@ func hsmInitContainer(instance *current.IBPOrderer, hsmConfig *config.HSMConfig)
 				RunAsNonRoot: &f,
 			},
 			VolumeMounts: []corev1.VolumeMount{
-				corev1.VolumeMount{
+				{
 					Name:      "shared",
 					MountPath: mountPath,
 				},

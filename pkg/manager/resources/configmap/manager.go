@@ -52,7 +52,7 @@ func (m *Manager) GetName(instance v1.Object) string {
 	if m.Name != "" {
 		return fmt.Sprintf("%s-%s", instance.GetName(), m.Name)
 	}
-	return fmt.Sprintf("%s", instance.GetName())
+	return instance.GetName()
 }
 
 func (m *Manager) Reconcile(instance v1.Object, update bool) error {
@@ -145,11 +145,8 @@ func (m *Manager) Get(instance v1.Object) (client.Object, error) {
 
 func (m *Manager) Exists(instance v1.Object) bool {
 	_, err := m.Get(instance)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (m *Manager) Delete(instance v1.Object) error {

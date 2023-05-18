@@ -133,7 +133,6 @@ func (o *Orderer) SetBCCSPLibrary(library string) {
 
 func (o *Orderer) SetDefaultKeyStore() {
 	// No-op
-	return
 }
 
 func (o *Orderer) GetBCCSPSection() *commonapi.BCCSP {

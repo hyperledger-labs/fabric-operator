@@ -147,11 +147,8 @@ var _ = Describe("orderer", func() {
 					}
 
 					newPodName := pods[0].Name
-					if newPodName != podName {
-						return true
-					}
 
-					return false
+					return newPodName != podName
 				}).Should(Equal(true))
 			})
 		})
@@ -203,11 +200,8 @@ var _ = Describe("orderer", func() {
 					}
 
 					newPodName := pods[0].Name
-					if newPodName == podName {
-						return false
-					}
 
-					return true
+					return newPodName != podName
 				}).Should(Equal(true))
 
 				Eventually(node1.PodIsRunning).Should((Equal(true)))
@@ -288,10 +282,8 @@ var _ = Describe("orderer", func() {
 					_, err := kclient.CoreV1().
 						Secrets(namespace).
 						Get(context.TODO(), fmt.Sprintf("ecert-%s-admincerts", node1.Name), metav1.GetOptions{})
-					if err != nil {
-						return false
-					}
-					return true
+
+					return err == nil
 				}).Should(Equal(true))
 			})
 
@@ -336,11 +328,8 @@ var _ = Describe("orderer", func() {
 					}
 
 					newPodName := pods[0].Name
-					if newPodName != podName {
-						return true
-					}
 
-					return false
+					return newPodName != podName
 				}).Should(Equal(true))
 			})
 		})
@@ -352,7 +341,7 @@ func GetOrderer(tlsCert, caHost string) *helper.Orderer {
 	Expect(err).NotTo(HaveOccurred())
 
 	nodes := []helper.Orderer{
-		helper.Orderer{
+		{
 			Name:      cr.Name + "node1",
 			Namespace: namespace,
 			CR:        cr.DeepCopy(),

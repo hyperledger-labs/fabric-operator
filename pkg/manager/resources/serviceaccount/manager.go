@@ -119,11 +119,8 @@ func (m *Manager) Get(instance v1.Object) (client.Object, error) {
 
 func (m *Manager) Exists(instance v1.Object) bool {
 	_, err := m.Get(instance)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (m *Manager) Delete(instance v1.Object) error {
@@ -168,5 +165,5 @@ func GetName(instanceName string, suffix ...string) string {
 			return fmt.Sprintf("%s-%s", instanceName, suffix[0])
 		}
 	}
-	return fmt.Sprintf("%s", instanceName)
+	return instanceName
 }

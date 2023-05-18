@@ -40,7 +40,7 @@ var _ = Describe("profile", func() {
 		Expect(err).NotTo(HaveOccurred())
 
 		mspConfig = map[string]*msp.MSPConfig{
-			"testorg3": &msp.MSPConfig{},
+			"testorg3": {},
 		}
 	})
 
@@ -85,15 +85,15 @@ var _ = Describe("profile", func() {
 
 		It("adds consortium", func() {
 			profile.Policies = map[string]*configtx.Policy{
-				channelconfig.AdminsPolicyKey: &configtx.Policy{
+				channelconfig.AdminsPolicyKey: {
 					Type: configtx.ImplicitMetaPolicyType,
 					Rule: "ALL bar",
 				},
-				channelconfig.ReadersPolicyKey: &configtx.Policy{
+				channelconfig.ReadersPolicyKey: {
 					Type: configtx.ImplicitMetaPolicyType,
 					Rule: "ALL bar",
 				},
-				channelconfig.WritersPolicyKey: &configtx.Policy{
+				channelconfig.WritersPolicyKey: {
 					Type: configtx.ImplicitMetaPolicyType,
 					Rule: "ALL bar",
 				},
@@ -125,15 +125,15 @@ var _ = Describe("profile", func() {
 
 		It("adds org to consortium", func() {
 			profile.Policies = map[string]*configtx.Policy{
-				channelconfig.AdminsPolicyKey: &configtx.Policy{
+				channelconfig.AdminsPolicyKey: {
 					Type: configtx.ImplicitMetaPolicyType,
 					Rule: "ALL bar",
 				},
-				channelconfig.ReadersPolicyKey: &configtx.Policy{
+				channelconfig.ReadersPolicyKey: {
 					Type: configtx.ImplicitMetaPolicyType,
 					Rule: "ALL bar",
 				},
-				channelconfig.WritersPolicyKey: &configtx.Policy{
+				channelconfig.WritersPolicyKey: {
 					Type: configtx.ImplicitMetaPolicyType,
 					Rule: "ALL bar",
 				},

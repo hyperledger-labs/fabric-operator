@@ -106,11 +106,11 @@ var _ = Describe("K8S Orderer Overrides", func() {
 					ClusterSize:       2,
 					NodeNumber:        &nodenum,
 					ClusterLocation: []current.IBPOrdererClusterLocation{
-						current.IBPOrdererClusterLocation{
+						{
 							Zone:   "dal1",
 							Region: "us-south1",
 						},
-						current.IBPOrdererClusterLocation{
+						{
 							Zone:   "dal2",
 							Region: "us-south2",
 						},

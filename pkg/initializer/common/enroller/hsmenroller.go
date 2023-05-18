@@ -344,7 +344,7 @@ func (e *HSMEnroller) initHSMJob(instance Instance, timeouts HSMEnrollJobTimeout
 					ImagePullSecrets:   util.AppendImagePullSecretIfMissing(instance.GetPullSecrets(), hsmConfig.BuildPullSecret()),
 					RestartPolicy:      corev1.RestartPolicyNever,
 					InitContainers: []corev1.Container{
-						corev1.Container{
+						{
 							Name:            "hsm-client",
 							Image:           hsmConfig.Library.Image,
 							ImagePullPolicy: corev1.PullAlways,
@@ -358,7 +358,7 @@ func (e *HSMEnroller) initHSMJob(instance Instance, timeouts HSMEnrollJobTimeout
 								RunAsNonRoot: &f,
 							},
 							VolumeMounts: []corev1.VolumeMount{
-								corev1.VolumeMount{
+								{
 									Name:      "shared",
 									MountPath: mountPath,
 								},
@@ -378,7 +378,7 @@ func (e *HSMEnroller) initHSMJob(instance Instance, timeouts HSMEnrollJobTimeout
 						},
 					},
 					Containers: []corev1.Container{
-						corev1.Container{
+						{
 							Name:            "init",
 							Image:           instance.EnrollerImage(),
 							ImagePullPolicy: corev1.PullAlways,
@@ -393,17 +393,17 @@ func (e *HSMEnroller) initHSMJob(instance Instance, timeouts HSMEnrollJobTimeout
 								fmt.Sprintf("/usr/local/bin/enroller node enroll %s %s %s %s %s %s %s %s %s", e.CAClient.GetHomeDir(), "/tmp/fabric-ca-client-config.yaml", req.CAHost, req.CAPort, req.CAName, instance.GetName(), instance.GetNamespace(), req.EnrollID, req.EnrollSecret),
 							},
 							VolumeMounts: []corev1.VolumeMount{
-								corev1.VolumeMount{
+								{
 									Name:      "tlscertfile",
 									MountPath: fmt.Sprintf("%s/tlsCert.pem", e.CAClient.GetHomeDir()),
 									SubPath:   "tlsCert.pem",
 								},
-								corev1.VolumeMount{
+								{
 									Name:      "clientconfig",
 									MountPath: fmt.Sprintf("/tmp/%s", "fabric-ca-client-config.yaml"),
 									SubPath:   "fabric-ca-client-config.yaml",
 								},
-								corev1.VolumeMount{
+								{
 									Name:      "shared",
 									MountPath: "/hsm/lib",
 									SubPath:   "hsm",
@@ -412,7 +412,7 @@ func (e *HSMEnroller) initHSMJob(instance Instance, timeouts HSMEnrollJobTimeout
 						},
 					},
 					Volumes: []corev1.Volume{
-						corev1.Volume{
+						{
 							Name: "shared",
 							VolumeSource: corev1.VolumeSource{
 								EmptyDir: &corev1.EmptyDirVolumeSource{
@@ -420,7 +420,7 @@ func (e *HSMEnroller) initHSMJob(instance Instance, timeouts HSMEnrollJobTimeout
 								},
 							},
 						},
-						corev1.Volume{
+						{
 							Name: "tlscertfile",
 							VolumeSource: corev1.VolumeSource{
 								Secret: &corev1.SecretVolumeSource{
@@ -428,7 +428,7 @@ func (e *HSMEnroller) initHSMJob(instance Instance, timeouts HSMEnrollJobTimeout
 								},
 							},
 						},
-						corev1.Volume{
+						{
 							Name: "clientconfig",
 							VolumeSource: corev1.VolumeSource{
 								ConfigMap: &corev1.ConfigMapVolumeSource{

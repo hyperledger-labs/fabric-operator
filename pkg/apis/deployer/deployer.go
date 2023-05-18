@@ -401,7 +401,7 @@ func (v *Versions) Override(requestedVersions *Versions, registryURL string, arc
 
 	if len(requestedVersions.CA) != 0 {
 		CAVersions := map[string]VersionCA{}
-		for key, _ := range requestedVersions.CA {
+		for key := range requestedVersions.CA {
 			var caConfig VersionCA
 			requestedCAVersion := requestedVersions.CA[key]
 			caConfig.Image.Override(&requestedCAVersion.Image, registryURL, arch)
@@ -414,7 +414,7 @@ func (v *Versions) Override(requestedVersions *Versions, registryURL string, arc
 
 	if len(requestedVersions.Peer) != 0 {
 		PeerVersions := map[string]VersionPeer{}
-		for key, _ := range requestedVersions.Peer {
+		for key := range requestedVersions.Peer {
 			var peerConfig VersionPeer
 			requestedPeerVersion := requestedVersions.Peer[key]
 			peerConfig.Image.Override(&requestedPeerVersion.Image, registryURL, arch)
@@ -427,7 +427,7 @@ func (v *Versions) Override(requestedVersions *Versions, registryURL string, arc
 
 	if len(requestedVersions.Orderer) != 0 {
 		OrdererVersions := map[string]VersionOrderer{}
-		for key, _ := range requestedVersions.Orderer {
+		for key := range requestedVersions.Orderer {
 			var ordererConfig VersionOrderer
 			requestedOrdererVersion := requestedVersions.Orderer[key]
 			ordererConfig.Image.Override(&requestedOrdererVersion.Image, registryURL, arch)

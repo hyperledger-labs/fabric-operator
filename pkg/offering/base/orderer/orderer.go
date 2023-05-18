@@ -183,9 +183,8 @@ func (o *Orderer) Initialize(instance *current.IBPOrderer, update Update) error 
 }
 
 func (o *Orderer) ReconcileManagers(instance *current.IBPOrderer, update Update, genesisBlock []byte) error {
-	var b64GenesisBlock string
 
-	b64GenesisBlock = util.BytesToBase64(genesisBlock)
+	b64GenesisBlock := util.BytesToBase64(genesisBlock)
 
 	for k := 0; k < instance.Spec.ClusterSize; k++ {
 		nodenumber := k + 1

@@ -39,9 +39,9 @@ type Client interface {
 	List(ctx context.Context, list client.ObjectList, opts ...client.ListOption) error
 }
 
-// 1. Only one existing instance (of the same type as 'instance') should have
-//    the name 'instance.GetName()'; if more than one is present, return error
-// 2. If any instance of a different type share the same name, return error
+//  1. Only one existing instance (of the same type as 'instance') should have
+//     the name 'instance.GetName()'; if more than one is present, return error
+//  2. If any instance of a different type share the same name, return error
 func ValidateCRName(k8sclient Client, name, namespace, kind string) error {
 	listOptions := &client.ListOptions{
 		Namespace: namespace,

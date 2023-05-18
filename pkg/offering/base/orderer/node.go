@@ -39,7 +39,7 @@ import (
 	v2ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v2"
 	v24ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v24"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/validator"
-	controllerclient "github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources"
 	resourcemanager "github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/manager"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/base/orderer/override"
@@ -629,11 +629,8 @@ func (n *Node) ConfigExists(instance *current.IBPOrderer) bool {
 
 	cm := &corev1.ConfigMap{}
 	err := n.Client.Get(context.TODO(), namespacedName, cm)
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func (n *Node) InitializeUpdateConfigOverride(instance *current.IBPOrderer, initOrderer *initializer.Orderer) error {
@@ -819,7 +816,7 @@ func (n *Node) GetLabels(instance v1.Object) map[string]string {
 	return map[string]string{
 		"app":                          instance.GetName(),
 		"creator":                      label,
-		"orderingservice":              fmt.Sprintf("%s", instance.GetName()),
+		"orderingservice":              instance.GetName(),
 		"app.kubernetes.io/name":       label,
 		"app.kubernetes.io/instance":   label + "orderer",
 		"app.kubernetes.io/managed-by": label + "-operator",
@@ -827,7 +824,7 @@ func (n *Node) GetLabels(instance v1.Object) map[string]string {
 }
 
 func (n *Node) Delete(instance *current.IBPOrderer) error {
-	log.Info(fmt.Sprintf("Deleting node '%s'", n.Name))
+	log.Info("Deleting node '%s'", n.Name)
 	err := n.ServiceManager.Delete(instance)
 	if err != nil {
 		return errors.Wrapf(err, "failed to delete service '%s'", n.ServiceManager.GetName(instance))

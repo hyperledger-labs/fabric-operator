@@ -424,7 +424,7 @@ func initHSMCAJob(instance *current.IBPCA, hsmConfig *config.HSMConfig, dbConfig
 					ImagePullSecrets:   util.AppendImagePullSecretIfMissing(instance.GetPullSecrets(), hsmConfig.BuildPullSecret()),
 					RestartPolicy:      corev1.RestartPolicyNever,
 					InitContainers: []corev1.Container{
-						corev1.Container{
+						{
 							Name:            "hsm-client",
 							Image:           hsmConfig.Library.Image,
 							ImagePullPolicy: corev1.PullAlways,
@@ -438,7 +438,7 @@ func initHSMCAJob(instance *current.IBPCA, hsmConfig *config.HSMConfig, dbConfig
 								RunAsNonRoot: &f,
 							},
 							VolumeMounts: []corev1.VolumeMount{
-								corev1.VolumeMount{
+								{
 									Name:      "shared",
 									MountPath: mountPath,
 								},
@@ -458,7 +458,7 @@ func initHSMCAJob(instance *current.IBPCA, hsmConfig *config.HSMConfig, dbConfig
 						},
 					},
 					Containers: []corev1.Container{
-						corev1.Container{
+						{
 							Name: "init",
 							Image: image.Format(
 								instance.Spec.Images.EnrollerImage,
@@ -476,12 +476,12 @@ func initHSMCAJob(instance *current.IBPCA, hsmConfig *config.HSMConfig, dbConfig
 							},
 							Env: hsmConfig.GetEnvs(),
 							VolumeMounts: []corev1.VolumeMount{
-								corev1.VolumeMount{
+								{
 									Name:      "shared",
 									MountPath: "/hsm/lib",
 									SubPath:   "hsm",
 								},
-								corev1.VolumeMount{
+								{
 									Name:      "caconfig",
 									MountPath: fmt.Sprintf("/tmp/data/%s/%s/fabric-ca-server-config.yaml", instance.GetName(), typ),
 									SubPath:   "fabric-ca-server-config.yaml",
@@ -490,7 +490,7 @@ func initHSMCAJob(instance *current.IBPCA, hsmConfig *config.HSMConfig, dbConfig
 						},
 					},
 					Volumes: []corev1.Volume{
-						corev1.Volume{
+						{
 							Name: "shared",
 							VolumeSource: corev1.VolumeSource{
 								EmptyDir: &corev1.EmptyDirVolumeSource{
@@ -498,7 +498,7 @@ func initHSMCAJob(instance *current.IBPCA, hsmConfig *config.HSMConfig, dbConfig
 								},
 							},
 						},
-						corev1.Volume{
+						{
 							Name: "caconfig",
 							VolumeSource: corev1.VolumeSource{
 								ConfigMap: &corev1.ConfigMapVolumeSource{
@@ -535,7 +535,7 @@ func initHSMCAJob(instance *current.IBPCA, hsmConfig *config.HSMConfig, dbConfig
 						Secret: &corev1.SecretVolumeSource{
 							SecretName: fmt.Sprintf("%s-%s-crypto", instance.GetName(), typ),
 							Items: []corev1.KeyToPath{
-								corev1.KeyToPath{
+								{
 									Key:  "db-certfile0.pem",
 									Path: "db-certfile0.pem",
 								},

@@ -296,7 +296,7 @@ func GetOrderer(tlsCert, caHost string) *helper.Orderer {
 	cr.Spec.NumSecondsWarningPeriod = 31535970
 
 	nodes := []helper.Orderer{
-		helper.Orderer{
+		{
 			Name:      cr.Name + "node1",
 			Namespace: namespace,
 			CR:        cr.DeepCopy(),

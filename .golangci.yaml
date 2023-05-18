@@ -1,0 +1,34 @@
+run:
+  timeout: 30m
+  modules-download-mode: "mod"
+
+linters:
+  disable-all: true
+  enable:
+    # linters maintained by golang.org
+    - gofmt
+    - goimports
+    - govet
+    # linters enabled by default
+    # - errcheck
+    # - ineffassign
+    - gosimple
+    # - govet
+    # - staticcheck
+    # - typecheck
+    # - unused
+    # custom
+    # please keep this alphabetized
+
+issues:
+  max-same-issues: 0
+
+linters-settings: # please keep this alphabetized
+  gosimple:
+    checks: [
+      "all",
+      "-S1034"
+    ]
+
+severity:
+  default-severity: error

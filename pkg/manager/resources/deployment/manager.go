@@ -415,5 +415,5 @@ func GetName(instanceName string, suffix ...string) string {
 			return fmt.Sprintf("%s-%s", instanceName, suffix[0])
 		}
 	}
-	return fmt.Sprintf("%s", instanceName)
+	return instanceName
 }

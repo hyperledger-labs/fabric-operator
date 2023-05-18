@@ -108,11 +108,7 @@ var _ = Describe("trigger orderer actions", func() {
 					}
 
 					newPodName := pods[0].Name
-					if newPodName != podNameNode1 {
-						return true
-					}
-
-					return false
+					return newPodName != podNameNode1
 				}).Should(Equal(true))
 			})
 
@@ -141,11 +137,7 @@ var _ = Describe("trigger orderer actions", func() {
 						}
 
 						newPodName := pods[0].Name
-						if newPodName != podNameNode1 {
-							return true
-						}
-
-						return false
+						return newPodName != podNameNode1
 					}).Should(Equal(true))
 				})
 
@@ -339,11 +331,7 @@ var _ = Describe("trigger orderer actions", func() {
 						}
 
 						newPodName := pods[0].Name
-						if newPodName != podNameNode2 {
-							return true
-						}
-
-						return false
+						return newPodName != podNameNode2
 					}).Should(Equal(true))
 				})
 
@@ -476,11 +464,7 @@ var _ = Describe("trigger orderer actions", func() {
 					}
 
 					newPodName := pods[0].Name
-					if newPodName != podNameNode3 {
-						return true
-					}
-
-					return false
+					return newPodName != podNameNode3
 				}).Should(Equal(true))
 			})
 

@@ -200,11 +200,8 @@ func (s *IBPCASpec) HSMSet() bool {
 }
 
 func (s *IBPCASpec) DomainSet() bool {
-	if s.Domain != "" {
-		return true
-	}
 
-	return false
+	return s.Domain != ""
 }
 
 func (s *IBPCASpec) CAResourcesSet() bool {
@@ -240,10 +237,8 @@ func (s *IBPCASpec) GetCAConfigOverride() (CAConfig, error) {
 }
 
 func (c *IBPCAStatus) HasType() bool {
-	if c.CRStatus.Type != "" {
-		return true
-	}
-	return false
+
+	return c.CRStatus.Type != ""
 }
 
 // Override will look at requested images and use those to override default image

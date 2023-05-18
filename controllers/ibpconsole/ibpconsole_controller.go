@@ -401,7 +401,7 @@ func (r *ReconcileIBPConsole) UpdateFunc(e event.UpdateEvent) bool {
 	log.Info(fmt.Sprintf("Spec update detected on IBPConsole custom resource: %s", oldConsole.Name))
 	r.update.specUpdated = true
 
-	if newConsole.Spec.Action.Restart == true {
+	if newConsole.Spec.Action.Restart {
 		r.update.restartNeeded = true
 	}
 

@@ -60,12 +60,12 @@ func (o *Override) CommonIngress(instance *current.IBPCA, ingress *networkingv1.
 	pathType := networkingv1.PathTypeImplementationSpecific
 	ingress.Spec = networkingv1.IngressSpec{
 		Rules: []networkingv1.IngressRule{
-			networkingv1.IngressRule{
+			{
 				Host: apihost,
 				IngressRuleValue: networkingv1.IngressRuleValue{
 					HTTP: &networkingv1.HTTPIngressRuleValue{
 						Paths: []networkingv1.HTTPIngressPath{
-							networkingv1.HTTPIngressPath{
+							{
 								Backend: networkingv1.IngressBackend{
 									Service: &networkingv1.IngressServiceBackend{
 										Name: instance.GetName(),
@@ -81,12 +81,12 @@ func (o *Override) CommonIngress(instance *current.IBPCA, ingress *networkingv1.
 					},
 				},
 			},
-			networkingv1.IngressRule{
+			{
 				Host: operationshost,
 				IngressRuleValue: networkingv1.IngressRuleValue{
 					HTTP: &networkingv1.HTTPIngressRuleValue{
 						Paths: []networkingv1.HTTPIngressPath{
-							networkingv1.HTTPIngressPath{
+							{
 								Backend: networkingv1.IngressBackend{
 									Service: &networkingv1.IngressServiceBackend{
 										Name: instance.GetName(),
@@ -104,10 +104,10 @@ func (o *Override) CommonIngress(instance *current.IBPCA, ingress *networkingv1.
 			},
 		},
 		TLS: []networkingv1.IngressTLS{
-			networkingv1.IngressTLS{
+			{
 				Hosts: []string{apihost},
 			},
-			networkingv1.IngressTLS{
+			{
 				Hosts: []string{operationshost},
 			},
 		},

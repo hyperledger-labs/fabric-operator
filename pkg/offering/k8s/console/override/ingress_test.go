@@ -66,7 +66,7 @@ var _ = Describe("K8s Console Ingress Overrides", func() {
 					IngressRuleValue: networkingv1.IngressRuleValue{
 						HTTP: &networkingv1.HTTPIngressRuleValue{
 							Paths: []networkingv1.HTTPIngressPath{
-								networkingv1.HTTPIngressPath{
+								{
 									Backend: networkingv1.IngressBackend{
 										Service: &networkingv1.IngressServiceBackend{
 											Name: instance.GetName(),

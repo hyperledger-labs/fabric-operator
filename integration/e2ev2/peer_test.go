@@ -193,11 +193,8 @@ var _ = Describe("peer", func() {
 					}
 
 					newPodName := pods[0].Name
-					if newPodName != podName {
-						return true
-					}
 
-					return false
+					return newPodName != podName
 				}).Should(Equal(true))
 			})
 		})

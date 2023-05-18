@@ -131,11 +131,11 @@ func SetupServer(homeDir string, parentURL string, port int, tlsConfig *tls.Serv
 		"org2dept1": nil,
 	}
 	profiles := map[string]*cfconfig.SigningProfile{
-		"tls": &cfconfig.SigningProfile{
+		"tls": {
 			Usage:        []string{"signing", "key encipherment", "server auth", "client auth", "key agreement"},
 			ExpiryString: "8760h",
 		},
-		"ca": &cfconfig.SigningProfile{
+		"ca": {
 			Usage:        []string{"cert sign", "crl sign"},
 			ExpiryString: "8760h",
 			CAConstraint: cfconfig.CAConstraint{
