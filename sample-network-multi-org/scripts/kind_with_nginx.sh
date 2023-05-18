@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Copyright contributors to the Hyperledger Fabric Operator project
 #
@@ -15,10 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-#!/bin/bash
-
-
 
 set -eo pipefail
 set -x
