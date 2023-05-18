@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright IBM Corp All Rights Reserved
+# Copyright contributors to the Hyperledger Fabric Operator project
 #
 # SPDX-License-Identifier: Apache-2.0
 #
