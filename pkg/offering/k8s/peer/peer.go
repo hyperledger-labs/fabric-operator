@@ -196,6 +196,12 @@ func (p *Peer) Reconcile(instance *current.IBPPeer, update basepeer.Update) (com
 		}
 	}
 
+	if update.MigrateToV25() {
+		if err := p.ReconcileFabricPeerMigrationV2_5(instance); err != nil {
+			return common.Result{}, operatorerrors.Wrap(err, operatorerrors.FabricPeerMigrationFailed, "failed to migrate fabric peer to version v2.5.x")
+		}
+	}
+
 	err = p.ReconcileManagers(instance, update)
 	if err != nil {
 		return common.Result{}, errors.Wrap(err, "failed to reconcile managers")

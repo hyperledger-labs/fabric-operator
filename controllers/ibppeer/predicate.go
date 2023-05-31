@@ -39,6 +39,7 @@ type Update struct {
 	tlscertNewKeyReenroll bool
 	migrateToV2           bool
 	migrateToV24          bool
+	migrateToV25          bool
 	mspUpdated            bool
 	ecertEnroll           bool
 	tlscertEnroll         bool
@@ -114,6 +115,10 @@ func (u *Update) MigrateToV2() bool {
 
 func (u *Update) MigrateToV24() bool {
 	return u.migrateToV24
+}
+
+func (u *Update) MigrateToV25() bool {
+	return u.migrateToV25
 }
 
 func (u *Update) UpgradeDBs() bool {
@@ -195,6 +200,7 @@ func (u *Update) Needed() bool {
 		u.tlscertNewKeyReenroll ||
 		u.migrateToV2 ||
 		u.migrateToV24 ||
+		u.migrateToV25 ||
 		u.mspUpdated ||
 		u.ecertEnroll ||
 		u.upgradedbs ||
@@ -238,6 +244,9 @@ func (u *Update) GetUpdateStackWithTrues() string {
 	}
 	if u.migrateToV24 {
 		stack += "migrateToV24 "
+	}
+	if u.migrateToV25 {
+		stack += "migrateToV25 "
 	}
 	if u.mspUpdated {
 		stack += "mspUpdated "

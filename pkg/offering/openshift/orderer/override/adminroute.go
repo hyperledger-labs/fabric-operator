@@ -33,7 +33,7 @@ import (
 func (o *Override) AdminRoute(object v1.Object, route *routev1.Route, action resources.Action) error {
 	instance := object.(*current.IBPOrderer)
 	currentVer := version.String(instance.Spec.FabricVersion)
-	if !(currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1)) {
+	if !(currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_4_1)) {
 		return nil
 	}
 	switch action {

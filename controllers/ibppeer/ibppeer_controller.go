@@ -48,7 +48,6 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -671,16 +670,29 @@ func (r *ReconcileIBPPeer) UpdateFunc(e event.UpdateEvent) bool {
 			version.GetMajorReleaseVersion(oldPeer.Spec.FabricVersion) == version.V1) &&
 			version.GetMajorReleaseVersion(newPeer.Spec.FabricVersion) == version.V2 {
 			update.migrateToV2 = true
-			if newVer.EqualWithoutTag(version.V2_4_1) || newVer.GreaterThan(version.V2_4_1) {
+			if newVer.EqualWithoutTag(version.V2_5_1) || newVer.GreaterThan(version.V2_5_1) {
+				update.migrateToV24 = true
+				update.migrateToV25 = true
+			} else if newVer.EqualWithoutTag(version.V2_4_1) || newVer.GreaterThan(version.V2_4_1) {
 				update.migrateToV24 = true
 			}
 		}
 
-		// check if this V2.2.x -> V2.4.x peer migration
+		// check if this V2.2.x -> V2.4.x/V2.5.x peer migration
 		if (version.GetMajorReleaseVersion(oldPeer.Spec.FabricVersion) == version.V2) &&
-			oldVer.LessThan(version.V2_4_1) &&
-			(newVer.EqualWithoutTag(version.V2_4_1) || newVer.GreaterThan(version.V2_4_1)) {
+			oldVer.LessThan(version.V2_4_1) {
 			update.migrateToV24 = true
+			if newVer.EqualWithoutTag(version.V2_5_1) || newVer.GreaterThan(version.V2_5_1) {
+				update.migrateToV25 = true
+			}
+		}
+
+		// check if this V2.4.x -> V2.5.x peer migration
+		if (version.GetMajorReleaseVersion(oldPeer.Spec.FabricVersion) == version.V2) &&
+			oldVer.LessThan(version.V2_5_1) {
+			if newVer.EqualWithoutTag(version.V2_5_1) || newVer.GreaterThan(version.V2_5_1) {
+				update.migrateToV25 = true
+			}
 		}
 
 		if newPeer.Spec.Action.UpgradeDBs == true {
@@ -775,7 +787,7 @@ func (r *ReconcileIBPPeer) DeleteFunc(e event.DeleteEvent) bool {
 		// without proper controller references set and was not cleaned up on peer resource deletion.
 		log.Info(fmt.Sprintf("Deleting %s-init-config config map, if found", peer.GetName()))
 		if err := r.client.Delete(context.TODO(), &corev1.ConfigMap{
-			ObjectMeta: metav1.ObjectMeta{
+			ObjectMeta: v1.ObjectMeta{
 				Name:      fmt.Sprintf("%s-init-config", peer.GetName()),
 				Namespace: peer.GetNamespace(),
 			},

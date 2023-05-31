@@ -44,6 +44,7 @@ import (
 	resourcemanager "github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/manager"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/migrator/peer/fabric"
 	v2 "github.com/IBM-Blockchain/fabric-operator/pkg/migrator/peer/fabric/v2"
+	v25 "github.com/IBM-Blockchain/fabric-operator/pkg/migrator/peer/fabric/v25"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/common"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/common/reconcilechecks"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
@@ -153,6 +154,7 @@ type Update interface {
 	TLScertNewKeyReenroll() bool
 	MigrateToV2() bool
 	MigrateToV24() bool
+	MigrateToV25() bool
 	UpgradeDBs() bool
 	MSPUpdated() bool
 	EcertEnroll() bool
@@ -396,7 +398,11 @@ func (p *Peer) Initialize(instance *current.IBPPeer, update Update) error {
 
 	peerConfig := p.Config.PeerInitConfig.CorePeerFile
 	if version.GetMajorReleaseVersion(instance.Spec.FabricVersion) == version.V2 {
+		peerversion := version.String(instance.Spec.FabricVersion)
 		peerConfig = p.Config.PeerInitConfig.CorePeerV2File
+		if peerversion.EqualWithoutTag(version.V2_5_1) || peerversion.GreaterThan(version.V2_5_1) {
+			peerConfig = p.Config.PeerInitConfig.CorePeerV25File
+		}
 	}
 
 	if instance.UsingHSMProxy() {
@@ -1220,6 +1226,22 @@ func (p *Peer) ReconcileFabricPeerMigrationV2_4(instance *current.IBPPeer) error
 	}
 
 	if err := fabric.V24Migrate(instance, migrator, instance.Spec.FabricVersion, p.Config.Operator.Peer.Timeouts.DBMigration); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *Peer) ReconcileFabricPeerMigrationV2_5(instance *current.IBPPeer) error {
+	log.Info("Migration to V2.5.x requested, checking if migration is needed")
+
+	migrator := &v25.Migrate{
+		DeploymentManager: p.DeploymentManager,
+		ConfigMapManager:  &initializer.CoreConfigMap{Config: p.Config.PeerInitConfig, Scheme: p.Scheme, GetLabels: p.GetLabels, Client: p.Client},
+		Client:            p.Client,
+	}
+
+	if err := fabric.V25Migrate(instance, migrator, instance.Spec.FabricVersion, p.Config.Operator.Peer.Timeouts.DBMigration); err != nil {
 		return err
 	}
 
