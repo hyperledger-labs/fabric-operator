@@ -1522,6 +1522,8 @@ func (n *Node) FabricOrdererMigrationV2_4(instance *current.IBPOrderer) error {
 		cm.Data["ORDERER_ADMIN_TLS_CERTIFICATE"] = "/certs/tls/signcerts/cert.pem"
 		cm.Data["ORDERER_ADMIN_TLS_PRIVATEKEY"] = "/certs/tls/keystore/key.pem"
 		cm.Data["ORDERER_ADMIN_TLS_CLIENTAUTHREQUIRED"] = "true"
+		// override the default value 127.0.0.1:9443
+		cm.Data["ORDERER_ADMIN_LISTENADDRESS"] = "0.0.0.0:9443"
 		if intermediateExists {
 			// override intermediate cert paths for root and clientroot cas
 			cm.Data["ORDERER_ADMIN_TLS_ROOTCAS"] = intercertPath
@@ -1611,6 +1613,8 @@ func (n *Node) FabricOrdererMigrationV2_5(instance *current.IBPOrderer) error {
 		cm.Data["ORDERER_ADMIN_TLS_CERTIFICATE"] = "/certs/tls/signcerts/cert.pem"
 		cm.Data["ORDERER_ADMIN_TLS_PRIVATEKEY"] = "/certs/tls/keystore/key.pem"
 		cm.Data["ORDERER_ADMIN_TLS_CLIENTAUTHREQUIRED"] = "true"
+		// override the default value 127.0.0.1:9443
+		cm.Data["ORDERER_ADMIN_LISTENADDRESS"] = "0.0.0.0:9443"
 		if intermediateExists {
 			// override intermediate cert paths for root and clientroot cas
 			cm.Data["ORDERER_ADMIN_TLS_ROOTCAS"] = intercertPath
