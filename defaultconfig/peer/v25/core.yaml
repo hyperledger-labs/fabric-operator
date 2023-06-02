@@ -66,6 +66,9 @@ peer:
         # endorsementTimeout is the duration the gateway waits for a response
         # from other endorsing peers before returning a timeout error to the client.
         endorsementTimeout: 30s
+        # broadcastTimeout is the duration the gateway waits for a response
+        # from ordering nodes before returning a timeout error to the client.
+        broadcastTimeout: 30s
         # dialTimeout is the duration the gateway waits for a connection
         # to other network nodes.
         dialTimeout: 2m
@@ -590,15 +593,15 @@ chaincode:
     # builders in the order specified below.
     # ibp updates this with ibp related values
     externalBuilders:
-
-        # Default builder for "k8s" chaincode packages.
-        # See https://github.com/hyperledgendary/fabric-builder-k8s
-      - name: k8s_builder
-        path: /opt/hyperledger/k8s_builder
+      - name: ibp-builder
+        path: /usr/local
+        environmentWhitelist:
+          - IBP_BUILDER_ENDPOINT
+          - IBP_BUILDER_SHARED_DIR
         propagateEnvironment:
-          - CORE_PEER_ID
-          - KUBERNETES_SERVICE_HOST
-          - KUBERNETES_SERVICE_PORT
+          - IBP_BUILDER_ENDPOINT
+          - IBP_BUILDER_SHARED_DIR
+          - PEER_NAME
 
         # Default builder for chaincode-as-a-service, included in fabric
         # opensource versions >= 2.4.2.  This is a "no-op" builder and will not
@@ -744,6 +747,12 @@ ledger:
     # deprioritizedDataReconcilerInterval (unit: minutes). Note that the
     # interval needs to be greater than the reconcileSleepInterval
     deprioritizedDataReconcilerInterval: 60m
+    # The frequency to purge private data (in number of blocks).
+    # Private data is purged from the peer's private data store based on
+    # the collection property blockToLive or an explicit chaincode call to PurgePrivateData().
+    purgeInterval: 100
+    # Whether to log private data keys purged from private data store (INFO level) when explicitly purged via chaincode
+    purgedKeyAuditLogging: true
 
   snapshots:
     # Path on the file system where peer will store ledger snapshots

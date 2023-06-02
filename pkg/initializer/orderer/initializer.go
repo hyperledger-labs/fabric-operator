@@ -34,6 +34,7 @@ import (
 	ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v1"
 	v2ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v2"
 	v24ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v24"
+	v25ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v25"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	k8sclient "github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
@@ -54,6 +55,7 @@ type Config struct {
 	OrdererFile        string
 	OrdererV2File      string
 	OrdererV24File     string
+	OrdererV25File     string
 	OUFile             string
 	InterOUFile        string
 	DeploymentFile     string
@@ -430,7 +432,14 @@ func (i *Initializer) GetCoreConfigFromFile(instance *current.IBPOrderer, file s
 	switch version.GetMajorReleaseVersion(instance.Spec.FabricVersion) {
 	case version.V2:
 		currentVer := version.String(instance.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			log.Info("v2.5.x Fabric Orderer requested")
+			v25config, err := v25ordererconfig.ReadOrdererFile(file)
+			if err != nil {
+				return nil, errors.Wrap(err, "failed to read v2.5.x default config file")
+			}
+			return v25config, nil
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			log.Info("v2.4.x Fabric Orderer requested")
 			v24config, err := v24ordererconfig.ReadOrdererFile(file)
 			if err != nil {
@@ -465,7 +474,14 @@ func (i *Initializer) GetCoreConfigFromBytes(instance *current.IBPOrderer, bytes
 	switch version.GetMajorReleaseVersion(instance.Spec.FabricVersion) {
 	case version.V2:
 		currentVer := version.String(instance.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			log.Info("v2.5.x Fabric Orderer requested")
+			v25config, err := v25ordererconfig.ReadOrdererFromBytes(bytes)
+			if err != nil {
+				return nil, err
+			}
+			return v25config, nil
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			log.Info("v2.4.x Fabric Orderer requested")
 			v24config, err := v24ordererconfig.ReadOrdererFromBytes(bytes)
 			if err != nil {

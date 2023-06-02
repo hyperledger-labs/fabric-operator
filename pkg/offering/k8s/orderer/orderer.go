@@ -133,7 +133,7 @@ func (o *Orderer) ReconcileNode(instance *current.IBPOrderer, update baseorderer
 	hostGrpc := fmt.Sprintf("%s-%s-grpcweb.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
 	hosts := []string{}
 	currentVer := version.String(instance.Spec.FabricVersion)
-	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_4_1) {
 		hostAdmin := fmt.Sprintf("%s-%s-admin.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
 		hosts = append(hosts, hostAPI, hostOperations, hostGrpc, hostAdmin, "127.0.0.1")
 		//TODO: need to Re-enroll when orderer migrated from 1.4.x/2.2.x to 2.4.1

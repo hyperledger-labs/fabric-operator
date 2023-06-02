@@ -64,7 +64,8 @@ func New(client k8sclient.Client, timeout time.Duration) *StaggerRestartsService
 // Restart is called by the restart manager.
 // For CA/Peer/Orderer: adds component to the queue for restart.
 // For Console: 		restarts the component directly as there is only one ibpconsole
-//						instance per network. We bypass the queue logic for ibpconsoles.
+//
+//	instance per network. We bypass the queue logic for ibpconsoles.
 func (s *StaggerRestartsService) Restart(instance Instance, reason string) error {
 	switch instance.(type) {
 	case *current.IBPConsole:

@@ -137,6 +137,7 @@ func setDefaultPeerDefinitions(cfg *config.Config) {
 		InterOUFile:            filepath.Join(defaultConfigs, "peer/ouconfig-inter.yaml"),
 		CorePeerFile:           filepath.Join(defaultConfigs, "peer/core.yaml"),
 		CorePeerV2File:         filepath.Join(defaultConfigs, "peer/v2/core.yaml"),
+		CorePeerV25File:        filepath.Join(defaultConfigs, "peer/v25/core.yaml"),
 		DeploymentFile:         filepath.Join(defaultPeerDef, "deployment.yaml"),
 		PVCFile:                filepath.Join(defaultPeerDef, "pvc.yaml"),
 		CouchDBPVCFile:         filepath.Join(defaultPeerDef, "couchdb-pvc.yaml"),
@@ -159,6 +160,7 @@ func setDefaultOrdererDefinitions(cfg *config.Config) {
 	cfg.OrdererInitConfig = &ordererinit.Config{
 		OrdererV2File:      filepath.Join(defaultConfigs, "orderer/v2/orderer.yaml"),
 		OrdererV24File:     filepath.Join(defaultConfigs, "orderer/v24/orderer.yaml"),
+		OrdererV25File:     filepath.Join(defaultConfigs, "orderer/v25/orderer.yaml"),
 		OrdererFile:        filepath.Join(defaultConfigs, "orderer/orderer.yaml"),
 		ConfigTxFile:       filepath.Join(defaultConfigs, "orderer/configtx.yaml"),
 		OUFile:             filepath.Join(defaultConfigs, "orderer/ouconfig.yaml"),

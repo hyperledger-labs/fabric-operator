@@ -22,6 +22,7 @@ import (
 	config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v1"
 	v2config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v2"
 	v24config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v24"
+	v25config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v25"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util/image"
 	"github.com/IBM-Blockchain/fabric-operator/version"
 	corev1 "k8s.io/api/core/v1"
@@ -88,7 +89,17 @@ func (o *IBPOrderer) GetConfigOverride() (interface{}, error) {
 	switch version.GetMajorReleaseVersion(o.Spec.FabricVersion) {
 	case version.V2:
 		currentVer := version.String(o.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			if o.Spec.ConfigOverride == nil {
+				return &v25config.Orderer{}, nil
+			}
+
+			configOverride, err := v25config.ReadFrom(&o.Spec.ConfigOverride.Raw)
+			if err != nil {
+				return nil, err
+			}
+			return configOverride, nil
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			if o.Spec.ConfigOverride == nil {
 				return &v24config.Orderer{}, nil
 			}

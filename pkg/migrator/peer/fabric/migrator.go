@@ -66,7 +66,14 @@ func V2Migrate(instance metav1.Object, migrator Migrator, version string, timeou
 
 func V24Migrate(instance metav1.Object, migrator Migrator, version string, timeouts config.DBMigrationTimeouts) error {
 	if err := migrator.UpdateConfig(instance, version); err != nil {
-		return errors.Wrap(err, "failed to update v2.4.1 configs")
+		return errors.Wrap(err, "failed to update v2.4.x configs")
+	}
+	return nil
+}
+
+func V25Migrate(instance metav1.Object, migrator Migrator, version string, timeouts config.DBMigrationTimeouts) error {
+	if err := migrator.UpdateConfig(instance, version); err != nil {
+		return errors.Wrap(err, "failed to update v2.5.x configs")
 	}
 	return nil
 }

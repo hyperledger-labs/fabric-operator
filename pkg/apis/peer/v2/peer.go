@@ -61,6 +61,8 @@ type Peer struct {
 	ValidatorPoolSize      int               `json:"validatorPoolSize,omitempty"`
 	Discovery              v1.Discovery      `json:"discovery,omitempty"`
 	Limits                 Limits            `json:"limits,omitempty"`
+	MaxRecvMsgSize         int               `json:"maxRecvMsgSize,omitempty"`
+	MaxSendMsgSize         int               `json:"maxSendMsgSize,omitempty"`
 }
 
 type Gossip struct {
