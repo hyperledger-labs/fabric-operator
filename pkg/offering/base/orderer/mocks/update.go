@@ -159,6 +159,16 @@ type Update struct {
 	migrateToV24ReturnsOnCall map[int]struct {
 		result1 bool
 	}
+	MigrateToV25Stub        func() bool
+	migrateToV25Mutex       sync.RWMutex
+	migrateToV25ArgsForCall []struct {
+	}
+	migrateToV25Returns struct {
+		result1 bool
+	}
+	migrateToV25ReturnsOnCall map[int]struct {
+		result1 bool
+	}
 	NodeOUUpdatedStub        func() bool
 	nodeOUUpdatedMutex       sync.RWMutex
 	nodeOUUpdatedArgsForCall []struct {
@@ -1038,6 +1048,59 @@ func (fake *Update) MigrateToV24ReturnsOnCall(i int, result1 bool) {
 	}{result1}
 }
 
+func (fake *Update) MigrateToV25() bool {
+	fake.migrateToV25Mutex.Lock()
+	ret, specificReturn := fake.migrateToV25ReturnsOnCall[len(fake.migrateToV25ArgsForCall)]
+	fake.migrateToV25ArgsForCall = append(fake.migrateToV25ArgsForCall, struct {
+	}{})
+	stub := fake.MigrateToV25Stub
+	fakeReturns := fake.migrateToV25Returns
+	fake.recordInvocation("MigrateToV25", []interface{}{})
+	fake.migrateToV25Mutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *Update) MigrateToV25CallCount() int {
+	fake.migrateToV25Mutex.RLock()
+	defer fake.migrateToV25Mutex.RUnlock()
+	return len(fake.migrateToV25ArgsForCall)
+}
+
+func (fake *Update) MigrateToV25Calls(stub func() bool) {
+	fake.migrateToV25Mutex.Lock()
+	defer fake.migrateToV25Mutex.Unlock()
+	fake.MigrateToV25Stub = stub
+}
+
+func (fake *Update) MigrateToV25Returns(result1 bool) {
+	fake.migrateToV25Mutex.Lock()
+	defer fake.migrateToV25Mutex.Unlock()
+	fake.MigrateToV25Stub = nil
+	fake.migrateToV25Returns = struct {
+		result1 bool
+	}{result1}
+}
+
+func (fake *Update) MigrateToV25ReturnsOnCall(i int, result1 bool) {
+	fake.migrateToV25Mutex.Lock()
+	defer fake.migrateToV25Mutex.Unlock()
+	fake.MigrateToV25Stub = nil
+	if fake.migrateToV25ReturnsOnCall == nil {
+		fake.migrateToV25ReturnsOnCall = make(map[int]struct {
+			result1 bool
+		})
+	}
+	fake.migrateToV25ReturnsOnCall[i] = struct {
+		result1 bool
+	}{result1}
+}
+
 func (fake *Update) NodeOUUpdated() bool {
 	fake.nodeOUUpdatedMutex.Lock()
 	ret, specificReturn := fake.nodeOUUpdatedReturnsOnCall[len(fake.nodeOUUpdatedArgsForCall)]
@@ -1495,6 +1558,8 @@ func (fake *Update) Invocations() map[string][][]interface{} {
 	defer fake.migrateToV2Mutex.RUnlock()
 	fake.migrateToV24Mutex.RLock()
 	defer fake.migrateToV24Mutex.RUnlock()
+	fake.migrateToV25Mutex.RLock()
+	defer fake.migrateToV25Mutex.RUnlock()
 	fake.nodeOUUpdatedMutex.RLock()
 	defer fake.nodeOUUpdatedMutex.RUnlock()
 	fake.ordererTagUpdatedMutex.RLock()

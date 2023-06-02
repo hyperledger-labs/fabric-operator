@@ -49,6 +49,8 @@ type General struct {
 	LocalMSPID        string             `json:"localMspId,omitempty"`
 	BCCSP             *commonapi.BCCSP   `json:"BCCSP,omitempty"`
 	Authentication    v1.Authentication  `json:"authentication,omitempty"`
+	MaxRecvMsgSize    int                `json:"maxRecvMsgSize,omitempty"`
+	MaxSendMsgSize    int                `json:"maxSendMsgSize,omitempty"`
 }
 
 // FileLedger contains configuration for the file-based ledger.

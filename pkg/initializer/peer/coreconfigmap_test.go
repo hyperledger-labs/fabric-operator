@@ -46,10 +46,11 @@ var _ = Describe("core config map", func() {
 		client = &mocks.Client{}
 		coreCM = &initializer.CoreConfigMap{
 			Config: &initializer.Config{
-				CorePeerFile:   "../../../defaultconfig/peer/core.yaml",
-				CorePeerV2File: "../../../defaultconfig/peer/v2/core.yaml",
-				OUFile:         "../../../defaultconfig/peer/ouconfig.yaml",
-				InterOUFile:    "../../../defaultconfig/peer/ouconfig-inter.yaml",
+				CorePeerFile:    "../../../defaultconfig/peer/core.yaml",
+				CorePeerV2File:  "../../../defaultconfig/peer/v2/core.yaml",
+				CorePeerV25File: "../../../defaultconfig/peer/v25/core.yaml",
+				OUFile:          "../../../defaultconfig/peer/ouconfig.yaml",
+				InterOUFile:     "../../../defaultconfig/peer/ouconfig-inter.yaml",
 			},
 			Client:    client,
 			GetLabels: func(o metav1.Object) map[string]string { return map[string]string{} },
