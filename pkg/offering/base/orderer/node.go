@@ -38,6 +38,7 @@ import (
 	ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v1"
 	v2ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v2"
 	v24ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v24"
+	v25ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v25"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/validator"
 	controllerclient "github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources"
@@ -128,6 +129,7 @@ type Update interface {
 	CryptoBackupNeeded() bool
 	MigrateToV2() bool
 	MigrateToV24() bool
+	MigrateToV25() bool
 	NodeOUUpdated() bool
 	ImagesUpdated() bool
 	FabricVersionUpdated() bool
@@ -511,7 +513,9 @@ func (n *Node) Initialize(instance *current.IBPOrderer, update Update) error {
 	ordererConfig := n.Config.OrdererInitConfig.OrdererFile
 	if version.GetMajorReleaseVersion(instance.Spec.FabricVersion) == version.V2 {
 		currentVer := version.String(instance.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			ordererConfig = n.Config.OrdererInitConfig.OrdererV25File
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			ordererConfig = n.Config.OrdererInitConfig.OrdererV24File
 		} else if currentVer.LessThan(version.V2_4_1) {
 			ordererConfig = n.Config.OrdererInitConfig.OrdererV2File
@@ -1076,7 +1080,7 @@ func (n *Node) GetEndpoints(instance *current.IBPOrderer) *current.OrdererEndpoi
 		Grpcweb:    "https://" + instance.Namespace + "-" + instance.Name + "-grpcweb." + instance.Spec.Domain + ":443",
 	}
 	currentVer := version.String(instance.Spec.FabricVersion)
-	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_4_1) {
 		endpoints.Admin = "https://" + instance.Namespace + "-" + instance.Name + "-admin." + instance.Spec.Domain + ":443"
 	}
 	return endpoints
@@ -1398,7 +1402,9 @@ func (n *Node) FabricOrdererMigrationV2_0(instance *current.IBPOrderer) error {
 	ordererConfig := n.Config.OrdererInitConfig.OrdererFile
 	if version.GetMajorReleaseVersion(instance.Spec.FabricVersion) == version.V2 {
 		currentVer := version.String(instance.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			ordererConfig = n.Config.OrdererInitConfig.OrdererV25File
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			ordererConfig = n.Config.OrdererInitConfig.OrdererV24File
 		} else {
 			ordererConfig = n.Config.OrdererInitConfig.OrdererV2File
@@ -1408,7 +1414,14 @@ func (n *Node) FabricOrdererMigrationV2_0(instance *current.IBPOrderer) error {
 	switch version.GetMajorReleaseVersion(instance.Spec.FabricVersion) {
 	case version.V2:
 		currentVer := version.String(instance.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			log.Info("v2.5.x Fabric Orderer requested")
+			v25config, err := v25ordererconfig.ReadOrdererFile(ordererConfig)
+			if err != nil {
+				return errors.Wrap(err, "failed to read v2.5.x default config file")
+			}
+			initOrderer.Config = v25config
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			log.Info("v2.4.x Fabric Orderer requested")
 			v24config, err := v24ordererconfig.ReadOrdererFile(ordererConfig)
 			if err != nil {
@@ -1509,6 +1522,99 @@ func (n *Node) FabricOrdererMigrationV2_4(instance *current.IBPOrderer) error {
 		cm.Data["ORDERER_ADMIN_TLS_CERTIFICATE"] = "/certs/tls/signcerts/cert.pem"
 		cm.Data["ORDERER_ADMIN_TLS_PRIVATEKEY"] = "/certs/tls/keystore/key.pem"
 		cm.Data["ORDERER_ADMIN_TLS_CLIENTAUTHREQUIRED"] = "true"
+		// override the default value 127.0.0.1:9443
+		cm.Data["ORDERER_ADMIN_LISTENADDRESS"] = "0.0.0.0:9443"
+		if intermediateExists {
+			// override intermediate cert paths for root and clientroot cas
+			cm.Data["ORDERER_ADMIN_TLS_ROOTCAS"] = intercertPath
+			cm.Data["ORDERER_ADMIN_TLS_CLIENTROOTCAS"] = intercertPath
+		} else {
+			cm.Data["ORDERER_ADMIN_TLS_ROOTCAS"] = "/certs/msp/tlscacerts/cacert-0.pem"
+			cm.Data["ORDERER_ADMIN_TLS_CLIENTROOTCAS"] = "/certs/msp/tlscacerts/cacert-0.pem"
+		}
+	}
+
+	err = n.Client.Update(context.TODO(), cm, controllerclient.UpdateOption{Owner: instance, Scheme: n.Scheme})
+	if err != nil {
+		return errors.Wrap(err, "failed to update env configmap")
+	}
+
+	initOrderer.Config = ordererConfig
+	configOverride, err := instance.GetConfigOverride()
+	if err != nil {
+		return err
+	}
+
+	err = initOrderer.OverrideConfig(configOverride.(OrdererConfig))
+	if err != nil {
+		return err
+	}
+
+	if instance.IsHSMEnabled() && !instance.UsingHSMProxy() {
+		log.Info(fmt.Sprintf("During orderer '%s' migration, detected using HSM sidecar, setting library path", instance.GetName()))
+		hsmConfig, err := commonconfig.ReadHSMConfig(n.Client, instance)
+		if err != nil {
+			return err
+		}
+		initOrderer.Config.SetBCCSPLibrary(filepath.Join("/hsm/lib", filepath.Base(hsmConfig.Library.FilePath)))
+	}
+
+	err = n.Initializer.CreateOrUpdateConfigMap(instance, initOrderer.GetConfig())
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *Node) FabricOrdererMigrationV2_5(instance *current.IBPOrderer) error {
+	log.Info(fmt.Sprintf("Orderer instance '%s' migrating to v2.5.x", instance.GetName()))
+
+	initOrderer, err := n.Initializer.GetInitOrderer(instance, n.GetInitStoragePath(instance))
+	if err != nil {
+		return err
+	}
+
+	ordererConfig, err := v25ordererconfig.ReadOrdererFile(n.Config.OrdererInitConfig.OrdererV25File)
+	if err != nil {
+		return errors.Wrap(err, "failed to read v2.5.x default config file")
+	}
+
+	// removed the field from the struct
+	// ordererConfig.FileLedger.Prefix = ""
+
+	name := fmt.Sprintf("%s-env", instance.GetName())
+	namespacedName := types.NamespacedName{
+		Name:      name,
+		Namespace: instance.Namespace,
+	}
+
+	cm := &corev1.ConfigMap{}
+	err = n.Client.Get(context.TODO(), namespacedName, cm)
+	if err != nil {
+		return errors.Wrap(err, "failed to get env configmap")
+	}
+
+	// Add configs for 2.5.x
+	trueVal := true
+	ordererConfig.Admin.TLs.Enabled = &trueVal
+	ordererConfig.Admin.TLs.ClientAuthRequired = &trueVal
+
+	intermediateExists := util.IntermediateSecretExists(n.Client, instance.Namespace, fmt.Sprintf("ecert-%s-intercerts", instance.Name)) &&
+		util.IntermediateSecretExists(n.Client, instance.Namespace, fmt.Sprintf("tls-%s-intercerts", instance.Name))
+	intercertPath := "/certs/msp/tlsintermediatecerts/intercert-0.pem"
+	currentVer := version.String(instance.Spec.FabricVersion)
+	if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+		// Enable Channel participation for 2.5.x orderers
+		cm.Data["ORDERER_CHANNELPARTICIPATION_ENABLED"] = "true"
+
+		cm.Data["ORDERER_GENERAL_CLUSTER_SENDBUFFERSIZE"] = "100"
+
+		cm.Data["ORDERER_ADMIN_TLS_ENABLED"] = "true"
+		cm.Data["ORDERER_ADMIN_TLS_CERTIFICATE"] = "/certs/tls/signcerts/cert.pem"
+		cm.Data["ORDERER_ADMIN_TLS_PRIVATEKEY"] = "/certs/tls/keystore/key.pem"
+		cm.Data["ORDERER_ADMIN_TLS_CLIENTAUTHREQUIRED"] = "true"
+		// override the default value 127.0.0.1:9443
+		cm.Data["ORDERER_ADMIN_LISTENADDRESS"] = "0.0.0.0:9443"
 		if intermediateExists {
 			// override intermediate cert paths for root and clientroot cas
 			cm.Data["ORDERER_ADMIN_TLS_ROOTCAS"] = intercertPath

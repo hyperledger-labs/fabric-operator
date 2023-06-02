@@ -65,9 +65,10 @@ var _ = Describe("Peer init", func() {
 		}
 
 		config := &initializer.Config{
-			OUFile:         filepath.Join(defaultConfigs, "peer/ouconfig.yaml"),
-			CorePeerFile:   filepath.Join(defaultConfigs, "peer/core.yaml"),
-			CorePeerV2File: filepath.Join(defaultConfigs, "peer/v2/core.yaml"),
+			OUFile:          filepath.Join(defaultConfigs, "peer/ouconfig.yaml"),
+			CorePeerFile:    filepath.Join(defaultConfigs, "peer/core.yaml"),
+			CorePeerV2File:  filepath.Join(defaultConfigs, "peer/v2/core.yaml"),
+			CorePeerV25File: filepath.Join(defaultConfigs, "peer/v25/core.yaml"),
 		}
 		validator := &validator.Validator{
 			Client: client,

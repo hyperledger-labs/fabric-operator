@@ -139,7 +139,7 @@ func (o *Override) CommonIngress(instance *current.IBPOrderer, ingress *networki
 		},
 	}
 	currentVer := version.String(instance.Spec.FabricVersion)
-	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_4_1) {
 		adminhost := instance.Namespace + "-" + instance.Name + "-admin" + "." + instance.Spec.Domain
 		adminIngressRule := []networkingv1.IngressRule{
 			networkingv1.IngressRule{

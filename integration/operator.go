@@ -66,6 +66,7 @@ func GetOperatorConfig(configs, caFiles, peerFiles, ordererFiles, consoleFiles s
 		PeerInitConfig: &peerinit.Config{
 			CorePeerFile:           filepath.Join(configs, "peer/core.yaml"),
 			CorePeerV2File:         filepath.Join(configs, "peer/v2/core.yaml"),
+			CorePeerV25File:        filepath.Join(configs, "peer/v25/core.yaml"),
 			OUFile:                 filepath.Join(configs, "peer/ouconfig.yaml"),
 			InterOUFile:            filepath.Join(configs, "peer/ouconfig-inter.yaml"),
 			DeploymentFile:         filepath.Join(peerFiles, "deployment.yaml"),
@@ -87,6 +88,7 @@ func GetOperatorConfig(configs, caFiles, peerFiles, ordererFiles, consoleFiles s
 		OrdererInitConfig: &ordererinit.Config{
 			OrdererV2File:      filepath.Join(configs, "orderer/v2/orderer.yaml"),
 			OrdererV24File:     filepath.Join(configs, "orderer/v24/orderer.yaml"),
+			OrdererV25File:     filepath.Join(configs, "orderer/v25/orderer.yaml"),
 			OrdererFile:        filepath.Join(configs, "orderer/orderer.yaml"),
 			ConfigTxFile:       filepath.Join(configs, "orderer/configtx.yaml"),
 			OUFile:             filepath.Join(configs, "orderer/ouconfig.yaml"),

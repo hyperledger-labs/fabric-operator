@@ -46,6 +46,7 @@ type Update struct {
 	ecertCreated          bool
 	migrateToV2           bool
 	migrateToV24          bool
+	migrateToV25          bool
 	nodeOUUpdated         bool
 	imagesUpdated         bool
 	fabricVersionUpdated  bool
@@ -69,6 +70,7 @@ func (u *Update) Detected() bool {
 		u.ecertEnroll ||
 		u.migrateToV2 ||
 		u.migrateToV24 ||
+		u.migrateToV25 ||
 		u.nodeOUUpdated ||
 		u.imagesUpdated ||
 		u.fabricVersionUpdated
@@ -186,6 +188,10 @@ func (u *Update) MigrateToV24() bool {
 	return u.migrateToV24
 }
 
+func (u *Update) MigrateToV25() bool {
+	return u.migrateToV25
+}
+
 func (u *Update) NodeOUUpdated() bool {
 	return u.nodeOUUpdated
 }
@@ -250,6 +256,9 @@ func (u *Update) GetUpdateStackWithTrues() string {
 	}
 	if u.migrateToV24 {
 		stack += "migrateToV24 "
+	}
+	if u.migrateToV25 {
+		stack += "migrateToV25 "
 	}
 	if u.nodeOUUpdated {
 		stack += "nodeOUUpdated "
