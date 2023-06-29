@@ -781,8 +781,8 @@ func (r *ReconcileIBPOrderer) UpdateFunc(e event.UpdateEvent) bool {
 			oldVer.LessThan(version.V2_5_1) &&
 			(newVer.EqualWithoutTag(version.V2_5_1) || newVer.GreaterThan(version.V2_5_1)) {
 			update.migrateToV25 = true
-			// Re-enrolling tls cert to include admin hostname in SAN (for orderers >=2.4.1)
-			update.tlscertReenrollNeeded = true
+			//Orderers >=2.4.1 alredy has the tls-cert renewed, we do not do this in this upgrade
+			//update.tlscertReenrollNeeded = true
 		}
 
 		if oldOrderer.Spec.NodeOUDisabled() != newOrderer.Spec.NodeOUDisabled() {
