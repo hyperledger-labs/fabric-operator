@@ -808,6 +808,7 @@ func (ca *CA) GenTLSCrypto(instance *current.IBPCA, endpoints *current.CAEndpoin
 	ip := net.ParseIP(endpoints.API)
 	if ip == nil {
 		template.DNSNames = append(template.DNSNames, endpoints.API)
+		template.DNSNames = append(template.DNSNames, strings.Replace(endpoints.API, "-ca.", ".", -1))
 	} else {
 		template.IPAddresses = append(template.IPAddresses, ip)
 	}
