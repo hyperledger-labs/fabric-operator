@@ -44,8 +44,10 @@ func GetImage(registryURL, image, requestedImage string) string {
 			// use the image as is
 			return image
 		}
-		// else pre-pend registry url to image
-		image = registryURL + image
+		if image != requestedImage {
+			// else pre-pend registry url to image
+			image = registryURL + image
+		}
 	}
 
 	return image
