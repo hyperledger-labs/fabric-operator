@@ -44,12 +44,11 @@ func GetImage(registryURL, image, requestedImage string) string {
 			// use the image as is
 			return image
 		}
-		if image != requestedImage {
-			// else pre-pend registry url to image
+		if !strings.Contains(image, registryURL) {
+			// if image doesn't contain registy url pre-pend the same to image
 			image = registryURL + image
 		}
 	}
-
 	return image
 }
 

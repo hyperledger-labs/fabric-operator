@@ -425,5 +425,10 @@ var _ = Describe("Util", func() {
 			resultImg := image.GetImage(registryURL, img, defaultImg)
 			Expect(resultImg).To(Equal(defaultImg))
 		})
+		It("Use default Image with registry URL when image is missing", func() {
+			defaultImg = "fabric-peer"
+			resultImg := image.GetImage(registryURL, "", defaultImg)
+			Expect(resultImg).To(Equal(registryURL+defaultImg))
+		})
 	})
 })
