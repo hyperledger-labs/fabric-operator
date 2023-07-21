@@ -37,7 +37,6 @@ func GetImage(registryURL, image, requestedImage string) string {
 	if requestedImage != "" {
 		image = requestedImage
 	}
-
 	if image != "" {
 		// if registry url is empty or set to `no-registry-url` return image as is
 		if registryURL == "" || registryURL == "no-registry-url" || registryURL == "no-registry-url/" {
