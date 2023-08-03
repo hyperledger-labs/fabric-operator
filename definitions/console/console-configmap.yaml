@@ -24,7 +24,6 @@ data:
   settings.yaml: |
     version: "v2.0"
     initial_admin: "xyz@ibm.com"
-    auth_scheme: "couchdb"
     configtxlator: "http://localhost:8083"
     deployer_url: "http://dev:dev123@localhost:8080" 
     deployer_timeout: 60000
