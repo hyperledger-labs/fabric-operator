@@ -46,7 +46,8 @@ General:
         # ServerMinInterval is the minimum permitted time between client pings.
         # If clients send pings more frequently, the server will
         # disconnect them.
-        ServerMinInterval: 60s
+        ## Changing defaults to 25s to fix connection issues with VPC clusters
+        ServerMinInterval: 25s
         # ServerInterval is the time between pings to clients.
         ServerInterval: 7200s
         # ServerTimeout is the duration the server waits for a response from
