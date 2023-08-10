@@ -443,6 +443,11 @@ func (o *Override) V2Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 		peerContainer.AppendEnvIfMissing("IBP_BUILDER_ENDPOINT", "127.0.0.1:11111")
 		peerContainer.AppendEnvIfMissing("PEER_NAME", instance.GetName())
 
+		// Overriding keepalive flags for peers to fix connection issues with VPC clusters
+		peerContainer.AppendEnvIfMissing("CORE_PEER_KEEPALIVE_MININTERVAL", "25s")
+		peerContainer.AppendEnvIfMissing("CORE_PEER_KEEPALIVE_CLIENT_INTERVAL", "30s")
+		peerContainer.AppendEnvIfMissing("CORE_PEER_KEEPALIVE_DELIVERYCLIENT_INTERVAL", "30s")
+
 		// Will delete these envs if found, these are not required for v2
 		peerContainer.DeleteEnv("CORE_VM_ENDPOINT")
 		peerContainer.DeleteEnv("CORE_CHAINCODE_GOLANG_RUNTIME")
