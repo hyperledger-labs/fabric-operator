@@ -21,8 +21,10 @@ package staggerrestarts
 import (
 	"context"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"math/big"
+	"strconv"
 	"strings"
 	"time"
 
@@ -163,6 +165,96 @@ func (s *StaggerRestartsService) RestartImmediately(componentType string, instan
 	return nil
 }
 
+// optimizeRestart is called by the ca/peer/orderer reconcile loops via the restart
+// this method combines restart requests into one and reduces the number
+// of restarts that is required for the components
+
+// returns the Restart Config with Optimized Queues for Restarts
+func optimizeRestart(restartConfig *RestartConfig) *RestartConfig {
+	m_a_p := map[string]map[string]string{}
+	for mspid, queue := range restartConfig.Queues {
+		for i := 0; i < len(queue); i++ {
+			// if the pod is already in waiting state, do not combine the restart
+			if queue[i].Status == "waiting" {
+				tempqueue := map[string]string{}
+				tempqueue["reason"] = queue[i].Reason
+				tempqueue["status"] = string(queue[i].Status)
+				tempqueue["count"] = "1"
+				tempqueue["checkuntilltimestamp"] = queue[i].CheckUntilTimestamp
+				tempqueue["lastcheckedtimestamp"] = queue[i].LastCheckedTimestamp
+				tempqueue["podname"] = queue[i].PodName
+				tempqueue["mspid"] = mspid
+
+				m_a_p[queue[i].CRName+"~wait"] = tempqueue
+				continue
+			}
+
+			// if the restart for that CRName already exist, increase the restart count and combine the reason
+			// else add it to the new map with the CRName and count as 1
+			if _, ok := m_a_p[queue[i].CRName]; ok && m_a_p[queue[i].CRName]["status"] != "waiting" {
+				existingCount := m_a_p[queue[i].CRName]["count"]
+				newCount, _ := strconv.Atoi(existingCount)
+				newCount++
+				m_a_p[queue[i].CRName]["count"] = strconv.Itoa(newCount)
+
+				existingReason := m_a_p[queue[i].CRName]["reason"]
+				newReason := queue[i].Reason
+				newReason = existingReason + "~" + newReason
+				m_a_p[queue[i].CRName]["reason"] = newReason
+				m_a_p[queue[i].CRName]["status"] = "pending"
+				m_a_p[queue[i].CRName]["mspid"] = mspid
+
+			} else {
+				tempqueue := map[string]string{}
+				tempqueue["reason"] = queue[i].Reason
+				tempqueue["count"] = "1"
+				tempqueue["status"] = "pending"
+				tempqueue["mspid"] = mspid
+				m_a_p[queue[i].CRName] = tempqueue
+			}
+		}
+	}
+
+	f := map[string][]*Component{}
+	tempComponentArray := []*Component{}
+	currComponent := []*Component{}
+
+	// Merge the restart queues such that waiting restart requests are at 0 index of the slice
+	for mspid, queue := range restartConfig.Queues {
+		_ = queue
+		for k := range m_a_p {
+			if m_a_p[k]["mspid"] == mspid {
+				component := Component{}
+				component.Reason = m_a_p[k]["reason"]
+				component.CheckUntilTimestamp = m_a_p[k]["checkuntilltimestamp"]
+				component.LastCheckedTimestamp = m_a_p[k]["lastcheckedtimestamp"]
+				component.Status = Status(m_a_p[k]["status"])
+				component.PodName = (m_a_p[k]["podname"])
+				k = strings.ReplaceAll(k, "~wait", "")
+				component.CRName = k
+				tempComponentArray = append(tempComponentArray, &component)
+				if f[mspid] == nil {
+					f[mspid] = tempComponentArray
+				} else {
+					tempComponentArray = f[mspid]
+					currComponent = append(currComponent, &component)
+					if component.Status == "waiting" {
+						tempComponentArray = append(currComponent, tempComponentArray...)
+					} else {
+						tempComponentArray = append(tempComponentArray, currComponent...)
+					}
+					f[mspid] = tempComponentArray
+				}
+				tempComponentArray = []*Component{}
+				currComponent = []*Component{}
+			}
+		}
+	}
+
+	restartConfig.Queues = f
+	return restartConfig
+}
+
 // Reconcile is called by the ca/peer/orderer reconcile loops via the restart
 // manager when an update to the <ca/peer/orderer>-restart-config CM is detected
 // and handles the different states of the first component of each queue.
@@ -175,6 +267,21 @@ func (s *StaggerRestartsService) Reconcile(componentType, namespace string) (boo
 	if err != nil {
 		return requeue, err
 	}
+
+	u, err := json.Marshal(restartConfig.Queues)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Restart Config Before optimized", string(u))
+
+	restartConfig = optimizeRestart(restartConfig)
+	s.UpdateConfig(componentType, namespace, restartConfig)
+
+	u, err = json.Marshal(restartConfig.Queues)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Restart Config After optimized", string(u))
 
 	updated := false
 	// Check front component of each queue
