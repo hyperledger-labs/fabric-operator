@@ -171,7 +171,7 @@ func (s *StaggerRestartsService) RestartImmediately(componentType string, instan
 
 // returns the Restart Config with Optimized Queues for Restarts
 func optimizeRestart(restartConfig *RestartConfig) *RestartConfig {
-	m_a_p := map[string]map[string]string{}
+	optimizedMap := map[string]map[string]string{}
 	for mspid, queue := range restartConfig.Queues {
 		for i := 0; i < len(queue); i++ {
 			// if the pod is already in waiting state, do not combine the restart
@@ -185,24 +185,24 @@ func optimizeRestart(restartConfig *RestartConfig) *RestartConfig {
 				tempqueue["podname"] = queue[i].PodName
 				tempqueue["mspid"] = mspid
 
-				m_a_p[queue[i].CRName+"~wait"] = tempqueue
+				optimizedMap[queue[i].CRName+"~wait"] = tempqueue
 				continue
 			}
 
 			// if the restart for that CRName already exist, increase the restart count and combine the reason
 			// else add it to the new map with the CRName and count as 1
-			if _, ok := m_a_p[queue[i].CRName]; ok && m_a_p[queue[i].CRName]["status"] != "waiting" {
-				existingCount := m_a_p[queue[i].CRName]["count"]
+			if _, ok := optimizedMap[queue[i].CRName]; ok && optimizedMap[queue[i].CRName]["status"] != "waiting" {
+				existingCount := optimizedMap[queue[i].CRName]["count"]
 				newCount, _ := strconv.Atoi(existingCount)
 				newCount++
-				m_a_p[queue[i].CRName]["count"] = strconv.Itoa(newCount)
+				optimizedMap[queue[i].CRName]["count"] = strconv.Itoa(newCount)
 
-				existingReason := m_a_p[queue[i].CRName]["reason"]
+				existingReason := optimizedMap[queue[i].CRName]["reason"]
 				newReason := queue[i].Reason
 				newReason = existingReason + "~" + newReason
-				m_a_p[queue[i].CRName]["reason"] = newReason
-				m_a_p[queue[i].CRName]["status"] = "pending"
-				m_a_p[queue[i].CRName]["mspid"] = mspid
+				optimizedMap[queue[i].CRName]["reason"] = newReason
+				optimizedMap[queue[i].CRName]["status"] = "pending"
+				optimizedMap[queue[i].CRName]["mspid"] = mspid
 
 			} else {
 				tempqueue := map[string]string{}
@@ -210,7 +210,7 @@ func optimizeRestart(restartConfig *RestartConfig) *RestartConfig {
 				tempqueue["count"] = "1"
 				tempqueue["status"] = "pending"
 				tempqueue["mspid"] = mspid
-				m_a_p[queue[i].CRName] = tempqueue
+				optimizedMap[queue[i].CRName] = tempqueue
 			}
 		}
 	}
@@ -222,14 +222,14 @@ func optimizeRestart(restartConfig *RestartConfig) *RestartConfig {
 	// Merge the restart queues such that waiting restart requests are at 0 index of the slice
 	for mspid, queue := range restartConfig.Queues {
 		_ = queue
-		for k := range m_a_p {
-			if m_a_p[k]["mspid"] == mspid {
+		for k := range optimizedMap {
+			if optimizedMap[k]["mspid"] == mspid {
 				component := Component{}
-				component.Reason = m_a_p[k]["reason"]
-				component.CheckUntilTimestamp = m_a_p[k]["checkuntilltimestamp"]
-				component.LastCheckedTimestamp = m_a_p[k]["lastcheckedtimestamp"]
-				component.Status = Status(m_a_p[k]["status"])
-				component.PodName = (m_a_p[k]["podname"])
+				component.Reason = optimizedMap[k]["reason"]
+				component.CheckUntilTimestamp = optimizedMap[k]["checkuntilltimestamp"]
+				component.LastCheckedTimestamp = optimizedMap[k]["lastcheckedtimestamp"]
+				component.Status = Status(optimizedMap[k]["status"])
+				component.PodName = (optimizedMap[k]["podname"])
 				k = strings.ReplaceAll(k, "~wait", "")
 				component.CRName = k
 				tempComponentArray = append(tempComponentArray, &component)
