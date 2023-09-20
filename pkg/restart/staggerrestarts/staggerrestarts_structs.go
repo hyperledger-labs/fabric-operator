@@ -33,6 +33,7 @@ const (
 	Waiting   Status = "waiting"
 	Completed Status = "completed"
 	Expired   Status = "expired"
+	Deleted   Status = "deleted"
 
 	Restarted Status = "restarted"
 )
