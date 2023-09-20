@@ -32,6 +32,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/restart/configmap"
 	"github.com/pkg/errors"
 
+	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -201,16 +202,27 @@ func (s *StaggerRestartsService) Reconcile(componentType, namespace string) (boo
 				component.PodName = pods[0].Name
 			}
 
-			// Restart component
-			err = s.RestartDeployment(name, namespace)
-			if err != nil {
-				return requeue, errors.Wrapf(err, "failed to restart deployment %s", name)
-			}
+			deployExists, _ := s.CheckDeployments(name, namespace)
+			if deployExists {
+				// Restart component
+				err = s.RestartDeployment(name, namespace)
+				if err != nil {
+					return requeue, errors.Wrapf(err, "failed to restart deployment %s", name)
+				}
 
-			// Update config
-			component.Status = Waiting
-			component.LastCheckedTimestamp = time.Now().UTC().String()
-			component.CheckUntilTimestamp = time.Now().Add(s.Timeout).UTC().String()
+				// Update config
+				component.Status = Waiting
+				component.LastCheckedTimestamp = time.Now().UTC().String()
+				component.CheckUntilTimestamp = time.Now().Add(s.Timeout).UTC().String()
+			} else { // if deployment doesn't exists then the cr spec might have been deleted
+				// deployment has been deleted, remove the entry from the queue
+				component.Status = Deleted
+				log.Info(fmt.Sprintf("%s restart status is %s, removing from %s restart queue", component.CRName, component.Status, mspid))
+				component.LastCheckedTimestamp = time.Now().UTC().String()
+				component.CheckUntilTimestamp = time.Now().Add(s.Timeout).UTC().String()
+				restartConfig.AddToLog(component)
+				restartConfig.PopFromQueue(mspid)
+			}
 
 			updated = true
 
@@ -328,6 +340,32 @@ func (s *StaggerRestartsService) RestartDeployment(name, namespace string) error
 	}
 
 	return nil
+}
+
+func (s *StaggerRestartsService) CheckDeployments(name, namespace string) (bool, error) {
+	deploymentsExists := false
+
+	labelSelector, err := labels.Parse(fmt.Sprintf("app=%s", name))
+	if err != nil {
+		return false, errors.Wrap(err, "failed to parse label selector for app name")
+	}
+
+	listOptions := &client.ListOptions{
+		LabelSelector: labelSelector,
+		Namespace:     namespace,
+	}
+	deployList := &appsv1.DeploymentList{}
+	err = s.Client.List(context.TODO(), deployList, listOptions)
+
+	if err != nil {
+		log.Error(err, "failed to get deployment list for %s", name)
+		return deploymentsExists, nil
+	}
+	if len(deployList.Items) > 0 {
+		deploymentsExists = true
+	}
+
+	return deploymentsExists, nil
 }
 
 func (s *StaggerRestartsService) GetRunningPods(name, namespace string) ([]corev1.Pod, error) {
