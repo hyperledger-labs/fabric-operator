@@ -19,15 +19,15 @@ name: Integration Test
 
 on:
   push:
-    branches: [main]
+    branches: [v1.*]
   pull_request:
-    branches: [main]
+    branches: [v1.*]
 
 env:
   KUBECONFIG_PATH: /tmp/kubeconfig.yaml
   OPERATOR_NAMESPACE: inttest
   DOCKERCONFIGJSON: ${{ secrets.DOCKERCONFIGJSON }}
-  GO_VER: 1.18
+  GO_VER: 1.20
 
 jobs:
   suite:
