@@ -9,7 +9,7 @@ require (
 	github.com/go-test/deep v1.0.2
 	github.com/gogo/protobuf v1.3.2
 	github.com/hyperledger/fabric v1.4.12
-	github.com/hyperledger/fabric-ca v1.5.5
+	github.com/hyperledger/fabric-ca v1.5.7
 	github.com/hyperledger/fabric-protos-go v0.0.0-20210911123859-041d13f0980c
 	github.com/imdario/mergo v0.3.12
 	github.com/lib/pq v1.8.0
@@ -34,9 +34,9 @@ require (
 )
 
 require (
-	github.com/IBM/idemix v0.0.0-20220113150823-80dd4cb2d74e // indirect
-	github.com/IBM/mathlib v0.0.0-20220414125002-6f78dce8f91c // indirect
-	github.com/consensys/gnark-crypto v0.6.0 // indirect
+	github.com/IBM/idemix v0.0.2-0.20230510082947-a0c3ee5ebe35 // indirect
+	github.com/IBM/mathlib v0.0.3-0.20230428120512-8afa4e643d4c // indirect
+	github.com/consensys/gnark-crypto v0.9.1 // indirect
 	github.com/jinzhu/copier v0.3.5 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
 )
@@ -48,6 +48,8 @@ require (
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/Shopify/sarama v1.30.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/cespare/xxhash/v2 v2.1.1 // indirect
+	github.com/consensys/bavard v0.1.13 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
@@ -92,6 +94,7 @@ require (
 	github.com/jmhodges/clock v0.0.0-20160418191101-880ee4c33548 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/kilic/bls12-381 v0.1.0 // indirect
 	github.com/kisielk/sqlstruct v0.0.0-20201105191214-5f3e10d3ab46 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect
@@ -108,14 +111,14 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.16.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
-	github.com/prometheus/common v0.10.0 // indirect
-	github.com/prometheus/procfs v0.2.0 // indirect
+	github.com/prometheus/common v0.26.0 // indirect
+	github.com/prometheus/procfs v0.6.0 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/jwalterweatherman v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/testify v1.7.1-0.20210116013205-6990a05d54c2 // indirect
+	github.com/stretchr/testify v1.8.0 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/sykesm/zap-logfmt v0.0.4 // indirect
 	github.com/weppos/publicsuffix-go v0.5.0 // indirect
@@ -123,7 +126,7 @@ require (
 	github.com/zmap/zlint v0.0.0-20190806154020-fd021b4cfbeb // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
-	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
@@ -136,23 +139,24 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20201110150050-8816d57aaa9a // indirect
 	google.golang.org/grpc v1.31.0 // indirect
-	google.golang.org/protobuf v1.26.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.51.0 // indirect
 	gopkg.in/ldap.v2 v2.5.1 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/component-base v0.21.5 // indirect
 	k8s.io/gengo v0.0.0-20201214224949-b6c5ce23f027 // indirect
 	k8s.io/klog/v2 v2.8.0 // indirect
 	k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7 // indirect
+	rsc.io/tmplfunc v0.0.3 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.1.2 // indirect
 )
 
 replace (
-	github.com/go-kit/kit => github.com/go-kit/kit v0.8.0 // Needed for fabric-ca
-	github.com/gorilla/handlers => github.com/gorilla/handlers v1.4.0 // Needed for fabric-ca
-	github.com/gorilla/mux => github.com/gorilla/mux v1.7.3 // Needed for fabric-ca
+	github.com/go-kit/kit => github.com/go-kit/kit v0.9.0 // Needed for fabric-ca
+	github.com/gorilla/handlers => github.com/gorilla/handlers v1.5.1 // Needed for fabric-ca
+	github.com/gorilla/mux => github.com/gorilla/mux v1.8.0 // Needed for fabric-ca
 	github.com/hyperledger/fabric => github.com/hyperledger/fabric v0.0.0-20191027202024-115c7a2205a6
-	github.com/prometheus/client_golang => github.com/prometheus/client_golang v0.9.0 // Needed for fabric-ca
+	github.com/prometheus/client_golang => github.com/prometheus/client_golang v1.11.1 // Needed for fabric-ca
 )
