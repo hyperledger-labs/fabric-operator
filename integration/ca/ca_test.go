@@ -500,7 +500,8 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 			})
 		})
 
-		Context("enroll intermediate ca", func() {
+		//TODO: Disabling the test untill DNS host issues are sorted out with the nginx ingress
+		PContext("enroll intermediate ca", func() {
 			BeforeEach(func() {
 				Eventually(ca.PodIsRunning).Should((Equal(true)))
 			})

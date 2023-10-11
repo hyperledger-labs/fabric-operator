@@ -19,11 +19,10 @@
 name: unit-tests
 
 on:
-  # TODO: uncomment this when moved to hyperledger-labs repo
-  # push:
-  #   branches: [main]
+  push:
+    branches: [v1.*]
   pull_request:
-    branches: [main]
+    branches: [v1.*]
 
 env:
   GO_VER: 1.18

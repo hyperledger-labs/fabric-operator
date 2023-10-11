@@ -2,7 +2,7 @@ name: Build Operator image
 
 on:
   push:
-    branches: [main]
+    branches: [v1.*]
 
 jobs:
   image:
