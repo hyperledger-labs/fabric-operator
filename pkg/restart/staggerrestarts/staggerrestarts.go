@@ -32,6 +32,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/action"
 	k8sclient "github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/restart/configmap"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/pkg/errors"
 
 	corev1 "k8s.io/api/core/v1"
@@ -165,6 +166,23 @@ func (s *StaggerRestartsService) RestartImmediately(componentType string, instan
 	return nil
 }
 
+func isOptimizePossible(restartConfig *RestartConfig) bool {
+	canOptimize := false
+	var listOfMspCRName []string
+	for mspid, queue := range restartConfig.Queues {
+		for i := 0; i < len(queue); i++ {
+			if util.ContainsValue(mspid+queue[i].CRName, listOfMspCRName) == true {
+				log.Info(fmt.Sprintf("We Can Optimize Restarts for '%s'", mspid+queue[i].CRName))
+				canOptimize = true
+				break
+			} else {
+				listOfMspCRName = append(listOfMspCRName, mspid+queue[i].CRName)
+			}
+		}
+	}
+	return canOptimize
+}
+
 // optimizeRestart is called by the ca/peer/orderer reconcile loops via the restart
 // this method combines restart requests into one and reduces the number
 // of restarts that is required for the components
@@ -268,20 +286,26 @@ func (s *StaggerRestartsService) Reconcile(componentType, namespace string) (boo
 		return requeue, err
 	}
 
-	u, err := json.Marshal(restartConfig.Queues)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Restart Config Before optimized", string(u))
+	isRestartPossible := isOptimizePossible(restartConfig)
+	if isRestartPossible {
+		u, err := json.Marshal(restartConfig.Queues)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Restart Config Before optimized", string(u))
 
-	restartConfig = optimizeRestart(restartConfig)
-	s.UpdateConfig(componentType, namespace, restartConfig)
+		restartConfig = optimizeRestart(restartConfig)
+		err = s.UpdateConfig(componentType, namespace, restartConfig)
+		if err != nil {
+			return requeue, err
+		}
+		u, err = json.Marshal(restartConfig.Queues)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Restart Config After optimized", string(u))
 
-	u, err = json.Marshal(restartConfig.Queues)
-	if err != nil {
-		panic(err)
 	}
-	fmt.Println("Restart Config After optimized", string(u))
 
 	updated := false
 	// Check front component of each queue
