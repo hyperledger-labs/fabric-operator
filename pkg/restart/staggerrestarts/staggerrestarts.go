@@ -171,6 +171,11 @@ func isOptimizePossible(restartConfig *RestartConfig) bool {
 	var listOfMspCRName []string
 	for mspid, queue := range restartConfig.Queues {
 		for i := 0; i < len(queue); i++ {
+			// we dont want to consider waiting pods
+			if queue[i].Status == "waiting" {
+				continue
+			}
+
 			if util.ContainsValue(mspid+queue[i].CRName, listOfMspCRName) == true {
 				log.Info(fmt.Sprintf("We Can Optimize Restarts for '%s'", mspid+queue[i].CRName))
 				canOptimize = true
@@ -286,8 +291,8 @@ func (s *StaggerRestartsService) Reconcile(componentType, namespace string) (boo
 		return requeue, err
 	}
 
-	isRestartPossible := isOptimizePossible(restartConfig)
-	if isRestartPossible {
+	isOptimizePossibleFlag := isOptimizePossible(restartConfig)
+	if isOptimizePossibleFlag {
 		u, err := json.Marshal(restartConfig.Queues)
 		if err != nil {
 			panic(err)
