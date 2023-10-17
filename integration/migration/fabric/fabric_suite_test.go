@@ -27,7 +27,7 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
 
@@ -56,7 +56,7 @@ const (
 	defaultConsoleDef     = "../../../definitions/console"
 	FabricBinaryVersion   = "2.2.3"
 	FabricCABinaryVersion = "1.5.1"
-	domain                = "vcap.me"
+	domain                = "localho.st"
 )
 
 var (

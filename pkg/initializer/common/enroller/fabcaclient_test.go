@@ -19,43 +19,13 @@
 package enroller_test
 
 import (
-	"net/http"
-	"net/http/httptest"
 	"time"
 
-	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/common/enroller"
-	"github.com/hyperledger/fabric-ca/lib"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Fabric CA client", func() {
-	var (
-		server      *httptest.Server
-		fabCaClient *enroller.FabCAClient
-	)
-
-	BeforeSuite(func() {
-		server = httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-			// Test request parameters
-			Expect(req.URL.String()).To(Equal("/cainfo"))
-			// Send response to be tested
-			rw.Write([]byte(`OK`))
-		}))
-
-		fabCaClient = &enroller.FabCAClient{
-			Client: &lib.Client{
-				Config: &lib.ClientConfig{
-					URL: server.URL,
-				},
-			},
-		}
-	})
-
-	AfterSuite(func() {
-		server.Close()
-	})
-
 	Context("ping CA", func() {
 		It("pings /cainfo endpoint", func() {
 			err := fabCaClient.PingCA(30 * time.Second)

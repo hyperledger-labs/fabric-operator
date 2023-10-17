@@ -22,7 +22,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/controllers/mocks"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/route"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	routev1 "github.com/openshift/api/route/v1"
 	"github.com/pkg/errors"

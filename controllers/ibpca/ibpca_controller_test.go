@@ -29,7 +29,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/common"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	camocks "github.com/IBM-Blockchain/fabric-operator/controllers/ibpca/mocks"

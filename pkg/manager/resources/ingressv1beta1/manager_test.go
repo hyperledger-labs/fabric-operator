@@ -24,7 +24,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/controllers/mocks"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources"
 	ingressv1beta1 "github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/ingressv1beta1"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
 	networkingv1beta1 "k8s.io/api/networking/v1beta1"

@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"time"
 
+	"k8s.io/utils/pointer"
 	"sigs.k8s.io/yaml"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
@@ -37,7 +38,7 @@ import (
 	config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v2"
 	baseorderer "github.com/IBM-Blockchain/fabric-operator/pkg/offering/base/orderer"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -939,7 +940,7 @@ func GetOrderer() (*Orderer, []Orderer) {
 				},
 			},
 			ConfigOverride: &runtime.RawExtension{Raw: configBytes},
-			DisableNodeOU:  &current.BoolTrue,
+			DisableNodeOU:  pointer.Bool(true),
 			FabricVersion:  integration.FabricVersion + "-1",
 		},
 	}
@@ -1022,7 +1023,7 @@ func GetOrderer2() (*Orderer, []Orderer) {
 					Limits:   defaultLimitsProxy,
 				},
 			},
-			DisableNodeOU: &current.BoolTrue,
+			DisableNodeOU: pointer.Bool(true),
 			FabricVersion: integration.FabricVersion + "-1",
 		},
 	}
@@ -1117,7 +1118,7 @@ func GetOrderer3() (*Orderer, []Orderer) {
 					Region: "us-south2",
 				},
 			},
-			DisableNodeOU: &current.BoolTrue,
+			DisableNodeOU: pointer.Bool(true),
 			FabricVersion: integration.FabricVersion + "-1",
 		},
 	}
@@ -1200,7 +1201,7 @@ func GetOrderer4() (*Orderer, []Orderer) {
 					Limits:   defaultLimitsProxy,
 				},
 			},
-			DisableNodeOU: &current.BoolTrue,
+			DisableNodeOU: pointer.Bool(true),
 			FabricVersion: integration.FabricVersion + "-1",
 		},
 	}
@@ -1268,7 +1269,7 @@ func GetOrderer5() (*Orderer, []Orderer) {
 			},
 			OrdererType:       "etcdraft",
 			SystemChannelName: "testchainid",
-			UseChannelLess:    &current.BoolTrue,
+			UseChannelLess:    pointer.Bool(true),
 			OrgName:           "orderermsp",
 			MSPID:             "orderermsp",
 			ImagePullSecrets:  []string{"regcred"},
@@ -1297,7 +1298,7 @@ func GetOrderer5() (*Orderer, []Orderer) {
 					Limits:   defaultLimitsProxy,
 				},
 			},
-			DisableNodeOU: &current.BoolTrue,
+			DisableNodeOU: pointer.Bool(true),
 			FabricVersion: integration.FabricVersion24 + "-1",
 		},
 	}

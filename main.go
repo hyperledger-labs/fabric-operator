@@ -41,11 +41,11 @@ import (
 )
 
 const (
-	defaultConfigs    = "../../defaultconfig"
-	defaultPeerDef    = "../../definitions/peer"
-	defaultCADef      = "../../definitions/ca"
-	defaultOrdererDef = "../../definitions/orderer"
-	defaultConsoleDef = "../../definitions/console"
+	defaultConfigs    = "./defaultconfig"
+	defaultPeerDef    = "./definitions/peer"
+	defaultCADef      = "./definitions/ca"
+	defaultOrdererDef = "./definitions/orderer"
+	defaultConsoleDef = "./definitions/console"
 )
 
 var log = logf.Log.WithName("cmd")
@@ -72,7 +72,7 @@ func main() {
 
 	operatorCfg.Operator.SetDefaults()
 
-	if err := command.Operator(operatorCfg, true); err != nil {
+	if err := command.Operator(operatorCfg); err != nil {
 		log.Error(err, "failed to start operator")
 		time.Sleep(15 * time.Second)
 	}

@@ -20,7 +20,7 @@ package merge_test
 
 import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util/merge"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 

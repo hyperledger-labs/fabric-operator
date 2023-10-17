@@ -139,7 +139,7 @@ spec:
           livenessProbe:
             failureThreshold: 6
             tcpSocket:
-              port: 7443
+              port: 8080
             initialDelaySeconds: 30
             timeoutSeconds: 5
           name: proxy
@@ -150,7 +150,7 @@ spec:
               name: https
           readinessProbe:
             tcpSocket:
-              port: 7443
+              port: 8080
             initialDelaySeconds: 26
             periodSeconds: 5
             timeoutSeconds: 5

@@ -29,12 +29,15 @@ import (
 	"math/big"
 	"time"
 
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	cmocks "github.com/IBM-Blockchain/fabric-operator/controllers/mocks"
 	config "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
 	commonapi "github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/deployer"
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v1"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/certificate"
 	commonconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/common/config"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/common/enroller"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/common/mspparser"
@@ -47,13 +50,14 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/IBM-Blockchain/fabric-operator/version"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	k8serror "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -623,6 +627,279 @@ var _ = Describe("Base Peer", func() {
 			Expect(instance.Spec.Secret.Enrollment.TLS.CSR.Hosts).To(ContainElement(hostsCustom[0]))
 			Expect(instance.Spec.Secret.Enrollment.TLS.CSR.Hosts).To(ContainElement(hosts[0]))
 			Expect(instance.Spec.Secret.Enrollment.TLS.CSR.Hosts).To(ContainElement(hosts[1]))
+		})
+	})
+	Context("check certificates", func() {
+		It("returns error if fails to get certificate expiry info", func() {
+			certificateMgr.CheckCertificatesForExpireReturns("", "", errors.New("cert expiry error"))
+			_, err := peer.CheckCertificates(instance)
+			Expect(err).To(HaveOccurred())
+		})
+
+		It("sets cr status with certificate expiry info", func() {
+			certificateMgr.CheckCertificatesForExpireReturns(current.Warning, "message", nil)
+			status, err := peer.CheckCertificates(instance)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(status.Type).To(Equal(current.Warning))
+			Expect(status.Message).To(Equal("message"))
+			Expect(status.Reason).To(Equal("certRenewalRequired"))
+		})
+	})
+
+	Context("set certificate timer", func() {
+		BeforeEach(func() {
+			instance.Spec.Secret = &current.SecretSpec{
+				Enrollment: &current.EnrollmentSpec{
+					TLS: &current.Enrollment{
+						EnrollID: "enrollID",
+					},
+				},
+			}
+			mockKubeClient.GetStub = func(ctx context.Context, types types.NamespacedName, obj client.Object) error {
+				switch obj.(type) {
+				case *current.IBPPeer:
+					o := obj.(*current.IBPPeer)
+					o.Kind = "IBPPeer"
+					o.Name = "peer1"
+					o.Namespace = "random"
+					o.Spec.Secret = &current.SecretSpec{
+						Enrollment: &current.EnrollmentSpec{
+							TLS: &current.Enrollment{
+								EnrollID: "enrollID",
+							},
+						},
+					}
+				case *corev1.Secret:
+					o := obj.(*corev1.Secret)
+					switch types.Name {
+					case "tls-" + instance.Name + "-signcert":
+						o.Name = "tls-" + instance.Name + "-signcert"
+						o.Namespace = instance.Namespace
+						o.Data = map[string][]byte{"cert.pem": generateCertPemBytes(29)}
+					case "tls-" + instance.Name + "-keystore":
+						o.Name = "tls-" + instance.Name + "-keystore"
+						o.Namespace = instance.Namespace
+						o.Data = map[string][]byte{"key.pem": []byte("")}
+					case instance.Name + "-crypto-backup":
+						return k8serrors.NewNotFound(schema.GroupResource{}, "not found")
+					}
+				}
+				return nil
+			}
+		})
+
+		It("returns error if unable to get duration to next renewal", func() {
+			certificateMgr.GetDurationToNextRenewalReturns(time.Duration(0), errors.New("failed to get duration"))
+			err := peer.SetCertificateTimer(instance, "tls")
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("failed to get duration"))
+		})
+
+		Context("sets timer to renew TLS certificate", func() {
+			BeforeEach(func() {
+				certificateMgr.GetDurationToNextRenewalReturns(time.Duration(3*time.Second), nil)
+				mockKubeClient.UpdateStatusReturns(nil)
+				certificateMgr.RenewCertReturns(nil)
+			})
+
+			It("does not return error, but certificate fails to renew after timer", func() {
+				certificateMgr.RenewCertReturns(errors.New("failed to renew cert"))
+				err := peer.SetCertificateTimer(instance, "tls")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"]).NotTo(BeNil())
+
+				By("certificate fails to be renewed", func() {
+					Eventually(func() bool {
+						return mockKubeClient.UpdateStatusCallCount() == 1 &&
+							certificateMgr.RenewCertCallCount() == 1
+					}, time.Duration(5*time.Second)).Should(Equal(true))
+				})
+
+				// timer.Stop() == false means that it already fired
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"].Stop()).To(Equal(false))
+			})
+
+			It("does not return error, and certificate is successfully renewed after timer", func() {
+				err := peer.SetCertificateTimer(instance, "tls")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"]).NotTo(BeNil())
+
+				By("certificate successfully renewed", func() {
+					Eventually(func() bool {
+						return mockKubeClient.UpdateStatusCallCount() == 1 &&
+							certificateMgr.RenewCertCallCount() == 1
+					}, time.Duration(5*time.Second)).Should(Equal(true))
+				})
+
+				// timer.Stop() == false means that it already fired
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"].Stop()).To(Equal(false))
+			})
+
+			It("does not return error, and timer is set to renew certificate at a later time", func() {
+				// Set expiration date of certificate to be > 30 days from now
+				certificateMgr.GetDurationToNextRenewalReturns(time.Duration(35*24*time.Hour), nil)
+
+				err := peer.SetCertificateTimer(instance, "tls")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"]).NotTo(BeNil())
+
+				// timer.Stop() == true means that it has not fired but is now stopped
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"].Stop()).To(Equal(true))
+			})
+		})
+
+		Context("read certificate expiration date to set timer correctly", func() {
+			BeforeEach(func() {
+				peer.CertificateManager = &certificate.CertificateManager{
+					Client: mockKubeClient,
+					Scheme: &runtime.Scheme{},
+				}
+
+				// set to 30 days
+				instance.Spec.NumSecondsWarningPeriod = 30 * basepeer.DaysToSecondsConversion
+			})
+
+			It("doesn't return error if timer is set correctly, but error in renewing certificate when timer goes off", func() {
+				// Set tls signcert expiration date to be 29 days from now, cert is renewed if expires within 30 days
+				mockKubeClient.GetStub = func(ctx context.Context, types types.NamespacedName, obj client.Object) error {
+					switch obj.(type) {
+					case *current.IBPPeer:
+						o := obj.(*current.IBPPeer)
+						o.Kind = "IBPPeer"
+						instance = o
+
+					case *corev1.Secret:
+						o := obj.(*corev1.Secret)
+						switch types.Name {
+						case "tls-" + instance.Name + "-signcert":
+							o.Name = "tls-" + instance.Name + "-signcert"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"cert.pem": generateCertPemBytes(29)}
+						case "tls-" + instance.Name + "-keystore":
+							o.Name = "tls-" + instance.Name + "-keystore"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"key.pem": []byte("")}
+						case instance.Name + "-crypto-backup":
+							return k8serrors.NewNotFound(schema.GroupResource{}, "not found")
+						}
+					}
+					return nil
+				}
+
+				err := peer.SetCertificateTimer(instance, "tls")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"]).NotTo(BeNil())
+
+				// Wait for timer to go off
+				time.Sleep(5 * time.Second)
+
+				// timer.Stop() == false means that it already fired
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"].Stop()).To(Equal(false))
+			})
+
+			It("doesn't return error if timer is set correctly, timer doesn't go off certificate isn't ready for renewal", func() {
+				// Set tls signcert expiration date to be 50 days from now, cert is renewed if expires within 30 days
+				mockKubeClient.GetStub = func(ctx context.Context, types types.NamespacedName, obj client.Object) error {
+					switch obj.(type) {
+					case *current.IBPPeer:
+						o := obj.(*current.IBPPeer)
+						o.Kind = "IBPPeer"
+						instance = o
+
+					case *corev1.Secret:
+						o := obj.(*corev1.Secret)
+						switch types.Name {
+						case "tls-" + instance.Name + "-signcert":
+							o.Name = "tls-" + instance.Name + "-signcert"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"cert.pem": generateCertPemBytes(50)}
+						case "tls-" + instance.Name + "-keystore":
+							o.Name = "tls-" + instance.Name + "-keystore"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"key.pem": []byte("")}
+						case instance.Name + "-crypto-backup":
+							return k8serrors.NewNotFound(schema.GroupResource{}, "not found")
+						}
+					}
+					return nil
+				}
+
+				err := peer.SetCertificateTimer(instance, "tls")
+				Expect(err).NotTo(HaveOccurred())
+
+				// Timer shouldn't go off
+				time.Sleep(5 * time.Second)
+
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"]).NotTo(BeNil())
+				// timer.Stop() == true means that it has not fired but is now stopped
+				Expect(peer.RenewCertTimers["tls-peer1-signcert"].Stop()).To(Equal(true))
+			})
+		})
+	})
+
+	Context("renew cert", func() {
+		BeforeEach(func() {
+			instance.Spec.Secret = &current.SecretSpec{
+				Enrollment: &current.EnrollmentSpec{
+					TLS: &current.Enrollment{},
+				},
+			}
+
+			certificateMgr.RenewCertReturns(nil)
+		})
+
+		It("returns error if secret spec is missing", func() {
+			instance.Spec.Secret = nil
+			err := peer.RenewCert("tls", instance, true)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("missing secret spec for instance 'peer1'"))
+		})
+
+		It("returns error if certificate generated by MSP", func() {
+			instance.Spec.Secret = &current.SecretSpec{
+				MSP: &current.MSPSpec{},
+			}
+			err := peer.RenewCert("tls", instance, true)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("cannot auto-renew certificate created by MSP, force renewal required"))
+		})
+
+		It("returns error if certificate manager fails to renew certificate", func() {
+			certificateMgr.RenewCertReturns(errors.New("failed to renew cert"))
+			err := peer.RenewCert("tls", instance, true)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("failed to renew cert"))
+		})
+
+		It("does not return error if certificate manager successfully renews cert", func() {
+			err := peer.RenewCert("tls", instance, true)
+			Expect(err).NotTo(HaveOccurred())
+		})
+	})
+
+	Context("set cr status", func() {
+		It("returns error if fails to get current instance", func() {
+			mockKubeClient.GetReturns(errors.New("get error"))
+			err := peer.UpdateCRStatus(instance)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("failed to get new instance: get error"))
+		})
+
+		It("returns error if fails to update instance status", func() {
+			mockKubeClient.UpdateStatusReturns(errors.New("update status error"))
+			certificateMgr.CheckCertificatesForExpireReturns(current.Warning, "cert renewal required", nil)
+			err := peer.UpdateCRStatus(instance)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("failed to update status to Warning phase: update status error"))
+		})
+
+		It("sets instance CR status to Warning", func() {
+			certificateMgr.CheckCertificatesForExpireReturns(current.Warning, "message", nil)
+			err := peer.UpdateCRStatus(instance)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(instance.Status.Type).To(Equal(current.Warning))
+			Expect(instance.Status.Reason).To(Equal("certRenewalRequired"))
+			Expect(instance.Status.Message).To(Equal("message"))
 		})
 	})
 

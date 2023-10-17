@@ -42,7 +42,7 @@ printenv | sort
 # Set up a cluster
 network kind
 
-# Set up ngress and CRDs
+# Set up ingress and CRDs
 network cluster init
 
 # Set up a Fabric Network
@@ -81,8 +81,8 @@ peer chaincode query -n asset-transfer-basic -C mychannel -c '{"Args":["org.hype
 
 network down
 
-export TEST_NETWORK_PEER_IMAGE=ghcr.io/hyperledgendary/k8s-fabric-peer
-export TEST_NETWORK_PEER_IMAGE_LABEL=v0.6.0
+export TEST_NETWORK_PEER_IMAGE=ghcr.io/hyperledger-labs/k8s-fabric-peer
+export TEST_NETWORK_PEER_IMAGE_LABEL=v0.7.2
 
 network up
 network channel create

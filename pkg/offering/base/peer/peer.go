@@ -19,6 +19,7 @@
 package basepeer
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -77,6 +78,8 @@ const (
 	defaultServiceAccount   = "./definitions/peer/serviceaccount.yaml"
 	defaultRoleBinding      = "./definitions/peer/rolebinding.yaml"
 	defaultFluentdConfigMap = "./definitions/peer/fluentd-configmap.yaml"
+
+	DaysToSecondsConversion = int64(24 * 60 * 60)
 )
 
 type Override interface {
@@ -825,9 +828,13 @@ func (p *Peer) ReconcileSecret(instance *current.IBPPeer) error {
 			return nil
 		}
 		return err
+	} else {
+		log.Info(fmt.Sprintf("Updating secret '%s'", name))
+		updateErr := p.UpdateSecret(instance, secret)
+		if updateErr != nil {
+			return updateErr
+		}
 	}
-
-	// TODO: If needed, update logic goes here
 
 	return nil
 }
@@ -857,7 +864,31 @@ func (p *Peer) CreateSecret(instance *current.IBPPeer) error {
 	return nil
 }
 
+func (p *Peer) UpdateSecret(instance *current.IBPPeer, secret *corev1.Secret) error {
+	secretData := instance.Spec.Secret
+	bytesData, err := json.Marshal(secretData)
+	if err != nil {
+		return err
+	}
+
+	if secret.Data != nil && !bytes.Equal(secret.Data["secret.json"], bytesData) {
+		secret.Data["secret.json"] = bytesData
+
+		err = p.Client.Update(context.TODO(), secret, controllerclient.UpdateOption{Owner: instance, Scheme: p.Scheme})
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (p *Peer) UpdateExternalEndpoint(instance *current.IBPPeer) bool {
+	// Disable Service discovery
+	if instance.Spec.PeerExternalEndpoint == "do-not-set" {
+		return false
+	}
+
 	if instance.Spec.PeerExternalEndpoint == "" {
 		instance.Spec.PeerExternalEndpoint = instance.Namespace + "-" + instance.Name + "-peer." + instance.Spec.Domain + ":443"
 		return true
@@ -1367,9 +1398,10 @@ func (p *Peer) ReconcileHSMImages(instance *current.IBPPeer) bool {
 
 	updated := false
 	if hsmConfig.Library.Image != "" {
-		hsm := strings.Split(hsmConfig.Library.Image, ":")
-		image := hsm[0]
-		tag := hsm[1]
+		hsmImage := hsmConfig.Library.Image
+		lastIndex := strings.LastIndex(hsmImage, ":")
+		image := hsmImage[:lastIndex]
+		tag := hsmImage[lastIndex+1:]
 
 		if instance.Spec.Images.HSMImage != image {
 			instance.Spec.Images.HSMImage = image
@@ -1582,5 +1614,170 @@ func (p *Peer) RenewCert(certType commoninit.SecretType, obj runtime.Object, new
 func (p *Peer) CustomLogic(instance *current.IBPPeer, update Update) (*current.CRStatus, *common.Result, error) {
 	var status *current.CRStatus
 	var err error
+
+	if !p.CanSetCertificateTimer(instance, update) {
+		log.Info("Certificate update detected but peer not yet deployed, requeuing request...")
+		return status, &common.Result{
+			Result: reconcile.Result{
+				Requeue: true,
+			},
+		}, nil
+	}
+
+	// Check if crypto needs to be backed up before an update overrides exisitng secrets
+	if update.CryptoBackupNeeded() {
+		log.Info("Performing backup of TLS and ecert crypto")
+		err = common.BackupCrypto(p.Client, p.Scheme, instance, p.GetLabels(instance))
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to backup TLS and ecert crypto")
+		}
+	}
+
+	status, err = p.CheckCertificates(instance)
+	if err != nil {
+		return status, nil, errors.Wrap(err, "failed to check for expiring certificates")
+	}
+
+	if update.CertificateCreated() {
+		log.Info(fmt.Sprintf("%s certificate was created", update.GetCreatedCertType()))
+		err = p.SetCertificateTimer(instance, update.GetCreatedCertType())
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
+
+	if update.EcertUpdated() {
+		log.Info("Ecert was updated")
+		err = p.SetCertificateTimer(instance, commoninit.ECERT)
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
+
+	if update.TLSCertUpdated() {
+		log.Info("TLS cert was updated")
+		err = p.SetCertificateTimer(instance, commoninit.TLS)
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
+
 	return status, nil, err
+
+}
+
+func (p *Peer) CheckCertificates(instance *current.IBPPeer) (*current.CRStatus, error) {
+	numSecondsBeforeExpire := instance.Spec.GetNumSecondsWarningPeriod()
+	statusType, message, err := p.CertificateManager.CheckCertificatesForExpire(instance, numSecondsBeforeExpire)
+	if err != nil {
+		return nil, err
+	}
+
+	crStatus := &current.CRStatus{
+		Type:    statusType,
+		Message: message,
+	}
+
+	switch statusType {
+	case current.Deployed:
+		crStatus.Reason = "allPodsDeployed"
+	default:
+		crStatus.Reason = "certRenewalRequired"
+	}
+
+	return crStatus, nil
+}
+
+func (p *Peer) SetCertificateTimer(instance *current.IBPPeer, certType commoninit.SecretType) error {
+	certName := fmt.Sprintf("%s-%s-signcert", certType, instance.Name)
+	numSecondsBeforeExpire := instance.Spec.GetNumSecondsWarningPeriod()
+	duration, err := p.CertificateManager.GetDurationToNextRenewal(certType, instance, numSecondsBeforeExpire)
+	if err != nil {
+		return err
+	}
+
+	log.Info((fmt.Sprintf("Setting timer to renew %s %d days before it expires", certName, int(numSecondsBeforeExpire/DaysToSecondsConversion))))
+
+	if p.RenewCertTimers[certName] != nil {
+		p.RenewCertTimers[certName].Stop()
+		p.RenewCertTimers[certName] = nil
+	}
+	p.RenewCertTimers[certName] = time.AfterFunc(duration, func() {
+		// Check certs for updated status & set status so that reconcile is triggered after cert renewal. Reconcile loop will handle
+		// checking certs again to determine whether instance status can return to Deployed
+		err := p.UpdateCRStatus(instance)
+		if err != nil {
+			log.Error(err, "failed to update CR status")
+		}
+
+		// get instance
+		instanceLatest := &current.IBPPeer{}
+		err = p.Client.Get(context.TODO(), types.NamespacedName{Namespace: instance.Namespace, Name: instance.Name}, instanceLatest)
+		if err != nil {
+			log.Error(err, "failed to get latest instance")
+			return
+		}
+
+		err = common.BackupCrypto(p.Client, p.Scheme, instance, p.GetLabels(instance))
+		if err != nil {
+			log.Error(err, "failed to backup crypto before renewing cert")
+			return
+		}
+
+		err = p.RenewCert(certType, instanceLatest, false)
+		if err != nil {
+			log.Info(fmt.Sprintf("Failed to renew %s certificate: %s, status of %s remaining in Warning phase", certType, err, instanceLatest.GetName()))
+			return
+		}
+		log.Info(fmt.Sprintf("%s renewal complete", certName))
+	})
+
+	return nil
+}
+
+// NOTE: This is called by the timer's subroutine when it goes off, not during a reconcile loop.
+// Therefore, it won't be overriden by the "SetStatus" method in ibppeer_controller.go
+func (p *Peer) UpdateCRStatus(instance *current.IBPPeer) error {
+	status, err := p.CheckCertificates(instance)
+	if err != nil {
+		return errors.Wrap(err, "failed to check certificates")
+	}
+
+	// Get most up-to-date instance at the time of update
+	updatedInstance := &current.IBPPeer{}
+	err = p.Client.Get(context.TODO(), types.NamespacedName{Name: instance.Name, Namespace: instance.Namespace}, updatedInstance)
+	if err != nil {
+		return errors.Wrap(err, "failed to get new instance")
+	}
+
+	// Don't trigger reconcile if status remaining the same
+	if updatedInstance.Status.Type == status.Type && updatedInstance.Status.Reason == status.Reason && updatedInstance.Status.Message == status.Message {
+		return nil
+	}
+
+	updatedInstance.Status.Type = status.Type
+	updatedInstance.Status.Reason = status.Reason
+	updatedInstance.Status.Message = status.Message
+	updatedInstance.Status.Status = current.True
+	updatedInstance.Status.LastHeartbeatTime = time.Now().String()
+
+	log.Info(fmt.Sprintf("Updating status of IBPPeer custom resource %s to %s phase", instance.Name, status.Type))
+	err = p.Client.UpdateStatus(context.TODO(), updatedInstance)
+	if err != nil {
+		return errors.Wrapf(err, "failed to update status to %s phase", status.Type)
+	}
+
+	return nil
+}
+
+// This function checks whether the instance is in Deployed or Warning state when a cert
+// update is detected. Only if Deployed or in Warning will a timer be set; otherwise,
+// the update will be requeued until the Peer has completed deploying.
+func (p *Peer) CanSetCertificateTimer(instance *current.IBPPeer, update Update) bool {
+	if update.CertificateCreated() || update.CertificateUpdated() {
+		if !(instance.Status.Type == current.Deployed || instance.Status.Type == current.Warning) {
+			return false
+		}
+	}
+	return true
 }

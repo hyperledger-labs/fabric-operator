@@ -201,11 +201,8 @@ func (n *Node) Reconcile(instance *current.IBPOrderer, update baseorderer.Update
 	}
 
 	if update.MSPUpdated() {
-		err = n.UpdateMSPCertificates(instance)
-		if err != nil {
-			if err != nil {
-				return common.Result{}, errors.Wrap(err, "failed to update certificates passed in MSP spec")
-			}
+		if err = n.UpdateMSPCertificates(instance); err != nil {
+			return common.Result{}, errors.Wrap(err, "failed to update certificates passed in MSP spec")
 		}
 	}
 

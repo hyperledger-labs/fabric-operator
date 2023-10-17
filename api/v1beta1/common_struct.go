@@ -22,9 +22,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-var BoolTrue = true
-var BoolFalse = false
-
 // Service is the overrides to be used for Service of the component
 // +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 type Service struct {

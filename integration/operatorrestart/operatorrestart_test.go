@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/IBM-Blockchain/fabric-operator/integration/helper"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 

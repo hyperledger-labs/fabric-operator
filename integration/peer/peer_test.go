@@ -34,7 +34,7 @@ import (
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v1"
 	v2 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v2"
 	config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v2"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -43,6 +43,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/utils/pointer"
 	"sigs.k8s.io/yaml"
 )
 
@@ -813,7 +814,7 @@ func GetPeer1() *Peer {
 				MSP: testMSPSpec,
 			},
 			ConfigOverride: &runtime.RawExtension{Raw: configBytes},
-			DisableNodeOU:  &current.BoolTrue,
+			DisableNodeOU:  pointer.Bool(true),
 			FabricVersion:  integration.FabricVersion + "-1",
 		},
 	}
@@ -867,7 +868,7 @@ func GetPeer2() *Peer {
 			Secret: &current.SecretSpec{
 				MSP: testMSPSpec,
 			},
-			DisableNodeOU: &current.BoolTrue,
+			DisableNodeOU: pointer.Bool(true),
 			FabricVersion: integration.FabricVersion + "-1",
 		},
 	}

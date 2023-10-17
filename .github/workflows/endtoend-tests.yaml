@@ -31,4 +31,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Sample Network E2E Test
-        run: sample-network/scripts/run-e2e-test.sh || cat sample-network/network-debug.log
+        run: sample-network/scripts/run-e2e-test.sh
+
+      - name: Show Debug Log
+        if: ${{ always() }}
+        run: cat sample-network/network-debug.log

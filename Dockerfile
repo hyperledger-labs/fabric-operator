@@ -1,12 +1,17 @@
-ARG ARCH
-ARG REGISTRY
 ARG GO_VER
 
 ########## Build operator binary ##########
 FROM registry.access.redhat.com/ubi8/go-toolset:$GO_VER as builder
-COPY . /go/src/github.com/IBM-Blockchain/fabric-operator
-WORKDIR /go/src/github.com/IBM-Blockchain/fabric-operator
-RUN GOOS=linux GOARCH=$(go env GOARCH) CGO_ENABLED=1 go build -mod=vendor -tags "pkcs11" -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -o /tmp/build/_output/bin/ibp-operator
+
+COPY . /go/src/github.com/hyperledger-labs/fabric-operator
+WORKDIR /go/src/github.com/hyperledger-labs/fabric-operator
+
+# RUN GOOS=linux GOARCH=$(go env GOARCH) CGO_ENABLED=1 go build
+RUN go build \
+    -tags "pkcs11" \
+    -gcflags all=-trimpath=${GOPATH} \
+    -asmflags all=-trimpath=${GOPATH} \
+    -o /tmp/build/_output/bin/ibp-operator
 
 ########## Final Image ##########
 FROM registry.access.redhat.com/ubi8/ubi-minimal
@@ -19,6 +24,7 @@ COPY definitions /definitions
 COPY config/crd/bases /deploy/crds
 COPY defaultconfig /defaultconfig
 COPY docker-entrypoint.sh .
+
 RUN microdnf update \
     && microdnf install -y \
     shadow-utils \

@@ -27,7 +27,7 @@ import (
 	baseconsole "github.com/IBM-Blockchain/fabric-operator/pkg/offering/base/console"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/base/console/mocks"
 	"github.com/IBM-Blockchain/fabric-operator/version"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/runtime"
