@@ -2,6 +2,7 @@ ARG GO_VER
 
 ########## Build operator binary ##########
 FROM registry.access.redhat.com/ubi8/go-toolset:$GO_VER as builder
+
 COPY . /go/src/github.com/IBM-Blockchain/fabric-operator
 WORKDIR /go/src/github.com/IBM-Blockchain/fabric-operator
 RUN GOOS=linux GOARCH=${ARCH} CGO_ENABLED=1 go build -mod=vendor -tags "pkcs11" -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -o /tmp/build/_output/bin/ibp-operator
