@@ -167,6 +167,7 @@ func (s *StaggerRestartsService) RestartImmediately(componentType string, instan
 	return nil
 }
 
+// this method checks if actually optimization is possible on the components and if restarts can be clubbed.
 func isOptimizePossible(restartConfig *RestartConfig) bool {
 	canOptimize := false
 	var listOfMspCRName []string
