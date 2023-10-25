@@ -1,10 +1,10 @@
 name: Release Operator
 
 on:
-  # pull_request:
-  #   branches: [v1.*]
+  pull_request:
+    branches: [v1.*]
   push:
-    tags: [v1.0.6-*]
+    tags: [v1.*]
 
 env:
   GO_VER: 1.18

@@ -20,9 +20,9 @@ name: unit-tests
 
 on:
   push:
-    branches: [v1.*]
+    branches: [main]
   pull_request:
-    branches: [v1.*]
+    branches: [main]
 
 env:
   GO_VER: 1.18

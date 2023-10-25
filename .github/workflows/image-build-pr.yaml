@@ -2,7 +2,7 @@ name: Build Operator image
 
 on:
   pull_request:
-    branches: [v1.*]
+    branches: [main]
 
 jobs:
   image:

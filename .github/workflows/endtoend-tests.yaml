@@ -19,9 +19,9 @@ name: Sample Network E2E Test
 
 on:
   push:
-    branches: [v1.*]
+    branches: [main]
   pull_request:
-    branches: [v1.*]
+    branches: [main]
 
 jobs:
   suite:
