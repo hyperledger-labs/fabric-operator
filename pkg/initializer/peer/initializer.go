@@ -47,6 +47,7 @@ type Config struct {
 	InterOUFile            string
 	CorePeerFile           string
 	CorePeerV2File         string
+	CorePeerV25File        string
 	DeploymentFile         string
 	PVCFile                string
 	CouchDBPVCFile         string

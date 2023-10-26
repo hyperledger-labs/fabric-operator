@@ -22,6 +22,7 @@ import (
 	"errors"
 
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util/image"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
@@ -394,6 +395,40 @@ var _ = Describe("Util", func() {
 			pullSecrets := util.AppendImagePullSecretIfMissing(pullSecrets, new)
 			Expect(len(pullSecrets)).To(Equal(1))
 			Expect(pullSecrets[0].Name).To(Equal("pullsecret1"))
+		})
+	})
+
+	Context("Image format verification", func() {
+		var (
+			img         string
+			registryURL string
+			defaultImg  string
+		)
+
+		BeforeEach(func() {
+			registryURL = "ghcr.io/hyperledger-labs/"
+			img = "fabric-operator"
+			defaultImg = "ghcr.io/hyperledger-labs/fabric-peer"
+		})
+
+		It("Use Registry URL and image tag when default image tag", func() {
+			resultImg := image.GetImage(registryURL, img, "")
+			Expect(resultImg).To(Equal(registryURL + img))
+		})
+
+		It("Use Default Image tag when RegistryURL", func() {
+			resultImg := image.GetImage("", "", defaultImg)
+			Expect(resultImg).To(Equal(defaultImg))
+		})
+
+		It("Use Default Image when everything is passed", func() {
+			resultImg := image.GetImage(registryURL, img, defaultImg)
+			Expect(resultImg).To(Equal(defaultImg))
+		})
+		It("Use default Image with registry URL when image is missing", func() {
+			defaultImg = "fabric-peer"
+			resultImg := image.GetImage(registryURL, "", defaultImg)
+			Expect(resultImg).To(Equal(registryURL + defaultImg))
 		})
 	})
 })

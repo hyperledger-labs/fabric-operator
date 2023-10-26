@@ -153,6 +153,12 @@ func (n *Node) Reconcile(instance *current.IBPOrderer, update baseorderer.Update
 		}
 	}
 
+	if update.MigrateToV25() {
+		if err := n.FabricOrdererMigrationV2_5(instance); err != nil {
+			return common.Result{}, operatorerrors.Wrap(err, operatorerrors.FabricOrdererMigrationFailed, "failed to migrate fabric orderer to version v2.5.x")
+		}
+	}
+
 	err = n.ReconcileManagers(instance, update, nil)
 	if err != nil {
 		return common.Result{}, errors.Wrap(err, "failed to reconcile managers")

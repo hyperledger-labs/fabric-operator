@@ -153,6 +153,12 @@ func (n *Node) Reconcile(instance *current.IBPOrderer, update baseorderer.Update
 		}
 	}
 
+	if update.MigrateToV25() {
+		if err := n.FabricOrdererMigrationV2_5(instance); err != nil {
+			return common.Result{}, operatorerrors.Wrap(err, operatorerrors.FabricOrdererMigrationFailed, "failed to migrate fabric orderer to version v2.5.x")
+		}
+	}
+
 	err = n.ReconcileManagers(instance, update, nil)
 	if err != nil {
 		return common.Result{}, errors.Wrap(err, "failed to reconcile managers")
@@ -245,7 +251,7 @@ func (n *Node) ReconcileManagers(instance *current.IBPOrderer, updated baseorder
 	}
 
 	currentVer := version.String(instance.Spec.FabricVersion)
-	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_4_1) {
 		err = n.AdminRouteManager.Reconcile(instance, update)
 		if err != nil {
 			return errors.Wrap(err, "failed Orderer Admin Route reconciliation")

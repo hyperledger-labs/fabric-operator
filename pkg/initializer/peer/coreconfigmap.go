@@ -29,6 +29,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/common/config"
 	configv1 "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v1"
 	configv2 "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v2"
+	configv25 "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v25"
 	k8sclient "github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/IBM-Blockchain/fabric-operator/version"
@@ -173,11 +174,20 @@ func GetCoreFromConfigMap(client k8sclient.Client, instance *current.IBPPeer) (*
 func GetCoreConfigFromBytes(instance *current.IBPPeer, bytes []byte) (CoreConfig, error) {
 	switch version.GetMajorReleaseVersion(instance.Spec.FabricVersion) {
 	case version.V2:
-		v2config, err := configv2.ReadCoreFromBytes(bytes)
-		if err != nil {
-			return nil, err
+		peerversion := version.String(instance.Spec.FabricVersion)
+		if peerversion.EqualWithoutTag(version.V2_5_1) || peerversion.GreaterThan(version.V2_5_1) {
+			v25config, err := configv25.ReadCoreFromBytes(bytes)
+			if err != nil {
+				return nil, err
+			}
+			return v25config, nil
+		} else {
+			v2config, err := configv2.ReadCoreFromBytes(bytes)
+			if err != nil {
+				return nil, err
+			}
+			return v2config, nil
 		}
-		return v2config, nil
 	case version.V1:
 		fallthrough
 	default:
@@ -196,11 +206,20 @@ func GetCoreConfigFromFile(instance *current.IBPPeer, file string) (CoreConfig, 
 	switch version.GetMajorReleaseVersion(instance.Spec.FabricVersion) {
 	case version.V2:
 		log.Info("v2 Fabric Peer requested")
-		v2config, err := configv2.ReadCoreFile(file)
-		if err != nil {
-			return nil, err
+		peerversion := version.String(instance.Spec.FabricVersion)
+		if peerversion.EqualWithoutTag(version.V2_5_1) || peerversion.GreaterThan(version.V2_5_1) {
+			v25config, err := configv25.ReadCoreFile(file)
+			if err != nil {
+				return nil, err
+			}
+			return v25config, nil
+		} else {
+			v2config, err := configv2.ReadCoreFile(file)
+			if err != nil {
+				return nil, err
+			}
+			return v2config, nil
 		}
-		return v2config, nil
 	case version.V1:
 		fallthrough
 	default:

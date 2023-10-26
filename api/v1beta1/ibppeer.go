@@ -23,6 +23,7 @@ import (
 
 	config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v1"
 	v2config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v2"
+	v25config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer/config/v25"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util/image"
 	"github.com/IBM-Blockchain/fabric-operator/version"
 	corev1 "k8s.io/api/core/v1"
@@ -99,15 +100,33 @@ func (p *IBPPeer) UsingCCLauncherImage() bool {
 func (p *IBPPeer) EnrollerImage() string {
 	return image.Format(p.Spec.Images.EnrollerImage, p.Spec.Images.EnrollerTag)
 }
+func IsV25Peer(fabricVersion string) bool {
+	currentVer := version.String(fabricVersion)
+	if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+		return true
+	}
+	return false
+}
 
 func (s *IBPPeer) GetConfigOverride() (interface{}, error) {
 	switch version.GetMajorReleaseVersion(s.Spec.FabricVersion) {
 	case version.V2:
+		isv25Peer := IsV25Peer(s.Spec.FabricVersion)
 		if s.Spec.ConfigOverride == nil {
-			return &v2config.Core{}, nil
+			if isv25Peer {
+				return &v25config.Core{}, nil
+			} else {
+				return &v2config.Core{}, nil
+			}
 		}
 
-		configOverride, err := v2config.ReadFrom(&s.Spec.ConfigOverride.Raw)
+		var configOverride interface{}
+		var err error
+		if isv25Peer {
+			configOverride, err = v25config.ReadFrom(&s.Spec.ConfigOverride.Raw)
+		} else {
+			configOverride, err = v2config.ReadFrom(&s.Spec.ConfigOverride.Raw)
+		}
 		if err != nil {
 			return nil, err
 		}

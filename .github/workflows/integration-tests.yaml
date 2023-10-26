@@ -61,7 +61,7 @@ jobs:
 
       - name: Set up ginkgo
         run: |
-          go install github.com/onsi/ginkgo/ginkgo
+          go install github.com/onsi/ginkgo/v2/ginkgo@v2.1.4
 
       - name: Set up KIND k8s cluster
         run: |

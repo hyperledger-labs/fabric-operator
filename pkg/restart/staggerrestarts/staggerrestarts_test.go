@@ -96,6 +96,7 @@ var _ = Describe("Staggerrestarts", func() {
 			component3    *staggerrestarts.Component
 
 			pod *corev1.Pod
+			dep *appsv1.Deployment
 		)
 
 		BeforeEach(func() {
@@ -138,7 +139,21 @@ var _ = Describe("Staggerrestarts", func() {
 					Phase: corev1.PodRunning,
 				},
 			}
-
+			replicas := int32(1)
+			dep = &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Replicas: &replicas,
+					Template: corev1.PodTemplateSpec{
+						Spec: corev1.PodSpec{
+							Containers: []corev1.Container{
+								corev1.Container{
+									Name: "org1peer1",
+								},
+							},
+						},
+					},
+				},
+			}
 			bytes, err := json.Marshal(restartConfig)
 			Expect(err).NotTo(HaveOccurred())
 
@@ -165,6 +180,9 @@ var _ = Describe("Staggerrestarts", func() {
 				case *corev1.PodList:
 					pods := obj.(*corev1.PodList)
 					pods.Items = []corev1.Pod{*pod}
+				case *appsv1.DeploymentList:
+					deployments := obj.(*appsv1.DeploymentList)
+					deployments.Items = []appsv1.Deployment{*dep}
 				}
 				return nil
 			}
@@ -173,6 +191,14 @@ var _ = Describe("Staggerrestarts", func() {
 		Context("pending", func() {
 			It("returns empty pod list if failed to get running pods", func() {
 				mockClient.ListReturns(errors.New("list error"))
+				mockClient.ListStub = func(ctx context.Context, obj client.ObjectList, opts ...k8sclient.ListOption) error {
+					switch obj.(type) {
+					case *appsv1.DeploymentList:
+						deployments := obj.(*appsv1.DeploymentList)
+						deployments.Items = []appsv1.Deployment{*dep}
+					}
+					return nil
+				}
 				requeue, err := service.Reconcile("peer", "namespace")
 				Expect(err).NotTo(HaveOccurred())
 				Expect(requeue).To(Equal(false))
@@ -184,6 +210,38 @@ var _ = Describe("Staggerrestarts", func() {
 					Expect(cfg.Queues["org1"][0].CRName).To(Equal("org1peer1"))
 					Expect(cfg.Queues["org1"][0].Status).To(Equal(staggerrestarts.Waiting))
 					Expect(cfg.Queues["org1"][0].PodName).To(Equal(""))
+				})
+			})
+
+			It("check deleted status when pods/deployments list is empty", func() {
+				mockClient.ListReturns(errors.New("list error"))
+				mockClient.ListStub = func(ctx context.Context, obj client.ObjectList, opts ...k8sclient.ListOption) error {
+					switch obj.(type) {
+					case *appsv1.DeploymentList:
+						deployments := obj.(*appsv1.DeploymentList)
+						deployments.Items = []appsv1.Deployment{}
+					}
+					return nil
+				}
+				requeue, err := service.Reconcile("peer", "namespace")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(requeue).To(Equal(false))
+
+				_, cm, _ := mockClient.CreateOrUpdateArgsForCall(0)
+				cfg := getRestartConfig(cm.(*corev1.ConfigMap))
+				By("deleting first component from queue, immediate second component will be in pending state", func() {
+					Expect(cfg.Queues["org1"][0].CRName).To(Equal("org1peer2"))
+					Expect(cfg.Queues["org1"][0].Status).To(Equal(staggerrestarts.Pending))
+					Expect(cfg.Queues["org1"][0].PodName).To(Equal(""))
+				})
+
+				By("moving the component to the log and setting status to deleted", func() {
+					Expect(len(cfg.Log)).To(Equal(2)) // since org1peer1 and org2peer1 has been deleted
+
+					for _, components := range cfg.Log {
+						Expect(components[0].CRName).To(ContainSubstring("peer1")) // org1peer1 and org2peer1
+						Expect(components[0].Status).To(Equal(staggerrestarts.Deleted))
+					}
 				})
 			})
 
@@ -286,6 +344,9 @@ var _ = Describe("Staggerrestarts", func() {
 					case *corev1.PodList:
 						pods := obj.(*corev1.PodList)
 						pods.Items = []corev1.Pod{*pod, *pod2}
+					case *appsv1.DeploymentList:
+						deployments := obj.(*appsv1.DeploymentList)
+						deployments.Items = []appsv1.Deployment{*dep}
 					}
 					return nil
 				}

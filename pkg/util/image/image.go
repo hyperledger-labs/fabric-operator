@@ -37,17 +37,17 @@ func GetImage(registryURL, image, requestedImage string) string {
 	if requestedImage != "" {
 		image = requestedImage
 	}
-
 	if image != "" {
 		// if registry url is empty or set to `no-registry-url` return image as is
 		if registryURL == "" || registryURL == "no-registry-url" || registryURL == "no-registry-url/" {
 			// use the image as is
 			return image
 		}
-		// else pre-pend registry url to image
-		image = registryURL + image
+		if !strings.Contains(image, registryURL) {
+			// if image doesn't contain registy url pre-pend the same to image
+			image = registryURL + image
+		}
 	}
-
 	return image
 }
 

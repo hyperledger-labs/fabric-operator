@@ -289,6 +289,9 @@ func (o *Override) CommonDeploymentOverrides(instance *current.IBPOrderer, deplo
 		orderer.SetStartupProbe(nil)
 	}
 
+	// Overriding keepalive default serverMinInterval to 25s to make this work on VPC clusters
+	orderer.AppendEnvIfMissing("ORDERER_GENERAL_KEEPALIVE_SERVERMININTERVAL", "25s")
+
 	deployment.UpdateContainer(orderer)
 	deployment.UpdateContainer(grpcProxy)
 	deployment.UpdateInitContainer(initCont)

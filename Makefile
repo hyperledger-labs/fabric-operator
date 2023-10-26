@@ -18,6 +18,8 @@
 
 IMAGE ?= hyperledger-labs/fabric-operator
 ARCH ?= $(shell go env GOARCH)
+OSS_GO_VER ?= 1.18
+BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 OS = $(shell go env GOOS)
 SEMREV_LABEL ?= v1.0.0-$(shell git rev-parse --short HEAD)
 BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")

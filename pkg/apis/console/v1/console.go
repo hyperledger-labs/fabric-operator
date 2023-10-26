@@ -93,7 +93,7 @@ type CRN struct {
 type ConsoleSettingsConfig struct {
 	Version              string                 `json:"version"`
 	Email                string                 `json:"initial_admin"`
-	AuthScheme           string                 `json:"auth_scheme"`
+	AuthScheme           string                 `json:"auth_scheme,omitempty"`
 	AllowDefaultPassword bool                   `json:"allow_default_password"`
 	Configtxlator        string                 `json:"configtxlator"`
 	DeployerURL          string                 `json:"deployer_url"`

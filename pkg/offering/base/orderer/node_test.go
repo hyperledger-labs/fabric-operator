@@ -20,10 +20,19 @@ package baseorderer_test
 
 import (
 	"context"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
+	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
+	"math/big"
 	"os"
+	"strings"
 	"time"
+
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	cmocks "github.com/IBM-Blockchain/fabric-operator/controllers/mocks"
@@ -32,6 +41,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/deployer"
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/orderer/v1"
 	v2 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/orderer/v2"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/certificate"
 	commonconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/common/config"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/common/mspparser"
 	ordererinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer"
@@ -48,6 +58,7 @@ import (
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -545,6 +556,355 @@ var _ = Describe("Base Orderer Node", func() {
 		})
 
 	})
+	Context("check certificates", func() {
+		It("returns error if fails to get certificate expiry info", func() {
+			certificateMgr.CheckCertificatesForExpireReturns("", "", errors.New("cert expiry error"))
+			_, err := node.CheckCertificates(instance)
+			Expect(err).To(HaveOccurred())
+		})
+
+		It("sets cr status with certificate expiry info", func() {
+			certificateMgr.CheckCertificatesForExpireReturns(current.Warning, "cert renewal required", nil)
+			status, err := node.CheckCertificates(instance)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(status.Type).To(Equal(current.Warning))
+			Expect(status.Message).To(Equal("cert renewal required"))
+		})
+	})
+
+	Context("set certificate timer", func() {
+		BeforeEach(func() {
+			mockKubeClient.GetStub = func(ctx context.Context, types types.NamespacedName, obj client.Object) error {
+				switch obj.(type) {
+				case *current.IBPOrderer:
+					o := obj.(*current.IBPOrderer)
+					o.Kind = "IBPOrderer"
+					o.Name = "orderer1"
+					o.Namespace = "random"
+					o.Spec.Secret = &current.SecretSpec{
+						Enrollment: &current.EnrollmentSpec{
+							TLS: &current.Enrollment{
+								EnrollID: "enrollID",
+							},
+						},
+					}
+					o.Status.Type = current.Deployed
+				case *corev1.Secret:
+					o := obj.(*corev1.Secret)
+					if strings.Contains(o.Name, "crypto-backup") {
+						return k8serrors.NewNotFound(schema.GroupResource{}, "not found")
+					}
+				}
+				return nil
+			}
+
+			instance.Spec.Secret = &current.SecretSpec{
+				Enrollment: &current.EnrollmentSpec{
+					Component: &current.Enrollment{
+						EnrollID: "enrollID",
+					},
+				},
+			}
+		})
+
+		Context("sets timer to renew tls certificate", func() {
+			BeforeEach(func() {
+				certificateMgr.GetDurationToNextRenewalReturns(time.Duration(3*time.Second), nil)
+			})
+
+			It("does not renew certificate if disabled in config", func() {
+				instance.Spec.FabricVersion = "1.4.9"
+				node.Config.Operator.Orderer.Renewals.DisableTLScert = true
+				err := node.SetCertificateTimer(instance, "tls")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(node.RenewCertTimers["tls-orderer1-signcert"]).NotTo(BeNil())
+
+				By("not renewing certificate", func() {
+					Eventually(func() bool {
+						return mockKubeClient.UpdateStatusCallCount() == 1 &&
+							certificateMgr.RenewCertCallCount() == 0
+					}, time.Duration(5*time.Second)).Should(Equal(true))
+
+					// timer.Stop() == false means that it already fired
+					Expect(node.RenewCertTimers["tls-orderer1-signcert"].Stop()).To(Equal(false))
+				})
+			})
+
+			It("does not renew certificate if fabric version is less than 1.4.9 or 2.2.1", func() {
+				instance.Spec.FabricVersion = "1.4.7"
+				err := node.SetCertificateTimer(instance, "tls")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(node.RenewCertTimers["tls-orderer1-signcert"]).NotTo(BeNil())
+
+				By("not renewing certificate", func() {
+					Eventually(func() bool {
+						return mockKubeClient.UpdateStatusCallCount() == 1 &&
+							certificateMgr.RenewCertCallCount() == 0
+					}, time.Duration(5*time.Second)).Should(Equal(true))
+
+					// timer.Stop() == false means that it already fired
+					Expect(node.RenewCertTimers["tls-orderer1-signcert"].Stop()).To(Equal(false))
+				})
+			})
+
+			It("renews certificate if fabric version is greater than or equal to 1.4.9 or 2.2.1", func() {
+				instance.Spec.FabricVersion = "2.2.1"
+				mockKubeClient.GetStub = func(ctx context.Context, types types.NamespacedName, obj client.Object) error {
+					switch obj.(type) {
+					case *current.IBPOrderer:
+						o := obj.(*current.IBPOrderer)
+						o.Kind = "IBPOrderer"
+						o.Name = "orderer1"
+						o.Namespace = "random"
+						o.Spec.Secret = &current.SecretSpec{
+							Enrollment: &current.EnrollmentSpec{
+								TLS: &current.Enrollment{
+									EnrollID: "enrollID",
+								},
+							},
+						}
+						o.Status.Type = current.Deployed
+						o.Spec.FabricVersion = "2.2.1"
+					case *corev1.Secret:
+						o := obj.(*corev1.Secret)
+						switch types.Name {
+						case "ecert-" + instance.Name + "-signcert":
+							o.Name = "ecert-" + instance.Name + "-signcert"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"cert.pem": generateCertPemBytes(29)}
+						case "ecert-" + instance.Name + "-keystore":
+							o.Name = "ecert-" + instance.Name + "-keystore"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"key.pem": []byte("")}
+						case instance.Name + "-crypto-backup":
+							return k8serrors.NewNotFound(schema.GroupResource{}, "not found")
+						}
+					}
+					return nil
+				}
+				err := node.SetCertificateTimer(instance, "tls")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(node.RenewCertTimers["tls-orderer1-signcert"]).NotTo(BeNil())
+
+				By("renewing certificate", func() {
+					Eventually(func() bool {
+						return mockKubeClient.UpdateStatusCallCount() == 1 &&
+							certificateMgr.RenewCertCallCount() == 1
+					}, time.Duration(5*time.Second)).Should(Equal(true))
+
+					// timer.Stop() == false means that it already fired
+					Expect(node.RenewCertTimers["tls-orderer1-signcert"].Stop()).To(Equal(false))
+				})
+			})
+		})
+
+		Context("sets timer to renew ecert certificate", func() {
+			BeforeEach(func() {
+				certificateMgr.GetDurationToNextRenewalReturns(time.Duration(3*time.Second), nil)
+				mockKubeClient.UpdateStatusReturns(nil)
+				certificateMgr.RenewCertReturns(nil)
+			})
+
+			It("does not return error, but certificate fails to renew after timer", func() {
+				certificateMgr.RenewCertReturns(errors.New("failed to renew cert"))
+				err := node.SetCertificateTimer(instance, "ecert")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(node.RenewCertTimers["ecert-orderer1-signcert"]).NotTo(BeNil())
+
+				By("certificate fails to be renewed", func() {
+					Eventually(func() bool {
+						return mockKubeClient.UpdateStatusCallCount() == 1 &&
+							certificateMgr.RenewCertCallCount() == 1
+					}, time.Duration(5*time.Second)).Should(Equal(true))
+
+					// timer.Stop() == false means that it already fired
+					Expect(node.RenewCertTimers["ecert-orderer1-signcert"].Stop()).To(Equal(false))
+				})
+			})
+
+			It("does not return error, and certificate is successfully renewed after timer", func() {
+				err := node.SetCertificateTimer(instance, "ecert")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(node.RenewCertTimers["ecert-orderer1-signcert"]).NotTo(BeNil())
+
+				By("certificate successfully renewed", func() {
+					Eventually(func() bool {
+						return mockKubeClient.UpdateStatusCallCount() == 1 &&
+							certificateMgr.RenewCertCallCount() == 1
+					}, time.Duration(5*time.Second)).Should(Equal(true))
+
+					// timer.Stop() == false means that it already fired
+					Expect(node.RenewCertTimers["ecert-orderer1-signcert"].Stop()).To(Equal(false))
+				})
+			})
+
+			It("does not return error, and timer is set to renew certificate at a later time", func() {
+				// Set expiration date of certificate to be > 30 days from now
+				certificateMgr.GetDurationToNextRenewalReturns(time.Duration(35*24*time.Hour), nil)
+
+				err := node.SetCertificateTimer(instance, "ecert")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(node.RenewCertTimers["ecert-orderer1-signcert"]).NotTo(BeNil())
+
+				// timer.Stop() == true means that it has not fired but is now stopped
+				Expect(node.RenewCertTimers["ecert-orderer1-signcert"].Stop()).To(Equal(true))
+			})
+		})
+
+		Context("read certificate expiration date to set timer correctly", func() {
+			BeforeEach(func() {
+				node.CertificateManager = &certificate.CertificateManager{
+					Client: mockKubeClient,
+					Scheme: &runtime.Scheme{},
+				}
+
+				// set to 30 days
+				instance.Spec.NumSecondsWarningPeriod = 30 * baseorderer.DaysToSecondsConversion
+			})
+
+			It("doesn't return error if timer is set correctly, but error in renewing certificate when timer goes off", func() {
+				// Set ecert signcert expiration date to be 29 days from now, cert is renewed if expires within 30 days
+				mockKubeClient.GetStub = func(ctx context.Context, types types.NamespacedName, obj client.Object) error {
+					switch obj.(type) {
+					case *current.IBPOrderer:
+						o := obj.(*current.IBPOrderer)
+						o.Kind = "IBPOrderer"
+						instance = o
+
+					case *corev1.Secret:
+						o := obj.(*corev1.Secret)
+						switch types.Name {
+						case "ecert-" + instance.Name + "-signcert":
+							o.Name = "ecert-" + instance.Name + "-signcert"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"cert.pem": generateCertPemBytes(29)}
+						case "ecert-" + instance.Name + "-keystore":
+							o.Name = "ecert-" + instance.Name + "-keystore"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"key.pem": []byte("")}
+						case instance.Name + "-crypto-backup":
+							return k8serrors.NewNotFound(schema.GroupResource{}, "not found")
+						}
+					}
+					return nil
+				}
+
+				err := node.SetCertificateTimer(instance, "ecert")
+				Expect(err).NotTo(HaveOccurred())
+				Expect(node.RenewCertTimers["ecert-orderer1-signcert"]).NotTo(BeNil())
+
+				// Wait for timer to go off
+				time.Sleep(5 * time.Second)
+
+				// timer.Stop() == false means that it already fired
+				Expect(node.RenewCertTimers["ecert-orderer1-signcert"].Stop()).To(Equal(false))
+			})
+
+			It("doesn't return error if timer is set correctly, timer doesn't go off because certificate isn't ready for renewal", func() {
+				// Set ecert signcert expiration date to be 50 days from now, cert is renewed if expires within 30 days
+				mockKubeClient.GetStub = func(ctx context.Context, types types.NamespacedName, obj client.Object) error {
+					switch obj.(type) {
+					case *current.IBPOrderer:
+						o := obj.(*current.IBPOrderer)
+						o.Kind = "IBPOrderer"
+						instance = o
+
+					case *corev1.Secret:
+						o := obj.(*corev1.Secret)
+						switch types.Name {
+						case "ecert-" + instance.Name + "-signcert":
+							o.Name = "ecert-" + instance.Name + "-signcert"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"cert.pem": generateCertPemBytes(50)}
+						case "ecert-" + instance.Name + "-keystore":
+							o.Name = "ecert-" + instance.Name + "-keystore"
+							o.Namespace = instance.Namespace
+							o.Data = map[string][]byte{"key.pem": []byte("")}
+						case instance.Name + "-crypto-backup":
+							return k8serrors.NewNotFound(schema.GroupResource{}, "not found")
+						}
+					}
+					return nil
+				}
+
+				err := node.SetCertificateTimer(instance, "ecert")
+				Expect(err).NotTo(HaveOccurred())
+
+				// Timer shouldn't go off
+				time.Sleep(5 * time.Second)
+
+				Expect(node.RenewCertTimers["ecert-orderer1-signcert"]).NotTo(BeNil())
+				// timer.Stop() == true means that it has not fired but is now stopped
+				Expect(node.RenewCertTimers["ecert-orderer1-signcert"].Stop()).To(Equal(true))
+			})
+		})
+	})
+
+	Context("renew cert", func() {
+		BeforeEach(func() {
+			instance.Spec.Secret = &current.SecretSpec{
+				Enrollment: &current.EnrollmentSpec{
+					Component: &current.Enrollment{},
+				},
+			}
+
+			certificateMgr.RenewCertReturns(nil)
+		})
+
+		It("returns error if secret spec is missing", func() {
+			instance.Spec.Secret = nil
+			err := node.RenewCert("ecert", instance, true)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("missing secret spec for instance 'orderer1'"))
+		})
+
+		It("returns error if certificate generated by MSP", func() {
+			instance.Spec.Secret = &current.SecretSpec{
+				MSP: &current.MSPSpec{},
+			}
+			err := node.RenewCert("ecert", instance, true)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("cannot auto-renew certificate created by MSP, force renewal required"))
+		})
+
+		It("returns error if certificate manager fails to renew certificate", func() {
+			certificateMgr.RenewCertReturns(errors.New("failed to renew cert"))
+			err := node.RenewCert("ecert", instance, true)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("failed to renew cert"))
+		})
+
+		It("does not return error if certificate manager successfully renews cert", func() {
+			err := node.RenewCert("ecert", instance, true)
+			Expect(err).NotTo(HaveOccurred())
+		})
+	})
+
+	Context("update cr status", func() {
+		It("returns error if fails to get current instance", func() {
+			mockKubeClient.GetReturns(errors.New("get error"))
+			err := node.UpdateCRStatus(instance)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("failed to get new instance: get error"))
+		})
+
+		It("returns error if fails to update instance status", func() {
+			mockKubeClient.UpdateStatusReturns(errors.New("update status error"))
+			certificateMgr.CheckCertificatesForExpireReturns(current.Warning, "cert renewal required", nil)
+			err := node.UpdateCRStatus(instance)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(Equal("failed to update status to Warning phase: update status error"))
+		})
+
+		It("sets instance CR status to Warning", func() {
+			certificateMgr.CheckCertificatesForExpireReturns(current.Warning, "cert renewal required", nil)
+			err := node.UpdateCRStatus(instance)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(instance.Status.Type).To(Equal(current.Warning))
+			Expect(instance.Status.Reason).To(Equal("certRenewalRequired"))
+			Expect(instance.Status.Message).To(Equal("cert renewal required"))
+		})
+	})
 
 	Context("fabric orderer migration", func() {
 		BeforeEach(func() {
@@ -722,3 +1082,24 @@ var _ = Describe("Base Orderer Node", func() {
 		})
 	})
 })
+
+func generateCertPemBytes(daysUntilExpired int) []byte {
+	certtemplate := x509.Certificate{
+		SerialNumber: big.NewInt(1),
+		NotBefore:    time.Now(),
+		NotAfter:     time.Now().Add(time.Duration(daysUntilExpired) * time.Hour * 24),
+	}
+
+	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	Expect(err).NotTo(HaveOccurred())
+
+	cert, err := x509.CreateCertificate(rand.Reader, &certtemplate, &certtemplate, &priv.PublicKey, priv)
+	Expect(err).NotTo(HaveOccurred())
+
+	block := &pem.Block{
+		Type:  "CERTIFICATE",
+		Bytes: cert,
+	}
+
+	return pem.EncodeToMemory(block)
+}

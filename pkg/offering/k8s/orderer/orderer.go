@@ -131,14 +131,15 @@ func (o *Orderer) ReconcileNode(instance *current.IBPOrderer, update baseorderer
 	hostAPI := fmt.Sprintf("%s-%s-orderer.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
 	hostOperations := fmt.Sprintf("%s-%s-operations.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
 	hostGrpc := fmt.Sprintf("%s-%s-grpcweb.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
+	legacyHostAPI := fmt.Sprintf("%s-%s.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
 	hosts := []string{}
 	currentVer := version.String(instance.Spec.FabricVersion)
-	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_4_1) {
 		hostAdmin := fmt.Sprintf("%s-%s-admin.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
-		hosts = append(hosts, hostAPI, hostOperations, hostGrpc, hostAdmin, "127.0.0.1")
+		hosts = append(hosts, hostAPI, hostOperations, hostGrpc, hostAdmin, legacyHostAPI, "127.0.0.1")
 		//TODO: need to Re-enroll when orderer migrated from 1.4.x/2.2.x to 2.4.1
 	} else {
-		hosts = append(hosts, hostAPI, hostOperations, hostGrpc, "127.0.0.1")
+		hosts = append(hosts, hostAPI, hostOperations, hostGrpc, legacyHostAPI, "127.0.0.1")
 	}
 
 	o.CheckCSRHosts(instance, hosts)

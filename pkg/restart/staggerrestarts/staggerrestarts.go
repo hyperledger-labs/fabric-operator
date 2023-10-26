@@ -21,8 +21,10 @@ package staggerrestarts
 import (
 	"context"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"math/big"
+	"strconv"
 	"strings"
 	"time"
 
@@ -30,8 +32,10 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/action"
 	k8sclient "github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/restart/configmap"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/pkg/errors"
 
+	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -64,7 +68,8 @@ func New(client k8sclient.Client, timeout time.Duration) *StaggerRestartsService
 // Restart is called by the restart manager.
 // For CA/Peer/Orderer: adds component to the queue for restart.
 // For Console: 		restarts the component directly as there is only one ibpconsole
-//						instance per network. We bypass the queue logic for ibpconsoles.
+//
+//	instance per network. We bypass the queue logic for ibpconsoles.
 func (s *StaggerRestartsService) Restart(instance Instance, reason string) error {
 	switch instance.(type) {
 	case *current.IBPConsole:
@@ -162,6 +167,119 @@ func (s *StaggerRestartsService) RestartImmediately(componentType string, instan
 	return nil
 }
 
+// this method checks if actually optimization is possible on the components and if restarts can be clubbed.
+func isOptimizePossible(restartConfig *RestartConfig) bool {
+	canOptimize := false
+	var listOfMspCRName []string
+	for mspid, queue := range restartConfig.Queues {
+		for i := 0; i < len(queue); i++ {
+			// we dont want to consider waiting pods
+			if queue[i].Status == "waiting" {
+				continue
+			}
+
+			if util.ContainsValue(mspid+queue[i].CRName, listOfMspCRName) == true {
+				log.Info(fmt.Sprintf("We Can Optimize Restarts for '%s'", mspid+queue[i].CRName))
+				canOptimize = true
+				break
+			} else {
+				listOfMspCRName = append(listOfMspCRName, mspid+queue[i].CRName)
+			}
+		}
+	}
+	return canOptimize
+}
+
+// optimizeRestart is called by the ca/peer/orderer reconcile loops via the restart
+// this method combines restart requests into one and reduces the number
+// of restarts that is required for the components
+
+// returns the Restart Config with Optimized Queues for Restarts
+func optimizeRestart(restartConfig *RestartConfig) *RestartConfig {
+	optimizedMap := map[string]map[string]string{}
+	for mspid, queue := range restartConfig.Queues {
+		for i := 0; i < len(queue); i++ {
+			// if the pod is already in waiting state, do not combine the restart
+			if queue[i].Status == "waiting" {
+				tempqueue := map[string]string{}
+				tempqueue["reason"] = queue[i].Reason
+				tempqueue["status"] = string(queue[i].Status)
+				tempqueue["count"] = "1"
+				tempqueue["checkuntilltimestamp"] = queue[i].CheckUntilTimestamp
+				tempqueue["lastcheckedtimestamp"] = queue[i].LastCheckedTimestamp
+				tempqueue["podname"] = queue[i].PodName
+				tempqueue["mspid"] = mspid
+
+				optimizedMap[queue[i].CRName+"~wait"] = tempqueue
+				continue
+			}
+
+			// if the restart for that CRName already exist, increase the restart count and combine the reason
+			// else add it to the new map with the CRName and count as 1
+			if _, ok := optimizedMap[queue[i].CRName]; ok && optimizedMap[queue[i].CRName]["status"] != "waiting" {
+				existingCount := optimizedMap[queue[i].CRName]["count"]
+				newCount, _ := strconv.Atoi(existingCount)
+				newCount++
+				optimizedMap[queue[i].CRName]["count"] = strconv.Itoa(newCount)
+
+				existingReason := optimizedMap[queue[i].CRName]["reason"]
+				newReason := queue[i].Reason
+				newReason = existingReason + "~" + newReason
+				optimizedMap[queue[i].CRName]["reason"] = newReason
+				optimizedMap[queue[i].CRName]["status"] = "pending"
+				optimizedMap[queue[i].CRName]["mspid"] = mspid
+
+			} else {
+				tempqueue := map[string]string{}
+				tempqueue["reason"] = queue[i].Reason
+				tempqueue["count"] = "1"
+				tempqueue["status"] = "pending"
+				tempqueue["mspid"] = mspid
+				optimizedMap[queue[i].CRName] = tempqueue
+			}
+		}
+	}
+
+	f := map[string][]*Component{}
+	tempComponentArray := []*Component{}
+	currComponent := []*Component{}
+
+	// Merge the restart queues such that waiting restart requests are at 0 index of the slice
+	for mspid, queue := range restartConfig.Queues {
+		_ = queue
+		for k := range optimizedMap {
+			if optimizedMap[k]["mspid"] == mspid {
+				component := Component{}
+				component.Reason = optimizedMap[k]["reason"]
+				component.CheckUntilTimestamp = optimizedMap[k]["checkuntilltimestamp"]
+				component.LastCheckedTimestamp = optimizedMap[k]["lastcheckedtimestamp"]
+				component.Status = Status(optimizedMap[k]["status"])
+				component.PodName = (optimizedMap[k]["podname"])
+				k = strings.ReplaceAll(k, "~wait", "")
+				component.CRName = k
+				tempComponentArray = append(tempComponentArray, &component)
+				if f[mspid] == nil {
+					f[mspid] = tempComponentArray
+				} else {
+					tempComponentArray = f[mspid]
+					currComponent = append(currComponent, &component)
+					if component.Status == "waiting" {
+						tempComponentArray = append(currComponent, tempComponentArray...)
+					} else {
+						tempComponentArray = append(tempComponentArray, currComponent...)
+					}
+					f[mspid] = tempComponentArray
+				}
+				tempComponentArray = []*Component{}
+				currComponent = []*Component{}
+			}
+		}
+	}
+
+	restartConfig.Queues = f
+	return restartConfig
+}
+
 // Reconcile is called by the ca/peer/orderer reconcile loops via the restart
 // manager when an update to the <ca/peer/orderer>-restart-config CM is detected
 // and handles the different states of the first component of each queue.
@@ -173,6 +291,27 @@ func (s *StaggerRestartsService) Reconcile(componentType, namespace string) (boo
 	restartConfig, err := s.GetConfig(componentType, namespace)
 	if err != nil {
 		return requeue, err
+	}
+
+	isOptimizePossibleFlag := isOptimizePossible(restartConfig)
+	if isOptimizePossibleFlag {
+		u, err := json.Marshal(restartConfig.Queues)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Restart Config Before optimized", string(u))
+
+		restartConfig = optimizeRestart(restartConfig)
+		err = s.UpdateConfig(componentType, namespace, restartConfig)
+		if err != nil {
+			return requeue, err
+		}
+		u, err = json.Marshal(restartConfig.Queues)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Restart Config After optimized", string(u))
+
 	}
 
 	updated := false
@@ -200,16 +339,27 @@ func (s *StaggerRestartsService) Reconcile(componentType, namespace string) (boo
 				component.PodName = pods[0].Name
 			}
 
-			// Restart component
-			err = s.RestartDeployment(name, namespace)
-			if err != nil {
-				return requeue, errors.Wrapf(err, "failed to restart deployment %s", name)
-			}
+			deployExists, _ := s.CheckDeployments(name, namespace)
+			if deployExists {
+				// Restart component
+				err = s.RestartDeployment(name, namespace)
+				if err != nil {
+					return requeue, errors.Wrapf(err, "failed to restart deployment %s", name)
+				}
 
-			// Update config
-			component.Status = Waiting
-			component.LastCheckedTimestamp = time.Now().UTC().String()
-			component.CheckUntilTimestamp = time.Now().Add(s.Timeout).UTC().String()
+				// Update config
+				component.Status = Waiting
+				component.LastCheckedTimestamp = time.Now().UTC().String()
+				component.CheckUntilTimestamp = time.Now().Add(s.Timeout).UTC().String()
+			} else { // if deployment doesn't exists then the cr spec might have been deleted
+				// deployment has been deleted, remove the entry from the queue
+				component.Status = Deleted
+				log.Info(fmt.Sprintf("%s restart status is %s, removing from %s restart queue", component.CRName, component.Status, mspid))
+				component.LastCheckedTimestamp = time.Now().UTC().String()
+				component.CheckUntilTimestamp = time.Now().Add(s.Timeout).UTC().String()
+				restartConfig.AddToLog(component)
+				restartConfig.PopFromQueue(mspid)
+			}
 
 			updated = true
 
@@ -327,6 +477,32 @@ func (s *StaggerRestartsService) RestartDeployment(name, namespace string) error
 	}
 
 	return nil
+}
+
+func (s *StaggerRestartsService) CheckDeployments(name, namespace string) (bool, error) {
+	deploymentsExists := false
+
+	labelSelector, err := labels.Parse(fmt.Sprintf("app=%s", name))
+	if err != nil {
+		return false, errors.Wrap(err, "failed to parse label selector for app name")
+	}
+
+	listOptions := &client.ListOptions{
+		LabelSelector: labelSelector,
+		Namespace:     namespace,
+	}
+	deployList := &appsv1.DeploymentList{}
+	err = s.Client.List(context.TODO(), deployList, listOptions)
+
+	if err != nil {
+		log.Error(err, "failed to get deployment list for %s", name)
+		return deploymentsExists, nil
+	}
+	if len(deployList.Items) > 0 {
+		deploymentsExists = true
+	}
+
+	return deploymentsExists, nil
 }
 
 func (s *StaggerRestartsService) GetRunningPods(name, namespace string) ([]corev1.Pod, error) {

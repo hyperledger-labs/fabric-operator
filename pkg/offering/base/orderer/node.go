@@ -38,6 +38,7 @@ import (
 	ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v1"
 	v2ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v2"
 	v24ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v24"
+	v25ordererconfig "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v25"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/validator"
 	controllerclient "github.com/IBM-Blockchain/fabric-operator/pkg/k8s/controllerclient"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources"
@@ -64,7 +65,8 @@ import (
 )
 
 const (
-	NODE = "node"
+	NODE                    = "node"
+	DaysToSecondsConversion = int64(24 * 60 * 60)
 )
 
 type Override interface {
@@ -127,6 +129,7 @@ type Update interface {
 	CryptoBackupNeeded() bool
 	MigrateToV2() bool
 	MigrateToV24() bool
+	MigrateToV25() bool
 	NodeOUUpdated() bool
 	ImagesUpdated() bool
 	FabricVersionUpdated() bool
@@ -510,7 +513,9 @@ func (n *Node) Initialize(instance *current.IBPOrderer, update Update) error {
 	ordererConfig := n.Config.OrdererInitConfig.OrdererFile
 	if version.GetMajorReleaseVersion(instance.Spec.FabricVersion) == version.V2 {
 		currentVer := version.String(instance.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			ordererConfig = n.Config.OrdererInitConfig.OrdererV25File
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			ordererConfig = n.Config.OrdererInitConfig.OrdererV24File
 		} else if currentVer.LessThan(version.V2_4_1) {
 			ordererConfig = n.Config.OrdererInitConfig.OrdererV2File
@@ -1075,7 +1080,7 @@ func (n *Node) GetEndpoints(instance *current.IBPOrderer) *current.OrdererEndpoi
 		Grpcweb:    "https://" + instance.Namespace + "-" + instance.Name + "-grpcweb." + instance.Spec.Domain + ":443",
 	}
 	currentVer := version.String(instance.Spec.FabricVersion)
-	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+	if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_4_1) {
 		endpoints.Admin = "https://" + instance.Namespace + "-" + instance.Name + "-admin." + instance.Spec.Domain + ":443"
 	}
 	return endpoints
@@ -1397,7 +1402,9 @@ func (n *Node) FabricOrdererMigrationV2_0(instance *current.IBPOrderer) error {
 	ordererConfig := n.Config.OrdererInitConfig.OrdererFile
 	if version.GetMajorReleaseVersion(instance.Spec.FabricVersion) == version.V2 {
 		currentVer := version.String(instance.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			ordererConfig = n.Config.OrdererInitConfig.OrdererV25File
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			ordererConfig = n.Config.OrdererInitConfig.OrdererV24File
 		} else {
 			ordererConfig = n.Config.OrdererInitConfig.OrdererV2File
@@ -1407,7 +1414,14 @@ func (n *Node) FabricOrdererMigrationV2_0(instance *current.IBPOrderer) error {
 	switch version.GetMajorReleaseVersion(instance.Spec.FabricVersion) {
 	case version.V2:
 		currentVer := version.String(instance.Spec.FabricVersion)
-		if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
+		if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+			log.Info("v2.5.x Fabric Orderer requested")
+			v25config, err := v25ordererconfig.ReadOrdererFile(ordererConfig)
+			if err != nil {
+				return errors.Wrap(err, "failed to read v2.5.x default config file")
+			}
+			initOrderer.Config = v25config
+		} else if currentVer.EqualWithoutTag(version.V2_4_1) || currentVer.GreaterThan(version.V2_4_1) {
 			log.Info("v2.4.x Fabric Orderer requested")
 			v24config, err := v24ordererconfig.ReadOrdererFile(ordererConfig)
 			if err != nil {
@@ -1508,6 +1522,99 @@ func (n *Node) FabricOrdererMigrationV2_4(instance *current.IBPOrderer) error {
 		cm.Data["ORDERER_ADMIN_TLS_CERTIFICATE"] = "/certs/tls/signcerts/cert.pem"
 		cm.Data["ORDERER_ADMIN_TLS_PRIVATEKEY"] = "/certs/tls/keystore/key.pem"
 		cm.Data["ORDERER_ADMIN_TLS_CLIENTAUTHREQUIRED"] = "true"
+		// override the default value 127.0.0.1:9443
+		cm.Data["ORDERER_ADMIN_LISTENADDRESS"] = "0.0.0.0:9443"
+		if intermediateExists {
+			// override intermediate cert paths for root and clientroot cas
+			cm.Data["ORDERER_ADMIN_TLS_ROOTCAS"] = intercertPath
+			cm.Data["ORDERER_ADMIN_TLS_CLIENTROOTCAS"] = intercertPath
+		} else {
+			cm.Data["ORDERER_ADMIN_TLS_ROOTCAS"] = "/certs/msp/tlscacerts/cacert-0.pem"
+			cm.Data["ORDERER_ADMIN_TLS_CLIENTROOTCAS"] = "/certs/msp/tlscacerts/cacert-0.pem"
+		}
+	}
+
+	err = n.Client.Update(context.TODO(), cm, controllerclient.UpdateOption{Owner: instance, Scheme: n.Scheme})
+	if err != nil {
+		return errors.Wrap(err, "failed to update env configmap")
+	}
+
+	initOrderer.Config = ordererConfig
+	configOverride, err := instance.GetConfigOverride()
+	if err != nil {
+		return err
+	}
+
+	err = initOrderer.OverrideConfig(configOverride.(OrdererConfig))
+	if err != nil {
+		return err
+	}
+
+	if instance.IsHSMEnabled() && !instance.UsingHSMProxy() {
+		log.Info(fmt.Sprintf("During orderer '%s' migration, detected using HSM sidecar, setting library path", instance.GetName()))
+		hsmConfig, err := commonconfig.ReadHSMConfig(n.Client, instance)
+		if err != nil {
+			return err
+		}
+		initOrderer.Config.SetBCCSPLibrary(filepath.Join("/hsm/lib", filepath.Base(hsmConfig.Library.FilePath)))
+	}
+
+	err = n.Initializer.CreateOrUpdateConfigMap(instance, initOrderer.GetConfig())
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *Node) FabricOrdererMigrationV2_5(instance *current.IBPOrderer) error {
+	log.Info(fmt.Sprintf("Orderer instance '%s' migrating to v2.5.x", instance.GetName()))
+
+	initOrderer, err := n.Initializer.GetInitOrderer(instance, n.GetInitStoragePath(instance))
+	if err != nil {
+		return err
+	}
+
+	ordererConfig, err := v25ordererconfig.ReadOrdererFile(n.Config.OrdererInitConfig.OrdererV25File)
+	if err != nil {
+		return errors.Wrap(err, "failed to read v2.5.x default config file")
+	}
+
+	// removed the field from the struct
+	// ordererConfig.FileLedger.Prefix = ""
+
+	name := fmt.Sprintf("%s-env", instance.GetName())
+	namespacedName := types.NamespacedName{
+		Name:      name,
+		Namespace: instance.Namespace,
+	}
+
+	cm := &corev1.ConfigMap{}
+	err = n.Client.Get(context.TODO(), namespacedName, cm)
+	if err != nil {
+		return errors.Wrap(err, "failed to get env configmap")
+	}
+
+	// Add configs for 2.5.x
+	trueVal := true
+	ordererConfig.Admin.TLs.Enabled = &trueVal
+	ordererConfig.Admin.TLs.ClientAuthRequired = &trueVal
+
+	intermediateExists := util.IntermediateSecretExists(n.Client, instance.Namespace, fmt.Sprintf("ecert-%s-intercerts", instance.Name)) &&
+		util.IntermediateSecretExists(n.Client, instance.Namespace, fmt.Sprintf("tls-%s-intercerts", instance.Name))
+	intercertPath := "/certs/msp/tlsintermediatecerts/intercert-0.pem"
+	currentVer := version.String(instance.Spec.FabricVersion)
+	if currentVer.EqualWithoutTag(version.V2_5_1) || currentVer.GreaterThan(version.V2_5_1) {
+		// Enable Channel participation for 2.5.x orderers
+		cm.Data["ORDERER_CHANNELPARTICIPATION_ENABLED"] = "true"
+
+		cm.Data["ORDERER_GENERAL_CLUSTER_SENDBUFFERSIZE"] = "100"
+
+		cm.Data["ORDERER_ADMIN_TLS_ENABLED"] = "true"
+		cm.Data["ORDERER_ADMIN_TLS_CERTIFICATE"] = "/certs/tls/signcerts/cert.pem"
+		cm.Data["ORDERER_ADMIN_TLS_PRIVATEKEY"] = "/certs/tls/keystore/key.pem"
+		cm.Data["ORDERER_ADMIN_TLS_CLIENTAUTHREQUIRED"] = "true"
+		// override the default value 127.0.0.1:9443
+		cm.Data["ORDERER_ADMIN_LISTENADDRESS"] = "0.0.0.0:9443"
 		if intermediateExists {
 			// override intermediate cert paths for root and clientroot cas
 			cm.Data["ORDERER_ADMIN_TLS_ROOTCAS"] = intercertPath
@@ -1716,5 +1823,224 @@ func (n *Node) HandleRestart(instance *current.IBPOrderer, update Update) error 
 func (n *Node) CustomLogic(instance *current.IBPOrderer, update Update) (*current.CRStatus, *common.Result, error) {
 	var status *current.CRStatus
 	var err error
+	if !n.CanSetCertificateTimer(instance, update) {
+		log.Info("Certificate update detected but all nodes not yet deployed, requeuing request...")
+		return status, &common.Result{
+			Result: reconcile.Result{
+				Requeue: true,
+			},
+		}, nil
+	}
+
+	// Check if crypto needs to be backed up before an update overrides exisitng secrets
+	if update.CryptoBackupNeeded() {
+		log.Info("Performing backup of TLS and ecert crypto")
+		err = common.BackupCrypto(n.Client, n.Scheme, instance, n.GetLabels(instance))
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to backup TLS and ecert crypto")
+		}
+	}
+
+	status, err = n.CheckCertificates(instance)
+	if err != nil {
+		return status, nil, errors.Wrap(err, "failed to check for expiring certificates")
+	}
+
+	if update.CertificateCreated() {
+		log.Info(fmt.Sprintf("%s certificate was created, setting timer for certificate renewal", update.GetCreatedCertType()))
+		err = n.SetCertificateTimer(instance, update.GetCreatedCertType())
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
+
+	if update.EcertUpdated() {
+		log.Info("Ecert was updated, setting timer for certificate renewal")
+		err = n.SetCertificateTimer(instance, commoninit.ECERT)
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
+
+	if update.TLSCertUpdated() {
+		log.Info("TLS cert was updated, setting timer for certificate renewal")
+		err = n.SetCertificateTimer(instance, commoninit.TLS)
+		if err != nil {
+			return status, nil, errors.Wrap(err, "failed to set timer for certificate renewal")
+		}
+	}
 	return status, nil, err
+
+}
+
+func (n *Node) CheckCertificates(instance *current.IBPOrderer) (*current.CRStatus, error) {
+	numSecondsBeforeExpire := instance.Spec.GetNumSecondsWarningPeriod()
+	statusType, message, err := n.CertificateManager.CheckCertificatesForExpire(instance, numSecondsBeforeExpire)
+	if err != nil {
+		return nil, err
+	}
+
+	crStatus := &current.CRStatus{
+		Type:    statusType,
+		Message: message,
+	}
+
+	switch statusType {
+	case current.Deployed:
+		crStatus.Reason = "allPodsRunning"
+		if message == "" {
+			crStatus.Message = "allPodsRunning"
+		}
+	default:
+		crStatus.Reason = "certRenewalRequired"
+	}
+
+	return crStatus, nil
+}
+
+func (n *Node) SetCertificateTimer(instance *current.IBPOrderer, certType commoninit.SecretType) error {
+	certName := fmt.Sprintf("%s-%s-signcert", certType, instance.Name)
+	numSecondsBeforeExpire := instance.Spec.GetNumSecondsWarningPeriod()
+	duration, err := n.CertificateManager.GetDurationToNextRenewal(certType, instance, numSecondsBeforeExpire)
+	if err != nil {
+		return err
+	}
+
+	log.Info((fmt.Sprintf("Creating timer to renew %s %d days before it expires", certName, int(numSecondsBeforeExpire/DaysToSecondsConversion))))
+
+	if n.RenewCertTimers[certName] != nil {
+		n.RenewCertTimers[certName].Stop()
+		n.RenewCertTimers[certName] = nil
+	}
+	n.RenewCertTimers[certName] = time.AfterFunc(duration, func() {
+		// Check certs for updated status & set status so that reconcile is triggered after cert renewal. Reconcile loop will handle
+		// checking certs again to determine whether instance status can return to Deployed
+		err := n.UpdateCRStatus(instance)
+		if err != nil {
+			log.Error(err, "failed to update CR status")
+		}
+
+		// get instance
+		instanceLatest := &current.IBPOrderer{}
+		err = n.Client.Get(context.TODO(), types.NamespacedName{Namespace: instance.Namespace, Name: instance.Name}, instanceLatest)
+		if err != nil {
+			log.Error(err, "failed to get latest instance")
+			return
+		}
+
+		// Orderer TLS certs can be auto-renewed for 1.4.9+ or 2.2.1+ orderers
+		if certType == commoninit.TLS {
+			// if renewal is disabled
+			if n.Config.Operator.Orderer.Renewals.DisableTLScert {
+				log.Info(fmt.Sprintf("%s cannot be auto-renewed because orderer tls renewal is disabled", certName))
+				return
+			}
+			switch version.GetMajorReleaseVersion(instanceLatest.Spec.FabricVersion) {
+			case version.V2:
+				if version.String(instanceLatest.Spec.FabricVersion).LessThan("2.2.1") {
+					log.Info(fmt.Sprintf("%s cannot be auto-renewed because v2 orderer is less than 2.2.1, force renewal required", certName))
+					return
+				}
+			case version.V1:
+				if version.String(instanceLatest.Spec.FabricVersion).LessThan("1.4.9") {
+					log.Info(fmt.Sprintf("%s cannot be auto-renewed because v1.4 orderer less than 1.4.9, force renewal required", certName))
+					return
+				}
+			default:
+				log.Info(fmt.Sprintf("%s cannot be auto-renewed, force renewal required", certName))
+				return
+			}
+		}
+
+		err = common.BackupCrypto(n.Client, n.Scheme, instance, n.GetLabels(instance))
+		if err != nil {
+			log.Error(err, "failed to backup crypto before renewing cert")
+			return
+		}
+
+		err = n.RenewCert(certType, instanceLatest, false)
+		if err != nil {
+			log.Info(fmt.Sprintf("Failed to renew %s certificate: %s, status of %s remaining in Warning phase", certType, err, instanceLatest.GetName()))
+			return
+		}
+		log.Info(fmt.Sprintf("%s renewal complete", certName))
+	})
+
+	return nil
+}
+
+// NOTE: This is called by the timer's subroutine when it goes off, not during a reconcile loop.
+// Therefore, it won't be overriden by the "SetStatus" method in ibporderer_controller.go
+func (n *Node) UpdateCRStatus(instance *current.IBPOrderer) error {
+	status, err := n.CheckCertificates(instance)
+	if err != nil {
+		return errors.Wrap(err, "failed to check certificates")
+	}
+
+	// Get most up-to-date instance at the time of update
+	updatedInstance := &current.IBPOrderer{}
+	err = n.Client.Get(context.TODO(), types.NamespacedName{Name: instance.Name, Namespace: instance.Namespace}, updatedInstance)
+	if err != nil {
+		return errors.Wrap(err, "failed to get new instance")
+	}
+
+	// Don't trigger reconcile if status remaining the same
+	if updatedInstance.Status.Type == status.Type && updatedInstance.Status.Reason == status.Reason && updatedInstance.Status.Message == status.Message {
+		return nil
+	}
+
+	updatedInstance.Status.Type = status.Type
+	updatedInstance.Status.Reason = status.Reason
+	updatedInstance.Status.Message = status.Message
+	updatedInstance.Status.Status = current.True
+	updatedInstance.Status.LastHeartbeatTime = time.Now().String()
+
+	log.Info(fmt.Sprintf("Updating status of IBPOrderer node %s to %s phase", instance.Name, status.Type))
+	err = n.Client.UpdateStatus(context.TODO(), updatedInstance)
+	if err != nil {
+		return errors.Wrapf(err, "failed to update status to %s phase", status.Type)
+	}
+
+	return nil
+}
+
+// This function checks whether the parent orderer node (if parent exists) or node itself  is in
+// Deployed or Warning state. We don't want to set a timer to renew certifictes before all nodes
+// are Deployed as a certificate renewal updates the parent status to Warning while renewing.
+func (n *Node) CanSetCertificateTimer(instance *current.IBPOrderer, update Update) bool {
+	if update.CertificateCreated() || update.CertificateUpdated() {
+		parentName := instance.Labels["parent"]
+		if parentName == "" {
+			// If parent not found, check individual node
+			if !(instance.Status.Type == current.Deployed || instance.Status.Type == current.Warning) {
+				log.Info(fmt.Sprintf("%s has no parent, node not yet deployed", instance.Name))
+				return false
+			} else {
+				log.Info(fmt.Sprintf("%s has no parent, node is deployed", instance.Name))
+				return true
+			}
+		}
+
+		nn := types.NamespacedName{
+			Name:      parentName,
+			Namespace: instance.GetNamespace(),
+		}
+
+		parentInstance := &current.IBPOrderer{}
+		err := n.Client.Get(context.TODO(), nn, parentInstance)
+		if err != nil {
+			log.Error(err, fmt.Sprintf("%s parent not found", instance.Name))
+			return false
+		}
+
+		// If parent not yet deployed, but cert update detected, then prevent timer from being set until parent
+		// (and subequently all child nodes) are deployed
+		if !(parentInstance.Status.Type == current.Deployed || parentInstance.Status.Type == current.Warning) {
+			log.Info(fmt.Sprintf("%s has parent, parent not yet deployed", instance.Name))
+			return false
+		}
+	}
+
+	log.Info(fmt.Sprintf("%s has parent, parent is deployed", instance.Name))
+	return true
 }

@@ -154,7 +154,8 @@ func (p *Peer) Reconcile(instance *current.IBPPeer, update basepeer.Update) (com
 	hostAPI := fmt.Sprintf("%s-%s-peer.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
 	hostOperations := fmt.Sprintf("%s-%s-operations.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
 	hostGrpc := fmt.Sprintf("%s-%s-grpcweb.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
-	hosts := []string{hostAPI, hostOperations, hostGrpc, "127.0.0.1"}
+	legacyHostAPI := fmt.Sprintf("%s-%s.%s", instance.Namespace, instance.Name, instance.Spec.Domain)
+	hosts := []string{hostAPI, hostOperations, hostGrpc, legacyHostAPI, "127.0.0.1"}
 	csrHostUpdated := p.CheckCSRHosts(instance, hosts)
 
 	if instanceUpdated || externalEndpointUpdated || csrHostUpdated {
@@ -214,6 +215,12 @@ func (p *Peer) Reconcile(instance *current.IBPPeer, update basepeer.Update) (com
 	if update.MigrateToV24() {
 		if err := p.ReconcileFabricPeerMigrationV2_4(instance); err != nil {
 			return common.Result{}, operatorerrors.Wrap(err, operatorerrors.FabricPeerMigrationFailed, "failed to migrate fabric peer to version v2.4.x")
+		}
+	}
+
+	if update.MigrateToV25() {
+		if err := p.ReconcileFabricPeerMigrationV2_5(instance); err != nil {
+			return common.Result{}, operatorerrors.Wrap(err, operatorerrors.FabricPeerMigrationFailed, "failed to migrate fabric peer to version v2.5.x")
 		}
 	}
 

@@ -281,10 +281,10 @@ func (o *Override) CreateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 			return errors.Wrap(err, "failed during V2 peer deployment overrides")
 		}
 		peerVersion := version.String(instance.Spec.FabricVersion)
-		if peerVersion.EqualWithoutTag(version.V2_4_1) || peerVersion.GreaterThan(version.V2_4_1) {
+		if peerVersion.EqualWithoutTag(version.V2_4_1) || peerVersion.EqualWithoutTag(version.V2_5_1) || peerVersion.GreaterThan(version.V2_4_1) {
 			err = o.V24Deployment(instance, deployment)
 			if err != nil {
-				return errors.Wrap(err, "failed during V24 peer deployment overrides")
+				return errors.Wrap(err, "failed during V24/V25 peer deployment overrides")
 			}
 		}
 	} else {
@@ -442,6 +442,11 @@ func (o *Override) V2Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 		peerContainer.AppendEnvIfMissing("IBP_BUILDER_SHARED_DIR", "/cclauncher")
 		peerContainer.AppendEnvIfMissing("IBP_BUILDER_ENDPOINT", "127.0.0.1:11111")
 		peerContainer.AppendEnvIfMissing("PEER_NAME", instance.GetName())
+
+		// Overriding keepalive flags for peers to fix connection issues with VPC clusters
+		peerContainer.AppendEnvIfMissing("CORE_PEER_KEEPALIVE_MININTERVAL", "25s")
+		peerContainer.AppendEnvIfMissing("CORE_PEER_KEEPALIVE_CLIENT_INTERVAL", "30s")
+		peerContainer.AppendEnvIfMissing("CORE_PEER_KEEPALIVE_DELIVERYCLIENT_INTERVAL", "30s")
 
 		// Will delete these envs if found, these are not required for v2
 		peerContainer.DeleteEnv("CORE_VM_ENDPOINT")
@@ -636,10 +641,10 @@ func (o *Override) UpdateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 			return errors.Wrapf(err, "failed to update V2 fabric deployment for instance '%s'", instance.GetName())
 		}
 		peerVersion := version.String(instance.Spec.FabricVersion)
-		if peerVersion.EqualWithoutTag(version.V2_4_1) || peerVersion.GreaterThan(version.V2_4_1) {
+		if peerVersion.EqualWithoutTag(version.V2_4_1) || peerVersion.EqualWithoutTag(version.V2_5_1) || peerVersion.GreaterThan(version.V2_4_1) {
 			err := o.V24DeploymentUpdate(instance, deployment)
 			if err != nil {
-				return errors.Wrapf(err, "failed to update V24 fabric deployment for instance '%s'", instance.GetName())
+				return errors.Wrapf(err, "failed to update V24/V25 fabric deployment for instance '%s'", instance.GetName())
 			}
 		}
 	}
