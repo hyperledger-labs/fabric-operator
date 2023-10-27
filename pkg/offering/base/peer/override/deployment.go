@@ -448,6 +448,9 @@ func (o *Override) V2Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 		peerContainer.AppendEnvIfMissing("CORE_PEER_KEEPALIVE_CLIENT_INTERVAL", "30s")
 		peerContainer.AppendEnvIfMissing("CORE_PEER_KEEPALIVE_DELIVERYCLIENT_INTERVAL", "30s")
 
+		// Disable the flag peer.deliveryclient.blockGossipEnabled for existing v2 peers
+		peerContainer.AppendEnvIfMissing("CORE_PEER_DELIVERYCLIENT_BLOCKGOSSIPENABLED", "false")
+
 		// Will delete these envs if found, these are not required for v2
 		peerContainer.DeleteEnv("CORE_VM_ENDPOINT")
 		peerContainer.DeleteEnv("CORE_CHAINCODE_GOLANG_RUNTIME")
