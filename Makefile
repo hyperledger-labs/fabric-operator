@@ -16,25 +16,27 @@
 # limitations under the License.
 #
 
-IMAGE ?= hyperledger-labs/fabric-operator
-ARCH ?= $(shell go env GOARCH)
-OSS_GO_VER ?= 1.18
-BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
-OS = $(shell go env GOOS)
-SEMREV_LABEL ?= v1.0.0-$(shell git rev-parse --short HEAD)
-BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
-GO_VER ?= 1.18.4
+IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
 
+TAG ?= $(shell git rev-parse --short HEAD)
+ARCH ?= $(shell go env GOARCH)
+GO_VER ?= 1.18.4
+OS = $(shell go env GOOS)
+BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+DOCKER_IMAGE_REPO ?= ghcr.io
+
+SEMREV_LABEL ?= v1.0.0-$(shell git rev-parse --short HEAD)
 # For compatibility with legacy install-fabric.sh conventions, strip the
 # leading semrev 'v' character when preparing dist and release artifacts.
 VERSION=$(shell echo $(SEMREV_LABEL) | sed -e  's/^v\(.*\)/\1/')
 
-
-DOCKER_BUILD ?= docker build
-
+BUILD_ARGS=--build-arg ARCH=$(ARCH)
 BUILD_ARGS+=--build-arg BUILD_ID=$(VERSION)
 BUILD_ARGS+=--build-arg BUILD_DATE=$(BUILD_DATE)
 BUILD_ARGS+=--build-arg GO_VER=$(GO_VER)
+
+NAMESPACE ?= n$(shell echo $(TAG) | tr -d "-")
 
 .PHONY: build
 
@@ -42,13 +44,19 @@ build:
 	mkdir -p bin && go build -o bin/operator
 
 image: setup
-	$(DOCKER_BUILD) -f Dockerfile $(BUILD_ARGS) -t $(IMAGE) .
+	docker build --rm . -f Dockerfile $(BUILD_ARGS) -t $(IMAGE):$(VERSION)-$(ARCH)
+	docker tag $(IMAGE):$(VERSION)-$(ARCH) $(IMAGE):latest-$(ARCH)
 
 govendor:
 	@go mod vendor
 
 setup: govendor manifests bundle generate
 
+image-push:
+	docker push $(IMAGE):$(VERSION)-$(ARCH)
+
+image-push-latest:
+	docker push $(IMAGE):latest-$(ARCH)
 
 #######################################
 #### part of autogenerate makefile ####
@@ -148,6 +156,10 @@ go-sec:
 # Generate code
 generate: controller-gen
 	$(CONTROLLER_GEN) object:headerFile="boilerplate/boilerplate.go.txt" paths="./..."
+
+# Push the docker image
+docker-push:
+	docker push ${IMG}
 
 # find or download controller-gen
 # download controller-gen if necessary
