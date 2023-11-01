@@ -43,7 +43,6 @@ data:
       password: dev123
 
     imagePullSecret: ""
-    usetags: false
     versions:
       ca:
         1.5.3-1:
