@@ -208,7 +208,7 @@ func (o *Override) CommonDeployment(instance *current.IBPConsole, deployment *de
 		}
 
 		couchdbImage = image.GetImage(registryURL, defaultimage.CouchDBImage, images.CouchDBImage)
-		if instance.Spec.UseTags != nil && *(instance.Spec.UseTags) {
+		if instance.Spec.UseTags == nil || *(instance.Spec.UseTags)==true {
 			couchdbTag = image.GetTag(arch, defaultimage.CouchDBTag, images.CouchDBTag)
 		} else {
 			couchdbTag = image.GetTag(arch, defaultimage.CouchDBDigest, images.CouchDBDigest)
