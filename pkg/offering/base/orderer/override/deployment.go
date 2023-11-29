@@ -39,6 +39,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
@@ -107,10 +108,30 @@ func (o *Override) CreateDeployment(instance *current.IBPOrderer, k8sDep *appsv1
 	if err != nil {
 		return errors.New("orderer container not found in deployment spec")
 	}
+
 	grpcWeb, err := deployment.GetContainer(PROXY)
 	if err != nil {
 		return errors.New("proxy container not found in deployment spec")
 	}
+
+	// Change the legacy LivenessProbe from /settings endpoint to tcp port 8080
+	if grpcWeb.LivenessProbe.Handler.TCPSocket == nil {
+		grpcWeb.LivenessProbe.Handler = corev1.Handler{
+			TCPSocket: &corev1.TCPSocketAction{
+				Port: intstr.FromInt(8080),
+			},
+		}
+	}
+
+	// Change the legacy ReadinessProbe from /settings endpoint to tcp port 8080
+	if grpcWeb.ReadinessProbe.Handler.TCPSocket == nil {
+		grpcWeb.ReadinessProbe.Handler = corev1.Handler{
+			TCPSocket: &corev1.TCPSocketAction{
+				Port: intstr.FromInt(8080),
+			},
+		}
+	}
+
 	_, err = deployment.GetContainer(INIT)
 	if err != nil {
 		return errors.New("init container not found in deployment spec")

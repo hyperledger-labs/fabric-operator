@@ -42,6 +42,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 // Container names
@@ -189,6 +190,24 @@ func (o *Override) CreateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 	peerContainer.AppendEnvIfMissingOverrideIfPresent("CORE_PEER_TLS_ROOTCERT_FILE", certsData)
 	grpcwebContainer.AppendEnvIfMissingOverrideIfPresent("SERVER_TLS_CLIENT_CA_FILES", certsData)
 	peerContainer.AppendEnvIfMissingOverrideIfPresent("CORE_PEER_TLS_ROOTCERT_FILE", certsData)
+
+	// Change the legacy LivenessProbe from /settings endpoint to tcp port 8080
+	if grpcwebContainer.LivenessProbe.Handler.TCPSocket == nil {
+		grpcwebContainer.LivenessProbe.Handler = corev1.Handler{
+			TCPSocket: &corev1.TCPSocketAction{
+				Port: intstr.FromInt(8080),
+			},
+		}
+	}
+
+	// Change the legacy ReadinessProbe from /settings endpoint to tcp port 8080
+	if grpcwebContainer.ReadinessProbe.Handler.TCPSocket == nil {
+		grpcwebContainer.ReadinessProbe.Handler = corev1.Handler{
+			TCPSocket: &corev1.TCPSocketAction{
+				Port: intstr.FromInt(8080),
+			},
+		}
+	}
 
 	// Check if intermediate tlscerts exists
 	if util.IntermediateSecretExists(o.Client, instance.Namespace, tlsintercertSecret) {
