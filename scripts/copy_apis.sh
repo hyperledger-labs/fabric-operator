@@ -41,10 +41,26 @@ cp -r /tmp/fabric-operator/pkg/apis/console/* ../pkg/apis/console/.
 # copy common config
 cp -r /tmp/fabric-operator/pkg/apis/common/* ../pkg/apis/common/
 
-# copy deployer config
+# copy deployer config - This is manual step
 cp -r /tmp/fabric-operator/pkg/apis/deployer/* ../pkg/apis/deployer/
 
 # copy v1beta1 specs
 cp /tmp/fabric-operator/api/v1beta1/common_struct.go ../api/v1beta1/
 cp -r /tmp/fabric-operator/api/v1beta1/*_types.go ../api/v1beta1/.
 cp /tmp/fabric-operator/api/v1beta1/zz_generated.deepcopy.go ../api/v1beta1/zz_generated.deepcopy.go
+
+
+## We need structs only and not the implemtation and the corresponding imports
+for file_path in ../pkg/apis/peer/v2/peer.go ../pkg/apis/deployer/deployer.go
+do
+
+    line_no=$(awk '/pkg\/util/{ print NR; exit }' ${file_path})
+    sed -i ${line_no}d ${file_path}
+    line_no=$(awk '/func/{ print NR; exit }' ${file_path})
+    line=$((line_no-1))
+
+    file_name=$(basename "$file_path")
+    cat ${file_path} | head -${line} > /tmp/${file_name}
+    mv /tmp/${file_name} ${file_path}
+
+done

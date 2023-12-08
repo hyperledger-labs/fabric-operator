@@ -21,7 +21,6 @@ package v2
 import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v1"
-	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 )
 
 type Core struct {
@@ -210,15 +209,3 @@ type KeepAlive struct {
 	DeliveryClient v1.KeepAliveClient `json:"deliveryClient,omitempty"`
 }
 
-func (a *AddressOverride) CACertsFileToBytes() ([]byte, error) {
-	data, err := util.Base64ToBytes(a.CACertsFile)
-	if err != nil {
-		return nil, err
-	}
-
-	return data, nil
-}
-
-func (a *AddressOverride) GetCertBytes() []byte {
-	return a.certBytes
-}
