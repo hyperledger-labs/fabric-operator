@@ -20,6 +20,7 @@ package deployer
 
 import (
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util/image"
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -391,4 +392,158 @@ type ConsoleImages struct {
 	MustgatherTag string `json:"mustgatherTag,omitempty"`
 	// MustgatherDigest is the digest of the mustgather image
 	MustgatherDigest string `json:"mustgatherDigest,omitempty"`
+}
+
+func (v *Versions) Override(requestedVersions *Versions, registryURL string, arch string) {
+	if requestedVersions == nil {
+		return
+	}
+
+	if len(requestedVersions.CA) != 0 {
+		CAVersions := map[string]VersionCA{}
+		for key, _ := range requestedVersions.CA {
+			var caConfig VersionCA
+			requestedCAVersion := requestedVersions.CA[key]
+			caConfig.Image.Override(&requestedCAVersion.Image, registryURL, arch)
+			caConfig.Default = requestedCAVersion.Default
+			caConfig.Version = requestedCAVersion.Version
+			CAVersions[key] = caConfig
+		}
+		v.CA = CAVersions
+	}
+
+	if len(requestedVersions.Peer) != 0 {
+		PeerVersions := map[string]VersionPeer{}
+		for key, _ := range requestedVersions.Peer {
+			var peerConfig VersionPeer
+			requestedPeerVersion := requestedVersions.Peer[key]
+			peerConfig.Image.Override(&requestedPeerVersion.Image, registryURL, arch)
+			peerConfig.Default = requestedPeerVersion.Default
+			peerConfig.Version = requestedPeerVersion.Version
+			PeerVersions[key] = peerConfig
+		}
+		v.Peer = PeerVersions
+	}
+
+	if len(requestedVersions.Orderer) != 0 {
+		OrdererVersions := map[string]VersionOrderer{}
+		for key, _ := range requestedVersions.Orderer {
+			var ordererConfig VersionOrderer
+			requestedOrdererVersion := requestedVersions.Orderer[key]
+			ordererConfig.Image.Override(&requestedOrdererVersion.Image, registryURL, arch)
+			ordererConfig.Default = requestedOrdererVersion.Default
+			ordererConfig.Version = requestedOrdererVersion.Version
+			OrdererVersions[key] = ordererConfig
+		}
+		v.Orderer = OrdererVersions
+	}
+}
+
+// Override will look at requested images and use those to override default image
+// values. Override also format the image tag to include arch for non-sha based
+// tags.
+func (i *CAImages) Override(requested *CAImages, registryURL string, arch string) {
+	// If requested is nil, we are only interested in properly prepending registry
+	// URL to the image and with overriding default values so a empty struct is initialized.
+	if requested == nil {
+		requested = &CAImages{}
+	}
+
+	// Images
+	i.CAInitImage = image.GetImage(registryURL, i.CAInitImage, requested.CAInitImage)
+	i.CAImage = image.GetImage(registryURL, i.CAImage, requested.CAImage)
+	i.HSMImage = image.GetImage(registryURL, i.HSMImage, requested.HSMImage)
+	i.EnrollerImage = image.GetImage(registryURL, i.EnrollerImage, requested.EnrollerImage)
+
+	// Tags
+	i.CAInitTag = image.GetTag(arch, i.CAInitTag, requested.CAInitTag)
+	i.CATag = image.GetTag(arch, i.CATag, requested.CATag)
+	i.HSMTag = image.GetTag(arch, i.HSMTag, requested.HSMTag)
+	i.EnrollerTag = image.GetTag(arch, i.EnrollerTag, requested.EnrollerTag)
+
+	// Digests
+	i.CAInitDigest = image.GetTag(arch, i.CAInitDigest, requested.CAInitDigest)
+	i.CADigest = image.GetTag(arch, i.CADigest, requested.CADigest)
+	i.HSMDigest = image.GetTag(arch, i.HSMDigest, requested.HSMDigest)
+	i.EnrollerDigest = image.GetTag(arch, i.EnrollerDigest, requested.EnrollerDigest)
+}
+
+func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch string) {
+	if requested == nil {
+		requested = &PeerImages{}
+	}
+
+	// Images
+	i.PeerInitImage = image.GetImage(registryURL, i.PeerInitImage, requested.PeerInitImage)
+	i.PeerImage = image.GetImage(registryURL, i.PeerImage, requested.PeerImage)
+	i.CouchDBImage = image.GetImage(registryURL, i.CouchDBImage, requested.CouchDBImage)
+	i.DindImage = image.GetImage(registryURL, i.DindImage, requested.DindImage)
+	i.GRPCWebImage = image.GetImage(registryURL, i.GRPCWebImage, requested.GRPCWebImage)
+	i.FluentdImage = image.GetImage(registryURL, i.FluentdImage, requested.FluentdImage)
+	i.CCLauncherImage = image.GetImage(registryURL, i.CCLauncherImage, requested.CCLauncherImage)
+	i.FileTransferImage = image.GetImage(registryURL, i.FileTransferImage, requested.FileTransferImage)
+	i.BuilderImage = image.GetImage(registryURL, i.BuilderImage, requested.BuilderImage)
+	i.GoEnvImage = image.GetImage(registryURL, i.GoEnvImage, requested.GoEnvImage)
+	i.JavaEnvImage = image.GetImage(registryURL, i.JavaEnvImage, requested.JavaEnvImage)
+	i.NodeEnvImage = image.GetImage(registryURL, i.NodeEnvImage, requested.NodeEnvImage)
+	i.HSMImage = image.GetImage(registryURL, i.HSMImage, requested.HSMImage)
+	i.EnrollerImage = image.GetImage(registryURL, i.EnrollerImage, requested.EnrollerImage)
+
+	// Tags
+	i.PeerInitTag = image.GetTag(arch, i.PeerInitTag, requested.PeerInitTag)
+	i.PeerTag = image.GetTag(arch, i.PeerTag, requested.PeerTag)
+	i.CouchDBTag = image.GetTag(arch, i.CouchDBTag, requested.CouchDBTag)
+	i.DindTag = image.GetTag(arch, i.DindTag, requested.DindTag)
+	i.GRPCWebTag = image.GetTag(arch, i.GRPCWebTag, requested.GRPCWebTag)
+	i.FluentdTag = image.GetTag(arch, i.FluentdTag, requested.FluentdTag)
+	i.CCLauncherTag = image.GetTag(arch, i.CCLauncherTag, requested.CCLauncherTag)
+	i.FileTransferTag = image.GetTag(arch, i.FileTransferTag, requested.FileTransferTag)
+	i.BuilderTag = image.GetTag(arch, i.BuilderTag, requested.BuilderTag)
+	i.GoEnvTag = image.GetTag(arch, i.GoEnvTag, requested.GoEnvTag)
+	i.JavaEnvTag = image.GetTag(arch, i.JavaEnvTag, requested.JavaEnvTag)
+	i.NodeEnvTag = image.GetTag(arch, i.NodeEnvTag, requested.NodeEnvTag)
+	i.HSMTag = image.GetTag(arch, i.HSMTag, requested.HSMTag)
+	i.EnrollerTag = image.GetTag(arch, i.EnrollerTag, requested.EnrollerTag)
+
+	// Digests
+	i.PeerInitDigest = image.GetTag(arch, i.PeerInitDigest, requested.PeerInitDigest)
+	i.PeerDigest = image.GetTag(arch, i.PeerDigest, requested.PeerDigest)
+	i.CouchDBDigest = image.GetTag(arch, i.CouchDBDigest, requested.CouchDBDigest)
+	i.DindDigest = image.GetTag(arch, i.DindDigest, requested.DindDigest)
+	i.GRPCWebDigest = image.GetTag(arch, i.GRPCWebDigest, requested.GRPCWebDigest)
+	i.FluentdDigest = image.GetTag(arch, i.FluentdDigest, requested.FluentdDigest)
+	i.CCLauncherDigest = image.GetTag(arch, i.CCLauncherDigest, requested.CCLauncherDigest)
+	i.FileTransferDigest = image.GetTag(arch, i.FileTransferDigest, requested.FileTransferDigest)
+	i.BuilderDigest = image.GetTag(arch, i.BuilderDigest, requested.BuilderDigest)
+	i.GoEnvDigest = image.GetTag(arch, i.GoEnvDigest, requested.GoEnvDigest)
+	i.JavaEnvDigest = image.GetTag(arch, i.JavaEnvDigest, requested.JavaEnvDigest)
+	i.NodeEnvDigest = image.GetTag(arch, i.NodeEnvDigest, requested.NodeEnvDigest)
+	i.HSMDigest = image.GetTag(arch, i.HSMDigest, requested.HSMDigest)
+	i.EnrollerDigest = image.GetTag(arch, i.EnrollerDigest, requested.EnrollerDigest)
+}
+
+func (i *OrdererImages) Override(requested *OrdererImages, registryURL string, arch string) {
+	if requested == nil {
+		requested = &OrdererImages{}
+	}
+	// Images
+	i.GRPCWebImage = image.GetImage(registryURL, i.GRPCWebImage, requested.GRPCWebImage)
+	i.OrdererInitImage = image.GetImage(registryURL, i.OrdererInitImage, requested.OrdererInitImage)
+	i.OrdererImage = image.GetImage(registryURL, i.OrdererImage, requested.OrdererImage)
+	i.HSMImage = image.GetImage(registryURL, i.HSMImage, requested.HSMImage)
+	i.EnrollerImage = image.GetImage(registryURL, i.EnrollerImage, requested.EnrollerImage)
+
+	// Tags
+	i.GRPCWebTag = image.GetTag(arch, i.GRPCWebTag, requested.GRPCWebTag)
+	i.OrdererInitTag = image.GetTag(arch, i.OrdererInitTag, requested.OrdererInitTag)
+	i.OrdererTag = image.GetTag(arch, i.OrdererTag, requested.OrdererTag)
+	i.HSMTag = image.GetTag(arch, i.HSMTag, requested.HSMTag)
+	i.EnrollerTag = image.GetTag(arch, i.EnrollerTag, requested.EnrollerTag)
+
+	// Digests
+	i.GRPCWebDigest = image.GetTag(arch, i.GRPCWebDigest, requested.GRPCWebDigest)
+	i.OrdererInitDigest = image.GetTag(arch, i.OrdererInitDigest, requested.OrdererInitDigest)
+	i.OrdererDigest = image.GetTag(arch, i.OrdererDigest, requested.OrdererDigest)
+	i.HSMDigest = image.GetTag(arch, i.HSMDigest, requested.HSMDigest)
+	i.EnrollerDigest = image.GetTag(arch, i.EnrollerDigest, requested.EnrollerDigest)
 }

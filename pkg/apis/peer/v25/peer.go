@@ -19,9 +19,9 @@
 package v25
 
 import (
-	"github.com/IBM-Blockchain/fabric-operator/api/common"
-	v1 "github.com/IBM-Blockchain/fabric-operator/api/peer/v1"
-	v2 "github.com/IBM-Blockchain/fabric-operator/api/peer/v2"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
+	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v1"
+	v2 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v2"
 )
 
 type Core struct {
@@ -61,6 +61,8 @@ type Peer struct {
 	ValidatorPoolSize      int               `json:"validatorPoolSize,omitempty"`
 	Discovery              v1.Discovery      `json:"discovery,omitempty"`
 	Limits                 v2.Limits         `json:"limits,omitempty"`
+	MaxRecvMsgSize         int               `json:"maxRecvMsgSize,omitempty"`
+	MaxSendMsgSize         int               `json:"maxSendMsgSize,omitempty"`
 }
 
 type Ledger struct {
@@ -69,17 +71,17 @@ type Ledger struct {
 	PvtDataStore PvtDataStore     `json:"pvtdataStore,omitempty"`
 }
 
-type Gateway struct {
-	Enabled            *bool           `json:"enabled,omitempty"`
-	EndorsementTimeout common.Duration `json:"endorsementTimeout,omitempty"`
-	DialTimeout        common.Duration `json:"dialTimeout,omitempty"`
-	BroadcastTimeout   common.Duration `json:"broadcastTimeout,omitempty"`
-}
-
 type PvtDataStore struct {
 	CollElgProcMaxDbBatchSize           int             `json:"collElgProcMaxDbBatchSize,omitempty"`
 	CollElgProcDbBatchesInterval        int             `json:"collElgProcDbBatchesInterval,omitempty"`
 	DeprioritizedDataReconcilerInterval common.Duration `json:"deprioritizedDataReconcilerInterval,omitempty"`
 	PurgeInterval                       int             `json:"purgeInterval,omitempty"`
 	PurgedKeyAuditLogging               *bool           `json:"purgedKeyAuditLogging,omitempty"`
+}
+
+type Gateway struct {
+	Enabled            *bool           `json:"enabled,omitempty"`
+	EndorsementTimeout common.Duration `json:"endorsementTimeout,omitempty"`
+	DialTimeout        common.Duration `json:"dialTimeout,omitempty"`
+	BroadcastTimeout   common.Duration `json:"broadcastTimeout,omitempty"`
 }

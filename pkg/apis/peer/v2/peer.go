@@ -19,8 +19,9 @@
 package v2
 
 import (
-	"github.com/IBM-Blockchain/fabric-operator/api/common"
-	v1 "github.com/IBM-Blockchain/fabric-operator/api/peer/v1"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
+	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v1"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 )
 
 type Core struct {
@@ -60,6 +61,8 @@ type Peer struct {
 	ValidatorPoolSize      int               `json:"validatorPoolSize,omitempty"`
 	Discovery              v1.Discovery      `json:"discovery,omitempty"`
 	Limits                 Limits            `json:"limits,omitempty"`
+	MaxRecvMsgSize         int               `json:"maxRecvMsgSize,omitempty"`
+	MaxSendMsgSize         int               `json:"maxSendMsgSize,omitempty"`
 }
 
 type Gossip struct {
@@ -205,4 +208,17 @@ type KeepAlive struct {
 	MinInterval    common.Duration    `json:"minInterval,omitempty"`
 	Client         v1.KeepAliveClient `json:"client,omitempty"`
 	DeliveryClient v1.KeepAliveClient `json:"deliveryClient,omitempty"`
+}
+
+func (a *AddressOverride) CACertsFileToBytes() ([]byte, error) {
+	data, err := util.Base64ToBytes(a.CACertsFile)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func (a *AddressOverride) GetCertBytes() []byte {
+	return a.certBytes
 }
