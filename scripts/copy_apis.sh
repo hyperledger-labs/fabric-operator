@@ -62,5 +62,7 @@ do
     file_name=$(basename "$file_path")
     cat ${file_path} | head -${line} > /tmp/${file_name}
     mv /tmp/${file_name} ${file_path}
-
 done
+
+## format the files
+go fmt ../...

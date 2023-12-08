@@ -392,4 +392,3 @@ type ConsoleImages struct {
 	// MustgatherDigest is the digest of the mustgather image
 	MustgatherDigest string `json:"mustgatherDigest,omitempty"`
 }
-

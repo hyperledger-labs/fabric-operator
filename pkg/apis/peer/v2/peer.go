@@ -208,4 +208,3 @@ type KeepAlive struct {
 	Client         v1.KeepAliveClient `json:"client,omitempty"`
 	DeliveryClient v1.KeepAliveClient `json:"deliveryClient,omitempty"`
 }
-
