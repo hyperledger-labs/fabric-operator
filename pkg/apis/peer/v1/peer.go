@@ -19,7 +19,7 @@
 package v1
 
 import (
-	"github.com/IBM-Blockchain/fabric-operator/api/common"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
 	"github.com/docker/docker/api/types/container"
 )
 

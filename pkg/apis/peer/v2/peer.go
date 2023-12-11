@@ -19,8 +19,8 @@
 package v2
 
 import (
-	"github.com/IBM-Blockchain/fabric-operator/api/common"
-	v1 "github.com/IBM-Blockchain/fabric-operator/api/peer/v1"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
+	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/peer/v1"
 )
 
 type Core struct {
@@ -60,6 +60,8 @@ type Peer struct {
 	ValidatorPoolSize      int               `json:"validatorPoolSize,omitempty"`
 	Discovery              v1.Discovery      `json:"discovery,omitempty"`
 	Limits                 Limits            `json:"limits,omitempty"`
+	MaxRecvMsgSize         int               `json:"maxRecvMsgSize,omitempty"`
+	MaxSendMsgSize         int               `json:"maxSendMsgSize,omitempty"`
 }
 
 type Gossip struct {

@@ -19,8 +19,8 @@
 package v24
 
 import (
-	"github.com/IBM-Blockchain/fabric-operator/api/common"
-	v1 "github.com/IBM-Blockchain/fabric-operator/api/orderer/v1"
+	commonapi "github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
+	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/orderer/v1"
 )
 
 type Orderer struct {
@@ -35,20 +35,22 @@ type Orderer struct {
 }
 
 type General struct {
-	ListenAddress     string            `json:"listenAddress,omitempty"`
-	ListenPort        uint16            `json:"listenPort,omitempty"`
-	TLS               v1.TLS            `json:"tls,omitempty"`
-	Cluster           v1.Cluster        `json:"cluster,omitempty"`
-	Keepalive         v1.Keepalive      `json:"keepalive,omitempty"`
-	ConnectionTimeout common.Duration   `json:"connectionTimeout,omitempty"`
-	GenesisFile       string            `json:"genesisFile,omitempty"` // For compatibility only, will be replaced by BootstrapFile
-	BootstrapFile     string            `json:"bootstrapFile,omitempty"`
-	BootstrapMethod   string            `json:"bootstrapMethod,omitempty"`
-	Profile           v1.Profile        `json:"profile,omitempty"`
-	LocalMSPDir       string            `json:"localMspDir,omitempty"`
-	LocalMSPID        string            `json:"localMspId,omitempty"`
-	BCCSP             *common.BCCSP     `json:"BCCSP,omitempty"`
-	Authentication    v1.Authentication `json:"authentication,omitempty"`
+	ListenAddress     string             `json:"listenAddress,omitempty"`
+	ListenPort        uint16             `json:"listenPort,omitempty"`
+	TLS               v1.TLS             `json:"tls,omitempty"`
+	Cluster           v1.Cluster         `json:"cluster,omitempty"`
+	Keepalive         v1.Keepalive       `json:"keepalive,omitempty"`
+	ConnectionTimeout commonapi.Duration `json:"connectionTimeout,omitempty"`
+	GenesisFile       string             `json:"genesisFile,omitempty"` // For compatibility only, will be replaced by BootstrapFile
+	BootstrapFile     string             `json:"bootstrapFile,omitempty"`
+	BootstrapMethod   string             `json:"bootstrapMethod,omitempty"`
+	Profile           v1.Profile         `json:"profile,omitempty"`
+	LocalMSPDir       string             `json:"localMspDir,omitempty"`
+	LocalMSPID        string             `json:"localMspId,omitempty"`
+	BCCSP             *commonapi.BCCSP   `json:"BCCSP,omitempty"`
+	Authentication    v1.Authentication  `json:"authentication,omitempty"`
+	MaxRecvMsgSize    int                `json:"maxRecvMsgSize,omitempty"`
+	MaxSendMsgSize    int                `json:"maxSendMsgSize,omitempty"`
 }
 
 // FileLedger contains configuration for the file-based ledger.
