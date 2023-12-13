@@ -657,14 +657,6 @@ spec:
                               description: FileTransferTag is the tag of the file
                                 transfer image
                               type: string
-                            fluentdImage:
-                              description: FluentdImage is the name of the fluentd
-                                logger image
-                              type: string
-                            fluentdTag:
-                              description: FluentdTag is the tag of the fluentd logger
-                                image
-                              type: string
                             goEnvImage:
                               description: GoEnvImage is the name of the goenv image
                               type: string

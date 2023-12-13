@@ -71,14 +71,13 @@ const (
 	DefaultCouchContainer     = "./definitions/peer/couchdb.yaml"
 	DefaultCouchInitContainer = "./definitions/peer/couchdb-init.yaml"
 
-	defaultDeployment       = "./definitions/peer/deployment.yaml"
-	defaultPVC              = "./definitions/peer/pvc.yaml"
-	defaultCouchDBPVC       = "./definitions/peer/couchdb-pvc.yaml"
-	defaultService          = "./definitions/peer/service.yaml"
-	defaultRole             = "./definitions/peer/role.yaml"
-	defaultServiceAccount   = "./definitions/peer/serviceaccount.yaml"
-	defaultRoleBinding      = "./definitions/peer/rolebinding.yaml"
-	defaultFluentdConfigMap = "./definitions/peer/fluentd-configmap.yaml"
+	defaultDeployment     = "./definitions/peer/deployment.yaml"
+	defaultPVC            = "./definitions/peer/pvc.yaml"
+	defaultCouchDBPVC     = "./definitions/peer/couchdb-pvc.yaml"
+	defaultService        = "./definitions/peer/service.yaml"
+	defaultRole           = "./definitions/peer/role.yaml"
+	defaultServiceAccount = "./definitions/peer/serviceaccount.yaml"
+	defaultRoleBinding    = "./definitions/peer/rolebinding.yaml"
 
 	DaysToSecondsConversion = int64(24 * 60 * 60)
 )
@@ -193,14 +192,13 @@ type Peer struct {
 	Scheme *runtime.Scheme
 	Config *config.Config
 
-	DeploymentManager       DeploymentManager
-	ServiceManager          resources.Manager
-	PVCManager              resources.Manager
-	StateDBPVCManager       resources.Manager
-	FluentDConfigMapManager resources.Manager
-	RoleManager             resources.Manager
-	RoleBindingManager      resources.Manager
-	ServiceAccountManager   resources.Manager
+	DeploymentManager     DeploymentManager
+	ServiceManager        resources.Manager
+	PVCManager            resources.Manager
+	StateDBPVCManager     resources.Manager
+	RoleManager           resources.Manager
+	RoleBindingManager    resources.Manager
+	ServiceAccountManager resources.Manager
 
 	Override    Override
 	Initializer InitializeIBPPeer
@@ -244,7 +242,6 @@ func (p *Peer) CreateManagers() {
 	p.DeploymentManager = resourceManager.CreateDeploymentManager("", override.Deployment, p.GetLabels, peerConfig.DeploymentFile)
 	p.PVCManager = resourceManager.CreatePVCManager("", override.PVC, p.GetLabels, peerConfig.PVCFile)
 	p.StateDBPVCManager = resourceManager.CreatePVCManager("statedb", override.StateDBPVC, p.GetLabels, peerConfig.CouchDBPVCFile)
-	p.FluentDConfigMapManager = resourceManager.CreateConfigMapManager("fluentd", nil, p.GetLabels, peerConfig.FluentdConfigMapFile, nil)
 	p.RoleManager = resourceManager.CreateRoleManager("", nil, p.GetLabels, peerConfig.RoleFile)
 	p.RoleBindingManager = resourceManager.CreateRoleBindingManager("", nil, p.GetLabels, peerConfig.RoleBindingFile)
 	p.ServiceAccountManager = resourceManager.CreateServiceAccountManager("", nil, p.GetLabels, peerConfig.ServiceAccountFile)
@@ -769,11 +766,6 @@ func (p *Peer) ReconcileManagers(instance *current.IBPPeer, updated Update) erro
 	err = p.ReconcilePeerRBAC(instance)
 	if err != nil {
 		return errors.Wrap(err, "failed RBAC reconciliation")
-	}
-
-	err = p.FluentDConfigMapManager.Reconcile(instance, update)
-	if err != nil {
-		return errors.Wrap(err, "failed FluentD ConfigMap reconciliation")
 	}
 
 	return nil

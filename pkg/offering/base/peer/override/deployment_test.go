@@ -160,12 +160,11 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 				License: current.License{
 					Accept: true,
 				},
-				MSPID:    "peer-msp-id",
-				Storage:  &current.PeerStorages{},
-				Service:  &current.Service{},
-				Images:   &current.PeerImages{},
-				Arch:     []string{"test-arch"},
-				DindArgs: []string{"--log-driver", "fluentd", "--mtu", "1480"},
+				MSPID:   "peer-msp-id",
+				Storage: &current.PeerStorages{},
+				Service: &current.Service{},
+				Images:  &current.PeerImages{},
+				Arch:    []string{"test-arch"},
 				Ingress: current.Ingress{
 					TlsSecretName: "tlssecret",
 				},
@@ -210,18 +209,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 							corev1.ResourceEphemeralStorage: testMatrix[2][5],
 						},
 					},
-					FluentD: &corev1.ResourceRequirements{
-						Requests: map[corev1.ResourceName]resource.Quantity{
-							corev1.ResourceCPU:              testMatrix[3][0],
-							corev1.ResourceMemory:           testMatrix[3][1],
-							corev1.ResourceEphemeralStorage: testMatrix[3][4],
-						},
-						Limits: map[corev1.ResourceName]resource.Quantity{
-							corev1.ResourceCPU:              testMatrix[3][2],
-							corev1.ResourceMemory:           testMatrix[3][3],
-							corev1.ResourceEphemeralStorage: testMatrix[3][5],
-						},
-					},
 					CouchDB: &corev1.ResourceRequirements{
 						Requests: map[corev1.ResourceName]resource.Quantity{
 							corev1.ResourceCPU:              testMatrix[4][0],
@@ -264,13 +251,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 			err := overrider.Deployment(instance, k8sDep, resources.Create)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(Equal("failed to provide MSP ID for peer"))
-		})
-
-		It("sets default dind args if none provided", func() {
-			instance.Spec.DindArgs = nil
-			err := overrider.Deployment(instance, k8sDep, resources.Create)
-			Expect(err).NotTo(HaveOccurred())
-			Expect(deployment.Spec.Template.Spec.Containers[0].Args).To(Equal([]string{"--log-driver", "fluentd", "--log-opt", "fluentd-address=localhost:9880", "--mtu", "1400"}))
 		})
 
 		It("overrides value based on spec", func() {
@@ -374,20 +354,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					VolumeSource: corev1.VolumeSource{
 						PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
 							ClaimName: instance.Name + "-pvc",
-						},
-					},
-				}
-				Expect(deployment.Spec.Template.Spec.Volumes).To(ContainElement(v))
-			})
-
-			By("setting fluentd-config volume", func() {
-				v := corev1.Volume{
-					Name: "fluentd-config",
-					VolumeSource: corev1.VolumeSource{
-						ConfigMap: &corev1.ConfigMapVolumeSource{
-							LocalObjectReference: corev1.LocalObjectReference{
-								Name: instance.Name + "-fluentd",
-							},
 						},
 					},
 				}
@@ -518,7 +484,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					CouchDBImage:  "couchdb-image",
 					PeerImage:     "peer-image",
 					GRPCWebImage:  "proxy-image",
-					FluentdImage:  "fluentd-image",
 				}
 				instance.Spec.Images = image
 			})
@@ -531,7 +496,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:latest"))
-					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("fluentd-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[4].Image).To(Equal("couchdb-image:latest"))
 				})
 			})
@@ -544,7 +508,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					image.PeerTag = "1.0.3"
 					image.GRPCWebTag = "1.0.4"
 					image.PeerInitTag = "2.0.0"
-					image.FluentdTag = "1.0.5"
 
 					err := overrider.Deployment(instance, k8sDep, resources.Create)
 					Expect(err).NotTo(HaveOccurred())
@@ -552,7 +515,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:1.0.1"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:1.0.3"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:1.0.4"))
-					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("fluentd-image:1.0.5"))
 					Expect(deployment.Spec.Template.Spec.Containers[4].Image).To(Equal("couchdb-image:1.0.2"))
 				})
 			})
@@ -691,7 +653,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					CouchDBImage:  "couchdb-image",
 					PeerImage:     "peer-image",
 					GRPCWebImage:  "proxy-image",
-					FluentdImage:  "fluentd-image",
 				}
 				instance.Spec.Images = image
 			})
@@ -704,7 +665,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:latest"))
-					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("fluentd-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[4].Image).To(Equal("couchdb-image:latest"))
 				})
 			})
@@ -716,7 +676,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					image.PeerTag = "1.0.3"
 					image.GRPCWebTag = "1.0.4"
 					image.PeerInitTag = "2.0.0"
-					image.FluentdTag = "1.0.5"
 
 					err := overrider.Deployment(instance, k8sDep, resources.Update)
 					Expect(err).NotTo(HaveOccurred())
@@ -724,7 +683,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:1.0.1"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:1.0.3"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:1.0.4"))
-					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("fluentd-image:1.0.5"))
 					Expect(deployment.Spec.Template.Spec.Containers[4].Image).To(Equal("couchdb-image:1.0.2"))
 				})
 			})

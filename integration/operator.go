@@ -76,7 +76,6 @@ func GetOperatorConfig(configs, caFiles, peerFiles, ordererFiles, consoleFiles s
 			RoleFile:               filepath.Join(peerFiles, "role.yaml"),
 			ServiceAccountFile:     filepath.Join(peerFiles, "serviceaccount.yaml"),
 			RoleBindingFile:        filepath.Join(peerFiles, "rolebinding.yaml"),
-			FluentdConfigMapFile:   filepath.Join(peerFiles, "fluentd-configmap.yaml"),
 			CouchContainerFile:     filepath.Join(peerFiles, "couchdb.yaml"),
 			CouchInitContainerFile: filepath.Join(peerFiles, "couchdb-init.yaml"),
 			IngressFile:            filepath.Join(peerFiles, "ingress.yaml"),

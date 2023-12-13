@@ -631,12 +631,6 @@ spec:
       - description: FileTransferTag is the tag of the file transfer image
         displayName: File Transfer Tag
         path: versions.peer.image.fileTransferTag
-      - description: FluentdImage is the name of the fluentd logger image
-        displayName: Fluentd Image
-        path: versions.peer.image.fluentdImage
-      - description: FluentdTag is the tag of the fluentd logger image
-        displayName: Fluentd Tag
-        path: versions.peer.image.fluentdTag
       - description: GoEnvImage is the name of the goenv image
         displayName: Go Env Image
         path: versions.peer.image.goEnvImage
@@ -1371,12 +1365,6 @@ spec:
       - description: FileTransferTag is the tag of the file transfer image
         displayName: File Transfer Tag
         path: images.fileTransferTag
-      - description: FluentdImage is the name of the fluentd logger image
-        displayName: Fluentd Image
-        path: images.fluentdImage
-      - description: FluentdTag is the tag of the fluentd logger image
-        displayName: Fluentd Tag
-        path: images.fluentdTag
       - description: GoEnvImage is the name of the goenv image
         displayName: Go Env Image
         path: images.goEnvImage
@@ -1491,11 +1479,6 @@ spec:
           container
         displayName: Enroller
         path: resources.enroller
-        x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
-      - description: FluentD (Optional) is the resources provided to the fluentd container
-        displayName: Fluent D
-        path: resources.fluentd
         x-descriptors:
         - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
       - description: HSMDaemon (Optional) is the resources provided to the HSM Daemon

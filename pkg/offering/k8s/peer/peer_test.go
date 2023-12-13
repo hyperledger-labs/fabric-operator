@@ -54,7 +54,6 @@ var _ = Describe("K8s Peer", func() {
 		serviceMgr        *managermocks.ResourceManager
 		pvcMgr            *managermocks.ResourceManager
 		couchPvcMgr       *managermocks.ResourceManager
-		configMapMgr      *managermocks.ResourceManager
 		roleMgr           *managermocks.ResourceManager
 		roleBindingMgr    *managermocks.ResourceManager
 		serviceAccountMgr *managermocks.ResourceManager
@@ -128,7 +127,6 @@ var _ = Describe("K8s Peer", func() {
 		serviceMgr = &managermocks.ResourceManager{}
 		pvcMgr = &managermocks.ResourceManager{}
 		couchPvcMgr = &managermocks.ResourceManager{}
-		configMapMgr = &managermocks.ResourceManager{}
 		roleMgr = &managermocks.ResourceManager{}
 		roleBindingMgr = &managermocks.ResourceManager{}
 		serviceAccountMgr = &managermocks.ResourceManager{}
@@ -151,17 +149,16 @@ var _ = Describe("K8s Peer", func() {
 				Scheme: scheme,
 				Config: cfg,
 
-				DeploymentManager:       deploymentMgr,
-				ServiceManager:          serviceMgr,
-				PVCManager:              pvcMgr,
-				StateDBPVCManager:       couchPvcMgr,
-				FluentDConfigMapManager: configMapMgr,
-				RoleManager:             roleMgr,
-				RoleBindingManager:      roleBindingMgr,
-				ServiceAccountManager:   serviceAccountMgr,
-				Initializer:             initializer,
-				CertificateManager:      certificateMgr,
-				Restart:                 restartMgr,
+				DeploymentManager:     deploymentMgr,
+				ServiceManager:        serviceMgr,
+				PVCManager:            pvcMgr,
+				StateDBPVCManager:     couchPvcMgr,
+				RoleManager:           roleMgr,
+				RoleBindingManager:    roleBindingMgr,
+				ServiceAccountManager: serviceAccountMgr,
+				Initializer:           initializer,
+				CertificateManager:    certificateMgr,
+				Restart:               restartMgr,
 			},
 			IngressManager: ingressMgr,
 		}
@@ -215,13 +212,6 @@ var _ = Describe("K8s Peer", func() {
 			_, err := peer.Reconcile(instance, update)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("failed to reconcile service account"))
-		})
-
-		It("returns an error if config map manager fails to reconcile", func() {
-			configMapMgr.ReconcileReturns(errors.New("failed to reconcile config map"))
-			_, err := peer.Reconcile(instance, update)
-			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(Equal("failed to reconcile managers: failed FluentD ConfigMap reconciliation: failed to reconcile config map"))
 		})
 
 		It("returns a breaking error if initialization fails", func() {

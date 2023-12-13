@@ -71,18 +71,6 @@ var (
 		corev1.ResourceEphemeralStorage: resource.MustParse("1G"),
 	}
 
-	defaultRequestsFluentd = corev1.ResourceList{
-		corev1.ResourceCPU:              resource.MustParse("10m"),
-		corev1.ResourceMemory:           resource.MustParse("20M"),
-		corev1.ResourceEphemeralStorage: resource.MustParse("100M"),
-	}
-
-	defaultLimitsFluentd = corev1.ResourceList{
-		corev1.ResourceCPU:              resource.MustParse("100m"),
-		corev1.ResourceMemory:           resource.MustParse("200M"),
-		corev1.ResourceEphemeralStorage: resource.MustParse("1G"),
-	}
-
 	defaultRequestsCouchdb = corev1.ResourceList{
 		corev1.ResourceCPU:              resource.MustParse("20m"),
 		corev1.ResourceMemory:           resource.MustParse("40M"),
@@ -790,10 +778,6 @@ func GetPeer1() *Peer {
 				GRPCProxy: &corev1.ResourceRequirements{
 					Requests: defaultRequestsProxy,
 					Limits:   defaultLimitsProxy,
-				},
-				FluentD: &corev1.ResourceRequirements{
-					Requests: defaultRequestsFluentd,
-					Limits:   defaultLimitsFluentd,
 				},
 				CouchDB: &corev1.ResourceRequirements{
 					Requests: defaultRequestsCouchdb,

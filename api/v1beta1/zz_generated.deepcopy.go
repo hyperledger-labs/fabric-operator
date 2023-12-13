@@ -1743,11 +1743,6 @@ func (in *PeerResources) DeepCopyInto(out *PeerResources) {
 		*out = new(v1.ResourceRequirements)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.FluentD != nil {
-		in, out := &in.FluentD, &out.FluentD
-		*out = new(v1.ResourceRequirements)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.DinD != nil {
 		in, out := &in.DinD, &out.DinD
 		*out = new(v1.ResourceRequirements)

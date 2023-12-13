@@ -21,7 +21,6 @@ package openshiftpeer
 import (
 	"context"
 	"fmt"
-	"regexp"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	config "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
@@ -308,15 +307,6 @@ func (p *Peer) SelectDinDArgs(instance *current.IBPPeer) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-
-	dindargs := []string{"--log-driver", "fluentd", "--log-opt", "fluentd-address=localhost:9880", "--mtu", "1400", "--iptables=true"}
-
-	re := regexp.MustCompile(`4\.[0-9]\.[0-9]`)
-	if re.MatchString(clusterversion.Status.Desired.Version) {
-		dindargs = []string{"--log-driver", "fluentd", "--log-opt", "fluentd-address=localhost:9880", "--mtu", "1400", "--iptables=false"}
-	}
-
-	instance.Spec.DindArgs = dindargs
 
 	return true, nil
 }

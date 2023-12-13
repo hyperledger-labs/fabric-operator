@@ -55,7 +55,6 @@ type Config struct {
 	RoleFile               string
 	ServiceAccountFile     string
 	RoleBindingFile        string
-	FluentdConfigMapFile   string
 	CouchContainerFile     string
 	CouchInitContainerFile string
 	IngressFile            string

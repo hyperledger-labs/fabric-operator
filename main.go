@@ -145,7 +145,6 @@ func setDefaultPeerDefinitions(cfg *config.Config) {
 		RoleFile:               filepath.Join(defaultPeerDef, "role.yaml"),
 		ServiceAccountFile:     filepath.Join(defaultPeerDef, "serviceaccount.yaml"),
 		RoleBindingFile:        filepath.Join(defaultPeerDef, "rolebinding.yaml"),
-		FluentdConfigMapFile:   filepath.Join(defaultPeerDef, "fluentd-configmap.yaml"),
 		CouchContainerFile:     filepath.Join(defaultPeerDef, "couchdb.yaml"),
 		CouchInitContainerFile: filepath.Join(defaultPeerDef, "couchdb-init.yaml"),
 		IngressFile:            filepath.Join(defaultPeerDef, "ingress.yaml"),
