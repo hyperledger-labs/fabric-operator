@@ -211,14 +211,14 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					},
 					CouchDB: &corev1.ResourceRequirements{
 						Requests: map[corev1.ResourceName]resource.Quantity{
-							corev1.ResourceCPU:              testMatrix[4][0],
-							corev1.ResourceMemory:           testMatrix[4][1],
-							corev1.ResourceEphemeralStorage: testMatrix[4][4],
+							corev1.ResourceCPU:              testMatrix[3][0],
+							corev1.ResourceMemory:           testMatrix[3][1],
+							corev1.ResourceEphemeralStorage: testMatrix[3][4],
 						},
 						Limits: map[corev1.ResourceName]resource.Quantity{
-							corev1.ResourceCPU:              testMatrix[4][2],
-							corev1.ResourceMemory:           testMatrix[4][3],
-							corev1.ResourceEphemeralStorage: testMatrix[4][5],
+							corev1.ResourceCPU:              testMatrix[3][2],
+							corev1.ResourceMemory:           testMatrix[3][3],
+							corev1.ResourceEphemeralStorage: testMatrix[3][5],
 						},
 					},
 					CCLauncher: &corev1.ResourceRequirements{
@@ -257,10 +257,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 			mockKubeClient.GetReturnsOnCall(1, errors.New("no inter cert found"))
 			err := overrider.Deployment(instance, k8sDep, resources.Create)
 			Expect(err).NotTo(HaveOccurred())
-
-			By("setting dind args", func() {
-				Expect(len(deployment.Spec.Template.Spec.Containers[0].Args)).To(Equal(4))
-			})
 
 			By("setting service account", func() {
 				Expect(deployment.Spec.Template.Spec.ServiceAccountName).To(Equal(instance.Name))
@@ -323,7 +319,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Name:  "COUCHDB_USER",
 					Value: overrider.CouchdbUser,
 				}
-				Expect(deployment.Spec.Template.Spec.Containers[4].Env).To(ContainElement(ev))
+				Expect(deployment.Spec.Template.Spec.Containers[3].Env).To(ContainElement(ev))
 			})
 
 			By("setting COUCHDB_PASSWORD env var", func() {
@@ -331,7 +327,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Name:  "COUCHDB_PASSWORD",
 					Value: overrider.CouchdbPassword,
 				}
-				Expect(deployment.Spec.Template.Spec.Containers[4].Env).To(ContainElement(ev))
+				Expect(deployment.Spec.Template.Spec.Containers[3].Env).To(ContainElement(ev))
 			})
 
 			By("setting SKIP_PERMISSIONS_UPDATE env var", func() {
@@ -339,7 +335,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Name:  "SKIP_PERMISSIONS_UPDATE",
 					Value: "true",
 				}
-				Expect(deployment.Spec.Template.Spec.Containers[4].Env).To(ContainElement(ev))
+				Expect(deployment.Spec.Template.Spec.Containers[3].Env).To(ContainElement(ev))
 			})
 
 			By("setting image pull secret", func() {
@@ -496,7 +492,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:latest"))
-					Expect(deployment.Spec.Template.Spec.Containers[4].Image).To(Equal("couchdb-image:latest"))
+					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("couchdb-image:latest"))
 				})
 			})
 
@@ -515,7 +511,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:1.0.1"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:1.0.3"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:1.0.4"))
-					Expect(deployment.Spec.Template.Spec.Containers[4].Image).To(Equal("couchdb-image:1.0.2"))
+					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("couchdb-image:1.0.2"))
 				})
 			})
 
@@ -665,7 +661,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:latest"))
-					Expect(deployment.Spec.Template.Spec.Containers[4].Image).To(Equal("couchdb-image:latest"))
+					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("couchdb-image:latest"))
 				})
 			})
 
@@ -683,7 +679,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:1.0.1"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:1.0.3"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:1.0.4"))
-					Expect(deployment.Spec.Template.Spec.Containers[4].Image).To(Equal("couchdb-image:1.0.2"))
+					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("couchdb-image:1.0.2"))
 				})
 			})
 		})
