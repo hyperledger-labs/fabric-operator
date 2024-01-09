@@ -124,13 +124,6 @@ data:
             requests:
               cpu: 200m
               memory: 400M
-          fluentd:
-            limits:
-              cpu: 100m
-              memory: 200M
-            requests:
-              cpu: 100m
-              memory: 200M
           couchdb:
             limits:
               cpu: 200m

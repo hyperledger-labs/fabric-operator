@@ -234,46 +234,6 @@ spec:
               name: tls-signcert
             - mountPath: /certs/tls/keystore
               name: tls-keystore
-        - env:
-            - name: LICENSE
-              value: accept
-          image: fluent/fluentd:v1.4-2
-          imagePullPolicy: Always
-          livenessProbe:
-            failureThreshold: 6
-            initialDelaySeconds: 30
-            tcpSocket:
-              port: 9880
-            timeoutSeconds: 5
-          name: chaincode-logs
-          ports:
-            - containerPort: 9880
-          readinessProbe:
-            initialDelaySeconds: 26
-            periodSeconds: 5
-            tcpSocket:
-              port: 9880
-            timeoutSeconds: 5
-          resources:
-            limits:
-              cpu: 100m
-              memory: 200M
-            requests:
-              cpu: 100m
-              memory: 200M
-          securityContext:
-            capabilities:
-              add:
-                - NET_BIND_SERVICE
-              drop:
-                - ALL
-            privileged: false
-            readOnlyRootFilesystem: false
-            runAsNonRoot: true
-            runAsUser: 1000
-          volumeMounts:
-            - mountPath: /fluentd/etc
-              name: fluentd-config
       hostIPC: false
       hostNetwork: false
       hostPID: false

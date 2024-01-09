@@ -158,8 +158,6 @@ func GetPeer() *helper.Peer {
 				// do not change dind tag, it is used for loading dind faster
 				DindImage:     "ghcr.io/ibm-blockchain/dind",
 				DindTag:       "noimages-amd64",
-				FluentdImage:  "ghcr.io/ibm-blockchain/fluentd",
-				FluentdTag:    "1.0.0-20210826-amd64",
 				GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcweb",
 				GRPCWebTag:    "1.0.0-20210826-amd64",
 				PeerImage:     "ghcr.io/ibm-blockchain/peer",

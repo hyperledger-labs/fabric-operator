@@ -117,7 +117,6 @@ var _ = Describe("Openshift Peer", func() {
 			serviceMgr := &managermocks.ResourceManager{}
 			pvcMgr := &managermocks.ResourceManager{}
 			couchPvcMgr := &managermocks.ResourceManager{}
-			configMapMgr := &managermocks.ResourceManager{}
 			roleMgr := &managermocks.ResourceManager{}
 			roleBindingMgr := &managermocks.ResourceManager{}
 			serviceAccountMgr := &managermocks.ResourceManager{}
@@ -139,20 +138,19 @@ var _ = Describe("Openshift Peer", func() {
 			initializer.GetInitPeerReturns(&peerinit.Peer{}, nil)
 			peer = &openshiftpeer.Peer{
 				Peer: &basepeer.Peer{
-					Config:                  cfg,
-					Client:                  mockKubeClient,
-					Scheme:                  scheme,
-					DeploymentManager:       deploymentMgr,
-					ServiceManager:          serviceMgr,
-					PVCManager:              pvcMgr,
-					StateDBPVCManager:       couchPvcMgr,
-					FluentDConfigMapManager: configMapMgr,
-					RoleManager:             roleMgr,
-					RoleBindingManager:      roleBindingMgr,
-					ServiceAccountManager:   serviceAccountMgr,
-					Initializer:             initializer,
-					CertificateManager:      certificateMgr,
-					Restart:                 restartMgr,
+					Config:                cfg,
+					Client:                mockKubeClient,
+					Scheme:                scheme,
+					DeploymentManager:     deploymentMgr,
+					ServiceManager:        serviceMgr,
+					PVCManager:            pvcMgr,
+					StateDBPVCManager:     couchPvcMgr,
+					RoleManager:           roleMgr,
+					RoleBindingManager:    roleBindingMgr,
+					ServiceAccountManager: serviceAccountMgr,
+					Initializer:           initializer,
+					CertificateManager:    certificateMgr,
+					Restart:               restartMgr,
 				},
 				RouteManager:           peerRouteManager,
 				OperationsRouteManager: operationsRouteManager,

@@ -51,7 +51,6 @@ const (
 	PEER        = "peer"
 	DIND        = "dind"
 	PROXY       = "proxy"
-	FLUENTD     = "chaincode-logs"
 	COUCHDB     = "couchdb"
 	COUCHDBINIT = "couchdbinit"
 	CCLAUNCHER  = "chaincode-launcher"
@@ -152,8 +151,6 @@ func (o *Override) CreateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 		claimName = instance.Spec.CustomNames.PVC.Peer
 	}
 	deployment.AppendPVCVolumeIfMissing("fabric-peer-0", claimName)
-
-	deployment.AppendConfigMapVolumeIfMissing("fluentd-config", instance.Name+"-fluentd")
 
 	ecertintercertSecret := fmt.Sprintf("ecert-%s-intercerts", instance.Name)
 	tlsintercertSecret := fmt.Sprintf("tls-%s-intercerts", instance.Name)
@@ -351,26 +348,14 @@ func (o *Override) V1Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 		})
 	}
 
-	fluentdContainer, err := deployment.GetContainer(FLUENTD)
-	if err != nil {
-		return errors.New("fluentD container not found in deployment")
-	}
-
 	dindContainer, err := deployment.GetContainer(DIND)
 	if err != nil {
 		return errors.New("dind container not found in deployment")
 	}
 
-	dindargs := instance.Spec.DindArgs
-	if dindargs == nil {
-		dindargs = []string{"--log-driver", "fluentd", "--log-opt", "fluentd-address=localhost:9880", "--mtu", "1400"}
-	}
-	dindContainer.SetArgs(dindargs)
-
 	image := instance.Spec.Images
 	if image != nil {
 		dindContainer.SetImage(image.DindImage, image.DindTag)
-		fluentdContainer.SetImage(image.FluentdImage, image.FluentdTag)
 	}
 
 	resourcesRequest := instance.Spec.Resources
@@ -382,12 +367,6 @@ func (o *Override) V1Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 			}
 		}
 
-		if resourcesRequest.FluentD != nil {
-			err = fluentdContainer.UpdateResources(resourcesRequest.FluentD)
-			if err != nil {
-				return errors.Wrap(err, "resource update for fluentd failed")
-			}
-		}
 	}
 
 	peerContainer := deployment.MustGetContainer(PEER)
@@ -402,7 +381,6 @@ func (o *Override) V1Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 	peerContainer.AppendEnvIfMissing("CORE_VM_DOCKER_ATTACHSTDOUT", "false")
 
 	deployment.UpdateInitContainer(initContainer)
-	deployment.UpdateContainer(fluentdContainer)
 	deployment.UpdateContainer(dindContainer)
 	deployment.UpdateContainer(peerContainer)
 	return nil
@@ -494,7 +472,6 @@ func (o *Override) V2Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 
 	deployment.UpdateInitContainer(initContainer)
 	deployment.UpdateContainer(peerContainer)
-	deployment.RemoveContainer(FLUENTD)
 	deployment.RemoveContainer(DIND)
 	return nil
 }

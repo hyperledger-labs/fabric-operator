@@ -150,7 +150,6 @@ func Org1PeerCR(namespace, domain, peerUsername, tlsCert, caHost, adminCert stri
 						corev1.ResourceEphemeralStorage: resource.MustParse("1G"),
 					},
 				},
-				FluentD:   resourceReq,
 				GRPCProxy: resourceReq,
 				Peer:      resourceReq,
 			},

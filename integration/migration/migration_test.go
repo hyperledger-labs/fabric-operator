@@ -646,15 +646,6 @@ var _ = PDescribe("migrating", func() {
 			err = client.Create(context.TODO(), ingress)
 			Expect(err).NotTo(HaveOccurred())
 
-			cm := &corev1.ConfigMap{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      fmt.Sprintf("%s-fluentd-configmap", instance.Name),
-					Namespace: instance.Namespace,
-				},
-			}
-			err = client.Create(context.TODO(), cm)
-			Expect(err).NotTo(HaveOccurred())
-
 			secretBytes, err := ioutil.ReadFile("../../testdata/migration/secret.json")
 			Expect(err).NotTo(HaveOccurred())
 
@@ -703,7 +694,6 @@ var _ = PDescribe("migrating", func() {
 				}).Should(Equal(true))
 
 				Expect(secret.Data["peermigration-service"]).NotTo(Equal(""))
-				Expect(secret.Data["peermigration-cm-fluentd"]).NotTo(Equal(""))
 			})
 
 			By("creating ecert ca certs secret", func() {

@@ -145,15 +145,6 @@ type PeerImages struct {
 	// GRPCWebDigest is the digest tag of the grpc web proxy image
 	GRPCWebDigest string `json:"grpcwebDigest,omitempty"`
 
-	// FluentdImage is the name of the fluentd logger image
-	FluentdImage string `json:"fluentdImage,omitempty"`
-
-	// FluentdTag is the tag of the fluentd logger image
-	FluentdTag string `json:"fluentdTag,omitempty"`
-
-	// FluentdDigest is the digest tag of the fluentd logger image
-	FluentdDigest string `json:"fluentdDigest,omitempty"`
-
 	// CouchDBImage is the name of the couchdb image
 	CouchDBImage string `json:"couchdbImage,omitempty"`
 
@@ -479,7 +470,6 @@ func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch st
 	i.CouchDBImage = image.GetImage(registryURL, i.CouchDBImage, requested.CouchDBImage)
 	i.DindImage = image.GetImage(registryURL, i.DindImage, requested.DindImage)
 	i.GRPCWebImage = image.GetImage(registryURL, i.GRPCWebImage, requested.GRPCWebImage)
-	i.FluentdImage = image.GetImage(registryURL, i.FluentdImage, requested.FluentdImage)
 	i.CCLauncherImage = image.GetImage(registryURL, i.CCLauncherImage, requested.CCLauncherImage)
 	i.FileTransferImage = image.GetImage(registryURL, i.FileTransferImage, requested.FileTransferImage)
 	i.BuilderImage = image.GetImage(registryURL, i.BuilderImage, requested.BuilderImage)
@@ -495,7 +485,6 @@ func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch st
 	i.CouchDBTag = image.GetTag(arch, i.CouchDBTag, requested.CouchDBTag)
 	i.DindTag = image.GetTag(arch, i.DindTag, requested.DindTag)
 	i.GRPCWebTag = image.GetTag(arch, i.GRPCWebTag, requested.GRPCWebTag)
-	i.FluentdTag = image.GetTag(arch, i.FluentdTag, requested.FluentdTag)
 	i.CCLauncherTag = image.GetTag(arch, i.CCLauncherTag, requested.CCLauncherTag)
 	i.FileTransferTag = image.GetTag(arch, i.FileTransferTag, requested.FileTransferTag)
 	i.BuilderTag = image.GetTag(arch, i.BuilderTag, requested.BuilderTag)
@@ -511,7 +500,6 @@ func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch st
 	i.CouchDBDigest = image.GetTag(arch, i.CouchDBDigest, requested.CouchDBDigest)
 	i.DindDigest = image.GetTag(arch, i.DindDigest, requested.DindDigest)
 	i.GRPCWebDigest = image.GetTag(arch, i.GRPCWebDigest, requested.GRPCWebDigest)
-	i.FluentdDigest = image.GetTag(arch, i.FluentdDigest, requested.FluentdDigest)
 	i.CCLauncherDigest = image.GetTag(arch, i.CCLauncherDigest, requested.CCLauncherDigest)
 	i.FileTransferDigest = image.GetTag(arch, i.FileTransferDigest, requested.FileTransferDigest)
 	i.BuilderDigest = image.GetTag(arch, i.BuilderDigest, requested.BuilderDigest)

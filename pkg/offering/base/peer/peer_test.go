@@ -75,7 +75,6 @@ var _ = Describe("Base Peer", func() {
 		serviceMgr        *managermocks.ResourceManager
 		pvcMgr            *managermocks.ResourceManager
 		couchPvcMgr       *managermocks.ResourceManager
-		configMapMgr      *managermocks.ResourceManager
 		roleMgr           *managermocks.ResourceManager
 		roleBindingMgr    *managermocks.ResourceManager
 		serviceAccountMgr *managermocks.ResourceManager
@@ -158,7 +157,6 @@ var _ = Describe("Base Peer", func() {
 		serviceMgr = &managermocks.ResourceManager{}
 		pvcMgr = &managermocks.ResourceManager{}
 		couchPvcMgr = &managermocks.ResourceManager{}
-		configMapMgr = &managermocks.ResourceManager{}
 		roleMgr = &managermocks.ResourceManager{}
 		roleBindingMgr = &managermocks.ResourceManager{}
 		serviceAccountMgr = &managermocks.ResourceManager{}
@@ -195,15 +193,14 @@ var _ = Describe("Base Peer", func() {
 			Scheme: scheme,
 			Config: cfg,
 
-			DeploymentManager:       deploymentMgr,
-			ServiceManager:          serviceMgr,
-			PVCManager:              pvcMgr,
-			StateDBPVCManager:       couchPvcMgr,
-			FluentDConfigMapManager: configMapMgr,
-			RoleManager:             roleMgr,
-			RoleBindingManager:      roleBindingMgr,
-			ServiceAccountManager:   serviceAccountMgr,
-			Initializer:             initializer,
+			DeploymentManager:     deploymentMgr,
+			ServiceManager:        serviceMgr,
+			PVCManager:            pvcMgr,
+			StateDBPVCManager:     couchPvcMgr,
+			RoleManager:           roleMgr,
+			RoleBindingManager:    roleBindingMgr,
+			ServiceAccountManager: serviceAccountMgr,
+			Initializer:           initializer,
 
 			CertificateManager: certificateMgr,
 			RenewCertTimers:    make(map[string]*time.Timer),
@@ -540,13 +537,6 @@ var _ = Describe("Base Peer", func() {
 			_, err := peer.Reconcile(instance, update)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("failed to reconcile service account"))
-		})
-
-		It("returns an error if config map manager fails to reconcile", func() {
-			configMapMgr.ReconcileReturns(errors.New("failed to reconcile config map"))
-			_, err := peer.Reconcile(instance, update)
-			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(Equal("failed to reconcile managers: failed FluentD ConfigMap reconciliation: failed to reconcile config map"))
 		})
 
 		It("does not return an error on a successful reconcile", func() {
@@ -1008,8 +998,6 @@ var _ = Describe("Base Peer", func() {
 					CouchDBTag:    "2.0.0",
 					GRPCWebImage:  "grpcimage",
 					GRPCWebTag:    "2.0.0",
-					FluentdImage:  "fluentdimage",
-					FluentdTag:    "2.0.0",
 				}
 			})
 
@@ -1025,8 +1013,6 @@ var _ = Describe("Base Peer", func() {
 				Expect(images.CouchDBTag).To(Equal("2.0.0"))
 				Expect(images.GRPCWebImage).To(Equal("ghcr.io/ibm-blockchain/grpcimage"))
 				Expect(images.GRPCWebTag).To(Equal("2.0.0"))
-				Expect(images.FluentdImage).To(Equal("ghcr.io/ibm-blockchain/fluentdimage"))
-				Expect(images.FluentdTag).To(Equal("2.0.0"))
 			})
 
 			It("overrides images based with registry url and does not append more value on each call", func() {
@@ -1041,8 +1027,7 @@ var _ = Describe("Base Peer", func() {
 				Expect(images.CouchDBTag).To(Equal("2.0.0"))
 				Expect(images.GRPCWebImage).To(Equal("ghcr.io/ibm-blockchain/images/grpcimage"))
 				Expect(images.GRPCWebTag).To(Equal("2.0.0"))
-				Expect(images.FluentdImage).To(Equal("ghcr.io/ibm-blockchain/images/fluentdimage"))
-				Expect(images.FluentdTag).To(Equal("2.0.0"))
+
 			})
 		})
 
@@ -1059,8 +1044,6 @@ var _ = Describe("Base Peer", func() {
 					CouchDBTag:    "2.0.0",
 					GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcimage",
 					GRPCWebTag:    "2.0.0",
-					FluentdImage:  "ghcr.io/ibm-blockchain/fluentdimage",
-					FluentdTag:    "2.0.0",
 				}
 			})
 
@@ -1076,8 +1059,7 @@ var _ = Describe("Base Peer", func() {
 				Expect(images.CouchDBTag).To(Equal("2.0.0"))
 				Expect(images.GRPCWebImage).To(Equal("ghcr.io/ibm-blockchain/grpcimage"))
 				Expect(images.GRPCWebTag).To(Equal("2.0.0"))
-				Expect(images.FluentdImage).To(Equal("ghcr.io/ibm-blockchain/fluentdimage"))
-				Expect(images.FluentdTag).To(Equal("2.0.0"))
+
 			})
 		})
 	})

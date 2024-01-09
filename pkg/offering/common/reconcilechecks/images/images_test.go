@@ -78,8 +78,6 @@ var _ = Describe("default images", func() {
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ibp-grpcweb",
 							GRPCWebTag:    "2.5.1-2511004-amd64",
-							FluentdImage:  "ibp-fluentd",
-							FluentdTag:    "2.5.1-2511004-amd64",
 							EnrollerImage: "ibp-enroller",
 							EnrollerTag:   "1.0.0-amd64",
 						},
@@ -98,8 +96,6 @@ var _ = Describe("default images", func() {
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ibp-grpcweb",
 							GRPCWebTag:    "2.5.1-2511004-amd64",
-							FluentdImage:  "ibp-fluentd",
-							FluentdTag:    "2.5.1-2511004-amd64",
 							EnrollerImage: "ibp-enroller",
 							EnrollerTag:   "1.0.0-amd64",
 						},
@@ -118,8 +114,6 @@ var _ = Describe("default images", func() {
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ibp-grpcweb",
 							GRPCWebTag:    "2.5.1-2511004-amd64",
-							FluentdImage:  "ibp-fluentd",
-							FluentdTag:    "2.5.1-2511004-amd64",
 							EnrollerImage: "ibp-enroller",
 							EnrollerTag:   "1.0.0-amd64",
 						},
@@ -347,8 +341,6 @@ var _ = Describe("default images", func() {
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ibp-grpcweb",
 							GRPCWebTag:    "2.5.1-2511004-amd64",
-							FluentdImage:  "ibp-fluentd",
-							FluentdTag:    "2.5.1-2511004-amd64",
 							EnrollerImage: "ibp-enroller",
 							EnrollerTag:   "1.0.0-amd64",
 						}
@@ -363,8 +355,6 @@ var _ = Describe("default images", func() {
 						Expect(instance.Spec.Images.CouchDBTag).To(Equal(peerImages.CouchDBTag))
 						Expect(instance.Spec.Images.GRPCWebImage).To(Equal(peerImages.GRPCWebImage))
 						Expect(instance.Spec.Images.GRPCWebTag).To(Equal(peerImages.GRPCWebTag))
-						Expect(instance.Spec.Images.FluentdImage).To(Equal(peerImages.FluentdImage))
-						Expect(instance.Spec.Images.FluentdTag).To(Equal(peerImages.FluentdTag))
 						Expect(instance.Spec.Images.EnrollerImage).To(Equal(peerImages.EnrollerImage))
 						Expect(instance.Spec.Images.EnrollerTag).To(Equal(peerImages.EnrollerTag))
 					})
@@ -385,8 +375,6 @@ var _ = Describe("default images", func() {
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ghcr.io/ibm-blockchain/ibp-grpcweb",
 							GRPCWebTag:    "2.5.1-2511004-amd64",
-							FluentdImage:  "ghcr.io/ibm-blockchain/ibp-fluentd",
-							FluentdTag:    "2.5.1-2511004-amd64",
 							EnrollerImage: "ghcr.io/ibm-blockchain/ibp-enroller",
 							EnrollerTag:   "1.0.0-amd64",
 						}
@@ -401,8 +389,6 @@ var _ = Describe("default images", func() {
 						Expect(instance.Spec.Images.CouchDBTag).To(Equal(peerImages.CouchDBTag))
 						Expect(instance.Spec.Images.GRPCWebImage).To(Equal(peerImages.GRPCWebImage))
 						Expect(instance.Spec.Images.GRPCWebTag).To(Equal(peerImages.GRPCWebTag))
-						Expect(instance.Spec.Images.FluentdImage).To(Equal(peerImages.FluentdImage))
-						Expect(instance.Spec.Images.FluentdTag).To(Equal(peerImages.FluentdTag))
 						Expect(instance.Spec.Images.EnrollerImage).To(Equal(peerImages.EnrollerImage))
 						Expect(instance.Spec.Images.EnrollerTag).To(Equal(peerImages.EnrollerTag))
 					})
@@ -429,8 +415,6 @@ var _ = Describe("default images", func() {
 						CouchDBTag:    "2.3.1-2511004-amd64",
 						GRPCWebImage:  "ghcr.io/ibm-blockchain/ibp-grpcweb",
 						GRPCWebTag:    "2.5.1-2511004-amd64",
-						FluentdImage:  "ghcr.io/ibm-blockchain/ibp-fluentd",
-						FluentdTag:    "2.5.1-2511004-amd64",
 						EnrollerImage: "ghcr.io/ibm-blockchain/ibp-enroller",
 						EnrollerTag:   "1.0.0-amd64",
 					}
@@ -445,8 +429,6 @@ var _ = Describe("default images", func() {
 					Expect(instance.Spec.Images.CouchDBTag).To(Equal(peerImages.CouchDBTag))
 					Expect(instance.Spec.Images.GRPCWebImage).To(Equal(peerImages.GRPCWebImage))
 					Expect(instance.Spec.Images.GRPCWebTag).To(Equal(peerImages.GRPCWebTag))
-					Expect(instance.Spec.Images.FluentdImage).To(Equal(peerImages.FluentdImage))
-					Expect(instance.Spec.Images.FluentdTag).To(Equal(peerImages.FluentdTag))
 					Expect(instance.Spec.Images.EnrollerImage).To(Equal(peerImages.EnrollerImage))
 					Expect(instance.Spec.Images.EnrollerTag).To(Equal(peerImages.EnrollerTag))
 				})

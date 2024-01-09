@@ -90,8 +90,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								DindTag:       "1.0.0",
 								GRPCWebImage:  "grpcweb-image",
 								GRPCWebTag:    "1.0.0",
-								FluentdImage:  "fluentd-image",
-								FluentdTag:    "1.0.0",
 								CouchDBImage:  "couchdb-image",
 								CouchDBTag:    "1.0.0",
 							},
@@ -108,8 +106,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								DindTag:         "2.0.0",
 								GRPCWebImage:    "grpcweb-image",
 								GRPCWebTag:      "2.0.0",
-								FluentdImage:    "fluentd-image",
-								FluentdTag:      "2.0.0",
 								CouchDBImage:    "couchdb-image",
 								CouchDBTag:      "2.0.0",
 								CCLauncherImage: "cclauncher-image",
@@ -242,8 +238,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								DindTag:       "1.0.0",
 								GRPCWebImage:  "grpcweb-image",
 								GRPCWebTag:    "1.0.0",
-								FluentdImage:  "fluentd-image",
-								FluentdTag:    "1.0.0",
 								CouchDBImage:  "couchdb-image",
 								CouchDBTag:    "1.0.0",
 							},
@@ -260,8 +254,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								DindTag:         "2.0.0",
 								GRPCWebImage:    "grpcweb-image",
 								GRPCWebTag:      "2.0.0",
-								FluentdImage:    "fluentd-image",
-								FluentdTag:      "2.0.0",
 								CouchDBImage:    "couchdb-image",
 								CouchDBTag:      "2.0.0",
 								CCLauncherImage: "cclauncher-image",
@@ -375,8 +367,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 											DindTag:       "1.0.0",
 											GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcweb-image",
 											GRPCWebTag:    "1.0.0",
-											FluentdImage:  "ghcr.io/ibm-blockchain/fluentd-image",
-											FluentdTag:    "1.0.0",
 											CouchDBImage:  "ghcr.io/ibm-blockchain/couchdb-image",
 											CouchDBTag:    "1.0.0",
 										},
@@ -422,8 +412,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									DindTag:       "1.0.0-amd64",
 									GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcweb-image",
 									GRPCWebTag:    "1.0.0-amd64",
-									FluentdImage:  "ghcr.io/ibm-blockchain/fluentd-image",
-									FluentdTag:    "1.0.0-amd64",
 									CouchDBImage:  "ghcr.io/ibm-blockchain/couchdb-image",
 									CouchDBTag:    "1.0.0-amd64",
 								},
@@ -470,9 +458,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									GRPCWebImage:   "grpcweb-image",
 									GRPCWebTag:     "1.0.0",
 									GRPCWebDigest:  "",
-									FluentdImage:   "fluentd-image",
-									FluentdTag:     "1.0.0",
-									FluentdDigest:  "",
 									CouchDBImage:   "couchdb-image",
 									CouchDBTag:     "1.0.0",
 									CouchDBDigest:  "",
@@ -527,8 +512,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 					Expect(config.Versions.Peer["1.4"].Image.PeerTag).To(Equal(expectedVersions.Peer["1.4"].Image.PeerTag))
 					Expect(config.Versions.Peer["1.4"].Image.DindImage).To(Equal(expectedVersions.Peer["1.4"].Image.DindImage))
 					Expect(config.Versions.Peer["1.4"].Image.DindTag).To(Equal(expectedVersions.Peer["1.4"].Image.DindTag))
-					Expect(config.Versions.Peer["1.4"].Image.FluentdImage).To(Equal(expectedVersions.Peer["1.4"].Image.FluentdImage))
-					Expect(config.Versions.Peer["1.4"].Image.FluentdTag).To(Equal(expectedVersions.Peer["1.4"].Image.FluentdTag))
 					Expect(config.Versions.Peer["1.4"].Image.CouchDBImage).To(Equal(expectedVersions.Peer["1.4"].Image.CouchDBImage))
 					Expect(config.Versions.Peer["1.4"].Image.CouchDBTag).To(Equal(expectedVersions.Peer["1.4"].Image.CouchDBTag))
 					Expect(config.Versions.Peer["1.4"].Image.GRPCWebImage).To(Equal(expectedVersions.Peer["1.4"].Image.GRPCWebImage))
@@ -574,8 +557,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 											DindTag:       "1.0.0",
 											GRPCWebImage:  "grpcweb-image",
 											GRPCWebTag:    "1.0.0",
-											FluentdImage:  "fluentd-image",
-											FluentdTag:    "1.0.0",
 											CouchDBImage:  "couchdb-image",
 											CouchDBTag:    "1.0.0",
 										},
@@ -621,8 +602,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									DindTag:       "1.0.0-amd64",
 									GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcweb-image",
 									GRPCWebTag:    "1.0.0-amd64",
-									FluentdImage:  "ghcr.io/ibm-blockchain/fluentd-image",
-									FluentdTag:    "1.0.0-amd64",
 									CouchDBImage:  "ghcr.io/ibm-blockchain/couchdb-image",
 									CouchDBTag:    "1.0.0-amd64",
 								},
@@ -669,9 +648,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									GRPCWebImage:   "grpcweb-image",
 									GRPCWebTag:     "1.0.0",
 									GRPCWebDigest:  "",
-									FluentdImage:   "fluentd-image",
-									FluentdTag:     "1.0.0",
-									FluentdDigest:  "",
 									CouchDBImage:   "couchdb-image",
 									CouchDBTag:     "1.0.0",
 									CouchDBDigest:  "",
@@ -726,8 +702,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 					Expect(config.Versions.Peer["1.4"].Image.PeerTag).To(Equal(expectedVersions.Peer["1.4"].Image.PeerTag))
 					Expect(config.Versions.Peer["1.4"].Image.DindImage).To(Equal(expectedVersions.Peer["1.4"].Image.DindImage))
 					Expect(config.Versions.Peer["1.4"].Image.DindTag).To(Equal(expectedVersions.Peer["1.4"].Image.DindTag))
-					Expect(config.Versions.Peer["1.4"].Image.FluentdImage).To(Equal(expectedVersions.Peer["1.4"].Image.FluentdImage))
-					Expect(config.Versions.Peer["1.4"].Image.FluentdTag).To(Equal(expectedVersions.Peer["1.4"].Image.FluentdTag))
 					Expect(config.Versions.Peer["1.4"].Image.CouchDBImage).To(Equal(expectedVersions.Peer["1.4"].Image.CouchDBImage))
 					Expect(config.Versions.Peer["1.4"].Image.CouchDBTag).To(Equal(expectedVersions.Peer["1.4"].Image.CouchDBTag))
 					Expect(config.Versions.Peer["1.4"].Image.GRPCWebImage).To(Equal(expectedVersions.Peer["1.4"].Image.GRPCWebImage))
