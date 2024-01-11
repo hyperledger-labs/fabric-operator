@@ -129,7 +129,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					return err
 				}
 				o := obj.(*corev1.ConfigMap)
-				o.Data = map[string]string{"ibp-hsm-config.yaml": string(configBytes)}
+				o.Data = map[string]string{"ibm-hlfsupport-hsm-config.yaml": string(configBytes)}
 			}
 			return nil
 		}

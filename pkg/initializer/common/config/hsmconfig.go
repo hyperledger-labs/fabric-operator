@@ -39,11 +39,11 @@ type Client interface {
 	Get(ctx context.Context, key client.ObjectKey, obj client.Object) error
 }
 
-// ReadHSMConfig reads hsm configuration from 'ibp-hsm-config', and key 'ibp-hsm-config.yaml'
+// ReadHSMConfig reads hsm configuration from 'ibm-hlfsupport-hsm-config', and key 'ibm-hlfsupport-hsm-config.yaml'
 // from data
 func ReadHSMConfig(client Client, instance metav1.Object) (*HSMConfig, error) {
 	// NOTE: This is hard-coded because this name should never be different
-	name := "ibp-hsm-config"
+	name := "ibm-hlfsupport-hsm-config"
 
 	cm := &corev1.ConfigMap{}
 	err := client.Get(
@@ -55,11 +55,11 @@ func ReadHSMConfig(client Client, instance metav1.Object) (*HSMConfig, error) {
 		cm,
 	)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get hsm config 'ibp-hsm-config'")
+		return nil, errors.Wrap(err, "failed to get hsm config 'ibm-hlfsupport-hsm-config'")
 	}
 
 	hsmConfig := &HSMConfig{}
-	err = yaml.Unmarshal([]byte(cm.Data["ibp-hsm-config.yaml"]), hsmConfig)
+	err = yaml.Unmarshal([]byte(cm.Data["ibm-hlfsupport-hsm-config.yaml"]), hsmConfig)
 	if err != nil {
 		return nil, err
 	}

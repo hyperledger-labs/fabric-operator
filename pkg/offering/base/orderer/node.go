@@ -490,7 +490,7 @@ func (n *Node) Initialize(instance *current.IBPOrderer, update Update) error {
 
 			hsmConfig, err := commonconfig.ReadHSMConfig(n.Client, instance)
 			if err != nil {
-				return errors.New("using non-proxy HSM, but no HSM config defined as config map 'ibp-hsm-config'")
+				return errors.New("using non-proxy HSM, but no HSM config defined as config map 'ibm-hlfsupport-hsm-config'")
 			}
 
 			if hsmConfig.Daemon != nil {

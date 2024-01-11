@@ -465,7 +465,7 @@ var _ = Describe("Base Orderer Node", func() {
 						Expect(err).NotTo(HaveOccurred())
 
 						o.Data = map[string]string{
-							"ibp-hsm-config.yaml": string(bytes),
+							"ibm-hlfsupport-hsm-config.yaml": string(bytes),
 						}
 					}
 					return nil
