@@ -378,7 +378,7 @@ func (ca *CA) Initialize(instance *current.IBPCA, update Update) error {
 		} else {
 			hsmConfig, err := commonconfig.ReadHSMConfig(ca.Client, instance)
 			if err != nil {
-				return errors.New("using non-proxy HSM, but no HSM config defined as config map 'ibp-hsm-config'")
+				return errors.New("using non-proxy HSM, but no HSM config defined as config map 'ibm-hlfsupport-hsm-config'")
 			}
 
 			if hsmConfig.Daemon != nil {
