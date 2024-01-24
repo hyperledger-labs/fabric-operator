@@ -24,13 +24,16 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 
 	k8sruntime "k8s.io/apimachinery/pkg/runtime"
 
 	routev1 "github.com/openshift/api/route/v1"
 	"github.com/operator-framework/operator-lib/leader"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/client-go/kubernetes"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	ctrl "sigs.k8s.io/controller-runtime"
 
@@ -168,6 +171,37 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 		setupLog.Error(err, "unable to start manager")
 		return err
 	}
+
+	// code added to get the operator image tag name
+	config := ctrl.GetConfigOrDie()
+	if err != nil {
+		fmt.Printf("Error building kubeconfig: %v\n", err)
+	}
+
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		log.Error(err, "Error building kubernetes client: %v\n")
+	}
+
+	// Specify the namespace and deployment name
+
+	deploymentName := os.Getenv("OPERATOR_NAME")
+
+	deployment, err := clientset.AppsV1().Deployments(operatorNamespace).Get(context.TODO(), deploymentName, metav1.GetOptions{})
+	if err != nil {
+		log.Error(err, "Error getting deployment %s in namespace")
+	}
+
+	podTemplate := deployment.Spec.Template
+
+	// Iterating through containers in the pod template
+	for _, container := range podTemplate.Spec.Containers {
+		// Accessing the container image
+		image := container.Image
+		image = strings.Split(image, ":")[1]
+		log.Info("Operator Image Tag is " + image)
+	}
+	// code added to get the operator image tag name ends
 
 	log.Info("Registering Components.")
 
