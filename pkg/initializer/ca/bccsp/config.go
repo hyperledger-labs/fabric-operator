@@ -32,7 +32,7 @@ func GetBCCSPOpts(from v1.BCCSP) *factory.FactoryOpts {
 	}
 
 	if from.SW != nil {
-		factoryOpts.SwOpts = &factory.SwOpts{
+		factoryOpts.SW = &factory.SwOpts{
 			Security: from.SW.Security,
 			Hash:     from.SW.Hash,
 			FileKeystore: &factory.FileKeystoreOpts{

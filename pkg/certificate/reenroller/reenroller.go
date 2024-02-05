@@ -38,8 +38,8 @@ import (
 	"github.com/hyperledger/fabric-ca/lib/client/credential"
 	fabricx509 "github.com/hyperledger/fabric-ca/lib/client/credential/x509"
 	"github.com/hyperledger/fabric-ca/lib/tls"
+	utils "github.com/hyperledger/fabric-ca/util"
 	"github.com/hyperledger/fabric/bccsp"
-	"github.com/hyperledger/fabric/bccsp/utils"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/util/wait"
 
