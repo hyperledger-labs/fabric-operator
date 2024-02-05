@@ -107,7 +107,7 @@ func (c *Core) DeepCopy() *Core {
 
 func (c *Core) UsingPKCS11() bool {
 	if c.Peer.BCCSP != nil {
-		if strings.ToLower(c.Peer.BCCSP.ProviderName) == "pkcs11" {
+		if strings.ToLower(c.Peer.BCCSP.Default) == "pkcs11" {
 			return true
 		}
 	}
@@ -123,15 +123,15 @@ func (c *Core) SetPKCS11Defaults(usingHSMProxy bool) {
 		c.Peer.BCCSP.PKCS11.Library = "/usr/local/lib/libpkcs11-proxy.so"
 	}
 
-	if c.Peer.BCCSP.PKCS11.HashFamily == "" {
-		c.Peer.BCCSP.PKCS11.HashFamily = "SHA2"
+	if c.Peer.BCCSP.PKCS11.Hash == "" {
+		c.Peer.BCCSP.PKCS11.Hash = "SHA2"
 	}
 
-	if c.Peer.BCCSP.PKCS11.SecLevel == 0 {
-		c.Peer.BCCSP.PKCS11.SecLevel = 256
+	if c.Peer.BCCSP.PKCS11.Security == 0 {
+		c.Peer.BCCSP.PKCS11.Security = 256
 	}
 
-	c.Peer.BCCSP.PKCS11.SoftVerify = true
+	c.Peer.BCCSP.PKCS11.SoftwareVerify = true
 }
 
 func (c *Core) SetDefaultKeyStore() {

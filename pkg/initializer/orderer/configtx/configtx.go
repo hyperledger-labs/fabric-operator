@@ -25,7 +25,6 @@ import (
 	"github.com/hyperledger/fabric-protos-go/orderer/etcdraft"
 	"github.com/hyperledger/fabric/common/viperutil"
 	"github.com/pkg/errors"
-	"github.com/spf13/viper"
 )
 
 // +k8s:openapi-gen=true
@@ -102,12 +101,12 @@ func GetGenesisDefaults() *TopLevel {
 }
 
 func LoadTopLevelConfig(configFile string) (*TopLevel, error) {
-	config := viper.New()
+	config := viperutil.New()
 	configDir, err := filepath.Abs(filepath.Dir(configFile))
 	if err != nil {
 		return nil, errors.Wrap(err, "error getting absolute path")
 	}
-	config.AddConfigPath(configDir)
+	config.AddConfigPaths(configDir)
 	config.SetConfigName("configtx")
 
 	err = config.ReadInConfig()
@@ -116,7 +115,7 @@ func LoadTopLevelConfig(configFile string) (*TopLevel, error) {
 	}
 
 	var uconf TopLevel
-	err = viperutil.EnhancedExactUnmarshal(config, &uconf)
+	err = config.EnhancedExactUnmarshal(&uconf)
 	if err != nil {
 		return nil, errors.Wrap(err, "error unmarshaling config into struct")
 	}

@@ -37,13 +37,13 @@ var _ = Describe("Peer configuration", func() {
 			Core: v25core.Core{
 				Peer: v25core.Peer{
 					BCCSP: &common.BCCSP{
-						ProviderName: "PKCS11",
+						Default: "PKCS11",
 						PKCS11: &common.PKCS11Opts{
-							Library:    "library2",
-							Label:      "label2",
-							Pin:        "2222",
-							HashFamily: "SHA3",
-							SecLevel:   512,
+							Library:  "library2",
+							Label:    "label2",
+							Pin:      "2222",
+							Hash:     "SHA3",
+							Security: 512,
 							FileKeyStore: &common.FileKeyStoreOpts{
 								KeyStorePath: "keystore3",
 							},
@@ -59,12 +59,12 @@ var _ = Describe("Peer configuration", func() {
 		Expect(err).NotTo(HaveOccurred())
 
 		Expect(*core.Peer.BCCSP.PKCS11).To(Equal(common.PKCS11Opts{
-			Library:    "/usr/local/lib/libpkcs11-proxy.so",
-			Label:      "label2",
-			Pin:        "2222",
-			HashFamily: "SHA3",
-			SecLevel:   512,
-			SoftVerify: true,
+			Library:        "/usr/local/lib/libpkcs11-proxy.so",
+			Label:          "label2",
+			Pin:            "2222",
+			Hash:           "SHA3",
+			Security:       512,
+			SoftwareVerify: true,
 			FileKeyStore: &common.FileKeyStoreOpts{
 				KeyStorePath: "keystore3",
 			},

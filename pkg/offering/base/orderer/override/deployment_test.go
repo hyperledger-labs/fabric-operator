@@ -500,7 +500,7 @@ var _ = Describe("Base Orderer Deployment Overrides", func() {
 				Orderer: v2orderer.Orderer{
 					General: v2orderer.General{
 						BCCSP: &common.BCCSP{
-							ProviderName: "PKCS11",
+							Default: "PKCS11",
 							PKCS11: &common.PKCS11Opts{
 								Label: "partition1",
 								Pin:   "B6T9Q7mGNG",

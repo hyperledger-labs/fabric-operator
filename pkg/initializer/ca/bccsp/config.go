@@ -28,13 +28,13 @@ import (
 
 func GetBCCSPOpts(from v1.BCCSP) *factory.FactoryOpts {
 	factoryOpts := &factory.FactoryOpts{
-		ProviderName: from.ProviderName,
+		Default: from.Default,
 	}
 
 	if from.SW != nil {
 		factoryOpts.SwOpts = &factory.SwOpts{
-			SecLevel:   from.SW.SecLevel,
-			HashFamily: from.SW.HashFamily,
+			Security: from.SW.Security,
+			Hash:     from.SW.Hash,
 			FileKeystore: &factory.FileKeystoreOpts{
 				KeyStorePath: from.SW.FileKeyStore.KeyStorePath,
 			},

@@ -59,7 +59,7 @@ var _ = Describe("IBPCA", func() {
 				ServerConfig: &v1.ServerConfig{
 					CAConfig: v1.CAConfig{
 						CSP: &v1.BCCSP{
-							ProviderName: "PKCS11",
+							Default: "PKCS11",
 							PKCS11: &v1.PKCS11Opts{
 								Pin:   "1234",
 								Label: "root",
@@ -112,7 +112,7 @@ var _ = Describe("IBPCA", func() {
 			override := &v1.ServerConfig{
 				CAConfig: v1.CAConfig{
 					CSP: &v1.BCCSP{
-						ProviderName: "PKCS11",
+						Default: "PKCS11",
 					},
 				},
 			}
@@ -124,8 +124,8 @@ var _ = Describe("IBPCA", func() {
 			By("setting in defaults when using pkcs11", func() {
 				Expect(defaultConfig.GetServerConfig().CAConfig.CSP.PKCS11.Library).To(Equal("/usr/local/lib/libpkcs11-proxy.so"))
 				Expect(defaultConfig.GetServerConfig().CAConfig.CSP.PKCS11.FileKeyStore.KeyStorePath).To(Equal("msp/keystore"))
-				Expect(defaultConfig.GetServerConfig().CAConfig.CSP.PKCS11.HashFamily).To(Equal("SHA2"))
-				Expect(defaultConfig.GetServerConfig().CAConfig.CSP.PKCS11.SecLevel).To(Equal(256))
+				Expect(defaultConfig.GetServerConfig().CAConfig.CSP.PKCS11.Hash).To(Equal("SHA2"))
+				Expect(defaultConfig.GetServerConfig().CAConfig.CSP.PKCS11.Security).To(Equal(256))
 				Expect(defaultConfig.GetServerConfig().CAConfig.CSR.CN).To(Equal("ca_test"))
 			})
 		})

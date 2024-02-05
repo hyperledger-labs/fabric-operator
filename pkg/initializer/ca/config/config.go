@@ -292,7 +292,7 @@ func (c *Config) SetMountPaths(caType Type) {
 
 func (c *Config) UsingPKCS11() bool {
 	if c.ServerConfig != nil && c.ServerConfig.CAConfig.CSP != nil {
-		if strings.ToLower(c.ServerConfig.CAConfig.CSP.ProviderName) == "pkcs11" {
+		if strings.ToLower(c.ServerConfig.CAConfig.CSP.Default) == "pkcs11" {
 			return true
 		}
 	}

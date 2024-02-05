@@ -641,7 +641,7 @@ func (o *Orderer) GetMSPConfig(instance *current.IBPOrderer, ID string) (*msp.MS
 	}
 
 	cryptoConfig := &msp.FabricCryptoConfig{
-		SignatureHashFamily:            bccsp.SHA2,
+		SignatureHash:                  bccsp.SHA2,
 		IdentityIdentifierHashFunction: bccsp.SHA256,
 	}
 

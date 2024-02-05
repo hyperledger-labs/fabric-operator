@@ -67,13 +67,13 @@ var _ = Describe("Peer configuration", func() {
 				Peer: v1.Peer{
 					ID: "test",
 					BCCSP: &common.BCCSP{
-						ProviderName: "PKCS11",
+						Default: "PKCS11",
 						PKCS11: &common.PKCS11Opts{
-							Library:    "library2",
-							Label:      "label2",
-							Pin:        "2222",
-							HashFamily: "SHA3",
-							SecLevel:   512,
+							Library:  "library2",
+							Label:    "label2",
+							Pin:      "2222",
+							Hash:     "SHA3",
+							Security: 512,
 							FileKeyStore: &common.FileKeyStoreOpts{
 								KeyStorePath: "keystore3",
 							},
@@ -106,8 +106,8 @@ var _ = Describe("Peer configuration", func() {
 		Expect(core.Peer.BCCSP.PKCS11.Library).To(Equal("/usr/local/lib/libpkcs11-proxy.so"))
 		Expect(core.Peer.BCCSP.PKCS11.Label).To(Equal("label2"))
 		Expect(core.Peer.BCCSP.PKCS11.Pin).To(Equal("2222"))
-		Expect(core.Peer.BCCSP.PKCS11.HashFamily).To(Equal("SHA3"))
-		Expect(core.Peer.BCCSP.PKCS11.SecLevel).To(Equal(512))
+		Expect(core.Peer.BCCSP.PKCS11.Hash).To(Equal("SHA3"))
+		Expect(core.Peer.BCCSP.PKCS11.Security).To(Equal(512))
 		Expect(core.Peer.BCCSP.PKCS11.FileKeyStore.KeyStorePath).To(Equal("keystore3"))
 
 		Expect(core.Peer.Keepalive.MinInterval).To(Equal(common.MustParseDuration("13s")))
@@ -129,7 +129,7 @@ var _ = Describe("Peer configuration", func() {
 				Peer: v1.Peer{
 					ID: "test",
 					BCCSP: &common.BCCSP{
-						ProviderName: "PKCS11",
+						Default: "PKCS11",
 						PKCS11: &common.PKCS11Opts{
 							Label: "label2",
 							Pin:   "2222",
@@ -148,8 +148,8 @@ var _ = Describe("Peer configuration", func() {
 		Expect(core.Peer.BCCSP.PKCS11.Library).To(Equal("/usr/local/lib/libpkcs11-proxy.so"))
 		Expect(core.Peer.BCCSP.PKCS11.Label).To(Equal("label2"))
 		Expect(core.Peer.BCCSP.PKCS11.Pin).To(Equal("2222"))
-		Expect(core.Peer.BCCSP.PKCS11.HashFamily).To(Equal("SHA2"))
-		Expect(core.Peer.BCCSP.PKCS11.SecLevel).To(Equal(256))
+		Expect(core.Peer.BCCSP.PKCS11.Hash).To(Equal("SHA2"))
+		Expect(core.Peer.BCCSP.PKCS11.Security).To(Equal(256))
 		Expect(core.Peer.BCCSP.PKCS11.FileKeyStore.KeyStorePath).To(Equal("keystore2"))
 	})
 
@@ -381,16 +381,16 @@ var _ = Describe("Peer configuration", func() {
 		})
 
 		// BCCSP
-		By("setting BCCSP.ProviderName", func() {
-			Expect(peerConfig.BCCSP.ProviderName).To(Equal("SW"))
+		By("setting BCCSP.Default", func() {
+			Expect(peerConfig.BCCSP.Default).To(Equal("SW"))
 		})
 
-		By("setting BCCSP.SW.HashFamily", func() {
-			Expect(peerConfig.BCCSP.SW.HashFamily).To(Equal("SHA2"))
+		By("setting BCCSP.SW.Hash", func() {
+			Expect(peerConfig.BCCSP.SW.Hash).To(Equal("SHA2"))
 		})
 
-		By("setting BCCSP.SW.SecLevel", func() {
-			Expect(peerConfig.BCCSP.SW.SecLevel).To(Equal(256))
+		By("setting BCCSP.SW.Security", func() {
+			Expect(peerConfig.BCCSP.SW.Security).To(Equal(256))
 		})
 
 		By("setting BCCSP.SW.FileKeystore.KeystorePath", func() {
@@ -409,12 +409,12 @@ var _ = Describe("Peer configuration", func() {
 			Expect(peerConfig.BCCSP.PKCS11.Pin).To(Equal("1234"))
 		})
 
-		By("setting BCCSP.PKCS11.HashFamily", func() {
-			Expect(peerConfig.BCCSP.PKCS11.HashFamily).To(Equal("SHA2"))
+		By("setting BCCSP.PKCS11.Hash", func() {
+			Expect(peerConfig.BCCSP.PKCS11.Hash).To(Equal("SHA2"))
 		})
 
 		By("setting BCCSP.PKCS11.Security", func() {
-			Expect(peerConfig.BCCSP.PKCS11.SecLevel).To(Equal(256))
+			Expect(peerConfig.BCCSP.PKCS11.Security).To(Equal(256))
 		})
 
 		By("setting BCCSP.PKCS11.FileKeystore.KeystorePath", func() {

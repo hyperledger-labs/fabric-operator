@@ -22,9 +22,9 @@ import (
 	"strings"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/hyperledger/fabric/common/cauthdsl"
 	"github.com/hyperledger/fabric/common/channelconfig"
 	"github.com/hyperledger/fabric/common/policies"
+	"github.com/hyperledger/fabric/common/policydsl"
 
 	cb "github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/msp"
@@ -128,7 +128,7 @@ func (p *Profile) Block(channelID string, channelGroup *cb.ConfigGroup) *cb.Bloc
 
 	block := utils.NewBlock(0, nil)
 	block.Data = &cb.BlockData{Data: [][]byte{utils.MarshalOrPanic(envelope)}}
-	block.Header.DataHash = utils.BlockDataHash(block.Data)
+	block.Header.DataHash, _ = utils.BlockDataHash(block.Data)
 	block.Metadata.Metadata[cb.BlockMetadataIndex_LAST_CONFIG] = utils.MarshalOrPanic(&cb.Metadata{
 		Value: utils.MarshalOrPanic(&cb.LastConfig{Index: 0}),
 	})
@@ -305,7 +305,7 @@ func addPolicies(cg *cb.ConfigGroup, policyMap map[string]*Policy, modPolicy str
 				},
 			}
 		case SignaturePolicyType:
-			sp, err := cauthdsl.FromString(policy.Rule)
+			sp, err := policydsl.FromString(policy.Rule)
 			if err != nil {
 				return errors.Wrapf(err, "invalid signature policy rule '%s'", policy.Rule)
 			}
@@ -331,10 +331,10 @@ func addImplicitMetaPolicyDefaults(cg *cb.ConfigGroup) {
 
 func addSignaturePolicyDefaults(cg *cb.ConfigGroup, mspID string, devMode bool) {
 	if devMode {
-		addPolicy(cg, policies.SignaturePolicy(channelconfig.AdminsPolicyKey, cauthdsl.SignedByMspMember(mspID)), channelconfig.AdminsPolicyKey)
+		addPolicy(cg, policies.SignaturePolicy(channelconfig.AdminsPolicyKey, policydsl.SignedByMspMember(mspID)), channelconfig.AdminsPolicyKey)
 	} else {
-		addPolicy(cg, policies.SignaturePolicy(channelconfig.AdminsPolicyKey, cauthdsl.SignedByMspAdmin(mspID)), channelconfig.AdminsPolicyKey)
+		addPolicy(cg, policies.SignaturePolicy(channelconfig.AdminsPolicyKey, policydsl.SignedByMspAdmin(mspID)), channelconfig.AdminsPolicyKey)
 	}
-	addPolicy(cg, policies.SignaturePolicy(channelconfig.ReadersPolicyKey, cauthdsl.SignedByMspMember(mspID)), channelconfig.AdminsPolicyKey)
-	addPolicy(cg, policies.SignaturePolicy(channelconfig.WritersPolicyKey, cauthdsl.SignedByMspMember(mspID)), channelconfig.AdminsPolicyKey)
+	addPolicy(cg, policies.SignaturePolicy(channelconfig.ReadersPolicyKey, policydsl.SignedByMspMember(mspID)), channelconfig.AdminsPolicyKey)
+	addPolicy(cg, policies.SignaturePolicy(channelconfig.WritersPolicyKey, policydsl.SignedByMspMember(mspID)), channelconfig.AdminsPolicyKey)
 }

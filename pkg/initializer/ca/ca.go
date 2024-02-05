@@ -391,12 +391,12 @@ func (ca *CA) SetPKCS11Defaults(serverConfig *v1.ServerConfig) {
 
 	serverConfig.CAConfig.CSP.PKCS11.FileKeyStore.KeyStorePath = "msp/keystore"
 
-	if serverConfig.CAConfig.CSP.PKCS11.HashFamily == "" {
-		serverConfig.CAConfig.CSP.PKCS11.HashFamily = "SHA2"
+	if serverConfig.CAConfig.CSP.PKCS11.Hash == "" {
+		serverConfig.CAConfig.CSP.PKCS11.Hash = "SHA2"
 	}
 
-	if serverConfig.CAConfig.CSP.PKCS11.SecLevel == 0 {
-		serverConfig.CAConfig.CSP.PKCS11.SecLevel = 256
+	if serverConfig.CAConfig.CSP.PKCS11.Security == 0 {
+		serverConfig.CAConfig.CSP.PKCS11.Security = 256
 	}
 }
 

@@ -975,7 +975,7 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 				Core: v2peer.Core{
 					Peer: v2peer.Peer{
 						BCCSP: &common.BCCSP{
-							ProviderName: "PKCS11",
+							Default: "PKCS11",
 							PKCS11: &common.PKCS11Opts{
 								Label: "partition1",
 								Pin:   "B6T9Q7mGNG",
