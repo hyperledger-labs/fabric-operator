@@ -7,7 +7,7 @@ on:
     tags: [v1.*]
 
 env:
-  GO_VER: 1.18
+  GO_VER: 1.20
   GO_TAGS: ""
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
