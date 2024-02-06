@@ -33,22 +33,15 @@ func GetClient(client *lib.Client, bccsp *commonapi.BCCSP) *lib.Client {
 		if bccsp.PKCS11 != nil {
 			client.Config.CSP = &factory.FactoryOpts{
 				Default: bccsp.Default,
-				Pkcs11Opts: &pkcs11.PKCS11Opts{
+				PKCS11: &pkcs11.PKCS11Opts{
 					Security:       bccsp.PKCS11.Security,
 					Hash:           bccsp.PKCS11.Hash,
-					Ephemeral:      bccsp.PKCS11.Ephemeral,
 					Library:        bccsp.PKCS11.Library,
 					Label:          bccsp.PKCS11.Label,
 					Pin:            bccsp.PKCS11.Pin,
 					SoftwareVerify: bccsp.PKCS11.SoftwareVerify,
 					Immutable:      bccsp.PKCS11.Immutable,
 				},
-			}
-
-			if bccsp.PKCS11.FileKeyStore != nil {
-				client.Config.CSP.Pkcs11Opts.FileKeystore = &pkcs11.FileKeystoreOpts{
-					KeyStorePath: bccsp.PKCS11.FileKeyStore.KeyStorePath,
-				}
 			}
 		}
 	}

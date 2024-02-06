@@ -43,19 +43,13 @@ func GetBCCSPOpts(from config.BCCSP) *factory.FactoryOpts {
 	}
 
 	if from.PKCS11 != nil {
-		factoryOpts.Pkcs11Opts = &pkcs11.PKCS11Opts{
+		factoryOpts.PKCS11 = &pkcs11.PKCS11Opts{
 			Security:       from.PKCS11.Security,
 			Hash:           from.PKCS11.Hash,
 			Library:        from.PKCS11.Library,
 			Label:          from.PKCS11.Label,
 			Pin:            from.PKCS11.Pin,
 			SoftwareVerify: from.PKCS11.SoftwareVerify,
-		}
-
-		if from.PKCS11.FileKeystore != nil {
-			factoryOpts.Pkcs11Opts.FileKeystore = &pkcs11.FileKeystoreOpts{
-				KeyStorePath: from.PKCS11.FileKeyStore.KeyStorePath,
-			}
 		}
 	}
 

@@ -7,13 +7,13 @@ metadata:
     categories: Database
     certified: "true"
     containerImage: todo:update
-    createdAt: "2020-07-14T00:00:00Z"
+    createdAt: "2024-02-06T14:36:39Z"
     description: TODO
-    operators.operatorframework.io/builder: operator-sdk-v1.24.1
+    operators.operatorframework.io/builder: operator-sdk-v1.31.0
     operators.operatorframework.io/internal-objects: '["ibpcas.ibp.com","ibppeers.ibp.com","ibporderers.ibp.com"]'
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
     repository: ""
-  name: fabric-opensource-operator.v1.0.0-9726bb6
+  name: fabric-opensource-operator.v1.0.0-a427049
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1759,6 +1759,7 @@ spec:
             metadata:
               labels:
                 control-plane: controller-manager
+                name: controller-manager
             spec:
               affinity:
                 nodeAffinity:
@@ -1869,4 +1870,4 @@ spec:
   maturity: alpha
   provider:
     name: Opensource
-  version: 1.0.0-9726bb6
+  version: 1.0.0-a427049
