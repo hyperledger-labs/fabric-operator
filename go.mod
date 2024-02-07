@@ -1,10 +1,10 @@
 module github.com/IBM-Blockchain/fabric-operator
 
-go 1.18
+go 1.20
 
 require (
 	github.com/cloudflare/cfssl v1.4.1
-	github.com/docker/docker v20.10.18+incompatible
+	github.com/docker/docker v20.10.27+incompatible
 	github.com/go-logr/logr v0.4.0
 	github.com/go-test/deep v1.0.2
 	github.com/gogo/protobuf v1.3.2
