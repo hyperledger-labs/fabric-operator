@@ -912,7 +912,7 @@ var _ = Describe("Base Orderer Node", func() {
 				Orderer: v1.Orderer{
 					General: v1.General{
 						BCCSP: &commonapi.BCCSP{
-							ProviderName: "pkcs11",
+							Default: "pkcs11",
 							PKCS11: &commonapi.PKCS11Opts{
 								FileKeyStore: &commonapi.FileKeyStoreOpts{
 									KeyStorePath: "msp/keystore",
@@ -956,7 +956,7 @@ var _ = Describe("Base Orderer Node", func() {
 					Orderer: v1.Orderer{
 						General: v1.General{
 							BCCSP: &commonapi.BCCSP{
-								ProviderName: "sw",
+								Default: "sw",
 								PKCS11: &commonapi.PKCS11Opts{
 									FileKeyStore: &commonapi.FileKeyStoreOpts{
 										KeyStorePath: "msp/keystore",
@@ -992,7 +992,7 @@ var _ = Describe("Base Orderer Node", func() {
 				Orderer: v2.Orderer{
 					General: v2.General{
 						BCCSP: &commonapi.BCCSP{
-							ProviderName: "PKCS11",
+							Default: "PKCS11",
 						},
 					},
 				},

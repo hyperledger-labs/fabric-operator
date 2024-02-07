@@ -98,7 +98,7 @@ func (o *Orderer) DeepCopy() *Orderer {
 
 func (o *Orderer) UsingPKCS11() bool {
 	if o.General.BCCSP != nil {
-		if strings.ToLower(o.General.BCCSP.ProviderName) == "pkcs11" {
+		if strings.ToLower(o.General.BCCSP.Default) == "pkcs11" {
 			return true
 		}
 	}
@@ -114,12 +114,12 @@ func (o *Orderer) SetPKCS11Defaults(usingHSMProxy bool) {
 		o.General.BCCSP.PKCS11.Library = "/usr/local/lib/libpkcs11-proxy.so"
 	}
 
-	if o.General.BCCSP.PKCS11.HashFamily == "" {
-		o.General.BCCSP.PKCS11.HashFamily = "SHA2"
+	if o.General.BCCSP.PKCS11.Hash == "" {
+		o.General.BCCSP.PKCS11.Hash = "SHA2"
 	}
 
-	if o.General.BCCSP.PKCS11.SecLevel == 0 {
-		o.General.BCCSP.PKCS11.SecLevel = 256
+	if o.General.BCCSP.PKCS11.Security == 0 {
+		o.General.BCCSP.PKCS11.Security = 256
 	}
 }
 

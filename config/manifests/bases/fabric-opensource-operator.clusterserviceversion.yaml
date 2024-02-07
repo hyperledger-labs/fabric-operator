@@ -1481,11 +1481,6 @@ spec:
         path: resources.enroller
         x-descriptors:
         - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
-      - description: FluentD (Optional) is the resources provided to the fluentd container
-        displayName: Fluent D
-        path: resources.fluentd
-        x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
       - description: HSMDaemon (Optional) is the resources provided to the HSM Daemon
           container
         displayName: HSMDaemon

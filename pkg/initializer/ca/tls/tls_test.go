@@ -41,7 +41,7 @@ var _ = Describe("generating TLS crypto", func() {
 
 	BeforeEach(func() {
 		csp := &factory.FactoryOpts{
-			ProviderName: "SW",
+			Default: "SW",
 		}
 		tlsGen = &tls.TLS{
 			CAHomeDir: "crypto",
