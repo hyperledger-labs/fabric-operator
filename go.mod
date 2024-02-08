@@ -1,6 +1,6 @@
 module github.com/IBM-Blockchain/fabric-operator
 
-go 1.18
+go 1.20
 
 require (
 	github.com/cloudflare/cfssl v1.4.1
