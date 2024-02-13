@@ -899,7 +899,7 @@ var _ = Describe("Base Peer", func() {
 				Core: v1.Core{
 					Peer: v1.Peer{
 						BCCSP: &commonapi.BCCSP{
-							ProviderName: "pkcs11",
+							Default: "pkcs11",
 							PKCS11: &commonapi.PKCS11Opts{
 								FileKeyStore: &commonapi.FileKeyStoreOpts{
 									KeyStorePath: "msp/keystore",
@@ -958,7 +958,7 @@ var _ = Describe("Base Peer", func() {
 					Core: v1.Core{
 						Peer: v1.Peer{
 							BCCSP: &commonapi.BCCSP{
-								ProviderName: "sw",
+								Default: "sw",
 								SW: &commonapi.SwOpts{
 									FileKeyStore: commonapi.FileKeyStoreOpts{
 										KeyStorePath: "msp/keystore",

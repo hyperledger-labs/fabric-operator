@@ -56,13 +56,13 @@ var _ = Describe("V2 Orderer Configuration", func() {
 				Orderer: v24.Orderer{
 					General: v24.General{
 						BCCSP: &commonapi.BCCSP{
-							ProviderName: "PKCS11",
+							Default: "PKCS11",
 							PKCS11: &commonapi.PKCS11Opts{
-								Library:    "library2",
-								Label:      "label2",
-								Pin:        "2222",
-								HashFamily: "SHA3",
-								SecLevel:   512,
+								Library:  "library2",
+								Label:    "label2",
+								Pin:      "2222",
+								Hash:     "SHA3",
+								Security: 512,
 								FileKeyStore: &commonapi.FileKeyStoreOpts{
 									KeyStorePath: "keystore3",
 								},
@@ -77,8 +77,8 @@ var _ = Describe("V2 Orderer Configuration", func() {
 			Expect(orderer.General.BCCSP.PKCS11.Library).To(Equal("/usr/local/lib/libpkcs11-proxy.so"))
 			Expect(orderer.General.BCCSP.PKCS11.Label).To(Equal("label2"))
 			Expect(orderer.General.BCCSP.PKCS11.Pin).To(Equal("2222"))
-			Expect(orderer.General.BCCSP.PKCS11.HashFamily).To(Equal("SHA3"))
-			Expect(orderer.General.BCCSP.PKCS11.SecLevel).To(Equal(512))
+			Expect(orderer.General.BCCSP.PKCS11.Hash).To(Equal("SHA3"))
+			Expect(orderer.General.BCCSP.PKCS11.Security).To(Equal(512))
 			Expect(orderer.General.BCCSP.PKCS11.FileKeyStore.KeyStorePath).To(Equal("keystore3"))
 		})
 
@@ -155,16 +155,16 @@ var _ = Describe("V2 Orderer Configuration", func() {
 			Expect(general.TLS.ClientRootCAs).To(Equal([]string{"tls/client.crt"}))
 		})
 
-		By("setting General.BCCSP.ProviderName", func() {
-			Expect(general.BCCSP.ProviderName).To(Equal("SW"))
+		By("setting General.BCCSP.Default", func() {
+			Expect(general.BCCSP.Default).To(Equal("SW"))
 		})
 
-		By("setting General.BCCSP.SW.HashFamily", func() {
-			Expect(general.BCCSP.SW.HashFamily).To(Equal("SHA2"))
+		By("setting General.BCCSP.SW.Hash", func() {
+			Expect(general.BCCSP.SW.Hash).To(Equal("SHA2"))
 		})
 
-		By("setting General.BCCSP.SW.SecLevel", func() {
-			Expect(general.BCCSP.SW.SecLevel).To(Equal(256))
+		By("setting General.BCCSP.SW.Security", func() {
+			Expect(general.BCCSP.SW.Security).To(Equal(256))
 		})
 
 		By("setting General.BCCSP.SW.FileKeyStore.KeyStore", func() {
@@ -183,12 +183,12 @@ var _ = Describe("V2 Orderer Configuration", func() {
 			Expect(general.BCCSP.PKCS11.Pin).To(Equal("1234"))
 		})
 
-		By("setting BCCSP.PKCS11.HashFamily", func() {
-			Expect(general.BCCSP.PKCS11.HashFamily).To(Equal("SHA2"))
+		By("setting BCCSP.PKCS11.Hash", func() {
+			Expect(general.BCCSP.PKCS11.Hash).To(Equal("SHA2"))
 		})
 
 		By("setting BCCSP.PKCS11.Security", func() {
-			Expect(general.BCCSP.PKCS11.SecLevel).To(Equal(256))
+			Expect(general.BCCSP.PKCS11.Security).To(Equal(256))
 		})
 
 		By("setting BCCSP.PKCS11.FileKeystore.KeystorePath", func() {

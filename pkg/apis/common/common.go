@@ -94,28 +94,28 @@ func ConvertTimeDuration(d time.Duration) Duration {
 }
 
 type BCCSP struct {
-	ProviderName string      `json:"default,omitempty"`
-	SW           *SwOpts     `json:"SW,omitempty"`
-	PKCS11       *PKCS11Opts `json:"PKCS11,omitempty"`
+	Default string      `json:"default,omitempty"`
+	SW      *SwOpts     `json:"SW,omitempty"`
+	PKCS11  *PKCS11Opts `json:"PKCS11,omitempty"`
 }
 
 // SwOpts contains options for the SWFactory
 type SwOpts struct {
-	SecLevel     int              `json:"security,omitempty"`
-	HashFamily   string           `json:"hash,omitempty"`
+	Security     int              `json:"security,omitempty"`
+	Hash         string           `json:"hash,omitempty"`
 	FileKeyStore FileKeyStoreOpts `json:"filekeystore,omitempty"`
 }
 
 type PKCS11Opts struct {
-	SecLevel     int               `json:"security,omitempty"`
-	HashFamily   string            `json:"hash,omitempty"`
-	Library      string            `json:"library,omitempty"`
-	Label        string            `json:"label,omitempty"`
-	Pin          string            `json:"pin,omitempty"`
-	Ephemeral    bool              `json:"tempkeys,omitempty"`
-	SoftVerify   bool              `json:"softwareVerify,omitempty"`
-	Immutable    bool              `json:"immutable,omitempty"`
-	FileKeyStore *FileKeyStoreOpts `json:"filekeystore,omitempty"`
+	Security       int               `json:"security,omitempty"`
+	Hash           string            `json:"hash,omitempty"`
+	Library        string            `json:"library,omitempty"`
+	Label          string            `json:"label,omitempty"`
+	Pin            string            `json:"pin,omitempty"`
+	Ephemeral      bool              `json:"tempkeys,omitempty"`
+	SoftwareVerify bool              `json:"softwareVerify,omitempty"`
+	Immutable      bool              `json:"immutable,omitempty"`
+	FileKeyStore   *FileKeyStoreOpts `json:"filekeystore,omitempty"`
 }
 
 type FileKeyStoreOpts struct {

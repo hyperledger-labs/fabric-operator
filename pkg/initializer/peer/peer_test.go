@@ -60,8 +60,8 @@ var _ = Describe("peer", func() {
 					Core: v1.Core{
 						Peer: v1.Peer{
 							BCCSP: &commonapi.BCCSP{
-								ProviderName: "PKCS11",
-								PKCS11:       &commonapi.PKCS11Opts{},
+								Default: "PKCS11",
+								PKCS11:  &commonapi.PKCS11Opts{},
 							},
 						},
 					},

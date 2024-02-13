@@ -825,7 +825,7 @@ var _ = Describe("Deployment Overrides", func() {
 			ca := &v1.ServerConfig{
 				CAConfig: v1.CAConfig{
 					CSP: &v1.BCCSP{
-						ProviderName: "PKCS11",
+						Default: "PKCS11",
 						PKCS11: &v1.PKCS11Opts{
 							Label: "partition1",
 							Pin:   "B6T9Q7mGNG",

@@ -29,13 +29,13 @@ import (
 
 func GetBCCSPOpts(from config.BCCSP) *factory.FactoryOpts {
 	factoryOpts := &factory.FactoryOpts{
-		ProviderName: from.ProviderName,
+		Default: from.Default,
 	}
 
 	if from.SW != nil {
 		factoryOpts.SwOpts = &factory.SwOpts{
-			SecLevel:   from.SW.SecLevel,
-			HashFamily: from.SW.HashFamily,
+			Security: from.SW.Security,
+			Hash:     from.SW.Hash,
 			FileKeystore: &factory.FileKeystoreOpts{
 				KeyStorePath: from.SW.FileKeyStore.KeyStorePath,
 			},
@@ -43,19 +43,13 @@ func GetBCCSPOpts(from config.BCCSP) *factory.FactoryOpts {
 	}
 
 	if from.PKCS11 != nil {
-		factoryOpts.Pkcs11Opts = &pkcs11.PKCS11Opts{
-			SecLevel:   from.PKCS11.SecLevel,
-			HashFamily: from.PKCS11.HashFamily,
-			Library:    from.PKCS11.Library,
-			Label:      from.PKCS11.Label,
-			Pin:        from.PKCS11.Pin,
-			SoftVerify: from.PKCS11.SoftVerify,
-		}
-
-		if from.PKCS11.FileKeystore != nil {
-			factoryOpts.Pkcs11Opts.FileKeystore = &pkcs11.FileKeystoreOpts{
-				KeyStorePath: from.PKCS11.FileKeyStore.KeyStorePath,
-			}
+		factoryOpts.PKCS11 = &pkcs11.PKCS11Opts{
+			Security:       from.PKCS11.Security,
+			Hash:           from.PKCS11.Hash,
+			Library:        from.PKCS11.Library,
+			Label:          from.PKCS11.Label,
+			Pin:            from.PKCS11.Pin,
+			SoftwareVerify: from.PKCS11.SoftwareVerify,
 		}
 	}
 
