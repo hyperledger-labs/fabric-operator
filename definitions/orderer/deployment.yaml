@@ -72,6 +72,8 @@ spec:
               ephemeral-storage: 100M
               memory: 100Mi
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
