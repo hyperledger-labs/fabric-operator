@@ -687,7 +687,6 @@ var _ = Describe("ReconcileIBPPeer", func() {
 				Expect(reconciler.GetUpdateStatus(instance)).To(Equal(&Update{
 					specUpdated:      false,
 					overridesUpdated: false,
-					dindArgsUpdated:  false,
 				}))
 			})
 

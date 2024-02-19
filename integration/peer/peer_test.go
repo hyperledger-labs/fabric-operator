@@ -83,18 +83,6 @@ var (
 		corev1.ResourceEphemeralStorage: resource.MustParse("1G"),
 	}
 
-	defaultRequestsDind = corev1.ResourceList{
-		corev1.ResourceCPU:              resource.MustParse("10m"),
-		corev1.ResourceMemory:           resource.MustParse("20M"),
-		corev1.ResourceEphemeralStorage: resource.MustParse("100M"),
-	}
-
-	defaultLimitsDind = corev1.ResourceList{
-		corev1.ResourceCPU:              resource.MustParse("100m"),
-		corev1.ResourceMemory:           resource.MustParse("200M"),
-		corev1.ResourceEphemeralStorage: resource.MustParse("1G"),
-	}
-
 	defaultRequestsProxy = corev1.ResourceList{
 		corev1.ResourceCPU:              resource.MustParse("10m"),
 		corev1.ResourceMemory:           resource.MustParse("20M"),
@@ -766,11 +754,6 @@ func GetPeer1() *Peer {
 			},
 			Domain: integration.TestAutomation1IngressDomain,
 			Resources: &current.PeerResources{
-				DinD: &corev1.ResourceRequirements{
-
-					Requests: defaultRequestsDind,
-					Limits:   defaultLimitsDind,
-				},
 				Peer: &corev1.ResourceRequirements{
 					Requests: defaultRequestsPeer,
 					Limits:   defaultLimitsPeer,

@@ -86,8 +86,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								PeerInitTag:   "1.0.0",
 								PeerImage:     "peer-image",
 								PeerTag:       "1.0.0",
-								DindImage:     "dind-iamge",
-								DindTag:       "1.0.0",
 								GRPCWebImage:  "grpcweb-image",
 								GRPCWebTag:    "1.0.0",
 								CouchDBImage:  "couchdb-image",
@@ -102,8 +100,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								PeerInitTag:     "2.0.0",
 								PeerImage:       "peer-image",
 								PeerTag:         "2.0.0",
-								DindImage:       "dind-iamge",
-								DindTag:         "2.0.0",
 								GRPCWebImage:    "grpcweb-image",
 								GRPCWebTag:      "2.0.0",
 								CouchDBImage:    "couchdb-image",
@@ -234,8 +230,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								PeerInitTag:   "1.0.0",
 								PeerImage:     "peer-image",
 								PeerTag:       "1.0.0",
-								DindImage:     "dind-iamge",
-								DindTag:       "1.0.0",
 								GRPCWebImage:  "grpcweb-image",
 								GRPCWebTag:    "1.0.0",
 								CouchDBImage:  "couchdb-image",
@@ -250,8 +244,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 								PeerInitTag:     "2.0.0",
 								PeerImage:       "peer-image",
 								PeerTag:         "2.0.0",
-								DindImage:       "dind-iamge",
-								DindTag:         "2.0.0",
 								GRPCWebImage:    "grpcweb-image",
 								GRPCWebTag:      "2.0.0",
 								CouchDBImage:    "couchdb-image",
@@ -363,8 +355,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 											PeerInitTag:   "1.0.0",
 											PeerImage:     "ghcr.io/ibm-blockchain/peer-image",
 											PeerTag:       "1.0.0",
-											DindImage:     "ghcr.io/ibm-blockchain/dind-iamge",
-											DindTag:       "1.0.0",
 											GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcweb-image",
 											GRPCWebTag:    "1.0.0",
 											CouchDBImage:  "ghcr.io/ibm-blockchain/couchdb-image",
@@ -408,8 +398,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									PeerInitTag:   "1.0.0-amd64",
 									PeerImage:     "ghcr.io/ibm-blockchain/peer-image",
 									PeerTag:       "1.0.0-amd64",
-									DindImage:     "ghcr.io/ibm-blockchain/dind-iamge",
-									DindTag:       "1.0.0-amd64",
 									GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcweb-image",
 									GRPCWebTag:    "1.0.0-amd64",
 									CouchDBImage:  "ghcr.io/ibm-blockchain/couchdb-image",
@@ -452,9 +440,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									PeerImage:      "peer-image",
 									PeerTag:        "1.0.0",
 									PeerDigest:     "",
-									DindImage:      "dind-iamge",
-									DindTag:        "1.0.0",
-									DindDigest:     "",
 									GRPCWebImage:   "grpcweb-image",
 									GRPCWebTag:     "1.0.0",
 									GRPCWebDigest:  "",
@@ -510,8 +495,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 					Expect(config.Versions.Peer["1.4"].Image.PeerInitTag).To(Equal(expectedVersions.Peer["1.4"].Image.PeerInitTag))
 					Expect(config.Versions.Peer["1.4"].Image.PeerImage).To(Equal(expectedVersions.Peer["1.4"].Image.PeerImage))
 					Expect(config.Versions.Peer["1.4"].Image.PeerTag).To(Equal(expectedVersions.Peer["1.4"].Image.PeerTag))
-					Expect(config.Versions.Peer["1.4"].Image.DindImage).To(Equal(expectedVersions.Peer["1.4"].Image.DindImage))
-					Expect(config.Versions.Peer["1.4"].Image.DindTag).To(Equal(expectedVersions.Peer["1.4"].Image.DindTag))
 					Expect(config.Versions.Peer["1.4"].Image.CouchDBImage).To(Equal(expectedVersions.Peer["1.4"].Image.CouchDBImage))
 					Expect(config.Versions.Peer["1.4"].Image.CouchDBTag).To(Equal(expectedVersions.Peer["1.4"].Image.CouchDBTag))
 					Expect(config.Versions.Peer["1.4"].Image.GRPCWebImage).To(Equal(expectedVersions.Peer["1.4"].Image.GRPCWebImage))
@@ -553,8 +536,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 											PeerInitTag:   "1.0.0",
 											PeerImage:     "peer-image",
 											PeerTag:       "1.0.0",
-											DindImage:     "dind-iamge",
-											DindTag:       "1.0.0",
 											GRPCWebImage:  "grpcweb-image",
 											GRPCWebTag:    "1.0.0",
 											CouchDBImage:  "couchdb-image",
@@ -598,8 +579,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									PeerInitTag:   "1.0.0-amd64",
 									PeerImage:     "ghcr.io/ibm-blockchain/peer-image",
 									PeerTag:       "1.0.0-amd64",
-									DindImage:     "ghcr.io/ibm-blockchain/dind-iamge",
-									DindTag:       "1.0.0-amd64",
 									GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcweb-image",
 									GRPCWebTag:    "1.0.0-amd64",
 									CouchDBImage:  "ghcr.io/ibm-blockchain/couchdb-image",
@@ -642,9 +621,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 									PeerImage:      "peer-image",
 									PeerTag:        "1.0.0",
 									PeerDigest:     "",
-									DindImage:      "dind-iamge",
-									DindTag:        "1.0.0",
-									DindDigest:     "",
 									GRPCWebImage:   "grpcweb-image",
 									GRPCWebTag:     "1.0.0",
 									GRPCWebDigest:  "",
@@ -700,8 +676,6 @@ var _ = Describe("Base Console Deployer Config Map Overrides", func() {
 					Expect(config.Versions.Peer["1.4"].Image.PeerInitTag).To(Equal(expectedVersions.Peer["1.4"].Image.PeerInitTag))
 					Expect(config.Versions.Peer["1.4"].Image.PeerImage).To(Equal(expectedVersions.Peer["1.4"].Image.PeerImage))
 					Expect(config.Versions.Peer["1.4"].Image.PeerTag).To(Equal(expectedVersions.Peer["1.4"].Image.PeerTag))
-					Expect(config.Versions.Peer["1.4"].Image.DindImage).To(Equal(expectedVersions.Peer["1.4"].Image.DindImage))
-					Expect(config.Versions.Peer["1.4"].Image.DindTag).To(Equal(expectedVersions.Peer["1.4"].Image.DindTag))
 					Expect(config.Versions.Peer["1.4"].Image.CouchDBImage).To(Equal(expectedVersions.Peer["1.4"].Image.CouchDBImage))
 					Expect(config.Versions.Peer["1.4"].Image.CouchDBTag).To(Equal(expectedVersions.Peer["1.4"].Image.CouchDBTag))
 					Expect(config.Versions.Peer["1.4"].Image.GRPCWebImage).To(Equal(expectedVersions.Peer["1.4"].Image.GRPCWebImage))

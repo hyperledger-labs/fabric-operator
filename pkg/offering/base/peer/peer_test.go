@@ -992,8 +992,6 @@ var _ = Describe("Base Peer", func() {
 					PeerInitTag:   "2.0.0",
 					PeerImage:     "peerimage",
 					PeerTag:       "2.0.0",
-					DindImage:     "dindimage",
-					DindTag:       "2.0.0",
 					CouchDBImage:  "couchimage",
 					CouchDBTag:    "2.0.0",
 					GRPCWebImage:  "grpcimage",
@@ -1007,8 +1005,6 @@ var _ = Describe("Base Peer", func() {
 				Expect(images.PeerInitTag).To(Equal("2.0.0"))
 				Expect(images.PeerImage).To(Equal("ghcr.io/ibm-blockchain/peerimage"))
 				Expect(images.PeerTag).To(Equal("2.0.0"))
-				Expect(images.DindImage).To(Equal("ghcr.io/ibm-blockchain/dindimage"))
-				Expect(images.DindTag).To(Equal("2.0.0"))
 				Expect(images.CouchDBImage).To(Equal("ghcr.io/ibm-blockchain/couchimage"))
 				Expect(images.CouchDBTag).To(Equal("2.0.0"))
 				Expect(images.GRPCWebImage).To(Equal("ghcr.io/ibm-blockchain/grpcimage"))
@@ -1021,8 +1017,6 @@ var _ = Describe("Base Peer", func() {
 				Expect(images.PeerInitTag).To(Equal("2.0.0"))
 				Expect(images.PeerImage).To(Equal("ghcr.io/ibm-blockchain/images/peerimage"))
 				Expect(images.PeerTag).To(Equal("2.0.0"))
-				Expect(images.DindImage).To(Equal("ghcr.io/ibm-blockchain/images/dindimage"))
-				Expect(images.DindTag).To(Equal("2.0.0"))
 				Expect(images.CouchDBImage).To(Equal("ghcr.io/ibm-blockchain/images/couchimage"))
 				Expect(images.CouchDBTag).To(Equal("2.0.0"))
 				Expect(images.GRPCWebImage).To(Equal("ghcr.io/ibm-blockchain/images/grpcimage"))
@@ -1038,8 +1032,6 @@ var _ = Describe("Base Peer", func() {
 					PeerInitTag:   "2.0.0",
 					PeerImage:     "ghcr.io/ibm-blockchain/peerimage",
 					PeerTag:       "2.0.0",
-					DindImage:     "ghcr.io/ibm-blockchain/dindimage",
-					DindTag:       "2.0.0",
 					CouchDBImage:  "ghcr.io/ibm-blockchain/couchimage",
 					CouchDBTag:    "2.0.0",
 					GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcimage",
@@ -1053,8 +1045,6 @@ var _ = Describe("Base Peer", func() {
 				Expect(images.PeerInitTag).To(Equal("2.0.0"))
 				Expect(images.PeerImage).To(Equal("ghcr.io/ibm-blockchain/peerimage"))
 				Expect(images.PeerTag).To(Equal("2.0.0"))
-				Expect(images.DindImage).To(Equal("ghcr.io/ibm-blockchain/dindimage"))
-				Expect(images.DindTag).To(Equal("2.0.0"))
 				Expect(images.CouchDBImage).To(Equal("ghcr.io/ibm-blockchain/couchimage"))
 				Expect(images.CouchDBTag).To(Equal("2.0.0"))
 				Expect(images.GRPCWebImage).To(Equal("ghcr.io/ibm-blockchain/grpcimage"))

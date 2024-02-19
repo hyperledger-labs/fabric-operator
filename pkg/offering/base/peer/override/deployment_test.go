@@ -173,18 +173,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 				StateDb:          "couchdb",
 				ImagePullSecrets: []string{"pullsecret1"},
 				Resources: &current.PeerResources{
-					DinD: &corev1.ResourceRequirements{
-						Requests: map[corev1.ResourceName]resource.Quantity{
-							corev1.ResourceCPU:              testMatrix[0][0],
-							corev1.ResourceMemory:           testMatrix[0][1],
-							corev1.ResourceEphemeralStorage: testMatrix[0][4],
-						},
-						Limits: map[corev1.ResourceName]resource.Quantity{
-							corev1.ResourceCPU:              testMatrix[0][2],
-							corev1.ResourceMemory:           testMatrix[0][3],
-							corev1.ResourceEphemeralStorage: testMatrix[0][5],
-						},
-					},
 					Peer: &corev1.ResourceRequirements{
 						Requests: map[corev1.ResourceName]resource.Quantity{
 							corev1.ResourceCPU:              testMatrix[1][0],
@@ -476,7 +464,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 			BeforeEach(func() {
 				image = &current.PeerImages{
 					PeerInitImage: "init-image",
-					DindImage:     "dind-image",
 					CouchDBImage:  "couchdb-image",
 					PeerImage:     "peer-image",
 					GRPCWebImage:  "proxy-image",
@@ -489,7 +476,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					err := overrider.Deployment(instance, k8sDep, resources.Create)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(deployment.Spec.Template.Spec.InitContainers[0].Image).To(Equal("init-image:latest"))
-					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("couchdb-image:latest"))
@@ -499,7 +485,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 			When("tag is passed", func() {
 				It("uses the passed in tag for image tags", func() {
 					instance.Spec.Images = image
-					image.DindTag = "1.0.1"
 					image.CouchDBTag = "1.0.2"
 					image.PeerTag = "1.0.3"
 					image.GRPCWebTag = "1.0.4"
@@ -508,7 +493,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					err := overrider.Deployment(instance, k8sDep, resources.Create)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(deployment.Spec.Template.Spec.InitContainers[0].Image).To(Equal("init-image:2.0.0"))
-					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:1.0.1"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:1.0.3"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:1.0.4"))
 					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("couchdb-image:1.0.2"))
@@ -645,7 +629,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 			BeforeEach(func() {
 				image = &current.PeerImages{
 					PeerInitImage: "init-image",
-					DindImage:     "dind-image",
 					CouchDBImage:  "couchdb-image",
 					PeerImage:     "peer-image",
 					GRPCWebImage:  "proxy-image",
@@ -658,7 +641,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					err := overrider.Deployment(instance, k8sDep, resources.Update)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(deployment.Spec.Template.Spec.InitContainers[0].Image).To(Equal("init-image:latest"))
-					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:latest"))
 					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("couchdb-image:latest"))
@@ -667,7 +649,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 
 			When("tag is passed", func() {
 				It("uses the passed in tag for image tags", func() {
-					image.DindTag = "1.0.1"
 					image.CouchDBTag = "1.0.2"
 					image.PeerTag = "1.0.3"
 					image.GRPCWebTag = "1.0.4"
@@ -676,7 +657,6 @@ var _ = Describe("Base Peer Deployment Overrides", func() {
 					err := overrider.Deployment(instance, k8sDep, resources.Update)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(deployment.Spec.Template.Spec.InitContainers[0].Image).To(Equal("init-image:2.0.0"))
-					Expect(deployment.Spec.Template.Spec.Containers[0].Image).To(Equal("dind-image:1.0.1"))
 					Expect(deployment.Spec.Template.Spec.Containers[1].Image).To(Equal("peer-image:1.0.3"))
 					Expect(deployment.Spec.Template.Spec.Containers[2].Image).To(Equal("proxy-image:1.0.4"))
 					Expect(deployment.Spec.Template.Spec.Containers[3].Image).To(Equal("couchdb-image:1.0.2"))

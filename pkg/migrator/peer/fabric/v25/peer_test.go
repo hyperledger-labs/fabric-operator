@@ -86,9 +86,6 @@ var _ = Describe("V2 peer migrator", func() {
 							v1.Container{
 								Name: "peer",
 							},
-							v1.Container{
-								Name: "dind",
-							},
 						},
 					},
 				},

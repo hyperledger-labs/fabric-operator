@@ -115,18 +115,6 @@ var _ = Describe("Fabric peer migration", func() {
 				Eventually(peer.PodIsRunning).Should((Equal(true)))
 			})
 
-			By("adding chaincode launcher container and removing dind", func() {
-				deps := peer.DeploymentList()
-				dep := deps.Items[0]
-
-				containerNames := []string{}
-				for _, cont := range dep.Spec.Template.Spec.Containers {
-					containerNames = append(containerNames, cont.Name)
-				}
-
-				Expect(containerNames).To(ContainElement("chaincode-launcher"))
-				Expect(containerNames).NotTo(ContainElement("dind"))
-			})
 		})
 	})
 })
@@ -153,11 +141,8 @@ func GetPeer() *helper.Peer {
 			ImagePullSecrets: []string{"regcred"},
 			Images: &current.PeerImages{
 				// TODO: OSS
-				CouchDBImage: "ghcr.io/ibm-blockchain/couchdb",
-				CouchDBTag:   "2.3.1-20210826-amd64",
-				// do not change dind tag, it is used for loading dind faster
-				DindImage:     "ghcr.io/ibm-blockchain/dind",
-				DindTag:       "noimages-amd64",
+				CouchDBImage:  "ghcr.io/ibm-blockchain/couchdb",
+				CouchDBTag:    "2.3.1-20210826-amd64",
 				GRPCWebImage:  "ghcr.io/ibm-blockchain/grpcweb",
 				GRPCWebTag:    "1.0.0-20210826-amd64",
 				PeerImage:     "ghcr.io/ibm-blockchain/peer",
