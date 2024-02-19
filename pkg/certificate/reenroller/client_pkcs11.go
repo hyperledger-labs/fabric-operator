@@ -24,8 +24,8 @@ package reenroller
 import (
 	commonapi "github.com/IBM-Blockchain/fabric-operator/pkg/apis/common"
 	"github.com/hyperledger/fabric-ca/lib"
-	"github.com/hyperledger/fabric/bccsp/factory"
-	"github.com/hyperledger/fabric/bccsp/pkcs11"
+	"github.com/hyperledger/fabric-lib-go/bccsp/factory"
+	"github.com/hyperledger/fabric-lib-go/bccsp/pkcs11"
 )
 
 func GetClient(client *lib.Client, bccsp *commonapi.BCCSP) *lib.Client {
