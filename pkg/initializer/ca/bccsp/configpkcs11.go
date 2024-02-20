@@ -23,8 +23,8 @@ package bccsp
 
 import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca/config"
-	"github.com/hyperledger/fabric/bccsp/factory"
-	"github.com/hyperledger/fabric/bccsp/pkcs11"
+	"github.com/hyperledger/fabric-lib-go/bccsp/factory"
+	"github.com/hyperledger/fabric-lib-go/bccsp/pkcs11"
 )
 
 func GetBCCSPOpts(from config.BCCSP) *factory.FactoryOpts {
