@@ -34,7 +34,6 @@ const (
 	ORDERER    Component = "ORDERER"
 	PEER       Component = "PEER"
 	GRPCPROXY  Component = "GRPCPROXY"
-	DIND       Component = "DIND"
 	COUCHDB    Component = "COUCHDB"
 	CCLAUNCHER Component = "CCLAUNCHER"
 	ENROLLER   Component = "ENROLLER"

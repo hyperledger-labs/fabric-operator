@@ -127,15 +127,6 @@ type PeerImages struct {
 	// PeerDigest is the digest tag of the peer image
 	PeerDigest string `json:"peerDigest,omitempty"`
 
-	// DindImage is the name of the dind image
-	DindImage string `json:"dindImage,omitempty"`
-
-	// DindTag is the tag of the dind image
-	DindTag string `json:"dindTag,omitempty"`
-
-	// DindDigest is the digest tag of the dind image
-	DindDigest string `json:"dindDigest,omitempty"`
-
 	// GRPCWebImage is the name of the grpc web proxy image
 	GRPCWebImage string `json:"grpcwebImage,omitempty"`
 
@@ -468,7 +459,6 @@ func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch st
 	i.PeerInitImage = image.GetImage(registryURL, i.PeerInitImage, requested.PeerInitImage)
 	i.PeerImage = image.GetImage(registryURL, i.PeerImage, requested.PeerImage)
 	i.CouchDBImage = image.GetImage(registryURL, i.CouchDBImage, requested.CouchDBImage)
-	i.DindImage = image.GetImage(registryURL, i.DindImage, requested.DindImage)
 	i.GRPCWebImage = image.GetImage(registryURL, i.GRPCWebImage, requested.GRPCWebImage)
 	i.CCLauncherImage = image.GetImage(registryURL, i.CCLauncherImage, requested.CCLauncherImage)
 	i.FileTransferImage = image.GetImage(registryURL, i.FileTransferImage, requested.FileTransferImage)
@@ -483,7 +473,6 @@ func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch st
 	i.PeerInitTag = image.GetTag(arch, i.PeerInitTag, requested.PeerInitTag)
 	i.PeerTag = image.GetTag(arch, i.PeerTag, requested.PeerTag)
 	i.CouchDBTag = image.GetTag(arch, i.CouchDBTag, requested.CouchDBTag)
-	i.DindTag = image.GetTag(arch, i.DindTag, requested.DindTag)
 	i.GRPCWebTag = image.GetTag(arch, i.GRPCWebTag, requested.GRPCWebTag)
 	i.CCLauncherTag = image.GetTag(arch, i.CCLauncherTag, requested.CCLauncherTag)
 	i.FileTransferTag = image.GetTag(arch, i.FileTransferTag, requested.FileTransferTag)
@@ -498,7 +487,6 @@ func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch st
 	i.PeerInitDigest = image.GetTag(arch, i.PeerInitDigest, requested.PeerInitDigest)
 	i.PeerDigest = image.GetTag(arch, i.PeerDigest, requested.PeerDigest)
 	i.CouchDBDigest = image.GetTag(arch, i.CouchDBDigest, requested.CouchDBDigest)
-	i.DindDigest = image.GetTag(arch, i.DindDigest, requested.DindDigest)
 	i.GRPCWebDigest = image.GetTag(arch, i.GRPCWebDigest, requested.GRPCWebDigest)
 	i.CCLauncherDigest = image.GetTag(arch, i.CCLauncherDigest, requested.CCLauncherDigest)
 	i.FileTransferDigest = image.GetTag(arch, i.FileTransferDigest, requested.FileTransferDigest)

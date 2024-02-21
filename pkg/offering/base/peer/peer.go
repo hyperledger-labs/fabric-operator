@@ -140,12 +140,10 @@ type RestartManager interface {
 type Update interface {
 	SpecUpdated() bool
 	ConfigOverridesUpdated() bool
-	DindArgsUpdated() bool
 	TLSCertUpdated() bool
 	EcertUpdated() bool
 	PeerTagUpdated() bool
 	CertificateUpdated() bool
-	SetDindArgsUpdated(updated bool)
 	RestartNeeded() bool
 	EcertReenrollNeeded() bool
 	TLSReenrollNeeded() bool
@@ -316,15 +314,14 @@ func (p *Peer) PreReconcileChecks(instance *current.IBPPeer, update Update) (boo
 	}
 
 	dbTypeUpdated := p.CheckDBType(instance)
-	updated := dbTypeUpdated || zoneUpdated || regionUpdated || update.DindArgsUpdated() || hsmImageUpdated || replicasUpdated || imagesUpdated
+	updated := dbTypeUpdated || zoneUpdated || regionUpdated || hsmImageUpdated || replicasUpdated || imagesUpdated
 
 	if updated {
 		log.Info(fmt.Sprintf(
-			"dbTypeUpdate %t, zoneUpdated %t, regionUpdated %t, dindArgsUpdated %t, hsmImageUpdated %t, replicasUpdated %t, imagesUpdated %t",
+			"dbTypeUpdate %t, zoneUpdated %t, regionUpdated %t, hsmImageUpdated %t, replicasUpdated %t, imagesUpdated %t",
 			dbTypeUpdated,
 			zoneUpdated,
 			regionUpdated,
-			update.DindArgsUpdated(),
 			hsmImageUpdated,
 			replicasUpdated,
 			imagesUpdated))

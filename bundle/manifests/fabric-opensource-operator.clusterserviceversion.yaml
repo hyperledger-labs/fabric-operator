@@ -613,12 +613,6 @@ spec:
       - description: CouchDBTag is the tag of the couchdb image
         displayName: Couch DBTag
         path: versions.peer.image.couchdbTag
-      - description: DindImage is the name of the dind image
-        displayName: Dind Image
-        path: versions.peer.image.dindImage
-      - description: DindTag is the tag of the dind image
-        displayName: Dind Tag
-        path: versions.peer.image.dindTag
       - description: EnrollerImage is the name of the init image for crypto generation
         displayName: Enroller Image
         path: versions.peer.image.enrollerImage
@@ -1305,10 +1299,6 @@ spec:
       - description: StateDB is the pvc to be used as statedb's storage
         displayName: State DB
         path: customNames.pvc.statedb
-      - description: advanced configs DindArgs (Optional) is used to override args
-          passed to dind container
-        displayName: Dind Args
-        path: dindArgs
       - description: DisableNodeOU (Optional) is used to switch nodeou on and off
         displayName: Disable Node OU
         path: disablenodeou
@@ -1347,12 +1337,6 @@ spec:
       - description: CouchDBTag is the tag of the couchdb image
         displayName: Couch DBTag
         path: images.couchdbTag
-      - description: DindImage is the name of the dind image
-        displayName: Dind Image
-        path: images.dindImage
-      - description: DindTag is the tag of the dind image
-        displayName: Dind Tag
-        path: images.dindTag
       - description: EnrollerImage is the name of the init image for crypto generation
         displayName: Enroller Image
         path: images.enrollerImage
@@ -1468,11 +1452,6 @@ spec:
       - description: CouchDB (Optional) is the resources provided to the couchdb container
         displayName: Couch DB
         path: resources.couchdb
-        x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
-      - description: DinD (Optional) is the resources provided to the dind container
-        displayName: Din D
-        path: resources.dind
         x-descriptors:
         - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
       - description: Enroller (Optional) is the resources provided to the enroller
