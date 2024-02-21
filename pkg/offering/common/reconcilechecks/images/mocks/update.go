@@ -37,16 +37,15 @@ func (fake *Update) FabricVersionUpdated() bool {
 	ret, specificReturn := fake.fabricVersionUpdatedReturnsOnCall[len(fake.fabricVersionUpdatedArgsForCall)]
 	fake.fabricVersionUpdatedArgsForCall = append(fake.fabricVersionUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.FabricVersionUpdatedStub
-	fakeReturns := fake.fabricVersionUpdatedReturns
 	fake.recordInvocation("FabricVersionUpdated", []interface{}{})
 	fake.fabricVersionUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.FabricVersionUpdatedStub != nil {
+		return fake.FabricVersionUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.fabricVersionUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -90,16 +89,15 @@ func (fake *Update) ImagesUpdated() bool {
 	ret, specificReturn := fake.imagesUpdatedReturnsOnCall[len(fake.imagesUpdatedArgsForCall)]
 	fake.imagesUpdatedArgsForCall = append(fake.imagesUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.ImagesUpdatedStub
-	fakeReturns := fake.imagesUpdatedReturns
 	fake.recordInvocation("ImagesUpdated", []interface{}{})
 	fake.imagesUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ImagesUpdatedStub != nil {
+		return fake.ImagesUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.imagesUpdatedReturns
 	return fakeReturns.result1
 }
 

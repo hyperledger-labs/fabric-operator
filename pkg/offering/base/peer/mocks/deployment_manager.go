@@ -145,16 +145,15 @@ func (fake *DeploymentManager) CheckForSecretChange(arg1 v1.Object, arg2 string,
 		arg2 string
 		arg3 func(string, *v1a.Deployment) bool
 	}{arg1, arg2, arg3})
-	stub := fake.CheckForSecretChangeStub
-	fakeReturns := fake.checkForSecretChangeReturns
 	fake.recordInvocation("CheckForSecretChange", []interface{}{arg1, arg2, arg3})
 	fake.checkForSecretChangeMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.CheckForSecretChangeStub != nil {
+		return fake.CheckForSecretChangeStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.checkForSecretChangeReturns
 	return fakeReturns.result1
 }
 
@@ -206,16 +205,15 @@ func (fake *DeploymentManager) CheckState(arg1 v1.Object) error {
 	fake.checkStateArgsForCall = append(fake.checkStateArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.CheckStateStub
-	fakeReturns := fake.checkStateReturns
 	fake.recordInvocation("CheckState", []interface{}{arg1})
 	fake.checkStateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.CheckStateStub != nil {
+		return fake.CheckStateStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.checkStateReturns
 	return fakeReturns.result1
 }
 
@@ -267,16 +265,15 @@ func (fake *DeploymentManager) Delete(arg1 v1.Object) error {
 	fake.deleteArgsForCall = append(fake.deleteArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.DeleteStub
-	fakeReturns := fake.deleteReturns
 	fake.recordInvocation("Delete", []interface{}{arg1})
 	fake.deleteMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.DeleteStub != nil {
+		return fake.DeleteStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.deleteReturns
 	return fakeReturns.result1
 }
 
@@ -328,16 +325,15 @@ func (fake *DeploymentManager) DeploymentStatus(arg1 v1.Object) (v1a.DeploymentS
 	fake.deploymentStatusArgsForCall = append(fake.deploymentStatusArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.DeploymentStatusStub
-	fakeReturns := fake.deploymentStatusReturns
 	fake.recordInvocation("DeploymentStatus", []interface{}{arg1})
 	fake.deploymentStatusMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.DeploymentStatusStub != nil {
+		return fake.DeploymentStatusStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.deploymentStatusReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -392,16 +388,15 @@ func (fake *DeploymentManager) Exists(arg1 v1.Object) bool {
 	fake.existsArgsForCall = append(fake.existsArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.ExistsStub
-	fakeReturns := fake.existsReturns
 	fake.recordInvocation("Exists", []interface{}{arg1})
 	fake.existsMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ExistsStub != nil {
+		return fake.ExistsStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.existsReturns
 	return fakeReturns.result1
 }
 
@@ -453,16 +448,15 @@ func (fake *DeploymentManager) Get(arg1 v1.Object) (client.Object, error) {
 	fake.getArgsForCall = append(fake.getArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.GetStub
-	fakeReturns := fake.getReturns
 	fake.recordInvocation("Get", []interface{}{arg1})
 	fake.getMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetStub != nil {
+		return fake.GetStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -517,16 +511,15 @@ func (fake *DeploymentManager) GetName(arg1 v1.Object) string {
 	fake.getNameArgsForCall = append(fake.getNameArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.GetNameStub
-	fakeReturns := fake.getNameReturns
 	fake.recordInvocation("GetName", []interface{}{arg1})
 	fake.getNameMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetNameStub != nil {
+		return fake.GetNameStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getNameReturns
 	return fakeReturns.result1
 }
 
@@ -577,16 +570,15 @@ func (fake *DeploymentManager) GetScheme() *runtime.Scheme {
 	ret, specificReturn := fake.getSchemeReturnsOnCall[len(fake.getSchemeArgsForCall)]
 	fake.getSchemeArgsForCall = append(fake.getSchemeArgsForCall, struct {
 	}{})
-	stub := fake.GetSchemeStub
-	fakeReturns := fake.getSchemeReturns
 	fake.recordInvocation("GetScheme", []interface{}{})
 	fake.getSchemeMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetSchemeStub != nil {
+		return fake.GetSchemeStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getSchemeReturns
 	return fakeReturns.result1
 }
 
@@ -632,16 +624,15 @@ func (fake *DeploymentManager) Reconcile(arg1 v1.Object, arg2 bool) error {
 		arg1 v1.Object
 		arg2 bool
 	}{arg1, arg2})
-	stub := fake.ReconcileStub
-	fakeReturns := fake.reconcileReturns
 	fake.recordInvocation("Reconcile", []interface{}{arg1, arg2})
 	fake.reconcileMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.ReconcileStub != nil {
+		return fake.ReconcileStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.reconcileReturns
 	return fakeReturns.result1
 }
 
@@ -693,16 +684,15 @@ func (fake *DeploymentManager) RestoreState(arg1 v1.Object) error {
 	fake.restoreStateArgsForCall = append(fake.restoreStateArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.RestoreStateStub
-	fakeReturns := fake.restoreStateReturns
 	fake.recordInvocation("RestoreState", []interface{}{arg1})
 	fake.restoreStateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.RestoreStateStub != nil {
+		return fake.RestoreStateStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.restoreStateReturns
 	return fakeReturns.result1
 }
 
@@ -753,10 +743,9 @@ func (fake *DeploymentManager) SetCustomName(arg1 string) {
 	fake.setCustomNameArgsForCall = append(fake.setCustomNameArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetCustomNameStub
 	fake.recordInvocation("SetCustomName", []interface{}{arg1})
 	fake.setCustomNameMutex.Unlock()
-	if stub != nil {
+	if fake.SetCustomNameStub != nil {
 		fake.SetCustomNameStub(arg1)
 	}
 }

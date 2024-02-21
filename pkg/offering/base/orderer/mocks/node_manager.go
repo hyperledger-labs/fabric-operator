@@ -34,16 +34,15 @@ func (fake *NodeManager) GetNode(arg1 int, arg2 map[string]*time.Timer, arg3 bas
 		arg2 map[string]*time.Timer
 		arg3 baseorderer.RestartManager
 	}{arg1, arg2, arg3})
-	stub := fake.GetNodeStub
-	fakeReturns := fake.getNodeReturns
 	fake.recordInvocation("GetNode", []interface{}{arg1, arg2, arg3})
 	fake.getNodeMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.GetNodeStub != nil {
+		return fake.GetNodeStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getNodeReturns
 	return fakeReturns.result1
 }
 

@@ -148,16 +148,15 @@ func (fake *IBPCA) ConfigToBytes() ([]byte, error) {
 	ret, specificReturn := fake.configToBytesReturnsOnCall[len(fake.configToBytesArgsForCall)]
 	fake.configToBytesArgsForCall = append(fake.configToBytesArgsForCall, struct {
 	}{})
-	stub := fake.ConfigToBytesStub
-	fakeReturns := fake.configToBytesReturns
 	fake.recordInvocation("ConfigToBytes", []interface{}{})
 	fake.configToBytesMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ConfigToBytesStub != nil {
+		return fake.ConfigToBytesStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.configToBytesReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -204,16 +203,15 @@ func (fake *IBPCA) GetHomeDir() string {
 	ret, specificReturn := fake.getHomeDirReturnsOnCall[len(fake.getHomeDirArgsForCall)]
 	fake.getHomeDirArgsForCall = append(fake.getHomeDirArgsForCall, struct {
 	}{})
-	stub := fake.GetHomeDirStub
-	fakeReturns := fake.getHomeDirReturns
 	fake.recordInvocation("GetHomeDir", []interface{}{})
 	fake.getHomeDirMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetHomeDirStub != nil {
+		return fake.GetHomeDirStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getHomeDirReturns
 	return fakeReturns.result1
 }
 
@@ -257,16 +255,15 @@ func (fake *IBPCA) GetServerConfig() *v1.ServerConfig {
 	ret, specificReturn := fake.getServerConfigReturnsOnCall[len(fake.getServerConfigArgsForCall)]
 	fake.getServerConfigArgsForCall = append(fake.getServerConfigArgsForCall, struct {
 	}{})
-	stub := fake.GetServerConfigStub
-	fakeReturns := fake.getServerConfigReturns
 	fake.recordInvocation("GetServerConfig", []interface{}{})
 	fake.getServerConfigMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetServerConfigStub != nil {
+		return fake.GetServerConfigStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getServerConfigReturns
 	return fakeReturns.result1
 }
 
@@ -310,16 +307,15 @@ func (fake *IBPCA) GetType() config.Type {
 	ret, specificReturn := fake.getTypeReturnsOnCall[len(fake.getTypeArgsForCall)]
 	fake.getTypeArgsForCall = append(fake.getTypeArgsForCall, struct {
 	}{})
-	stub := fake.GetTypeStub
-	fakeReturns := fake.getTypeReturns
 	fake.recordInvocation("GetType", []interface{}{})
 	fake.getTypeMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetTypeStub != nil {
+		return fake.GetTypeStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getTypeReturns
 	return fakeReturns.result1
 }
 
@@ -363,16 +359,15 @@ func (fake *IBPCA) Init() error {
 	ret, specificReturn := fake.initReturnsOnCall[len(fake.initArgsForCall)]
 	fake.initArgsForCall = append(fake.initArgsForCall, struct {
 	}{})
-	stub := fake.InitStub
-	fakeReturns := fake.initReturns
 	fake.recordInvocation("Init", []interface{}{})
 	fake.initMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.InitStub != nil {
+		return fake.InitStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.initReturns
 	return fakeReturns.result1
 }
 
@@ -415,10 +410,9 @@ func (fake *IBPCA) IsBeingUpdated() {
 	fake.isBeingUpdatedMutex.Lock()
 	fake.isBeingUpdatedArgsForCall = append(fake.isBeingUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.IsBeingUpdatedStub
 	fake.recordInvocation("IsBeingUpdated", []interface{}{})
 	fake.isBeingUpdatedMutex.Unlock()
-	if stub != nil {
+	if fake.IsBeingUpdatedStub != nil {
 		fake.IsBeingUpdatedStub()
 	}
 }
@@ -441,16 +435,15 @@ func (fake *IBPCA) OverrideServerConfig(arg1 *v1.ServerConfig) error {
 	fake.overrideServerConfigArgsForCall = append(fake.overrideServerConfigArgsForCall, struct {
 		arg1 *v1.ServerConfig
 	}{arg1})
-	stub := fake.OverrideServerConfigStub
-	fakeReturns := fake.overrideServerConfigReturns
 	fake.recordInvocation("OverrideServerConfig", []interface{}{arg1})
 	fake.overrideServerConfigMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.OverrideServerConfigStub != nil {
+		return fake.OverrideServerConfigStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.overrideServerConfigReturns
 	return fakeReturns.result1
 }
 
@@ -501,16 +494,15 @@ func (fake *IBPCA) ParseCABlock() (map[string][]byte, error) {
 	ret, specificReturn := fake.parseCABlockReturnsOnCall[len(fake.parseCABlockArgsForCall)]
 	fake.parseCABlockArgsForCall = append(fake.parseCABlockArgsForCall, struct {
 	}{})
-	stub := fake.ParseCABlockStub
-	fakeReturns := fake.parseCABlockReturns
 	fake.recordInvocation("ParseCABlock", []interface{}{})
 	fake.parseCABlockMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ParseCABlockStub != nil {
+		return fake.ParseCABlockStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.parseCABlockReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -557,16 +549,15 @@ func (fake *IBPCA) ParseCrypto() (map[string][]byte, error) {
 	ret, specificReturn := fake.parseCryptoReturnsOnCall[len(fake.parseCryptoArgsForCall)]
 	fake.parseCryptoArgsForCall = append(fake.parseCryptoArgsForCall, struct {
 	}{})
-	stub := fake.ParseCryptoStub
-	fakeReturns := fake.parseCryptoReturns
 	fake.recordInvocation("ParseCrypto", []interface{}{})
 	fake.parseCryptoMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ParseCryptoStub != nil {
+		return fake.ParseCryptoStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.parseCryptoReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -613,16 +604,15 @@ func (fake *IBPCA) RemoveHomeDir() error {
 	ret, specificReturn := fake.removeHomeDirReturnsOnCall[len(fake.removeHomeDirArgsForCall)]
 	fake.removeHomeDirArgsForCall = append(fake.removeHomeDirArgsForCall, struct {
 	}{})
-	stub := fake.RemoveHomeDirStub
-	fakeReturns := fake.removeHomeDirReturns
 	fake.recordInvocation("RemoveHomeDir", []interface{}{})
 	fake.removeHomeDirMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.RemoveHomeDirStub != nil {
+		return fake.RemoveHomeDirStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.removeHomeDirReturns
 	return fakeReturns.result1
 }
 
@@ -665,10 +655,9 @@ func (fake *IBPCA) SetMountPaths() {
 	fake.setMountPathsMutex.Lock()
 	fake.setMountPathsArgsForCall = append(fake.setMountPathsArgsForCall, struct {
 	}{})
-	stub := fake.SetMountPathsStub
 	fake.recordInvocation("SetMountPaths", []interface{}{})
 	fake.setMountPathsMutex.Unlock()
-	if stub != nil {
+	if fake.SetMountPathsStub != nil {
 		fake.SetMountPathsStub()
 	}
 }
@@ -691,16 +680,15 @@ func (fake *IBPCA) ViperUnmarshal(arg1 string) (*lib.ServerConfig, error) {
 	fake.viperUnmarshalArgsForCall = append(fake.viperUnmarshalArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.ViperUnmarshalStub
-	fakeReturns := fake.viperUnmarshalReturns
 	fake.recordInvocation("ViperUnmarshal", []interface{}{arg1})
 	fake.viperUnmarshalMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ViperUnmarshalStub != nil {
+		return fake.ViperUnmarshalStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.viperUnmarshalReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -754,16 +742,15 @@ func (fake *IBPCA) WriteConfig() error {
 	ret, specificReturn := fake.writeConfigReturnsOnCall[len(fake.writeConfigArgsForCall)]
 	fake.writeConfigArgsForCall = append(fake.writeConfigArgsForCall, struct {
 	}{})
-	stub := fake.WriteConfigStub
-	fakeReturns := fake.writeConfigReturns
 	fake.recordInvocation("WriteConfig", []interface{}{})
 	fake.writeConfigMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.WriteConfigStub != nil {
+		return fake.WriteConfigStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.writeConfigReturns
 	return fakeReturns.result1
 }
 

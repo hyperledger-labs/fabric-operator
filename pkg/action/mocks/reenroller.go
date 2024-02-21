@@ -35,16 +35,15 @@ func (fake *Reenroller) RenewCert(arg1 common.SecretType, arg2 runtime.Object, a
 		arg2 runtime.Object
 		arg3 bool
 	}{arg1, arg2, arg3})
-	stub := fake.RenewCertStub
-	fakeReturns := fake.renewCertReturns
 	fake.recordInvocation("RenewCert", []interface{}{arg1, arg2, arg3})
 	fake.renewCertMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.RenewCertStub != nil {
+		return fake.RenewCertStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.renewCertReturns
 	return fakeReturns.result1
 }
 

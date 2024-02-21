@@ -53,16 +53,15 @@ func (fake *Initializer) Create(arg1 *v1beta1.IBPCA, arg2 *v1.ServerConfig, arg3
 		arg2 *v1.ServerConfig
 		arg3 initializer.IBPCA
 	}{arg1, arg2, arg3})
-	stub := fake.CreateStub
-	fakeReturns := fake.createReturns
 	fake.recordInvocation("Create", []interface{}{arg1, arg2, arg3})
 	fake.createMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.CreateStub != nil {
+		return fake.CreateStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.createReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -119,16 +118,15 @@ func (fake *Initializer) Update(arg1 *v1beta1.IBPCA, arg2 *v1.ServerConfig, arg3
 		arg2 *v1.ServerConfig
 		arg3 initializer.IBPCA
 	}{arg1, arg2, arg3})
-	stub := fake.UpdateStub
-	fakeReturns := fake.updateReturns
 	fake.recordInvocation("Update", []interface{}{arg1, arg2, arg3})
 	fake.updateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.UpdateStub != nil {
+		return fake.UpdateStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.updateReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

@@ -53,16 +53,15 @@ func (fake *CryptoEnroller) Enroll() (*config.Response, error) {
 	ret, specificReturn := fake.enrollReturnsOnCall[len(fake.enrollArgsForCall)]
 	fake.enrollArgsForCall = append(fake.enrollArgsForCall, struct {
 	}{})
-	stub := fake.EnrollStub
-	fakeReturns := fake.enrollReturns
 	fake.recordInvocation("Enroll", []interface{}{})
 	fake.enrollMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.EnrollStub != nil {
+		return fake.EnrollStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.enrollReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -109,16 +108,15 @@ func (fake *CryptoEnroller) GetEnrollmentRequest() *v1beta1.Enrollment {
 	ret, specificReturn := fake.getEnrollmentRequestReturnsOnCall[len(fake.getEnrollmentRequestArgsForCall)]
 	fake.getEnrollmentRequestArgsForCall = append(fake.getEnrollmentRequestArgsForCall, struct {
 	}{})
-	stub := fake.GetEnrollmentRequestStub
-	fakeReturns := fake.getEnrollmentRequestReturns
 	fake.recordInvocation("GetEnrollmentRequest", []interface{}{})
 	fake.getEnrollmentRequestMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetEnrollmentRequestStub != nil {
+		return fake.GetEnrollmentRequestStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getEnrollmentRequestReturns
 	return fakeReturns.result1
 }
 
@@ -163,16 +161,15 @@ func (fake *CryptoEnroller) PingCA(arg1 time.Duration) error {
 	fake.pingCAArgsForCall = append(fake.pingCAArgsForCall, struct {
 		arg1 time.Duration
 	}{arg1})
-	stub := fake.PingCAStub
-	fakeReturns := fake.pingCAReturns
 	fake.recordInvocation("PingCA", []interface{}{arg1})
 	fake.pingCAMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.PingCAStub != nil {
+		return fake.PingCAStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.pingCAReturns
 	return fakeReturns.result1
 }
 

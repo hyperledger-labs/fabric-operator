@@ -88,16 +88,15 @@ func (fake *RestartManager) ForAdminCertUpdate(arg1 v1.Object) error {
 	fake.forAdminCertUpdateArgsForCall = append(fake.forAdminCertUpdateArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.ForAdminCertUpdateStub
-	fakeReturns := fake.forAdminCertUpdateReturns
 	fake.recordInvocation("ForAdminCertUpdate", []interface{}{arg1})
 	fake.forAdminCertUpdateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ForAdminCertUpdateStub != nil {
+		return fake.ForAdminCertUpdateStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.forAdminCertUpdateReturns
 	return fakeReturns.result1
 }
 
@@ -150,16 +149,15 @@ func (fake *RestartManager) ForCertUpdate(arg1 common.SecretType, arg2 v1.Object
 		arg1 common.SecretType
 		arg2 v1.Object
 	}{arg1, arg2})
-	stub := fake.ForCertUpdateStub
-	fakeReturns := fake.forCertUpdateReturns
 	fake.recordInvocation("ForCertUpdate", []interface{}{arg1, arg2})
 	fake.forCertUpdateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.ForCertUpdateStub != nil {
+		return fake.ForCertUpdateStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.forCertUpdateReturns
 	return fakeReturns.result1
 }
 
@@ -211,16 +209,15 @@ func (fake *RestartManager) ForConfigOverride(arg1 v1.Object) error {
 	fake.forConfigOverrideArgsForCall = append(fake.forConfigOverrideArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.ForConfigOverrideStub
-	fakeReturns := fake.forConfigOverrideReturns
 	fake.recordInvocation("ForConfigOverride", []interface{}{arg1})
 	fake.forConfigOverrideMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ForConfigOverrideStub != nil {
+		return fake.ForConfigOverrideStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.forConfigOverrideReturns
 	return fakeReturns.result1
 }
 
@@ -272,16 +269,15 @@ func (fake *RestartManager) ForNodeOU(arg1 v1.Object) error {
 	fake.forNodeOUArgsForCall = append(fake.forNodeOUArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.ForNodeOUStub
-	fakeReturns := fake.forNodeOUReturns
 	fake.recordInvocation("ForNodeOU", []interface{}{arg1})
 	fake.forNodeOUMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ForNodeOUStub != nil {
+		return fake.ForNodeOUStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.forNodeOUReturns
 	return fakeReturns.result1
 }
 
@@ -333,16 +329,15 @@ func (fake *RestartManager) ForRestartAction(arg1 v1.Object) error {
 	fake.forRestartActionArgsForCall = append(fake.forRestartActionArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.ForRestartActionStub
-	fakeReturns := fake.forRestartActionReturns
 	fake.recordInvocation("ForRestartAction", []interface{}{arg1})
 	fake.forRestartActionMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ForRestartActionStub != nil {
+		return fake.ForRestartActionStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.forRestartActionReturns
 	return fakeReturns.result1
 }
 
@@ -394,16 +389,15 @@ func (fake *RestartManager) TriggerIfNeeded(arg1 restart.Instance) error {
 	fake.triggerIfNeededArgsForCall = append(fake.triggerIfNeededArgsForCall, struct {
 		arg1 restart.Instance
 	}{arg1})
-	stub := fake.TriggerIfNeededStub
-	fakeReturns := fake.triggerIfNeededReturns
 	fake.recordInvocation("TriggerIfNeeded", []interface{}{arg1})
 	fake.triggerIfNeededMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.TriggerIfNeededStub != nil {
+		return fake.TriggerIfNeededStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.triggerIfNeededReturns
 	return fakeReturns.result1
 }
 

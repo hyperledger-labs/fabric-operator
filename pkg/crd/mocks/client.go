@@ -32,16 +32,15 @@ func (fake *Client) CreateCRD(arg1 *v1.CustomResourceDefinition) (*v1.CustomReso
 	fake.createCRDArgsForCall = append(fake.createCRDArgsForCall, struct {
 		arg1 *v1.CustomResourceDefinition
 	}{arg1})
-	stub := fake.CreateCRDStub
-	fakeReturns := fake.createCRDReturns
 	fake.recordInvocation("CreateCRD", []interface{}{arg1})
 	fake.createCRDMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.CreateCRDStub != nil {
+		return fake.CreateCRDStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.createCRDReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

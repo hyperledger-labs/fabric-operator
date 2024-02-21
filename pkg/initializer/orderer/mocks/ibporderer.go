@@ -51,16 +51,15 @@ func (fake *IBPOrderer) GenerateCrypto() (*config.CryptoResponse, error) {
 	ret, specificReturn := fake.generateCryptoReturnsOnCall[len(fake.generateCryptoArgsForCall)]
 	fake.generateCryptoArgsForCall = append(fake.generateCryptoArgsForCall, struct {
 	}{})
-	stub := fake.GenerateCryptoStub
-	fakeReturns := fake.generateCryptoReturns
 	fake.recordInvocation("GenerateCrypto", []interface{}{})
 	fake.generateCryptoMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GenerateCryptoStub != nil {
+		return fake.GenerateCryptoStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.generateCryptoReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -107,16 +106,15 @@ func (fake *IBPOrderer) GetConfig() initializer.OrdererConfig {
 	ret, specificReturn := fake.getConfigReturnsOnCall[len(fake.getConfigArgsForCall)]
 	fake.getConfigArgsForCall = append(fake.getConfigArgsForCall, struct {
 	}{})
-	stub := fake.GetConfigStub
-	fakeReturns := fake.getConfigReturns
 	fake.recordInvocation("GetConfig", []interface{}{})
 	fake.getConfigMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetConfigStub != nil {
+		return fake.GetConfigStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getConfigReturns
 	return fakeReturns.result1
 }
 
@@ -161,16 +159,15 @@ func (fake *IBPOrderer) OverrideConfig(arg1 initializer.OrdererConfig) error {
 	fake.overrideConfigArgsForCall = append(fake.overrideConfigArgsForCall, struct {
 		arg1 initializer.OrdererConfig
 	}{arg1})
-	stub := fake.OverrideConfigStub
-	fakeReturns := fake.overrideConfigReturns
 	fake.recordInvocation("OverrideConfig", []interface{}{arg1})
 	fake.overrideConfigMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.OverrideConfigStub != nil {
+		return fake.OverrideConfigStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.overrideConfigReturns
 	return fakeReturns.result1
 }
 

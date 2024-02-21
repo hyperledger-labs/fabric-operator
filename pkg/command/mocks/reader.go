@@ -49,16 +49,15 @@ func (fake *Reader) Get(arg1 context.Context, arg2 types.NamespacedName, arg3 cl
 		arg2 types.NamespacedName
 		arg3 client.Object
 	}{arg1, arg2, arg3})
-	stub := fake.GetStub
-	fakeReturns := fake.getReturns
 	fake.recordInvocation("Get", []interface{}{arg1, arg2, arg3})
 	fake.getMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.GetStub != nil {
+		return fake.GetStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getReturns
 	return fakeReturns.result1
 }
 
@@ -112,16 +111,15 @@ func (fake *Reader) List(arg1 context.Context, arg2 client.ObjectList, arg3 ...c
 		arg2 client.ObjectList
 		arg3 []client.ListOption
 	}{arg1, arg2, arg3})
-	stub := fake.ListStub
-	fakeReturns := fake.listReturns
 	fake.recordInvocation("List", []interface{}{arg1, arg2, arg3})
 	fake.listMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3...)
+	if fake.ListStub != nil {
+		return fake.ListStub(arg1, arg2, arg3...)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.listReturns
 	return fakeReturns.result1
 }
 

@@ -86,16 +86,15 @@ func (fake *CAClient) Enroll(arg1 *api.EnrollmentRequest) (*lib.EnrollmentRespon
 	fake.enrollArgsForCall = append(fake.enrollArgsForCall, struct {
 		arg1 *api.EnrollmentRequest
 	}{arg1})
-	stub := fake.EnrollStub
-	fakeReturns := fake.enrollReturns
 	fake.recordInvocation("Enroll", []interface{}{arg1})
 	fake.enrollMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.EnrollStub != nil {
+		return fake.EnrollStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.enrollReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -149,16 +148,15 @@ func (fake *CAClient) GetEnrollmentRequest() *v1beta1.Enrollment {
 	ret, specificReturn := fake.getEnrollmentRequestReturnsOnCall[len(fake.getEnrollmentRequestArgsForCall)]
 	fake.getEnrollmentRequestArgsForCall = append(fake.getEnrollmentRequestArgsForCall, struct {
 	}{})
-	stub := fake.GetEnrollmentRequestStub
-	fakeReturns := fake.getEnrollmentRequestReturns
 	fake.recordInvocation("GetEnrollmentRequest", []interface{}{})
 	fake.getEnrollmentRequestMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetEnrollmentRequestStub != nil {
+		return fake.GetEnrollmentRequestStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getEnrollmentRequestReturns
 	return fakeReturns.result1
 }
 
@@ -202,16 +200,15 @@ func (fake *CAClient) GetHomeDir() string {
 	ret, specificReturn := fake.getHomeDirReturnsOnCall[len(fake.getHomeDirArgsForCall)]
 	fake.getHomeDirArgsForCall = append(fake.getHomeDirArgsForCall, struct {
 	}{})
-	stub := fake.GetHomeDirStub
-	fakeReturns := fake.getHomeDirReturns
 	fake.recordInvocation("GetHomeDir", []interface{}{})
 	fake.getHomeDirMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetHomeDirStub != nil {
+		return fake.GetHomeDirStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getHomeDirReturns
 	return fakeReturns.result1
 }
 
@@ -255,16 +252,15 @@ func (fake *CAClient) GetTLSCert() []byte {
 	ret, specificReturn := fake.getTLSCertReturnsOnCall[len(fake.getTLSCertArgsForCall)]
 	fake.getTLSCertArgsForCall = append(fake.getTLSCertArgsForCall, struct {
 	}{})
-	stub := fake.GetTLSCertStub
-	fakeReturns := fake.getTLSCertReturns
 	fake.recordInvocation("GetTLSCert", []interface{}{})
 	fake.getTLSCertMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetTLSCertStub != nil {
+		return fake.GetTLSCertStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getTLSCertReturns
 	return fakeReturns.result1
 }
 
@@ -308,16 +304,15 @@ func (fake *CAClient) Init() error {
 	ret, specificReturn := fake.initReturnsOnCall[len(fake.initArgsForCall)]
 	fake.initArgsForCall = append(fake.initArgsForCall, struct {
 	}{})
-	stub := fake.InitStub
-	fakeReturns := fake.initReturns
 	fake.recordInvocation("Init", []interface{}{})
 	fake.initMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.InitStub != nil {
+		return fake.InitStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.initReturns
 	return fakeReturns.result1
 }
 
@@ -362,16 +357,15 @@ func (fake *CAClient) PingCA(arg1 time.Duration) error {
 	fake.pingCAArgsForCall = append(fake.pingCAArgsForCall, struct {
 		arg1 time.Duration
 	}{arg1})
-	stub := fake.PingCAStub
-	fakeReturns := fake.pingCAReturns
 	fake.recordInvocation("PingCA", []interface{}{arg1})
 	fake.pingCAMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.PingCAStub != nil {
+		return fake.PingCAStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.pingCAReturns
 	return fakeReturns.result1
 }
 

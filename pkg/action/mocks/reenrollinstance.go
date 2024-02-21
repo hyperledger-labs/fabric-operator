@@ -289,16 +289,15 @@ func (fake *ReenrollInstance) DeepCopyObject() runtime.Object {
 	ret, specificReturn := fake.deepCopyObjectReturnsOnCall[len(fake.deepCopyObjectArgsForCall)]
 	fake.deepCopyObjectArgsForCall = append(fake.deepCopyObjectArgsForCall, struct {
 	}{})
-	stub := fake.DeepCopyObjectStub
-	fakeReturns := fake.deepCopyObjectReturns
 	fake.recordInvocation("DeepCopyObject", []interface{}{})
 	fake.deepCopyObjectMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.DeepCopyObjectStub != nil {
+		return fake.DeepCopyObjectStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.deepCopyObjectReturns
 	return fakeReturns.result1
 }
 
@@ -342,16 +341,15 @@ func (fake *ReenrollInstance) GetAnnotations() map[string]string {
 	ret, specificReturn := fake.getAnnotationsReturnsOnCall[len(fake.getAnnotationsArgsForCall)]
 	fake.getAnnotationsArgsForCall = append(fake.getAnnotationsArgsForCall, struct {
 	}{})
-	stub := fake.GetAnnotationsStub
-	fakeReturns := fake.getAnnotationsReturns
 	fake.recordInvocation("GetAnnotations", []interface{}{})
 	fake.getAnnotationsMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetAnnotationsStub != nil {
+		return fake.GetAnnotationsStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getAnnotationsReturns
 	return fakeReturns.result1
 }
 
@@ -395,16 +393,15 @@ func (fake *ReenrollInstance) GetClusterName() string {
 	ret, specificReturn := fake.getClusterNameReturnsOnCall[len(fake.getClusterNameArgsForCall)]
 	fake.getClusterNameArgsForCall = append(fake.getClusterNameArgsForCall, struct {
 	}{})
-	stub := fake.GetClusterNameStub
-	fakeReturns := fake.getClusterNameReturns
 	fake.recordInvocation("GetClusterName", []interface{}{})
 	fake.getClusterNameMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetClusterNameStub != nil {
+		return fake.GetClusterNameStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getClusterNameReturns
 	return fakeReturns.result1
 }
 
@@ -448,16 +445,15 @@ func (fake *ReenrollInstance) GetCreationTimestamp() v1.Time {
 	ret, specificReturn := fake.getCreationTimestampReturnsOnCall[len(fake.getCreationTimestampArgsForCall)]
 	fake.getCreationTimestampArgsForCall = append(fake.getCreationTimestampArgsForCall, struct {
 	}{})
-	stub := fake.GetCreationTimestampStub
-	fakeReturns := fake.getCreationTimestampReturns
 	fake.recordInvocation("GetCreationTimestamp", []interface{}{})
 	fake.getCreationTimestampMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetCreationTimestampStub != nil {
+		return fake.GetCreationTimestampStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getCreationTimestampReturns
 	return fakeReturns.result1
 }
 
@@ -501,16 +497,15 @@ func (fake *ReenrollInstance) GetDeletionGracePeriodSeconds() *int64 {
 	ret, specificReturn := fake.getDeletionGracePeriodSecondsReturnsOnCall[len(fake.getDeletionGracePeriodSecondsArgsForCall)]
 	fake.getDeletionGracePeriodSecondsArgsForCall = append(fake.getDeletionGracePeriodSecondsArgsForCall, struct {
 	}{})
-	stub := fake.GetDeletionGracePeriodSecondsStub
-	fakeReturns := fake.getDeletionGracePeriodSecondsReturns
 	fake.recordInvocation("GetDeletionGracePeriodSeconds", []interface{}{})
 	fake.getDeletionGracePeriodSecondsMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetDeletionGracePeriodSecondsStub != nil {
+		return fake.GetDeletionGracePeriodSecondsStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getDeletionGracePeriodSecondsReturns
 	return fakeReturns.result1
 }
 
@@ -554,16 +549,15 @@ func (fake *ReenrollInstance) GetDeletionTimestamp() *v1.Time {
 	ret, specificReturn := fake.getDeletionTimestampReturnsOnCall[len(fake.getDeletionTimestampArgsForCall)]
 	fake.getDeletionTimestampArgsForCall = append(fake.getDeletionTimestampArgsForCall, struct {
 	}{})
-	stub := fake.GetDeletionTimestampStub
-	fakeReturns := fake.getDeletionTimestampReturns
 	fake.recordInvocation("GetDeletionTimestamp", []interface{}{})
 	fake.getDeletionTimestampMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetDeletionTimestampStub != nil {
+		return fake.GetDeletionTimestampStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getDeletionTimestampReturns
 	return fakeReturns.result1
 }
 
@@ -607,16 +601,15 @@ func (fake *ReenrollInstance) GetFinalizers() []string {
 	ret, specificReturn := fake.getFinalizersReturnsOnCall[len(fake.getFinalizersArgsForCall)]
 	fake.getFinalizersArgsForCall = append(fake.getFinalizersArgsForCall, struct {
 	}{})
-	stub := fake.GetFinalizersStub
-	fakeReturns := fake.getFinalizersReturns
 	fake.recordInvocation("GetFinalizers", []interface{}{})
 	fake.getFinalizersMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetFinalizersStub != nil {
+		return fake.GetFinalizersStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getFinalizersReturns
 	return fakeReturns.result1
 }
 
@@ -660,16 +653,15 @@ func (fake *ReenrollInstance) GetGenerateName() string {
 	ret, specificReturn := fake.getGenerateNameReturnsOnCall[len(fake.getGenerateNameArgsForCall)]
 	fake.getGenerateNameArgsForCall = append(fake.getGenerateNameArgsForCall, struct {
 	}{})
-	stub := fake.GetGenerateNameStub
-	fakeReturns := fake.getGenerateNameReturns
 	fake.recordInvocation("GetGenerateName", []interface{}{})
 	fake.getGenerateNameMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetGenerateNameStub != nil {
+		return fake.GetGenerateNameStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getGenerateNameReturns
 	return fakeReturns.result1
 }
 
@@ -713,16 +705,15 @@ func (fake *ReenrollInstance) GetGeneration() int64 {
 	ret, specificReturn := fake.getGenerationReturnsOnCall[len(fake.getGenerationArgsForCall)]
 	fake.getGenerationArgsForCall = append(fake.getGenerationArgsForCall, struct {
 	}{})
-	stub := fake.GetGenerationStub
-	fakeReturns := fake.getGenerationReturns
 	fake.recordInvocation("GetGeneration", []interface{}{})
 	fake.getGenerationMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetGenerationStub != nil {
+		return fake.GetGenerationStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getGenerationReturns
 	return fakeReturns.result1
 }
 
@@ -766,16 +757,15 @@ func (fake *ReenrollInstance) GetLabels() map[string]string {
 	ret, specificReturn := fake.getLabelsReturnsOnCall[len(fake.getLabelsArgsForCall)]
 	fake.getLabelsArgsForCall = append(fake.getLabelsArgsForCall, struct {
 	}{})
-	stub := fake.GetLabelsStub
-	fakeReturns := fake.getLabelsReturns
 	fake.recordInvocation("GetLabels", []interface{}{})
 	fake.getLabelsMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetLabelsStub != nil {
+		return fake.GetLabelsStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getLabelsReturns
 	return fakeReturns.result1
 }
 
@@ -819,16 +809,15 @@ func (fake *ReenrollInstance) GetManagedFields() []v1.ManagedFieldsEntry {
 	ret, specificReturn := fake.getManagedFieldsReturnsOnCall[len(fake.getManagedFieldsArgsForCall)]
 	fake.getManagedFieldsArgsForCall = append(fake.getManagedFieldsArgsForCall, struct {
 	}{})
-	stub := fake.GetManagedFieldsStub
-	fakeReturns := fake.getManagedFieldsReturns
 	fake.recordInvocation("GetManagedFields", []interface{}{})
 	fake.getManagedFieldsMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetManagedFieldsStub != nil {
+		return fake.GetManagedFieldsStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getManagedFieldsReturns
 	return fakeReturns.result1
 }
 
@@ -872,16 +861,15 @@ func (fake *ReenrollInstance) GetName() string {
 	ret, specificReturn := fake.getNameReturnsOnCall[len(fake.getNameArgsForCall)]
 	fake.getNameArgsForCall = append(fake.getNameArgsForCall, struct {
 	}{})
-	stub := fake.GetNameStub
-	fakeReturns := fake.getNameReturns
 	fake.recordInvocation("GetName", []interface{}{})
 	fake.getNameMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetNameStub != nil {
+		return fake.GetNameStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getNameReturns
 	return fakeReturns.result1
 }
 
@@ -925,16 +913,15 @@ func (fake *ReenrollInstance) GetNamespace() string {
 	ret, specificReturn := fake.getNamespaceReturnsOnCall[len(fake.getNamespaceArgsForCall)]
 	fake.getNamespaceArgsForCall = append(fake.getNamespaceArgsForCall, struct {
 	}{})
-	stub := fake.GetNamespaceStub
-	fakeReturns := fake.getNamespaceReturns
 	fake.recordInvocation("GetNamespace", []interface{}{})
 	fake.getNamespaceMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetNamespaceStub != nil {
+		return fake.GetNamespaceStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getNamespaceReturns
 	return fakeReturns.result1
 }
 
@@ -978,16 +965,15 @@ func (fake *ReenrollInstance) GetObjectKind() schema.ObjectKind {
 	ret, specificReturn := fake.getObjectKindReturnsOnCall[len(fake.getObjectKindArgsForCall)]
 	fake.getObjectKindArgsForCall = append(fake.getObjectKindArgsForCall, struct {
 	}{})
-	stub := fake.GetObjectKindStub
-	fakeReturns := fake.getObjectKindReturns
 	fake.recordInvocation("GetObjectKind", []interface{}{})
 	fake.getObjectKindMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetObjectKindStub != nil {
+		return fake.GetObjectKindStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getObjectKindReturns
 	return fakeReturns.result1
 }
 
@@ -1031,16 +1017,15 @@ func (fake *ReenrollInstance) GetOwnerReferences() []v1.OwnerReference {
 	ret, specificReturn := fake.getOwnerReferencesReturnsOnCall[len(fake.getOwnerReferencesArgsForCall)]
 	fake.getOwnerReferencesArgsForCall = append(fake.getOwnerReferencesArgsForCall, struct {
 	}{})
-	stub := fake.GetOwnerReferencesStub
-	fakeReturns := fake.getOwnerReferencesReturns
 	fake.recordInvocation("GetOwnerReferences", []interface{}{})
 	fake.getOwnerReferencesMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetOwnerReferencesStub != nil {
+		return fake.GetOwnerReferencesStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getOwnerReferencesReturns
 	return fakeReturns.result1
 }
 
@@ -1084,16 +1069,15 @@ func (fake *ReenrollInstance) GetResourceVersion() string {
 	ret, specificReturn := fake.getResourceVersionReturnsOnCall[len(fake.getResourceVersionArgsForCall)]
 	fake.getResourceVersionArgsForCall = append(fake.getResourceVersionArgsForCall, struct {
 	}{})
-	stub := fake.GetResourceVersionStub
-	fakeReturns := fake.getResourceVersionReturns
 	fake.recordInvocation("GetResourceVersion", []interface{}{})
 	fake.getResourceVersionMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetResourceVersionStub != nil {
+		return fake.GetResourceVersionStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getResourceVersionReturns
 	return fakeReturns.result1
 }
 
@@ -1137,16 +1121,15 @@ func (fake *ReenrollInstance) GetSelfLink() string {
 	ret, specificReturn := fake.getSelfLinkReturnsOnCall[len(fake.getSelfLinkArgsForCall)]
 	fake.getSelfLinkArgsForCall = append(fake.getSelfLinkArgsForCall, struct {
 	}{})
-	stub := fake.GetSelfLinkStub
-	fakeReturns := fake.getSelfLinkReturns
 	fake.recordInvocation("GetSelfLink", []interface{}{})
 	fake.getSelfLinkMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetSelfLinkStub != nil {
+		return fake.GetSelfLinkStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getSelfLinkReturns
 	return fakeReturns.result1
 }
 
@@ -1190,16 +1173,15 @@ func (fake *ReenrollInstance) GetUID() types.UID {
 	ret, specificReturn := fake.getUIDReturnsOnCall[len(fake.getUIDArgsForCall)]
 	fake.getUIDArgsForCall = append(fake.getUIDArgsForCall, struct {
 	}{})
-	stub := fake.GetUIDStub
-	fakeReturns := fake.getUIDReturns
 	fake.recordInvocation("GetUID", []interface{}{})
 	fake.getUIDMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetUIDStub != nil {
+		return fake.GetUIDStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getUIDReturns
 	return fakeReturns.result1
 }
 
@@ -1242,10 +1224,9 @@ func (fake *ReenrollInstance) ResetEcertReenroll() {
 	fake.resetEcertReenrollMutex.Lock()
 	fake.resetEcertReenrollArgsForCall = append(fake.resetEcertReenrollArgsForCall, struct {
 	}{})
-	stub := fake.ResetEcertReenrollStub
 	fake.recordInvocation("ResetEcertReenroll", []interface{}{})
 	fake.resetEcertReenrollMutex.Unlock()
-	if stub != nil {
+	if fake.ResetEcertReenrollStub != nil {
 		fake.ResetEcertReenrollStub()
 	}
 }
@@ -1266,10 +1247,9 @@ func (fake *ReenrollInstance) ResetTLSReenroll() {
 	fake.resetTLSReenrollMutex.Lock()
 	fake.resetTLSReenrollArgsForCall = append(fake.resetTLSReenrollArgsForCall, struct {
 	}{})
-	stub := fake.ResetTLSReenrollStub
 	fake.recordInvocation("ResetTLSReenroll", []interface{}{})
 	fake.resetTLSReenrollMutex.Unlock()
-	if stub != nil {
+	if fake.ResetTLSReenrollStub != nil {
 		fake.ResetTLSReenrollStub()
 	}
 }
@@ -1291,10 +1271,9 @@ func (fake *ReenrollInstance) SetAnnotations(arg1 map[string]string) {
 	fake.setAnnotationsArgsForCall = append(fake.setAnnotationsArgsForCall, struct {
 		arg1 map[string]string
 	}{arg1})
-	stub := fake.SetAnnotationsStub
 	fake.recordInvocation("SetAnnotations", []interface{}{arg1})
 	fake.setAnnotationsMutex.Unlock()
-	if stub != nil {
+	if fake.SetAnnotationsStub != nil {
 		fake.SetAnnotationsStub(arg1)
 	}
 }
@@ -1323,10 +1302,9 @@ func (fake *ReenrollInstance) SetClusterName(arg1 string) {
 	fake.setClusterNameArgsForCall = append(fake.setClusterNameArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetClusterNameStub
 	fake.recordInvocation("SetClusterName", []interface{}{arg1})
 	fake.setClusterNameMutex.Unlock()
-	if stub != nil {
+	if fake.SetClusterNameStub != nil {
 		fake.SetClusterNameStub(arg1)
 	}
 }
@@ -1355,10 +1333,9 @@ func (fake *ReenrollInstance) SetCreationTimestamp(arg1 v1.Time) {
 	fake.setCreationTimestampArgsForCall = append(fake.setCreationTimestampArgsForCall, struct {
 		arg1 v1.Time
 	}{arg1})
-	stub := fake.SetCreationTimestampStub
 	fake.recordInvocation("SetCreationTimestamp", []interface{}{arg1})
 	fake.setCreationTimestampMutex.Unlock()
-	if stub != nil {
+	if fake.SetCreationTimestampStub != nil {
 		fake.SetCreationTimestampStub(arg1)
 	}
 }
@@ -1387,10 +1364,9 @@ func (fake *ReenrollInstance) SetDeletionGracePeriodSeconds(arg1 *int64) {
 	fake.setDeletionGracePeriodSecondsArgsForCall = append(fake.setDeletionGracePeriodSecondsArgsForCall, struct {
 		arg1 *int64
 	}{arg1})
-	stub := fake.SetDeletionGracePeriodSecondsStub
 	fake.recordInvocation("SetDeletionGracePeriodSeconds", []interface{}{arg1})
 	fake.setDeletionGracePeriodSecondsMutex.Unlock()
-	if stub != nil {
+	if fake.SetDeletionGracePeriodSecondsStub != nil {
 		fake.SetDeletionGracePeriodSecondsStub(arg1)
 	}
 }
@@ -1419,10 +1395,9 @@ func (fake *ReenrollInstance) SetDeletionTimestamp(arg1 *v1.Time) {
 	fake.setDeletionTimestampArgsForCall = append(fake.setDeletionTimestampArgsForCall, struct {
 		arg1 *v1.Time
 	}{arg1})
-	stub := fake.SetDeletionTimestampStub
 	fake.recordInvocation("SetDeletionTimestamp", []interface{}{arg1})
 	fake.setDeletionTimestampMutex.Unlock()
-	if stub != nil {
+	if fake.SetDeletionTimestampStub != nil {
 		fake.SetDeletionTimestampStub(arg1)
 	}
 }
@@ -1456,10 +1431,9 @@ func (fake *ReenrollInstance) SetFinalizers(arg1 []string) {
 	fake.setFinalizersArgsForCall = append(fake.setFinalizersArgsForCall, struct {
 		arg1 []string
 	}{arg1Copy})
-	stub := fake.SetFinalizersStub
 	fake.recordInvocation("SetFinalizers", []interface{}{arg1Copy})
 	fake.setFinalizersMutex.Unlock()
-	if stub != nil {
+	if fake.SetFinalizersStub != nil {
 		fake.SetFinalizersStub(arg1)
 	}
 }
@@ -1488,10 +1462,9 @@ func (fake *ReenrollInstance) SetGenerateName(arg1 string) {
 	fake.setGenerateNameArgsForCall = append(fake.setGenerateNameArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetGenerateNameStub
 	fake.recordInvocation("SetGenerateName", []interface{}{arg1})
 	fake.setGenerateNameMutex.Unlock()
-	if stub != nil {
+	if fake.SetGenerateNameStub != nil {
 		fake.SetGenerateNameStub(arg1)
 	}
 }
@@ -1520,10 +1493,9 @@ func (fake *ReenrollInstance) SetGeneration(arg1 int64) {
 	fake.setGenerationArgsForCall = append(fake.setGenerationArgsForCall, struct {
 		arg1 int64
 	}{arg1})
-	stub := fake.SetGenerationStub
 	fake.recordInvocation("SetGeneration", []interface{}{arg1})
 	fake.setGenerationMutex.Unlock()
-	if stub != nil {
+	if fake.SetGenerationStub != nil {
 		fake.SetGenerationStub(arg1)
 	}
 }
@@ -1552,10 +1524,9 @@ func (fake *ReenrollInstance) SetLabels(arg1 map[string]string) {
 	fake.setLabelsArgsForCall = append(fake.setLabelsArgsForCall, struct {
 		arg1 map[string]string
 	}{arg1})
-	stub := fake.SetLabelsStub
 	fake.recordInvocation("SetLabels", []interface{}{arg1})
 	fake.setLabelsMutex.Unlock()
-	if stub != nil {
+	if fake.SetLabelsStub != nil {
 		fake.SetLabelsStub(arg1)
 	}
 }
@@ -1589,10 +1560,9 @@ func (fake *ReenrollInstance) SetManagedFields(arg1 []v1.ManagedFieldsEntry) {
 	fake.setManagedFieldsArgsForCall = append(fake.setManagedFieldsArgsForCall, struct {
 		arg1 []v1.ManagedFieldsEntry
 	}{arg1Copy})
-	stub := fake.SetManagedFieldsStub
 	fake.recordInvocation("SetManagedFields", []interface{}{arg1Copy})
 	fake.setManagedFieldsMutex.Unlock()
-	if stub != nil {
+	if fake.SetManagedFieldsStub != nil {
 		fake.SetManagedFieldsStub(arg1)
 	}
 }
@@ -1621,10 +1591,9 @@ func (fake *ReenrollInstance) SetName(arg1 string) {
 	fake.setNameArgsForCall = append(fake.setNameArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetNameStub
 	fake.recordInvocation("SetName", []interface{}{arg1})
 	fake.setNameMutex.Unlock()
-	if stub != nil {
+	if fake.SetNameStub != nil {
 		fake.SetNameStub(arg1)
 	}
 }
@@ -1653,10 +1622,9 @@ func (fake *ReenrollInstance) SetNamespace(arg1 string) {
 	fake.setNamespaceArgsForCall = append(fake.setNamespaceArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetNamespaceStub
 	fake.recordInvocation("SetNamespace", []interface{}{arg1})
 	fake.setNamespaceMutex.Unlock()
-	if stub != nil {
+	if fake.SetNamespaceStub != nil {
 		fake.SetNamespaceStub(arg1)
 	}
 }
@@ -1690,10 +1658,9 @@ func (fake *ReenrollInstance) SetOwnerReferences(arg1 []v1.OwnerReference) {
 	fake.setOwnerReferencesArgsForCall = append(fake.setOwnerReferencesArgsForCall, struct {
 		arg1 []v1.OwnerReference
 	}{arg1Copy})
-	stub := fake.SetOwnerReferencesStub
 	fake.recordInvocation("SetOwnerReferences", []interface{}{arg1Copy})
 	fake.setOwnerReferencesMutex.Unlock()
-	if stub != nil {
+	if fake.SetOwnerReferencesStub != nil {
 		fake.SetOwnerReferencesStub(arg1)
 	}
 }
@@ -1722,10 +1689,9 @@ func (fake *ReenrollInstance) SetResourceVersion(arg1 string) {
 	fake.setResourceVersionArgsForCall = append(fake.setResourceVersionArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetResourceVersionStub
 	fake.recordInvocation("SetResourceVersion", []interface{}{arg1})
 	fake.setResourceVersionMutex.Unlock()
-	if stub != nil {
+	if fake.SetResourceVersionStub != nil {
 		fake.SetResourceVersionStub(arg1)
 	}
 }
@@ -1754,10 +1720,9 @@ func (fake *ReenrollInstance) SetSelfLink(arg1 string) {
 	fake.setSelfLinkArgsForCall = append(fake.setSelfLinkArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetSelfLinkStub
 	fake.recordInvocation("SetSelfLink", []interface{}{arg1})
 	fake.setSelfLinkMutex.Unlock()
-	if stub != nil {
+	if fake.SetSelfLinkStub != nil {
 		fake.SetSelfLinkStub(arg1)
 	}
 }
@@ -1786,10 +1751,9 @@ func (fake *ReenrollInstance) SetUID(arg1 types.UID) {
 	fake.setUIDArgsForCall = append(fake.setUIDArgsForCall, struct {
 		arg1 types.UID
 	}{arg1})
-	stub := fake.SetUIDStub
 	fake.recordInvocation("SetUID", []interface{}{arg1})
 	fake.setUIDMutex.Unlock()
-	if stub != nil {
+	if fake.SetUIDStub != nil {
 		fake.SetUIDStub(arg1)
 	}
 }

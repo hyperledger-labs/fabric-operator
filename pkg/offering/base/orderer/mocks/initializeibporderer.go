@@ -241,16 +241,15 @@ func (fake *InitializeIBPOrderer) CheckIfAdminCertsUpdated(arg1 *v1beta1.IBPOrde
 	fake.checkIfAdminCertsUpdatedArgsForCall = append(fake.checkIfAdminCertsUpdatedArgsForCall, struct {
 		arg1 *v1beta1.IBPOrderer
 	}{arg1})
-	stub := fake.CheckIfAdminCertsUpdatedStub
-	fakeReturns := fake.checkIfAdminCertsUpdatedReturns
 	fake.recordInvocation("CheckIfAdminCertsUpdated", []interface{}{arg1})
 	fake.checkIfAdminCertsUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.CheckIfAdminCertsUpdatedStub != nil {
+		return fake.CheckIfAdminCertsUpdatedStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.checkIfAdminCertsUpdatedReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -307,16 +306,15 @@ func (fake *InitializeIBPOrderer) Create(arg1 initializer.OrdererConfig, arg2 in
 		arg2 initializer.IBPOrderer
 		arg3 string
 	}{arg1, arg2, arg3})
-	stub := fake.CreateStub
-	fakeReturns := fake.createReturns
 	fake.recordInvocation("Create", []interface{}{arg1, arg2, arg3})
 	fake.createMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.CreateStub != nil {
+		return fake.CreateStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.createReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -372,16 +370,15 @@ func (fake *InitializeIBPOrderer) CreateOrUpdateConfigMap(arg1 *v1beta1.IBPOrder
 		arg1 *v1beta1.IBPOrderer
 		arg2 initializer.OrdererConfig
 	}{arg1, arg2})
-	stub := fake.CreateOrUpdateConfigMapStub
-	fakeReturns := fake.createOrUpdateConfigMapReturns
 	fake.recordInvocation("CreateOrUpdateConfigMap", []interface{}{arg1, arg2})
 	fake.createOrUpdateConfigMapMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.CreateOrUpdateConfigMapStub != nil {
+		return fake.CreateOrUpdateConfigMapStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.createOrUpdateConfigMapReturns
 	return fakeReturns.result1
 }
 
@@ -433,16 +430,15 @@ func (fake *InitializeIBPOrderer) Delete(arg1 *v1beta1.IBPOrderer) error {
 	fake.deleteArgsForCall = append(fake.deleteArgsForCall, struct {
 		arg1 *v1beta1.IBPOrderer
 	}{arg1})
-	stub := fake.DeleteStub
-	fakeReturns := fake.deleteReturns
 	fake.recordInvocation("Delete", []interface{}{arg1})
 	fake.deleteMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.DeleteStub != nil {
+		return fake.DeleteStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.deleteReturns
 	return fakeReturns.result1
 }
 
@@ -496,16 +492,15 @@ func (fake *InitializeIBPOrderer) GenerateSecrets(arg1 common.SecretType, arg2 *
 		arg2 *v1beta1.IBPOrderer
 		arg3 *config.Response
 	}{arg1, arg2, arg3})
-	stub := fake.GenerateSecretsStub
-	fakeReturns := fake.generateSecretsReturns
 	fake.recordInvocation("GenerateSecrets", []interface{}{arg1, arg2, arg3})
 	fake.generateSecretsMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.GenerateSecretsStub != nil {
+		return fake.GenerateSecretsStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.generateSecretsReturns
 	return fakeReturns.result1
 }
 
@@ -558,16 +553,15 @@ func (fake *InitializeIBPOrderer) GenerateSecretsFromResponse(arg1 *v1beta1.IBPO
 		arg1 *v1beta1.IBPOrderer
 		arg2 *config.CryptoResponse
 	}{arg1, arg2})
-	stub := fake.GenerateSecretsFromResponseStub
-	fakeReturns := fake.generateSecretsFromResponseReturns
 	fake.recordInvocation("GenerateSecretsFromResponse", []interface{}{arg1, arg2})
 	fake.generateSecretsFromResponseMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GenerateSecretsFromResponseStub != nil {
+		return fake.GenerateSecretsFromResponseStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.generateSecretsFromResponseReturns
 	return fakeReturns.result1
 }
 
@@ -619,16 +613,15 @@ func (fake *InitializeIBPOrderer) GetConfigFromConfigMap(arg1 *v1beta1.IBPOrdere
 	fake.getConfigFromConfigMapArgsForCall = append(fake.getConfigFromConfigMapArgsForCall, struct {
 		arg1 *v1beta1.IBPOrderer
 	}{arg1})
-	stub := fake.GetConfigFromConfigMapStub
-	fakeReturns := fake.getConfigFromConfigMapReturns
 	fake.recordInvocation("GetConfigFromConfigMap", []interface{}{arg1})
 	fake.getConfigFromConfigMapMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetConfigFromConfigMapStub != nil {
+		return fake.GetConfigFromConfigMapStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getConfigFromConfigMapReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -689,16 +682,15 @@ func (fake *InitializeIBPOrderer) GetCoreConfigFromBytes(arg1 *v1beta1.IBPOrdere
 		arg1 *v1beta1.IBPOrderer
 		arg2 []byte
 	}{arg1, arg2Copy})
-	stub := fake.GetCoreConfigFromBytesStub
-	fakeReturns := fake.getCoreConfigFromBytesReturns
 	fake.recordInvocation("GetCoreConfigFromBytes", []interface{}{arg1, arg2Copy})
 	fake.getCoreConfigFromBytesMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GetCoreConfigFromBytesStub != nil {
+		return fake.GetCoreConfigFromBytesStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getCoreConfigFromBytesReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -754,16 +746,15 @@ func (fake *InitializeIBPOrderer) GetCoreConfigFromFile(arg1 *v1beta1.IBPOrderer
 		arg1 *v1beta1.IBPOrderer
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.GetCoreConfigFromFileStub
-	fakeReturns := fake.getCoreConfigFromFileReturns
 	fake.recordInvocation("GetCoreConfigFromFile", []interface{}{arg1, arg2})
 	fake.getCoreConfigFromFileMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GetCoreConfigFromFileStub != nil {
+		return fake.GetCoreConfigFromFileStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getCoreConfigFromFileReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -818,16 +809,15 @@ func (fake *InitializeIBPOrderer) GetCrypto(arg1 *v1beta1.IBPOrderer) (*config.C
 	fake.getCryptoArgsForCall = append(fake.getCryptoArgsForCall, struct {
 		arg1 *v1beta1.IBPOrderer
 	}{arg1})
-	stub := fake.GetCryptoStub
-	fakeReturns := fake.getCryptoReturns
 	fake.recordInvocation("GetCrypto", []interface{}{arg1})
 	fake.getCryptoMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetCryptoStub != nil {
+		return fake.GetCryptoStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getCryptoReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -883,16 +873,15 @@ func (fake *InitializeIBPOrderer) GetInitOrderer(arg1 *v1beta1.IBPOrderer, arg2 
 		arg1 *v1beta1.IBPOrderer
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.GetInitOrdererStub
-	fakeReturns := fake.getInitOrdererReturns
 	fake.recordInvocation("GetInitOrderer", []interface{}{arg1, arg2})
 	fake.getInitOrdererMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GetInitOrdererStub != nil {
+		return fake.GetInitOrdererStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getInitOrdererReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -947,16 +936,15 @@ func (fake *InitializeIBPOrderer) GetUpdatedOrderer(arg1 *v1beta1.IBPOrderer) (*
 	fake.getUpdatedOrdererArgsForCall = append(fake.getUpdatedOrdererArgsForCall, struct {
 		arg1 *v1beta1.IBPOrderer
 	}{arg1})
-	stub := fake.GetUpdatedOrdererStub
-	fakeReturns := fake.getUpdatedOrdererReturns
 	fake.recordInvocation("GetUpdatedOrderer", []interface{}{arg1})
 	fake.getUpdatedOrdererMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetUpdatedOrdererStub != nil {
+		return fake.GetUpdatedOrdererStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getUpdatedOrdererReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -1011,16 +999,15 @@ func (fake *InitializeIBPOrderer) MissingCrypto(arg1 *v1beta1.IBPOrderer) bool {
 	fake.missingCryptoArgsForCall = append(fake.missingCryptoArgsForCall, struct {
 		arg1 *v1beta1.IBPOrderer
 	}{arg1})
-	stub := fake.MissingCryptoStub
-	fakeReturns := fake.missingCryptoReturns
 	fake.recordInvocation("MissingCrypto", []interface{}{arg1})
 	fake.missingCryptoMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.MissingCryptoStub != nil {
+		return fake.MissingCryptoStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.missingCryptoReturns
 	return fakeReturns.result1
 }
 
@@ -1073,16 +1060,15 @@ func (fake *InitializeIBPOrderer) Update(arg1 initializer.OrdererConfig, arg2 in
 		arg1 initializer.OrdererConfig
 		arg2 initializer.IBPOrderer
 	}{arg1, arg2})
-	stub := fake.UpdateStub
-	fakeReturns := fake.updateReturns
 	fake.recordInvocation("Update", []interface{}{arg1, arg2})
 	fake.updateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.UpdateStub != nil {
+		return fake.UpdateStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.updateReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -1137,16 +1123,15 @@ func (fake *InitializeIBPOrderer) UpdateAdminSecret(arg1 *v1beta1.IBPOrderer) er
 	fake.updateAdminSecretArgsForCall = append(fake.updateAdminSecretArgsForCall, struct {
 		arg1 *v1beta1.IBPOrderer
 	}{arg1})
-	stub := fake.UpdateAdminSecretStub
-	fakeReturns := fake.updateAdminSecretReturns
 	fake.recordInvocation("UpdateAdminSecret", []interface{}{arg1})
 	fake.updateAdminSecretMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.UpdateAdminSecretStub != nil {
+		return fake.UpdateAdminSecretStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.updateAdminSecretReturns
 	return fakeReturns.result1
 }
 
@@ -1200,16 +1185,15 @@ func (fake *InitializeIBPOrderer) UpdateSecrets(arg1 common.SecretType, arg2 *v1
 		arg2 *v1beta1.IBPOrderer
 		arg3 *config.Response
 	}{arg1, arg2, arg3})
-	stub := fake.UpdateSecretsStub
-	fakeReturns := fake.updateSecretsReturns
 	fake.recordInvocation("UpdateSecrets", []interface{}{arg1, arg2, arg3})
 	fake.updateSecretsMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.UpdateSecretsStub != nil {
+		return fake.UpdateSecretsStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.updateSecretsReturns
 	return fakeReturns.result1
 }
 
@@ -1262,16 +1246,15 @@ func (fake *InitializeIBPOrderer) UpdateSecretsFromResponse(arg1 *v1beta1.IBPOrd
 		arg1 *v1beta1.IBPOrderer
 		arg2 *config.CryptoResponse
 	}{arg1, arg2})
-	stub := fake.UpdateSecretsFromResponseStub
-	fakeReturns := fake.updateSecretsFromResponseReturns
 	fake.recordInvocation("UpdateSecretsFromResponse", []interface{}{arg1, arg2})
 	fake.updateSecretsFromResponseMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.UpdateSecretsFromResponseStub != nil {
+		return fake.UpdateSecretsFromResponseStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.updateSecretsFromResponseReturns
 	return fakeReturns.result1
 }
 

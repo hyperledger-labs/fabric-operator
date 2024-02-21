@@ -66,16 +66,15 @@ func (fake *HSMCAClient) GetConfig() *lib.ClientConfig {
 	ret, specificReturn := fake.getConfigReturnsOnCall[len(fake.getConfigArgsForCall)]
 	fake.getConfigArgsForCall = append(fake.getConfigArgsForCall, struct {
 	}{})
-	stub := fake.GetConfigStub
-	fakeReturns := fake.getConfigReturns
 	fake.recordInvocation("GetConfig", []interface{}{})
 	fake.getConfigMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetConfigStub != nil {
+		return fake.GetConfigStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getConfigReturns
 	return fakeReturns.result1
 }
 
@@ -119,16 +118,15 @@ func (fake *HSMCAClient) GetEnrollmentRequest() *v1beta1.Enrollment {
 	ret, specificReturn := fake.getEnrollmentRequestReturnsOnCall[len(fake.getEnrollmentRequestArgsForCall)]
 	fake.getEnrollmentRequestArgsForCall = append(fake.getEnrollmentRequestArgsForCall, struct {
 	}{})
-	stub := fake.GetEnrollmentRequestStub
-	fakeReturns := fake.getEnrollmentRequestReturns
 	fake.recordInvocation("GetEnrollmentRequest", []interface{}{})
 	fake.getEnrollmentRequestMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetEnrollmentRequestStub != nil {
+		return fake.GetEnrollmentRequestStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getEnrollmentRequestReturns
 	return fakeReturns.result1
 }
 
@@ -172,16 +170,15 @@ func (fake *HSMCAClient) GetHomeDir() string {
 	ret, specificReturn := fake.getHomeDirReturnsOnCall[len(fake.getHomeDirArgsForCall)]
 	fake.getHomeDirArgsForCall = append(fake.getHomeDirArgsForCall, struct {
 	}{})
-	stub := fake.GetHomeDirStub
-	fakeReturns := fake.getHomeDirReturns
 	fake.recordInvocation("GetHomeDir", []interface{}{})
 	fake.getHomeDirMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetHomeDirStub != nil {
+		return fake.GetHomeDirStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getHomeDirReturns
 	return fakeReturns.result1
 }
 
@@ -226,16 +223,15 @@ func (fake *HSMCAClient) PingCA(arg1 time.Duration) error {
 	fake.pingCAArgsForCall = append(fake.pingCAArgsForCall, struct {
 		arg1 time.Duration
 	}{arg1})
-	stub := fake.PingCAStub
-	fakeReturns := fake.pingCAReturns
 	fake.recordInvocation("PingCA", []interface{}{arg1})
 	fake.pingCAMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.PingCAStub != nil {
+		return fake.PingCAStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.pingCAReturns
 	return fakeReturns.result1
 }
 
@@ -286,10 +282,9 @@ func (fake *HSMCAClient) SetHSMLibrary(arg1 string) {
 	fake.setHSMLibraryArgsForCall = append(fake.setHSMLibraryArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetHSMLibraryStub
 	fake.recordInvocation("SetHSMLibrary", []interface{}{arg1})
 	fake.setHSMLibraryMutex.Unlock()
-	if stub != nil {
+	if fake.SetHSMLibraryStub != nil {
 		fake.SetHSMLibraryStub(arg1)
 	}
 }

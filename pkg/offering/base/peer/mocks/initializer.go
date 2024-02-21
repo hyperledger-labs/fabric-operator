@@ -186,16 +186,15 @@ func (fake *InitializeIBPPeer) CheckIfAdminCertsUpdated(arg1 *v1beta1.IBPPeer) (
 	fake.checkIfAdminCertsUpdatedArgsForCall = append(fake.checkIfAdminCertsUpdatedArgsForCall, struct {
 		arg1 *v1beta1.IBPPeer
 	}{arg1})
-	stub := fake.CheckIfAdminCertsUpdatedStub
-	fakeReturns := fake.checkIfAdminCertsUpdatedReturns
 	fake.recordInvocation("CheckIfAdminCertsUpdated", []interface{}{arg1})
 	fake.checkIfAdminCertsUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.CheckIfAdminCertsUpdatedStub != nil {
+		return fake.CheckIfAdminCertsUpdatedStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.checkIfAdminCertsUpdatedReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -249,16 +248,15 @@ func (fake *InitializeIBPPeer) CoreConfigMap() *initializer.CoreConfigMap {
 	ret, specificReturn := fake.coreConfigMapReturnsOnCall[len(fake.coreConfigMapArgsForCall)]
 	fake.coreConfigMapArgsForCall = append(fake.coreConfigMapArgsForCall, struct {
 	}{})
-	stub := fake.CoreConfigMapStub
-	fakeReturns := fake.coreConfigMapReturns
 	fake.recordInvocation("CoreConfigMap", []interface{}{})
 	fake.coreConfigMapMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.CoreConfigMapStub != nil {
+		return fake.CoreConfigMapStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.coreConfigMapReturns
 	return fakeReturns.result1
 }
 
@@ -305,16 +303,15 @@ func (fake *InitializeIBPPeer) Create(arg1 initializer.CoreConfig, arg2 initiali
 		arg2 initializer.IBPPeer
 		arg3 string
 	}{arg1, arg2, arg3})
-	stub := fake.CreateStub
-	fakeReturns := fake.createReturns
 	fake.recordInvocation("Create", []interface{}{arg1, arg2, arg3})
 	fake.createMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.CreateStub != nil {
+		return fake.CreateStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.createReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -370,16 +367,15 @@ func (fake *InitializeIBPPeer) GenerateOrdererCACertsSecret(arg1 *v1beta1.IBPPee
 		arg1 *v1beta1.IBPPeer
 		arg2 map[string][]byte
 	}{arg1, arg2})
-	stub := fake.GenerateOrdererCACertsSecretStub
-	fakeReturns := fake.generateOrdererCACertsSecretReturns
 	fake.recordInvocation("GenerateOrdererCACertsSecret", []interface{}{arg1, arg2})
 	fake.generateOrdererCACertsSecretMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GenerateOrdererCACertsSecretStub != nil {
+		return fake.GenerateOrdererCACertsSecretStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.generateOrdererCACertsSecretReturns
 	return fakeReturns.result1
 }
 
@@ -433,16 +429,15 @@ func (fake *InitializeIBPPeer) GenerateSecrets(arg1 common.SecretType, arg2 v1.O
 		arg2 v1.Object
 		arg3 *config.Response
 	}{arg1, arg2, arg3})
-	stub := fake.GenerateSecretsStub
-	fakeReturns := fake.generateSecretsReturns
 	fake.recordInvocation("GenerateSecrets", []interface{}{arg1, arg2, arg3})
 	fake.generateSecretsMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.GenerateSecretsStub != nil {
+		return fake.GenerateSecretsStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.generateSecretsReturns
 	return fakeReturns.result1
 }
 
@@ -495,16 +490,15 @@ func (fake *InitializeIBPPeer) GenerateSecretsFromResponse(arg1 *v1beta1.IBPPeer
 		arg1 *v1beta1.IBPPeer
 		arg2 *config.CryptoResponse
 	}{arg1, arg2})
-	stub := fake.GenerateSecretsFromResponseStub
-	fakeReturns := fake.generateSecretsFromResponseReturns
 	fake.recordInvocation("GenerateSecretsFromResponse", []interface{}{arg1, arg2})
 	fake.generateSecretsFromResponseMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GenerateSecretsFromResponseStub != nil {
+		return fake.GenerateSecretsFromResponseStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.generateSecretsFromResponseReturns
 	return fakeReturns.result1
 }
 
@@ -556,16 +550,15 @@ func (fake *InitializeIBPPeer) GetCrypto(arg1 *v1beta1.IBPPeer) (*config.CryptoR
 	fake.getCryptoArgsForCall = append(fake.getCryptoArgsForCall, struct {
 		arg1 *v1beta1.IBPPeer
 	}{arg1})
-	stub := fake.GetCryptoStub
-	fakeReturns := fake.getCryptoReturns
 	fake.recordInvocation("GetCrypto", []interface{}{arg1})
 	fake.getCryptoMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetCryptoStub != nil {
+		return fake.GetCryptoStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getCryptoReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -621,16 +614,15 @@ func (fake *InitializeIBPPeer) GetInitPeer(arg1 *v1beta1.IBPPeer, arg2 string) (
 		arg1 *v1beta1.IBPPeer
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.GetInitPeerStub
-	fakeReturns := fake.getInitPeerReturns
 	fake.recordInvocation("GetInitPeer", []interface{}{arg1, arg2})
 	fake.getInitPeerMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GetInitPeerStub != nil {
+		return fake.GetInitPeerStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getInitPeerReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -685,16 +677,15 @@ func (fake *InitializeIBPPeer) GetUpdatedPeer(arg1 *v1beta1.IBPPeer) (*initializ
 	fake.getUpdatedPeerArgsForCall = append(fake.getUpdatedPeerArgsForCall, struct {
 		arg1 *v1beta1.IBPPeer
 	}{arg1})
-	stub := fake.GetUpdatedPeerStub
-	fakeReturns := fake.getUpdatedPeerReturns
 	fake.recordInvocation("GetUpdatedPeer", []interface{}{arg1})
 	fake.getUpdatedPeerMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetUpdatedPeerStub != nil {
+		return fake.GetUpdatedPeerStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getUpdatedPeerReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -749,16 +740,15 @@ func (fake *InitializeIBPPeer) MissingCrypto(arg1 *v1beta1.IBPPeer) bool {
 	fake.missingCryptoArgsForCall = append(fake.missingCryptoArgsForCall, struct {
 		arg1 *v1beta1.IBPPeer
 	}{arg1})
-	stub := fake.MissingCryptoStub
-	fakeReturns := fake.missingCryptoReturns
 	fake.recordInvocation("MissingCrypto", []interface{}{arg1})
 	fake.missingCryptoMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.MissingCryptoStub != nil {
+		return fake.MissingCryptoStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.missingCryptoReturns
 	return fakeReturns.result1
 }
 
@@ -811,16 +801,15 @@ func (fake *InitializeIBPPeer) Update(arg1 initializer.CoreConfig, arg2 initiali
 		arg1 initializer.CoreConfig
 		arg2 initializer.IBPPeer
 	}{arg1, arg2})
-	stub := fake.UpdateStub
-	fakeReturns := fake.updateReturns
 	fake.recordInvocation("Update", []interface{}{arg1, arg2})
 	fake.updateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.UpdateStub != nil {
+		return fake.UpdateStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.updateReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -875,16 +864,15 @@ func (fake *InitializeIBPPeer) UpdateAdminSecret(arg1 *v1beta1.IBPPeer) error {
 	fake.updateAdminSecretArgsForCall = append(fake.updateAdminSecretArgsForCall, struct {
 		arg1 *v1beta1.IBPPeer
 	}{arg1})
-	stub := fake.UpdateAdminSecretStub
-	fakeReturns := fake.updateAdminSecretReturns
 	fake.recordInvocation("UpdateAdminSecret", []interface{}{arg1})
 	fake.updateAdminSecretMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.UpdateAdminSecretStub != nil {
+		return fake.UpdateAdminSecretStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.updateAdminSecretReturns
 	return fakeReturns.result1
 }
 
@@ -937,16 +925,15 @@ func (fake *InitializeIBPPeer) UpdateSecretsFromResponse(arg1 *v1beta1.IBPPeer, 
 		arg1 *v1beta1.IBPPeer
 		arg2 *config.CryptoResponse
 	}{arg1, arg2})
-	stub := fake.UpdateSecretsFromResponseStub
-	fakeReturns := fake.updateSecretsFromResponseReturns
 	fake.recordInvocation("UpdateSecretsFromResponse", []interface{}{arg1, arg2})
 	fake.updateSecretsFromResponseMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.UpdateSecretsFromResponseStub != nil {
+		return fake.UpdateSecretsFromResponseStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.updateSecretsFromResponseReturns
 	return fakeReturns.result1
 }
 

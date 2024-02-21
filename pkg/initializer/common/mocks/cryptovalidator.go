@@ -61,16 +61,15 @@ func (fake *CryptoValidator) CheckClientAuthCrypto(arg1 v1.Object, arg2 string) 
 		arg1 v1.Object
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.CheckClientAuthCryptoStub
-	fakeReturns := fake.checkClientAuthCryptoReturns
 	fake.recordInvocation("CheckClientAuthCrypto", []interface{}{arg1, arg2})
 	fake.checkClientAuthCryptoMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.CheckClientAuthCryptoStub != nil {
+		return fake.CheckClientAuthCryptoStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.checkClientAuthCryptoReturns
 	return fakeReturns.result1
 }
 
@@ -123,16 +122,15 @@ func (fake *CryptoValidator) CheckEcertCrypto(arg1 v1.Object, arg2 string) error
 		arg1 v1.Object
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.CheckEcertCryptoStub
-	fakeReturns := fake.checkEcertCryptoReturns
 	fake.recordInvocation("CheckEcertCrypto", []interface{}{arg1, arg2})
 	fake.checkEcertCryptoMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.CheckEcertCryptoStub != nil {
+		return fake.CheckEcertCryptoStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.checkEcertCryptoReturns
 	return fakeReturns.result1
 }
 
@@ -185,16 +183,15 @@ func (fake *CryptoValidator) CheckTLSCrypto(arg1 v1.Object, arg2 string) error {
 		arg1 v1.Object
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.CheckTLSCryptoStub
-	fakeReturns := fake.checkTLSCryptoReturns
 	fake.recordInvocation("CheckTLSCrypto", []interface{}{arg1, arg2})
 	fake.checkTLSCryptoMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.CheckTLSCryptoStub != nil {
+		return fake.CheckTLSCryptoStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.checkTLSCryptoReturns
 	return fakeReturns.result1
 }
 
@@ -245,10 +242,9 @@ func (fake *CryptoValidator) SetHSMEnabled(arg1 bool) {
 	fake.setHSMEnabledArgsForCall = append(fake.setHSMEnabledArgsForCall, struct {
 		arg1 bool
 	}{arg1})
-	stub := fake.SetHSMEnabledStub
 	fake.recordInvocation("SetHSMEnabled", []interface{}{arg1})
 	fake.setHSMEnabledMutex.Unlock()
-	if stub != nil {
+	if fake.SetHSMEnabledStub != nil {
 		fake.SetHSMEnabledStub(arg1)
 	}
 }

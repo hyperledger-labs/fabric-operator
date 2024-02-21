@@ -105,16 +105,15 @@ func (fake *InitializeIBPCA) CreateOrUpdateConfigMap(arg1 *v1beta1.IBPCA, arg2 m
 		arg2 map[string][]byte
 		arg3 string
 	}{arg1, arg2, arg3})
-	stub := fake.CreateOrUpdateConfigMapStub
-	fakeReturns := fake.createOrUpdateConfigMapReturns
 	fake.recordInvocation("CreateOrUpdateConfigMap", []interface{}{arg1, arg2, arg3})
 	fake.createOrUpdateConfigMapMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.CreateOrUpdateConfigMapStub != nil {
+		return fake.CreateOrUpdateConfigMapStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.createOrUpdateConfigMapReturns
 	return fakeReturns.result1
 }
 
@@ -169,16 +168,15 @@ func (fake *InitializeIBPCA) HandleConfigResources(arg1 string, arg2 *v1beta1.IB
 		arg3 *initializer.Response
 		arg4 baseca.Update
 	}{arg1, arg2, arg3, arg4})
-	stub := fake.HandleConfigResourcesStub
-	fakeReturns := fake.handleConfigResourcesReturns
 	fake.recordInvocation("HandleConfigResources", []interface{}{arg1, arg2, arg3, arg4})
 	fake.handleConfigResourcesMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3, arg4)
+	if fake.HandleConfigResourcesStub != nil {
+		return fake.HandleConfigResourcesStub(arg1, arg2, arg3, arg4)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.handleConfigResourcesReturns
 	return fakeReturns.result1
 }
 
@@ -231,16 +229,15 @@ func (fake *InitializeIBPCA) HandleEnrollmentCAInit(arg1 *v1beta1.IBPCA, arg2 ba
 		arg1 *v1beta1.IBPCA
 		arg2 baseca.Update
 	}{arg1, arg2})
-	stub := fake.HandleEnrollmentCAInitStub
-	fakeReturns := fake.handleEnrollmentCAInitReturns
 	fake.recordInvocation("HandleEnrollmentCAInit", []interface{}{arg1, arg2})
 	fake.handleEnrollmentCAInitMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.HandleEnrollmentCAInitStub != nil {
+		return fake.HandleEnrollmentCAInitStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.handleEnrollmentCAInitReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -296,16 +293,15 @@ func (fake *InitializeIBPCA) HandleTLSCAInit(arg1 *v1beta1.IBPCA, arg2 baseca.Up
 		arg1 *v1beta1.IBPCA
 		arg2 baseca.Update
 	}{arg1, arg2})
-	stub := fake.HandleTLSCAInitStub
-	fakeReturns := fake.handleTLSCAInitReturns
 	fake.recordInvocation("HandleTLSCAInit", []interface{}{arg1, arg2})
 	fake.handleTLSCAInitMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.HandleTLSCAInitStub != nil {
+		return fake.HandleTLSCAInitStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.handleTLSCAInitReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -361,16 +357,15 @@ func (fake *InitializeIBPCA) ReadConfigMap(arg1 *v1beta1.IBPCA, arg2 string) (*v
 		arg1 *v1beta1.IBPCA
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.ReadConfigMapStub
-	fakeReturns := fake.readConfigMapReturns
 	fake.recordInvocation("ReadConfigMap", []interface{}{arg1, arg2})
 	fake.readConfigMapMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.ReadConfigMapStub != nil {
+		return fake.ReadConfigMapStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.readConfigMapReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -425,16 +420,15 @@ func (fake *InitializeIBPCA) SyncDBConfig(arg1 *v1beta1.IBPCA) (*v1beta1.IBPCA, 
 	fake.syncDBConfigArgsForCall = append(fake.syncDBConfigArgsForCall, struct {
 		arg1 *v1beta1.IBPCA
 	}{arg1})
-	stub := fake.SyncDBConfigStub
-	fakeReturns := fake.syncDBConfigReturns
 	fake.recordInvocation("SyncDBConfig", []interface{}{arg1})
 	fake.syncDBConfigMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.SyncDBConfigStub != nil {
+		return fake.SyncDBConfigStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.syncDBConfigReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

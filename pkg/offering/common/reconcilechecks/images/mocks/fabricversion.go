@@ -27,16 +27,15 @@ func (fake *FabricVersionInstance) GetFabricVersion() string {
 	ret, specificReturn := fake.getFabricVersionReturnsOnCall[len(fake.getFabricVersionArgsForCall)]
 	fake.getFabricVersionArgsForCall = append(fake.getFabricVersionArgsForCall, struct {
 	}{})
-	stub := fake.GetFabricVersionStub
-	fakeReturns := fake.getFabricVersionReturns
 	fake.recordInvocation("GetFabricVersion", []interface{}{})
 	fake.getFabricVersionMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetFabricVersionStub != nil {
+		return fake.GetFabricVersionStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getFabricVersionReturns
 	return fakeReturns.result1
 }
 

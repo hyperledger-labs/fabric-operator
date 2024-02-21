@@ -64,16 +64,15 @@ func (fake *RestartManager) ForConfigOverride(arg1 v1.Object) error {
 	fake.forConfigOverrideArgsForCall = append(fake.forConfigOverrideArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.ForConfigOverrideStub
-	fakeReturns := fake.forConfigOverrideReturns
 	fake.recordInvocation("ForConfigOverride", []interface{}{arg1})
 	fake.forConfigOverrideMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ForConfigOverrideStub != nil {
+		return fake.ForConfigOverrideStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.forConfigOverrideReturns
 	return fakeReturns.result1
 }
 
@@ -125,16 +124,15 @@ func (fake *RestartManager) ForRestartAction(arg1 v1.Object) error {
 	fake.forRestartActionArgsForCall = append(fake.forRestartActionArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.ForRestartActionStub
-	fakeReturns := fake.forRestartActionReturns
 	fake.recordInvocation("ForRestartAction", []interface{}{arg1})
 	fake.forRestartActionMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ForRestartActionStub != nil {
+		return fake.ForRestartActionStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.forRestartActionReturns
 	return fakeReturns.result1
 }
 
@@ -186,16 +184,15 @@ func (fake *RestartManager) ForTLSReenroll(arg1 v1.Object) error {
 	fake.forTLSReenrollArgsForCall = append(fake.forTLSReenrollArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.ForTLSReenrollStub
-	fakeReturns := fake.forTLSReenrollReturns
 	fake.recordInvocation("ForTLSReenroll", []interface{}{arg1})
 	fake.forTLSReenrollMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ForTLSReenrollStub != nil {
+		return fake.ForTLSReenrollStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.forTLSReenrollReturns
 	return fakeReturns.result1
 }
 
@@ -247,16 +244,15 @@ func (fake *RestartManager) TriggerIfNeeded(arg1 restart.Instance) error {
 	fake.triggerIfNeededArgsForCall = append(fake.triggerIfNeededArgsForCall, struct {
 		arg1 restart.Instance
 	}{arg1})
-	stub := fake.TriggerIfNeededStub
-	fakeReturns := fake.triggerIfNeededReturns
 	fake.recordInvocation("TriggerIfNeeded", []interface{}{arg1})
 	fake.triggerIfNeededMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.TriggerIfNeededStub != nil {
+		return fake.TriggerIfNeededStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.triggerIfNeededReturns
 	return fakeReturns.result1
 }
 

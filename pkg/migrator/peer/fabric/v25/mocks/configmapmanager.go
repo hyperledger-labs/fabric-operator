@@ -47,16 +47,15 @@ func (fake *ConfigMapManager) CreateOrUpdate(arg1 *v1beta1.IBPPeer, arg2 initial
 		arg1 *v1beta1.IBPPeer
 		arg2 initializer.CoreConfig
 	}{arg1, arg2})
-	stub := fake.CreateOrUpdateStub
-	fakeReturns := fake.createOrUpdateReturns
 	fake.recordInvocation("CreateOrUpdate", []interface{}{arg1, arg2})
 	fake.createOrUpdateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.CreateOrUpdateStub != nil {
+		return fake.CreateOrUpdateStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.createOrUpdateReturns
 	return fakeReturns.result1
 }
 
@@ -108,16 +107,15 @@ func (fake *ConfigMapManager) GetCoreConfig(arg1 *v1beta1.IBPPeer) (*v1.ConfigMa
 	fake.getCoreConfigArgsForCall = append(fake.getCoreConfigArgsForCall, struct {
 		arg1 *v1beta1.IBPPeer
 	}{arg1})
-	stub := fake.GetCoreConfigStub
-	fakeReturns := fake.getCoreConfigReturns
 	fake.recordInvocation("GetCoreConfig", []interface{}{arg1})
 	fake.getCoreConfigMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetCoreConfigStub != nil {
+		return fake.GetCoreConfigStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getCoreConfigReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
