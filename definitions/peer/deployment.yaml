@@ -144,6 +144,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: false
+            runAsGroup: 7051
             runAsNonRoot: true
             runAsUser: 7051
           volumeMounts:
@@ -225,6 +226,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: false
+            runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
           volumeMounts:
@@ -269,5 +271,6 @@ spec:
               subPath: data
       securityContext:
         fsGroup: 2000
+        runAsGroup: 1000
         runAsNonRoot: true
         runAsUser: 1000
