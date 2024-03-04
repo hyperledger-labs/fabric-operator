@@ -72,6 +72,8 @@ spec:
               ephemeral-storage: 100M
               memory: 100Mi
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
@@ -164,6 +166,8 @@ spec:
               ephemeral-storage: 100M
               memory: 100Mi
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               add:
                 - NET_BIND_SERVICE
