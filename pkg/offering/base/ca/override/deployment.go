@@ -33,6 +33,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/deployment"
 	dep "github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/deployment"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/serviceaccount"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/common"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -181,6 +182,9 @@ func (o *Override) CommonDeployment(instance *current.IBPCA, deployment *dep.Dep
 
 		deployment.SetReplicas(instance.Spec.Replicas)
 	}
+
+	// set seccompProfile to RuntimeDefault
+	common.GetPodSecurityContext(caCont)
 
 	return nil
 }

@@ -756,6 +756,11 @@ func (o *Override) CommonDeploymentOverrides(instance *current.IBPPeer, deployme
 
 	deployment.UpdateContainer(peerContainer)
 	deployment.UpdateContainer(grpcContainer)
+
+	// set seccompProfile to RuntimeDefault
+	common.GetPodSecurityContext(peerContainer)
+	common.GetPodSecurityContext(grpcContainer)
+
 	return nil
 }
 

@@ -19,6 +19,7 @@
 package common
 
 import (
+	container "github.com/IBM-Blockchain/fabric-operator/pkg/manager/resources/container"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -104,5 +105,14 @@ func GetPodAntiAffinity(orgName string) *corev1.PodAntiAffinity {
 				},
 			},
 		},
+	}
+}
+
+func GetPodSecurityContext(con container.Container) {
+	secContext := con.SecurityContext
+	if secContext.SeccompProfile == nil {
+		secContext.SeccompProfile = &corev1.SeccompProfile{
+			Type: corev1.SeccompProfileTypeRuntimeDefault,
+		}
 	}
 }
