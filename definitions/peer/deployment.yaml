@@ -59,6 +59,8 @@ spec:
               cpu: 500m
               memory: 1000M
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: true
             capabilities:
               add:
