@@ -62,7 +62,7 @@ rules:
       - pods/log
       - persistentvolumeclaims
       - deployments
-      - replicas
+      - replicasets
       - ingresses
     verbs:
       - "get"
