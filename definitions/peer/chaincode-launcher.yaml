@@ -20,6 +20,7 @@ imagePullPolicy: Always
 securityContext:
   privileged: false
   readOnlyRootFileSystem: false
+  runAsGroup: 7051
   runAsNonRoot: true
   runAsUser: 7051
   capabilities:
