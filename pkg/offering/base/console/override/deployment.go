@@ -319,6 +319,11 @@ func (o *Override) CommonDeployment(instance *current.IBPConsole, deployment *de
 	}
 	init.SetCommand([]string{"sh", "-c", initCommand})
 
+	// set seccompProfile to RuntimeDefault
+	common.GetPodSecurityContext(console)
+	common.GetPodSecurityContext(deployer)
+	common.GetPodSecurityContext(configtxlator)
+
 	return nil
 }
 

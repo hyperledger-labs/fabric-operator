@@ -62,6 +62,8 @@ spec:
               ephemeral-storage: 100M
               memory: 1000Mi
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
@@ -110,6 +112,8 @@ spec:
               ephemeral-storage: 100M
               memory: 200Mi
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
@@ -160,6 +164,8 @@ spec:
               ephemeral-storage: 100M
               memory: 50Mi
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
