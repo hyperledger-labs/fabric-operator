@@ -59,6 +59,8 @@ spec:
               cpu: 500m
               memory: 1000M
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: true
             capabilities:
               add:
@@ -136,6 +138,8 @@ spec:
               cpu: 200m
               memory: 400M
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
@@ -218,6 +222,8 @@ spec:
               cpu: 100m
               memory: 200M
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
