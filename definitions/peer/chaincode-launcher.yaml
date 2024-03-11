@@ -22,6 +22,7 @@ securityContext:
     type: RuntimeDefault
   privileged: false
   readOnlyRootFileSystem: false
+  runAsGroup: 7051
   runAsNonRoot: true
   runAsUser: 7051
   capabilities:

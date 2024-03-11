@@ -84,6 +84,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: false
+            runAsGroup: 7051
             runAsNonRoot: true
             runAsUser: 7051
           volumeMounts:
@@ -132,6 +133,7 @@ spec:
             runAsUser: 0
       securityContext:
         fsGroup: 7051
+        runAsGroup: 7051
         runAsNonRoot: true
         runAsUser: 7051
       serviceAccountName: sample
