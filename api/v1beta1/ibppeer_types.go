@@ -136,11 +136,6 @@ type IBPPeerSpec struct {
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	Zone string `json:"zone,omitempty"`
 
-	/* advanced configs */
-	// DindArgs (Optional) is used to override args passed to dind container
-	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	DindArgs []string `json:"dindArgs,omitempty"`
-
 	// Action (Optional) is object for peer actions
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	Action PeerAction `json:"action,omitempty"`
@@ -225,10 +220,6 @@ type PeerResources struct {
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	FluentD *corev1.ResourceRequirements `json:"fluentd,omitempty"`
 
-	// DinD (Optional) is the resources provided to the dind container
-	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	DinD *corev1.ResourceRequirements `json:"dind,omitempty"`
-
 	// CouchDB (Optional) is the resources provided to the couchdb container
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	CouchDB *corev1.ResourceRequirements `json:"couchdb,omitempty"`
@@ -277,14 +268,6 @@ type PeerImages struct {
 	// PeerTag is the tag of the peer image
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	PeerTag string `json:"peerTag,omitempty"`
-
-	// DindImage is the name of the dind image
-	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	DindImage string `json:"dindImage,omitempty"`
-
-	// DindTag is the tag of the dind image
-	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	DindTag string `json:"dindTag,omitempty"`
 
 	// GRPCWebImage is the name of the grpc web proxy image
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
