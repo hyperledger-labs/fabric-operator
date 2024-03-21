@@ -62,16 +62,15 @@ func (fake *Instance) GetArch() []string {
 	ret, specificReturn := fake.getArchReturnsOnCall[len(fake.getArchArgsForCall)]
 	fake.getArchArgsForCall = append(fake.getArchArgsForCall, struct {
 	}{})
-	stub := fake.GetArchStub
-	fakeReturns := fake.getArchReturns
 	fake.recordInvocation("GetArch", []interface{}{})
 	fake.getArchMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetArchStub != nil {
+		return fake.GetArchStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getArchReturns
 	return fakeReturns.result1
 }
 
@@ -115,16 +114,15 @@ func (fake *Instance) GetFabricVersion() string {
 	ret, specificReturn := fake.getFabricVersionReturnsOnCall[len(fake.getFabricVersionArgsForCall)]
 	fake.getFabricVersionArgsForCall = append(fake.getFabricVersionArgsForCall, struct {
 	}{})
-	stub := fake.GetFabricVersionStub
-	fakeReturns := fake.getFabricVersionReturns
 	fake.recordInvocation("GetFabricVersion", []interface{}{})
 	fake.getFabricVersionMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetFabricVersionStub != nil {
+		return fake.GetFabricVersionStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getFabricVersionReturns
 	return fakeReturns.result1
 }
 
@@ -168,16 +166,15 @@ func (fake *Instance) GetRegistryURL() string {
 	ret, specificReturn := fake.getRegistryURLReturnsOnCall[len(fake.getRegistryURLArgsForCall)]
 	fake.getRegistryURLArgsForCall = append(fake.getRegistryURLArgsForCall, struct {
 	}{})
-	stub := fake.GetRegistryURLStub
-	fakeReturns := fake.getRegistryURLReturns
 	fake.recordInvocation("GetRegistryURL", []interface{}{})
 	fake.getRegistryURLMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetRegistryURLStub != nil {
+		return fake.GetRegistryURLStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getRegistryURLReturns
 	return fakeReturns.result1
 }
 
@@ -221,16 +218,15 @@ func (fake *Instance) ImagesSet() bool {
 	ret, specificReturn := fake.imagesSetReturnsOnCall[len(fake.imagesSetArgsForCall)]
 	fake.imagesSetArgsForCall = append(fake.imagesSetArgsForCall, struct {
 	}{})
-	stub := fake.ImagesSetStub
-	fakeReturns := fake.imagesSetReturns
 	fake.recordInvocation("ImagesSet", []interface{}{})
 	fake.imagesSetMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ImagesSetStub != nil {
+		return fake.ImagesSetStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.imagesSetReturns
 	return fakeReturns.result1
 }
 
@@ -274,10 +270,9 @@ func (fake *Instance) SetFabricVersion(arg1 string) {
 	fake.setFabricVersionArgsForCall = append(fake.setFabricVersionArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	stub := fake.SetFabricVersionStub
 	fake.recordInvocation("SetFabricVersion", []interface{}{arg1})
 	fake.setFabricVersionMutex.Unlock()
-	if stub != nil {
+	if fake.SetFabricVersionStub != nil {
 		fake.SetFabricVersionStub(arg1)
 	}
 }

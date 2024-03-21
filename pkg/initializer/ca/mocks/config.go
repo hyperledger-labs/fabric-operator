@@ -124,16 +124,15 @@ func (fake *CAConfig) GetHomeDir() string {
 	ret, specificReturn := fake.getHomeDirReturnsOnCall[len(fake.getHomeDirArgsForCall)]
 	fake.getHomeDirArgsForCall = append(fake.getHomeDirArgsForCall, struct {
 	}{})
-	stub := fake.GetHomeDirStub
-	fakeReturns := fake.getHomeDirReturns
 	fake.recordInvocation("GetHomeDir", []interface{}{})
 	fake.getHomeDirMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetHomeDirStub != nil {
+		return fake.GetHomeDirStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getHomeDirReturns
 	return fakeReturns.result1
 }
 
@@ -177,16 +176,15 @@ func (fake *CAConfig) GetServerConfig() *v1.ServerConfig {
 	ret, specificReturn := fake.getServerConfigReturnsOnCall[len(fake.getServerConfigArgsForCall)]
 	fake.getServerConfigArgsForCall = append(fake.getServerConfigArgsForCall, struct {
 	}{})
-	stub := fake.GetServerConfigStub
-	fakeReturns := fake.getServerConfigReturns
 	fake.recordInvocation("GetServerConfig", []interface{}{})
 	fake.getServerConfigMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetServerConfigStub != nil {
+		return fake.GetServerConfigStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getServerConfigReturns
 	return fakeReturns.result1
 }
 
@@ -230,16 +228,15 @@ func (fake *CAConfig) ParseCABlock() (map[string][]byte, error) {
 	ret, specificReturn := fake.parseCABlockReturnsOnCall[len(fake.parseCABlockArgsForCall)]
 	fake.parseCABlockArgsForCall = append(fake.parseCABlockArgsForCall, struct {
 	}{})
-	stub := fake.ParseCABlockStub
-	fakeReturns := fake.parseCABlockReturns
 	fake.recordInvocation("ParseCABlock", []interface{}{})
 	fake.parseCABlockMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ParseCABlockStub != nil {
+		return fake.ParseCABlockStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.parseCABlockReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -286,16 +283,15 @@ func (fake *CAConfig) ParseDBBlock() (map[string][]byte, error) {
 	ret, specificReturn := fake.parseDBBlockReturnsOnCall[len(fake.parseDBBlockArgsForCall)]
 	fake.parseDBBlockArgsForCall = append(fake.parseDBBlockArgsForCall, struct {
 	}{})
-	stub := fake.ParseDBBlockStub
-	fakeReturns := fake.parseDBBlockReturns
 	fake.recordInvocation("ParseDBBlock", []interface{}{})
 	fake.parseDBBlockMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ParseDBBlockStub != nil {
+		return fake.ParseDBBlockStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.parseDBBlockReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -342,16 +338,15 @@ func (fake *CAConfig) ParseIntermediateBlock() (map[string][]byte, error) {
 	ret, specificReturn := fake.parseIntermediateBlockReturnsOnCall[len(fake.parseIntermediateBlockArgsForCall)]
 	fake.parseIntermediateBlockArgsForCall = append(fake.parseIntermediateBlockArgsForCall, struct {
 	}{})
-	stub := fake.ParseIntermediateBlockStub
-	fakeReturns := fake.parseIntermediateBlockReturns
 	fake.recordInvocation("ParseIntermediateBlock", []interface{}{})
 	fake.parseIntermediateBlockMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ParseIntermediateBlockStub != nil {
+		return fake.ParseIntermediateBlockStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.parseIntermediateBlockReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -398,16 +393,15 @@ func (fake *CAConfig) ParseOperationsBlock() (map[string][]byte, error) {
 	ret, specificReturn := fake.parseOperationsBlockReturnsOnCall[len(fake.parseOperationsBlockArgsForCall)]
 	fake.parseOperationsBlockArgsForCall = append(fake.parseOperationsBlockArgsForCall, struct {
 	}{})
-	stub := fake.ParseOperationsBlockStub
-	fakeReturns := fake.parseOperationsBlockReturns
 	fake.recordInvocation("ParseOperationsBlock", []interface{}{})
 	fake.parseOperationsBlockMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ParseOperationsBlockStub != nil {
+		return fake.ParseOperationsBlockStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.parseOperationsBlockReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -454,16 +448,15 @@ func (fake *CAConfig) ParseTLSBlock() (map[string][]byte, error) {
 	ret, specificReturn := fake.parseTLSBlockReturnsOnCall[len(fake.parseTLSBlockArgsForCall)]
 	fake.parseTLSBlockArgsForCall = append(fake.parseTLSBlockArgsForCall, struct {
 	}{})
-	stub := fake.ParseTLSBlockStub
-	fakeReturns := fake.parseTLSBlockReturns
 	fake.recordInvocation("ParseTLSBlock", []interface{}{})
 	fake.parseTLSBlockMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ParseTLSBlockStub != nil {
+		return fake.ParseTLSBlockStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.parseTLSBlockReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -510,10 +503,9 @@ func (fake *CAConfig) SetMountPaths(arg1 config.Type) {
 	fake.setMountPathsArgsForCall = append(fake.setMountPathsArgsForCall, struct {
 		arg1 config.Type
 	}{arg1})
-	stub := fake.SetMountPathsStub
 	fake.recordInvocation("SetMountPaths", []interface{}{arg1})
 	fake.setMountPathsMutex.Unlock()
-	if stub != nil {
+	if fake.SetMountPathsStub != nil {
 		fake.SetMountPathsStub(arg1)
 	}
 }
@@ -542,10 +534,9 @@ func (fake *CAConfig) SetServerConfig(arg1 *v1.ServerConfig) {
 	fake.setServerConfigArgsForCall = append(fake.setServerConfigArgsForCall, struct {
 		arg1 *v1.ServerConfig
 	}{arg1})
-	stub := fake.SetServerConfigStub
 	fake.recordInvocation("SetServerConfig", []interface{}{arg1})
 	fake.setServerConfigMutex.Unlock()
-	if stub != nil {
+	if fake.SetServerConfigStub != nil {
 		fake.SetServerConfigStub(arg1)
 	}
 }
@@ -574,10 +565,9 @@ func (fake *CAConfig) SetUpdate(arg1 bool) {
 	fake.setUpdateArgsForCall = append(fake.setUpdateArgsForCall, struct {
 		arg1 bool
 	}{arg1})
-	stub := fake.SetUpdateStub
 	fake.recordInvocation("SetUpdate", []interface{}{arg1})
 	fake.setUpdateMutex.Unlock()
-	if stub != nil {
+	if fake.SetUpdateStub != nil {
 		fake.SetUpdateStub(arg1)
 	}
 }
@@ -606,16 +596,15 @@ func (fake *CAConfig) UsingPKCS11() bool {
 	ret, specificReturn := fake.usingPKCS11ReturnsOnCall[len(fake.usingPKCS11ArgsForCall)]
 	fake.usingPKCS11ArgsForCall = append(fake.usingPKCS11ArgsForCall, struct {
 	}{})
-	stub := fake.UsingPKCS11Stub
-	fakeReturns := fake.usingPKCS11Returns
 	fake.recordInvocation("UsingPKCS11", []interface{}{})
 	fake.usingPKCS11Mutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.UsingPKCS11Stub != nil {
+		return fake.UsingPKCS11Stub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.usingPKCS11Returns
 	return fakeReturns.result1
 }
 

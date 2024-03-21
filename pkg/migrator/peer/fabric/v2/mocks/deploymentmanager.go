@@ -69,16 +69,15 @@ func (fake *DeploymentManager) Delete(arg1 v1.Object) error {
 	fake.deleteArgsForCall = append(fake.deleteArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.DeleteStub
-	fakeReturns := fake.deleteReturns
 	fake.recordInvocation("Delete", []interface{}{arg1})
 	fake.deleteMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.DeleteStub != nil {
+		return fake.DeleteStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.deleteReturns
 	return fakeReturns.result1
 }
 
@@ -130,16 +129,15 @@ func (fake *DeploymentManager) DeploymentStatus(arg1 v1.Object) (v1a.DeploymentS
 	fake.deploymentStatusArgsForCall = append(fake.deploymentStatusArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.DeploymentStatusStub
-	fakeReturns := fake.deploymentStatusReturns
 	fake.recordInvocation("DeploymentStatus", []interface{}{arg1})
 	fake.deploymentStatusMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.DeploymentStatusStub != nil {
+		return fake.DeploymentStatusStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.deploymentStatusReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -194,16 +192,15 @@ func (fake *DeploymentManager) Get(arg1 v1.Object) (client.Object, error) {
 	fake.getArgsForCall = append(fake.getArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.GetStub
-	fakeReturns := fake.getReturns
 	fake.recordInvocation("Get", []interface{}{arg1})
 	fake.getMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.GetStub != nil {
+		return fake.GetStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -257,16 +254,15 @@ func (fake *DeploymentManager) GetScheme() *runtime.Scheme {
 	ret, specificReturn := fake.getSchemeReturnsOnCall[len(fake.getSchemeArgsForCall)]
 	fake.getSchemeArgsForCall = append(fake.getSchemeArgsForCall, struct {
 	}{})
-	stub := fake.GetSchemeStub
-	fakeReturns := fake.getSchemeReturns
 	fake.recordInvocation("GetScheme", []interface{}{})
 	fake.getSchemeMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetSchemeStub != nil {
+		return fake.GetSchemeStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getSchemeReturns
 	return fakeReturns.result1
 }
 

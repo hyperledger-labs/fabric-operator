@@ -53,16 +53,15 @@ func (fake *Identity) GetClient() *lib.Client {
 	ret, specificReturn := fake.getClientReturnsOnCall[len(fake.getClientArgsForCall)]
 	fake.getClientArgsForCall = append(fake.getClientArgsForCall, struct {
 	}{})
-	stub := fake.GetClientStub
-	fakeReturns := fake.getClientReturns
 	fake.recordInvocation("GetClient", []interface{}{})
 	fake.getClientMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetClientStub != nil {
+		return fake.GetClientStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getClientReturns
 	return fakeReturns.result1
 }
 
@@ -106,16 +105,15 @@ func (fake *Identity) GetECert() *x509.Signer {
 	ret, specificReturn := fake.getECertReturnsOnCall[len(fake.getECertArgsForCall)]
 	fake.getECertArgsForCall = append(fake.getECertArgsForCall, struct {
 	}{})
-	stub := fake.GetECertStub
-	fakeReturns := fake.getECertReturns
 	fake.recordInvocation("GetECert", []interface{}{})
 	fake.getECertMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetECertStub != nil {
+		return fake.GetECertStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getECertReturns
 	return fakeReturns.result1
 }
 
@@ -160,16 +158,15 @@ func (fake *Identity) Reenroll(arg1 *api.ReenrollmentRequest) (*lib.EnrollmentRe
 	fake.reenrollArgsForCall = append(fake.reenrollArgsForCall, struct {
 		arg1 *api.ReenrollmentRequest
 	}{arg1})
-	stub := fake.ReenrollStub
-	fakeReturns := fake.reenrollReturns
 	fake.recordInvocation("Reenroll", []interface{}{arg1})
 	fake.reenrollMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ReenrollStub != nil {
+		return fake.ReenrollStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.reenrollReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

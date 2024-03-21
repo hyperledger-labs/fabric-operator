@@ -127,16 +127,15 @@ func (fake *Update) CACryptoCreated() bool {
 	ret, specificReturn := fake.cACryptoCreatedReturnsOnCall[len(fake.cACryptoCreatedArgsForCall)]
 	fake.cACryptoCreatedArgsForCall = append(fake.cACryptoCreatedArgsForCall, struct {
 	}{})
-	stub := fake.CACryptoCreatedStub
-	fakeReturns := fake.cACryptoCreatedReturns
 	fake.recordInvocation("CACryptoCreated", []interface{}{})
 	fake.cACryptoCreatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.CACryptoCreatedStub != nil {
+		return fake.CACryptoCreatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.cACryptoCreatedReturns
 	return fakeReturns.result1
 }
 
@@ -180,16 +179,15 @@ func (fake *Update) CACryptoUpdated() bool {
 	ret, specificReturn := fake.cACryptoUpdatedReturnsOnCall[len(fake.cACryptoUpdatedArgsForCall)]
 	fake.cACryptoUpdatedArgsForCall = append(fake.cACryptoUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.CACryptoUpdatedStub
-	fakeReturns := fake.cACryptoUpdatedReturns
 	fake.recordInvocation("CACryptoUpdated", []interface{}{})
 	fake.cACryptoUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.CACryptoUpdatedStub != nil {
+		return fake.CACryptoUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.cACryptoUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -233,16 +231,15 @@ func (fake *Update) CAOverridesUpdated() bool {
 	ret, specificReturn := fake.cAOverridesUpdatedReturnsOnCall[len(fake.cAOverridesUpdatedArgsForCall)]
 	fake.cAOverridesUpdatedArgsForCall = append(fake.cAOverridesUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.CAOverridesUpdatedStub
-	fakeReturns := fake.cAOverridesUpdatedReturns
 	fake.recordInvocation("CAOverridesUpdated", []interface{}{})
 	fake.cAOverridesUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.CAOverridesUpdatedStub != nil {
+		return fake.CAOverridesUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.cAOverridesUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -286,16 +283,15 @@ func (fake *Update) CATagUpdated() bool {
 	ret, specificReturn := fake.cATagUpdatedReturnsOnCall[len(fake.cATagUpdatedArgsForCall)]
 	fake.cATagUpdatedArgsForCall = append(fake.cATagUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.CATagUpdatedStub
-	fakeReturns := fake.cATagUpdatedReturns
 	fake.recordInvocation("CATagUpdated", []interface{}{})
 	fake.cATagUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.CATagUpdatedStub != nil {
+		return fake.CATagUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.cATagUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -339,16 +335,15 @@ func (fake *Update) ConfigOverridesUpdated() bool {
 	ret, specificReturn := fake.configOverridesUpdatedReturnsOnCall[len(fake.configOverridesUpdatedArgsForCall)]
 	fake.configOverridesUpdatedArgsForCall = append(fake.configOverridesUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.ConfigOverridesUpdatedStub
-	fakeReturns := fake.configOverridesUpdatedReturns
 	fake.recordInvocation("ConfigOverridesUpdated", []interface{}{})
 	fake.configOverridesUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ConfigOverridesUpdatedStub != nil {
+		return fake.ConfigOverridesUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.configOverridesUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -392,16 +387,15 @@ func (fake *Update) FabricVersionUpdated() bool {
 	ret, specificReturn := fake.fabricVersionUpdatedReturnsOnCall[len(fake.fabricVersionUpdatedArgsForCall)]
 	fake.fabricVersionUpdatedArgsForCall = append(fake.fabricVersionUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.FabricVersionUpdatedStub
-	fakeReturns := fake.fabricVersionUpdatedReturns
 	fake.recordInvocation("FabricVersionUpdated", []interface{}{})
 	fake.fabricVersionUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.FabricVersionUpdatedStub != nil {
+		return fake.FabricVersionUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.fabricVersionUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -445,16 +439,15 @@ func (fake *Update) ImagesUpdated() bool {
 	ret, specificReturn := fake.imagesUpdatedReturnsOnCall[len(fake.imagesUpdatedArgsForCall)]
 	fake.imagesUpdatedArgsForCall = append(fake.imagesUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.ImagesUpdatedStub
-	fakeReturns := fake.imagesUpdatedReturns
 	fake.recordInvocation("ImagesUpdated", []interface{}{})
 	fake.imagesUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ImagesUpdatedStub != nil {
+		return fake.ImagesUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.imagesUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -498,16 +491,15 @@ func (fake *Update) RenewTLSCert() bool {
 	ret, specificReturn := fake.renewTLSCertReturnsOnCall[len(fake.renewTLSCertArgsForCall)]
 	fake.renewTLSCertArgsForCall = append(fake.renewTLSCertArgsForCall, struct {
 	}{})
-	stub := fake.RenewTLSCertStub
-	fakeReturns := fake.renewTLSCertReturns
 	fake.recordInvocation("RenewTLSCert", []interface{}{})
 	fake.renewTLSCertMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.RenewTLSCertStub != nil {
+		return fake.RenewTLSCertStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.renewTLSCertReturns
 	return fakeReturns.result1
 }
 
@@ -551,16 +543,15 @@ func (fake *Update) RestartNeeded() bool {
 	ret, specificReturn := fake.restartNeededReturnsOnCall[len(fake.restartNeededArgsForCall)]
 	fake.restartNeededArgsForCall = append(fake.restartNeededArgsForCall, struct {
 	}{})
-	stub := fake.RestartNeededStub
-	fakeReturns := fake.restartNeededReturns
 	fake.recordInvocation("RestartNeeded", []interface{}{})
 	fake.restartNeededMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.RestartNeededStub != nil {
+		return fake.RestartNeededStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.restartNeededReturns
 	return fakeReturns.result1
 }
 
@@ -604,16 +595,15 @@ func (fake *Update) SpecUpdated() bool {
 	ret, specificReturn := fake.specUpdatedReturnsOnCall[len(fake.specUpdatedArgsForCall)]
 	fake.specUpdatedArgsForCall = append(fake.specUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.SpecUpdatedStub
-	fakeReturns := fake.specUpdatedReturns
 	fake.recordInvocation("SpecUpdated", []interface{}{})
 	fake.specUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.SpecUpdatedStub != nil {
+		return fake.SpecUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.specUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -657,16 +647,15 @@ func (fake *Update) TLSCAOverridesUpdated() bool {
 	ret, specificReturn := fake.tLSCAOverridesUpdatedReturnsOnCall[len(fake.tLSCAOverridesUpdatedArgsForCall)]
 	fake.tLSCAOverridesUpdatedArgsForCall = append(fake.tLSCAOverridesUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.TLSCAOverridesUpdatedStub
-	fakeReturns := fake.tLSCAOverridesUpdatedReturns
 	fake.recordInvocation("TLSCAOverridesUpdated", []interface{}{})
 	fake.tLSCAOverridesUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.TLSCAOverridesUpdatedStub != nil {
+		return fake.TLSCAOverridesUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.tLSCAOverridesUpdatedReturns
 	return fakeReturns.result1
 }
 

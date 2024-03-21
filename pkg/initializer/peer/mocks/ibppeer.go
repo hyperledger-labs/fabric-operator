@@ -61,16 +61,15 @@ func (fake *IBPPeer) DeliveryClientCrypto() map[string][]byte {
 	ret, specificReturn := fake.deliveryClientCryptoReturnsOnCall[len(fake.deliveryClientCryptoArgsForCall)]
 	fake.deliveryClientCryptoArgsForCall = append(fake.deliveryClientCryptoArgsForCall, struct {
 	}{})
-	stub := fake.DeliveryClientCryptoStub
-	fakeReturns := fake.deliveryClientCryptoReturns
 	fake.recordInvocation("DeliveryClientCrypto", []interface{}{})
 	fake.deliveryClientCryptoMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.DeliveryClientCryptoStub != nil {
+		return fake.DeliveryClientCryptoStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.deliveryClientCryptoReturns
 	return fakeReturns.result1
 }
 
@@ -114,16 +113,15 @@ func (fake *IBPPeer) GenerateCrypto() (*config.CryptoResponse, error) {
 	ret, specificReturn := fake.generateCryptoReturnsOnCall[len(fake.generateCryptoArgsForCall)]
 	fake.generateCryptoArgsForCall = append(fake.generateCryptoArgsForCall, struct {
 	}{})
-	stub := fake.GenerateCryptoStub
-	fakeReturns := fake.generateCryptoReturns
 	fake.recordInvocation("GenerateCrypto", []interface{}{})
 	fake.generateCryptoMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GenerateCryptoStub != nil {
+		return fake.GenerateCryptoStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.generateCryptoReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -170,16 +168,15 @@ func (fake *IBPPeer) GetConfig() initializer.CoreConfig {
 	ret, specificReturn := fake.getConfigReturnsOnCall[len(fake.getConfigArgsForCall)]
 	fake.getConfigArgsForCall = append(fake.getConfigArgsForCall, struct {
 	}{})
-	stub := fake.GetConfigStub
-	fakeReturns := fake.getConfigReturns
 	fake.recordInvocation("GetConfig", []interface{}{})
 	fake.getConfigMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetConfigStub != nil {
+		return fake.GetConfigStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getConfigReturns
 	return fakeReturns.result1
 }
 
@@ -224,16 +221,15 @@ func (fake *IBPPeer) OverrideConfig(arg1 initializer.CoreConfig) error {
 	fake.overrideConfigArgsForCall = append(fake.overrideConfigArgsForCall, struct {
 		arg1 initializer.CoreConfig
 	}{arg1})
-	stub := fake.OverrideConfigStub
-	fakeReturns := fake.overrideConfigReturns
 	fake.recordInvocation("OverrideConfig", []interface{}{arg1})
 	fake.overrideConfigMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.OverrideConfigStub != nil {
+		return fake.OverrideConfigStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.overrideConfigReturns
 	return fakeReturns.result1
 }
 

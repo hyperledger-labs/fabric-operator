@@ -86,16 +86,15 @@ func (fake *CertificateManager) Expires(arg1 []byte, arg2 int64) (bool, time.Tim
 		arg1 []byte
 		arg2 int64
 	}{arg1Copy, arg2})
-	stub := fake.ExpiresStub
-	fakeReturns := fake.expiresReturns
 	fake.recordInvocation("Expires", []interface{}{arg1Copy, arg2})
 	fake.expiresMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.ExpiresStub != nil {
+		return fake.ExpiresStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2, ret.result3
 	}
+	fakeReturns := fake.expiresReturns
 	return fakeReturns.result1, fakeReturns.result2, fakeReturns.result3
 }
 
@@ -161,16 +160,15 @@ func (fake *CertificateManager) GetDurationToNextRenewalForCert(arg1 string, arg
 		arg3 v1.Object
 		arg4 int64
 	}{arg1, arg2Copy, arg3, arg4})
-	stub := fake.GetDurationToNextRenewalForCertStub
-	fakeReturns := fake.getDurationToNextRenewalForCertReturns
 	fake.recordInvocation("GetDurationToNextRenewalForCert", []interface{}{arg1, arg2Copy, arg3, arg4})
 	fake.getDurationToNextRenewalForCertMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3, arg4)
+	if fake.GetDurationToNextRenewalForCertStub != nil {
+		return fake.GetDurationToNextRenewalForCertStub(arg1, arg2, arg3, arg4)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getDurationToNextRenewalForCertReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -226,16 +224,15 @@ func (fake *CertificateManager) GetSecret(arg1 string, arg2 string) (*v1a.Secret
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.GetSecretStub
-	fakeReturns := fake.getSecretReturns
 	fake.recordInvocation("GetSecret", []interface{}{arg1, arg2})
 	fake.getSecretMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GetSecretStub != nil {
+		return fake.GetSecretStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getSecretReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -292,16 +289,15 @@ func (fake *CertificateManager) UpdateSecret(arg1 v1.Object, arg2 string, arg3 m
 		arg2 string
 		arg3 map[string][]byte
 	}{arg1, arg2, arg3})
-	stub := fake.UpdateSecretStub
-	fakeReturns := fake.updateSecretReturns
 	fake.recordInvocation("UpdateSecret", []interface{}{arg1, arg2, arg3})
 	fake.updateSecretMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.UpdateSecretStub != nil {
+		return fake.UpdateSecretStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.updateSecretReturns
 	return fakeReturns.result1
 }
 

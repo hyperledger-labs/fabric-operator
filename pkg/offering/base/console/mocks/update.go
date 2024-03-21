@@ -67,16 +67,15 @@ func (fake *Update) ConsoleCMUpdated() bool {
 	ret, specificReturn := fake.consoleCMUpdatedReturnsOnCall[len(fake.consoleCMUpdatedArgsForCall)]
 	fake.consoleCMUpdatedArgsForCall = append(fake.consoleCMUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.ConsoleCMUpdatedStub
-	fakeReturns := fake.consoleCMUpdatedReturns
 	fake.recordInvocation("ConsoleCMUpdated", []interface{}{})
 	fake.consoleCMUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ConsoleCMUpdatedStub != nil {
+		return fake.ConsoleCMUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.consoleCMUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -120,16 +119,15 @@ func (fake *Update) DeployerCMUpdated() bool {
 	ret, specificReturn := fake.deployerCMUpdatedReturnsOnCall[len(fake.deployerCMUpdatedArgsForCall)]
 	fake.deployerCMUpdatedArgsForCall = append(fake.deployerCMUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.DeployerCMUpdatedStub
-	fakeReturns := fake.deployerCMUpdatedReturns
 	fake.recordInvocation("DeployerCMUpdated", []interface{}{})
 	fake.deployerCMUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.DeployerCMUpdatedStub != nil {
+		return fake.DeployerCMUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.deployerCMUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -173,16 +171,15 @@ func (fake *Update) EnvCMUpdated() bool {
 	ret, specificReturn := fake.envCMUpdatedReturnsOnCall[len(fake.envCMUpdatedArgsForCall)]
 	fake.envCMUpdatedArgsForCall = append(fake.envCMUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.EnvCMUpdatedStub
-	fakeReturns := fake.envCMUpdatedReturns
 	fake.recordInvocation("EnvCMUpdated", []interface{}{})
 	fake.envCMUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.EnvCMUpdatedStub != nil {
+		return fake.EnvCMUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.envCMUpdatedReturns
 	return fakeReturns.result1
 }
 
@@ -226,16 +223,15 @@ func (fake *Update) RestartNeeded() bool {
 	ret, specificReturn := fake.restartNeededReturnsOnCall[len(fake.restartNeededArgsForCall)]
 	fake.restartNeededArgsForCall = append(fake.restartNeededArgsForCall, struct {
 	}{})
-	stub := fake.RestartNeededStub
-	fakeReturns := fake.restartNeededReturns
 	fake.recordInvocation("RestartNeeded", []interface{}{})
 	fake.restartNeededMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.RestartNeededStub != nil {
+		return fake.RestartNeededStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.restartNeededReturns
 	return fakeReturns.result1
 }
 
@@ -279,16 +275,15 @@ func (fake *Update) SpecUpdated() bool {
 	ret, specificReturn := fake.specUpdatedReturnsOnCall[len(fake.specUpdatedArgsForCall)]
 	fake.specUpdatedArgsForCall = append(fake.specUpdatedArgsForCall, struct {
 	}{})
-	stub := fake.SpecUpdatedStub
-	fakeReturns := fake.specUpdatedReturns
 	fake.recordInvocation("SpecUpdated", []interface{}{})
 	fake.specUpdatedMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.SpecUpdatedStub != nil {
+		return fake.SpecUpdatedStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.specUpdatedReturns
 	return fakeReturns.result1
 }
 

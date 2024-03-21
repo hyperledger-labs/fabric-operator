@@ -66,16 +66,15 @@ func (fake *Migrator) MigrationNeeded(arg1 v1.Object) bool {
 	fake.migrationNeededArgsForCall = append(fake.migrationNeededArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.MigrationNeededStub
-	fakeReturns := fake.migrationNeededReturns
 	fake.recordInvocation("MigrationNeeded", []interface{}{arg1})
 	fake.migrationNeededMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.MigrationNeededStub != nil {
+		return fake.MigrationNeededStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.migrationNeededReturns
 	return fakeReturns.result1
 }
 
@@ -127,16 +126,15 @@ func (fake *Migrator) SetChaincodeLauncherResourceOnCR(arg1 v1.Object) error {
 	fake.setChaincodeLauncherResourceOnCRArgsForCall = append(fake.setChaincodeLauncherResourceOnCRArgsForCall, struct {
 		arg1 v1.Object
 	}{arg1})
-	stub := fake.SetChaincodeLauncherResourceOnCRStub
-	fakeReturns := fake.setChaincodeLauncherResourceOnCRReturns
 	fake.recordInvocation("SetChaincodeLauncherResourceOnCR", []interface{}{arg1})
 	fake.setChaincodeLauncherResourceOnCRMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.SetChaincodeLauncherResourceOnCRStub != nil {
+		return fake.SetChaincodeLauncherResourceOnCRStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.setChaincodeLauncherResourceOnCRReturns
 	return fakeReturns.result1
 }
 
@@ -189,16 +187,15 @@ func (fake *Migrator) UpdateConfig(arg1 v1.Object, arg2 string) error {
 		arg1 v1.Object
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.UpdateConfigStub
-	fakeReturns := fake.updateConfigReturns
 	fake.recordInvocation("UpdateConfig", []interface{}{arg1, arg2})
 	fake.updateConfigMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.UpdateConfigStub != nil {
+		return fake.UpdateConfigStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.updateConfigReturns
 	return fakeReturns.result1
 }
 
@@ -251,16 +248,15 @@ func (fake *Migrator) UpgradeDBs(arg1 v1.Object, arg2 operatorconfig.DBMigration
 		arg1 v1.Object
 		arg2 operatorconfig.DBMigrationTimeouts
 	}{arg1, arg2})
-	stub := fake.UpgradeDBsStub
-	fakeReturns := fake.upgradeDBsReturns
 	fake.recordInvocation("UpgradeDBs", []interface{}{arg1, arg2})
 	fake.upgradeDBsMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.UpgradeDBsStub != nil {
+		return fake.UpgradeDBsStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.upgradeDBsReturns
 	return fakeReturns.result1
 }
 

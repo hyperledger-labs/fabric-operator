@@ -636,12 +636,6 @@ spec:
                             couchdbTag:
                               description: CouchDBTag is the tag of the couchdb image
                               type: string
-                            dindImage:
-                              description: DindImage is the name of the dind image
-                              type: string
-                            dindTag:
-                              description: DindTag is the tag of the dind image
-                              type: string
                             enrollerImage:
                               description: EnrollerImage is the name of the init image
                                 for crypto generation

@@ -49,7 +49,6 @@ import (
 const (
 	INIT        = "init"
 	PEER        = "peer"
-	DIND        = "dind"
 	PROXY       = "proxy"
 	COUCHDB     = "couchdb"
 	COUCHDBINIT = "couchdbinit"
@@ -348,27 +347,6 @@ func (o *Override) V1Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 		})
 	}
 
-	dindContainer, err := deployment.GetContainer(DIND)
-	if err != nil {
-		return errors.New("dind container not found in deployment")
-	}
-
-	image := instance.Spec.Images
-	if image != nil {
-		dindContainer.SetImage(image.DindImage, image.DindTag)
-	}
-
-	resourcesRequest := instance.Spec.Resources
-	if resourcesRequest != nil {
-		if resourcesRequest.DinD != nil {
-			err = dindContainer.UpdateResources(resourcesRequest.DinD)
-			if err != nil {
-				return errors.Wrap(err, "resource update for dind failed")
-			}
-		}
-
-	}
-
 	peerContainer := deployment.MustGetContainer(PEER)
 	// env vars only required for 1.x peer
 	peerContainer.AppendEnvIfMissing("CORE_VM_ENDPOINT", "localhost:2375")
@@ -381,7 +359,6 @@ func (o *Override) V1Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 	peerContainer.AppendEnvIfMissing("CORE_VM_DOCKER_ATTACHSTDOUT", "false")
 
 	deployment.UpdateInitContainer(initContainer)
-	deployment.UpdateContainer(dindContainer)
 	deployment.UpdateContainer(peerContainer)
 	return nil
 }
@@ -472,7 +449,6 @@ func (o *Override) V2Deployment(instance *current.IBPPeer, deployment *dep.Deplo
 
 	deployment.UpdateInitContainer(initContainer)
 	deployment.UpdateContainer(peerContainer)
-	deployment.RemoveContainer(DIND)
 	return nil
 }
 

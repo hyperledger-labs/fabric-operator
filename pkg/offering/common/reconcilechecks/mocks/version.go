@@ -41,16 +41,15 @@ func (fake *Version) Normalize(arg1 images.FabricVersionInstance) string {
 	fake.normalizeArgsForCall = append(fake.normalizeArgsForCall, struct {
 		arg1 images.FabricVersionInstance
 	}{arg1})
-	stub := fake.NormalizeStub
-	fakeReturns := fake.normalizeReturns
 	fake.recordInvocation("Normalize", []interface{}{arg1})
 	fake.normalizeMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.NormalizeStub != nil {
+		return fake.NormalizeStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.normalizeReturns
 	return fakeReturns.result1
 }
 
@@ -102,16 +101,15 @@ func (fake *Version) Validate(arg1 images.FabricVersionInstance) error {
 	fake.validateArgsForCall = append(fake.validateArgsForCall, struct {
 		arg1 images.FabricVersionInstance
 	}{arg1})
-	stub := fake.ValidateStub
-	fakeReturns := fake.validateReturns
 	fake.recordInvocation("Validate", []interface{}{arg1})
 	fake.validateMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.ValidateStub != nil {
+		return fake.ValidateStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.validateReturns
 	return fakeReturns.result1
 }
 

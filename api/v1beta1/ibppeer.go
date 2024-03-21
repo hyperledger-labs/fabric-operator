@@ -211,10 +211,6 @@ func (s *IBPPeer) GetResource(comp Component) corev1.ResourceRequirements {
 			if s.Spec.Resources.GRPCProxy != nil {
 				return *s.Spec.Resources.GRPCProxy
 			}
-		case DIND:
-			if s.Spec.Resources.DinD != nil {
-				return *s.Spec.Resources.DinD
-			}
 		case COUCHDB:
 			if s.Spec.Resources.CouchDB != nil {
 				return *s.Spec.Resources.CouchDB
@@ -307,7 +303,6 @@ func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch st
 	i.PeerInitImage = image.GetImage(registryURL, i.PeerInitImage, requested.PeerInitImage)
 	i.PeerImage = image.GetImage(registryURL, i.PeerImage, requested.PeerImage)
 	i.CouchDBImage = image.GetImage(registryURL, i.CouchDBImage, requested.CouchDBImage)
-	i.DindImage = image.GetImage(registryURL, i.DindImage, requested.DindImage)
 	i.GRPCWebImage = image.GetImage(registryURL, i.GRPCWebImage, requested.GRPCWebImage)
 	i.CCLauncherImage = image.GetImage(registryURL, i.CCLauncherImage, requested.CCLauncherImage)
 	i.FileTransferImage = image.GetImage(registryURL, i.FileTransferImage, requested.FileTransferImage)
@@ -322,7 +317,6 @@ func (i *PeerImages) Override(requested *PeerImages, registryURL string, arch st
 	i.PeerInitTag = image.GetTag(arch, i.PeerInitTag, requested.PeerInitTag)
 	i.PeerTag = image.GetTag(arch, i.PeerTag, requested.PeerTag)
 	i.CouchDBTag = image.GetTag(arch, i.CouchDBTag, requested.CouchDBTag)
-	i.DindTag = image.GetTag(arch, i.DindTag, requested.DindTag)
 	i.GRPCWebTag = image.GetTag(arch, i.GRPCWebTag, requested.GRPCWebTag)
 	i.CCLauncherTag = image.GetTag(arch, i.CCLauncherTag, requested.CCLauncherTag)
 	i.FileTransferTag = image.GetTag(arch, i.FileTransferTag, requested.FileTransferTag)

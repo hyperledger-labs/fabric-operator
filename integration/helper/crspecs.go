@@ -126,18 +126,6 @@ func Org1PeerCR(namespace, domain, peerUsername, tlsCert, caHost, adminCert stri
 			},
 			Domain: domain,
 			Resources: &current.PeerResources{
-				DinD: &corev1.ResourceRequirements{
-					Requests: corev1.ResourceList{
-						corev1.ResourceCPU:              resource.MustParse("500m"),
-						corev1.ResourceMemory:           resource.MustParse("1G"),
-						corev1.ResourceEphemeralStorage: resource.MustParse("100M"),
-					},
-					Limits: corev1.ResourceList{
-						corev1.ResourceCPU:              resource.MustParse("500m"),
-						corev1.ResourceMemory:           resource.MustParse("1G"),
-						corev1.ResourceEphemeralStorage: resource.MustParse("1G"),
-					},
-				},
 				CouchDB: &corev1.ResourceRequirements{
 					Requests: corev1.ResourceList{
 						corev1.ResourceCPU:              resource.MustParse("200m"),

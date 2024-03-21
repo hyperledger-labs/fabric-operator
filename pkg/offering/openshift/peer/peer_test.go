@@ -74,7 +74,6 @@ var _ = Describe("Openshift Peer", func() {
 				Spec: current.IBPPeerSpec{
 					PeerExternalEndpoint: "address",
 					Domain:               "domain",
-					DindArgs:             []string{"fake", "args"},
 					StateDb:              "couchdb",
 					Replicas:             &replicas,
 					Images:               &current.PeerImages{},
@@ -178,29 +177,6 @@ var _ = Describe("Openshift Peer", func() {
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(Equal("failed to reconcile managers: failed Peer GRPC Route reconciliation: failed to reconcile grpc web route"))
 		})
-
-		// Disabling this test because the function uses rest client which cannot be mocked
-		// It("adds dind args in CR if not passed", func() {
-		// 	mockKubeClient.GetStub = func(ctx context.Context, types types.NamespacedName, obj client.Object) error {
-		// 		switch obj.(type) {
-		// 		case *openshiftv1.ClusterVersion:
-		// 			cv := &openshiftv1.ClusterVersion{
-		// 				Spec: openshiftv1.ClusterVersionSpec{
-		// 					Channel: "stable-4.2",
-		// 				},
-		// 			}
-
-		// 			obj = cv.DeepCopy()
-		// 		}
-
-		// 		return nil
-
-		// 	}
-		// 	_, err := peer.SelectDinDArgs(instance)
-		// 	Expect(err).NotTo(HaveOccurred())
-
-		// 	Expect(len(instance.Spec.DindArgs)).NotTo(Equal(0))
-		// })
 
 		It("returns a breaking error if initialization fails", func() {
 			cfg.PeerInitConfig.CorePeerFile = "../../../../defaultconfig/peer/badfile.yaml"

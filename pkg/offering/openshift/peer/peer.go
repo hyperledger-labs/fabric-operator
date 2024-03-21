@@ -34,7 +34,6 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/openshift/peer/override"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
 	"github.com/IBM-Blockchain/fabric-operator/version"
-	openshiftv1 "github.com/openshift/api/config/v1"
 	routev1 "github.com/openshift/api/route/v1"
 	"github.com/pkg/errors"
 	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -135,12 +134,6 @@ func (p *Peer) Reconcile(instance *current.IBPPeer, update basepeer.Update) (com
 		}, nil
 	}
 
-	updatecr, err := p.SelectDinDArgs(instance)
-	if err != nil {
-		log.Info("Cannot get cluster version. Ignoring openshift cluster version")
-	}
-
-	update.SetDindArgsUpdated(updatecr)
 	instanceUpdated, err := p.PreReconcileChecks(instance, update)
 	if err != nil {
 		return common.Result{}, errors.Wrap(err, "failed pre reconcile checks")
@@ -289,24 +282,4 @@ func (p *Peer) Reconcile(instance *current.IBPPeer, update basepeer.Update) (com
 	return common.Result{
 		Status: status,
 	}, nil
-}
-
-func (p *Peer) SelectDinDArgs(instance *current.IBPPeer) (bool, error) {
-
-	if len(instance.Spec.DindArgs) != 0 {
-		return false, nil
-	}
-
-	clusterversion := openshiftv1.ClusterVersion{}
-
-	err := p.RestClient.RESTClient().Get().
-		AbsPath("apis", "config.openshift.io", "v1", "clusterversions", "version").
-		Do(context.TODO()).
-		Into(&clusterversion)
-
-	if err != nil {
-		return false, err
-	}
-
-	return true, nil
 }

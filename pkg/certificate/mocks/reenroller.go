@@ -30,16 +30,15 @@ func (fake *Reenroller) Reenroll() (*config.Response, error) {
 	ret, specificReturn := fake.reenrollReturnsOnCall[len(fake.reenrollArgsForCall)]
 	fake.reenrollArgsForCall = append(fake.reenrollArgsForCall, struct {
 	}{})
-	stub := fake.ReenrollStub
-	fakeReturns := fake.reenrollReturns
 	fake.recordInvocation("Reenroll", []interface{}{})
 	fake.reenrollMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ReenrollStub != nil {
+		return fake.ReenrollStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.reenrollReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

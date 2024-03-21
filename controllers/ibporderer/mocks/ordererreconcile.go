@@ -35,16 +35,15 @@ func (fake *OrdererReconcile) Reconcile(arg1 *v1beta1.IBPOrderer, arg2 baseorder
 		arg1 *v1beta1.IBPOrderer
 		arg2 baseorderer.Update
 	}{arg1, arg2})
-	stub := fake.ReconcileStub
-	fakeReturns := fake.reconcileReturns
 	fake.recordInvocation("Reconcile", []interface{}{arg1, arg2})
 	fake.reconcileMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.ReconcileStub != nil {
+		return fake.ReconcileStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.reconcileReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

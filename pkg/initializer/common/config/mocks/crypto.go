@@ -49,16 +49,15 @@ func (fake *Crypto) GetCrypto() (*config.Response, error) {
 	ret, specificReturn := fake.getCryptoReturnsOnCall[len(fake.getCryptoArgsForCall)]
 	fake.getCryptoArgsForCall = append(fake.getCryptoArgsForCall, struct {
 	}{})
-	stub := fake.GetCryptoStub
-	fakeReturns := fake.getCryptoReturns
 	fake.recordInvocation("GetCrypto", []interface{}{})
 	fake.getCryptoMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetCryptoStub != nil {
+		return fake.GetCryptoStub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getCryptoReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -105,16 +104,15 @@ func (fake *Crypto) PingCA() error {
 	ret, specificReturn := fake.pingCAReturnsOnCall[len(fake.pingCAArgsForCall)]
 	fake.pingCAArgsForCall = append(fake.pingCAArgsForCall, struct {
 	}{})
-	stub := fake.PingCAStub
-	fakeReturns := fake.pingCAReturns
 	fake.recordInvocation("PingCA", []interface{}{})
 	fake.pingCAMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.PingCAStub != nil {
+		return fake.PingCAStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.pingCAReturns
 	return fakeReturns.result1
 }
 
@@ -158,16 +156,15 @@ func (fake *Crypto) Validate() error {
 	ret, specificReturn := fake.validateReturnsOnCall[len(fake.validateArgsForCall)]
 	fake.validateArgsForCall = append(fake.validateArgsForCall, struct {
 	}{})
-	stub := fake.ValidateStub
-	fakeReturns := fake.validateReturns
 	fake.recordInvocation("Validate", []interface{}{})
 	fake.validateMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.ValidateStub != nil {
+		return fake.ValidateStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.validateReturns
 	return fakeReturns.result1
 }
 

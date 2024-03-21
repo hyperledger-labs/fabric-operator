@@ -86,9 +86,6 @@ var _ = Describe("V2 peer migrator", func() {
 							v1.Container{
 								Name: "peer",
 							},
-							v1.Container{
-								Name: "dind",
-							},
 						},
 					},
 				},
@@ -147,10 +144,6 @@ var _ = Describe("V2 peer migrator", func() {
 			Expect(needed).To(Equal(true))
 		})
 
-		It("returns true if deployment has dind container", func() {
-			needed := migrator.MigrationNeeded(instance)
-			Expect(needed).To(Equal(true))
-		})
 	})
 
 	Context("upgrade dbs peer", func() {

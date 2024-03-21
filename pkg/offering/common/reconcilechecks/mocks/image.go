@@ -41,16 +41,15 @@ func (fake *Image) SetDefaults(arg1 images.Instance) error {
 	fake.setDefaultsArgsForCall = append(fake.setDefaultsArgsForCall, struct {
 		arg1 images.Instance
 	}{arg1})
-	stub := fake.SetDefaultsStub
-	fakeReturns := fake.setDefaultsReturns
 	fake.recordInvocation("SetDefaults", []interface{}{arg1})
 	fake.setDefaultsMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.SetDefaultsStub != nil {
+		return fake.SetDefaultsStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.setDefaultsReturns
 	return fakeReturns.result1
 }
 
@@ -102,16 +101,15 @@ func (fake *Image) UpdateRequired(arg1 images.Update) bool {
 	fake.updateRequiredArgsForCall = append(fake.updateRequiredArgsForCall, struct {
 		arg1 images.Update
 	}{arg1})
-	stub := fake.UpdateRequiredStub
-	fakeReturns := fake.updateRequiredReturns
 	fake.recordInvocation("UpdateRequired", []interface{}{arg1})
 	fake.updateRequiredMutex.Unlock()
-	if stub != nil {
-		return stub(arg1)
+	if fake.UpdateRequiredStub != nil {
+		return fake.UpdateRequiredStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.updateRequiredReturns
 	return fakeReturns.result1
 }
 

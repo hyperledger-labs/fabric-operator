@@ -87,16 +87,15 @@ func (fake *CertificateManager) CheckCertificatesForExpire(arg1 v1.Object, arg2 
 		arg1 v1.Object
 		arg2 int64
 	}{arg1, arg2})
-	stub := fake.CheckCertificatesForExpireStub
-	fakeReturns := fake.checkCertificatesForExpireReturns
 	fake.recordInvocation("CheckCertificatesForExpire", []interface{}{arg1, arg2})
 	fake.checkCertificatesForExpireMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.CheckCertificatesForExpireStub != nil {
+		return fake.CheckCertificatesForExpireStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2, ret.result3
 	}
+	fakeReturns := fake.checkCertificatesForExpireReturns
 	return fakeReturns.result1, fakeReturns.result2, fakeReturns.result3
 }
 
@@ -156,16 +155,15 @@ func (fake *CertificateManager) GetDurationToNextRenewal(arg1 common.SecretType,
 		arg2 v1.Object
 		arg3 int64
 	}{arg1, arg2, arg3})
-	stub := fake.GetDurationToNextRenewalStub
-	fakeReturns := fake.getDurationToNextRenewalReturns
 	fake.recordInvocation("GetDurationToNextRenewal", []interface{}{arg1, arg2, arg3})
 	fake.getDurationToNextRenewalMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3)
+	if fake.GetDurationToNextRenewalStub != nil {
+		return fake.GetDurationToNextRenewalStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getDurationToNextRenewalReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -221,16 +219,15 @@ func (fake *CertificateManager) GetSignCert(arg1 string, arg2 string) ([]byte, e
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.GetSignCertStub
-	fakeReturns := fake.getSignCertReturns
 	fake.recordInvocation("GetSignCert", []interface{}{arg1, arg2})
 	fake.getSignCertMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2)
+	if fake.GetSignCertStub != nil {
+		return fake.GetSignCertStub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
+	fakeReturns := fake.getSignCertReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -291,16 +288,15 @@ func (fake *CertificateManager) RenewCert(arg1 common.SecretType, arg2 certifica
 		arg6 bool
 		arg7 bool
 	}{arg1, arg2, arg3, arg4, arg5, arg6, arg7})
-	stub := fake.RenewCertStub
-	fakeReturns := fake.renewCertReturns
 	fake.recordInvocation("RenewCert", []interface{}{arg1, arg2, arg3, arg4, arg5, arg6, arg7})
 	fake.renewCertMutex.Unlock()
-	if stub != nil {
-		return stub(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+	if fake.RenewCertStub != nil {
+		return fake.RenewCertStub(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.renewCertReturns
 	return fakeReturns.result1
 }
 

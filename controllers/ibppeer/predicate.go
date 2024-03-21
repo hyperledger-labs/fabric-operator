@@ -28,7 +28,6 @@ import (
 type Update struct {
 	specUpdated           bool
 	overridesUpdated      bool
-	dindArgsUpdated       bool
 	tlsCertUpdated        bool
 	ecertUpdated          bool
 	peerTagUpdated        bool
@@ -58,10 +57,6 @@ func (u *Update) SpecUpdated() bool {
 
 func (u *Update) ConfigOverridesUpdated() bool {
 	return u.overridesUpdated
-}
-
-func (u *Update) DindArgsUpdated() bool {
-	return u.dindArgsUpdated
 }
 
 func (u *Update) TLSCertUpdated() bool {
@@ -133,10 +128,6 @@ func (u *Update) TLSCertEnroll() bool {
 	return u.tlscertEnroll
 }
 
-func (u *Update) SetDindArgsUpdated(updated bool) {
-	u.dindArgsUpdated = updated
-}
-
 func (u *Update) MSPUpdated() bool {
 	return u.mspUpdated
 }
@@ -189,7 +180,6 @@ func (u *Update) FabricVersionUpdated() bool {
 func (u *Update) Needed() bool {
 	return u.specUpdated ||
 		u.overridesUpdated ||
-		u.dindArgsUpdated ||
 		u.tlsCertUpdated ||
 		u.ecertUpdated ||
 		u.peerTagUpdated ||
@@ -218,9 +208,7 @@ func (u *Update) GetUpdateStackWithTrues() string {
 	if u.overridesUpdated {
 		stack += "overridesUpdated "
 	}
-	if u.dindArgsUpdated {
-		stack += "dindArgsUpdated "
-	}
+
 	if u.tlsCertUpdated {
 		stack += "tlsCertUpdated "
 	}

@@ -37,16 +37,15 @@ func (fake *Config) GetBCCSPSection() *common.BCCSP {
 	ret, specificReturn := fake.getBCCSPSectionReturnsOnCall[len(fake.getBCCSPSectionArgsForCall)]
 	fake.getBCCSPSectionArgsForCall = append(fake.getBCCSPSectionArgsForCall, struct {
 	}{})
-	stub := fake.GetBCCSPSectionStub
-	fakeReturns := fake.getBCCSPSectionReturns
 	fake.recordInvocation("GetBCCSPSection", []interface{}{})
 	fake.getBCCSPSectionMutex.Unlock()
-	if stub != nil {
-		return stub()
+	if fake.GetBCCSPSectionStub != nil {
+		return fake.GetBCCSPSectionStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
+	fakeReturns := fake.getBCCSPSectionReturns
 	return fakeReturns.result1
 }
 
@@ -89,10 +88,9 @@ func (fake *Config) SetDefaultKeyStore() {
 	fake.setDefaultKeyStoreMutex.Lock()
 	fake.setDefaultKeyStoreArgsForCall = append(fake.setDefaultKeyStoreArgsForCall, struct {
 	}{})
-	stub := fake.SetDefaultKeyStoreStub
 	fake.recordInvocation("SetDefaultKeyStore", []interface{}{})
 	fake.setDefaultKeyStoreMutex.Unlock()
-	if stub != nil {
+	if fake.SetDefaultKeyStoreStub != nil {
 		fake.SetDefaultKeyStoreStub()
 	}
 }
@@ -114,10 +112,9 @@ func (fake *Config) SetPKCS11Defaults(arg1 bool) {
 	fake.setPKCS11DefaultsArgsForCall = append(fake.setPKCS11DefaultsArgsForCall, struct {
 		arg1 bool
 	}{arg1})
-	stub := fake.SetPKCS11DefaultsStub
 	fake.recordInvocation("SetPKCS11Defaults", []interface{}{arg1})
 	fake.setPKCS11DefaultsMutex.Unlock()
-	if stub != nil {
+	if fake.SetPKCS11DefaultsStub != nil {
 		fake.SetPKCS11DefaultsStub(arg1)
 	}
 }

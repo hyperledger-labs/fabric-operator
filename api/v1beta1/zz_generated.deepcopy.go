@@ -1251,11 +1251,6 @@ func (in *IBPPeerSpec) DeepCopyInto(out *IBPPeerSpec) {
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
-	if in.DindArgs != nil {
-		in, out := &in.DindArgs, &out.DindArgs
-		*out = make([]string, len(*in))
-		copy(*out, *in)
-	}
 	out.Action = in.Action
 	if in.ChaincodeBuilderConfig != nil {
 		in, out := &in.ChaincodeBuilderConfig, &out.ChaincodeBuilderConfig
@@ -1740,11 +1735,6 @@ func (in *PeerResources) DeepCopyInto(out *PeerResources) {
 	}
 	if in.GRPCProxy != nil {
 		in, out := &in.GRPCProxy, &out.GRPCProxy
-		*out = new(v1.ResourceRequirements)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.DinD != nil {
-		in, out := &in.DinD, &out.DinD
 		*out = new(v1.ResourceRequirements)
 		(*in).DeepCopyInto(*out)
 	}

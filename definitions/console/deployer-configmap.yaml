@@ -131,13 +131,6 @@ data:
             requests:
               cpu: 200m
               memory: 400M
-          dind:
-            limits:
-              cpu: 500m
-              memory: 1000M
-            requests:
-              cpu: 500m
-              memory: 1000M
           proxy:
             limits:
               cpu: 100m

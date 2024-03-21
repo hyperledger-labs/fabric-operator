@@ -72,8 +72,6 @@ var _ = Describe("default images", func() {
 							PeerInitTag:   "2.5.1-2511004-amd64",
 							PeerImage:     "ibp-peer",
 							PeerTag:       "1.4.9-2511004-amd64",
-							DindImage:     "ibp-dind",
-							DindTag:       "noimages-amd64",
 							CouchDBImage:  "ibp-couchdb",
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ibp-grpcweb",
@@ -90,8 +88,6 @@ var _ = Describe("default images", func() {
 							PeerInitTag:   "2.5.1-2511004-amd64",
 							PeerImage:     "ibp-peer",
 							PeerTag:       "2.2.1-2511004-amd64",
-							DindImage:     "ibp-dind",
-							DindTag:       "noimages-amd64",
 							CouchDBImage:  "ibp-couchdb",
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ibp-grpcweb",
@@ -108,8 +104,6 @@ var _ = Describe("default images", func() {
 							PeerInitTag:   "2.5.1-2511004-amd64",
 							PeerImage:     "ibp-peer",
 							PeerTag:       "2.2.1-2511204-amd64",
-							DindImage:     "ibp-dind",
-							DindTag:       "noimages-amd64",
 							CouchDBImage:  "ibp-couchdb",
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ibp-grpcweb",
@@ -335,8 +329,6 @@ var _ = Describe("default images", func() {
 							PeerInitTag:   "2.5.1-2511004-amd64",
 							PeerImage:     "ibp-peer",
 							PeerTag:       "2.2.1-2511204-amd64",
-							DindImage:     "ibp-dind",
-							DindTag:       "noimages-amd64",
 							CouchDBImage:  "ibp-couchdb",
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ibp-grpcweb",
@@ -349,8 +341,6 @@ var _ = Describe("default images", func() {
 						Expect(instance.Spec.Images.PeerInitTag).To(Equal(peerImages.PeerInitTag))
 						Expect(instance.Spec.Images.PeerImage).To(Equal(peerImages.PeerImage))
 						Expect(instance.Spec.Images.PeerTag).To(Equal(peerImages.PeerTag))
-						Expect(instance.Spec.Images.DindImage).To(Equal(peerImages.DindImage))
-						Expect(instance.Spec.Images.DindTag).To(Equal(peerImages.DindTag))
 						Expect(instance.Spec.Images.CouchDBImage).To(Equal(peerImages.CouchDBImage))
 						Expect(instance.Spec.Images.CouchDBTag).To(Equal(peerImages.CouchDBTag))
 						Expect(instance.Spec.Images.GRPCWebImage).To(Equal(peerImages.GRPCWebImage))
@@ -369,8 +359,6 @@ var _ = Describe("default images", func() {
 							PeerInitTag:   "2.5.1-2511004-amd64",
 							PeerImage:     "ghcr.io/ibm-blockchain/ibp-peer",
 							PeerTag:       "2.2.1-2511204-amd64",
-							DindImage:     "ghcr.io/ibm-blockchain/ibp-dind",
-							DindTag:       "noimages-amd64",
 							CouchDBImage:  "ghcr.io/ibm-blockchain/ibp-couchdb",
 							CouchDBTag:    "2.3.1-2511004-amd64",
 							GRPCWebImage:  "ghcr.io/ibm-blockchain/ibp-grpcweb",
@@ -383,8 +371,6 @@ var _ = Describe("default images", func() {
 						Expect(instance.Spec.Images.PeerInitTag).To(Equal(peerImages.PeerInitTag))
 						Expect(instance.Spec.Images.PeerImage).To(Equal(peerImages.PeerImage))
 						Expect(instance.Spec.Images.PeerTag).To(Equal(peerImages.PeerTag))
-						Expect(instance.Spec.Images.DindImage).To(Equal(peerImages.DindImage))
-						Expect(instance.Spec.Images.DindTag).To(Equal(peerImages.DindTag))
 						Expect(instance.Spec.Images.CouchDBImage).To(Equal(peerImages.CouchDBImage))
 						Expect(instance.Spec.Images.CouchDBTag).To(Equal(peerImages.CouchDBTag))
 						Expect(instance.Spec.Images.GRPCWebImage).To(Equal(peerImages.GRPCWebImage))
@@ -409,8 +395,6 @@ var _ = Describe("default images", func() {
 						PeerInitTag:   "2.5.1-2511004-amd64",
 						PeerImage:     "ghcr.io/ibm-blockchain/ibp-peer",
 						PeerTag:       "2.2.1-2511004-amd64",
-						DindImage:     "ghcr.io/ibm-blockchain/ibp-dind",
-						DindTag:       "noimages-amd64",
 						CouchDBImage:  "ghcr.io/ibm-blockchain/ibp-couchdb",
 						CouchDBTag:    "2.3.1-2511004-amd64",
 						GRPCWebImage:  "ghcr.io/ibm-blockchain/ibp-grpcweb",
@@ -423,8 +407,6 @@ var _ = Describe("default images", func() {
 					Expect(instance.Spec.Images.PeerInitTag).To(Equal(peerImages.PeerInitTag))
 					Expect(instance.Spec.Images.PeerImage).To(Equal(peerImages.PeerImage))
 					Expect(instance.Spec.Images.PeerTag).To(Equal(peerImages.PeerTag))
-					Expect(instance.Spec.Images.DindImage).To(Equal(peerImages.DindImage))
-					Expect(instance.Spec.Images.DindTag).To(Equal(peerImages.DindTag))
 					Expect(instance.Spec.Images.CouchDBImage).To(Equal(peerImages.CouchDBImage))
 					Expect(instance.Spec.Images.CouchDBTag).To(Equal(peerImages.CouchDBTag))
 					Expect(instance.Spec.Images.GRPCWebImage).To(Equal(peerImages.GRPCWebImage))
