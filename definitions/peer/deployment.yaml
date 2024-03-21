@@ -33,6 +33,47 @@ spec:
         - env:
             - name: LICENSE
               value: accept
+          image: ""
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            tcpSocket:
+              port: 2375
+            timeoutSeconds: 5
+          name: dind
+          ports:
+            - containerPort: 2375
+          readinessProbe:
+            exec:
+              command:
+                - readiness.sh
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1000M
+            requests:
+              cpu: 500m
+              memory: 1000M
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            allowPrivilegeEscalation: true
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+              drop:
+                - ALL
+            privileged: true
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+            runAsUser: 0
+        - env:
+            - name: LICENSE
+              value: accept
             - name: CORE_PEER_LISTENADDRESS
               value: 0.0.0.0:7051
             - name: CORE_PEER_CHAINCODELISTENADDRESS
@@ -97,6 +138,8 @@ spec:
               cpu: 200m
               memory: 400M
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
@@ -105,6 +148,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: false
+            runAsGroup: 7051
             runAsNonRoot: true
             runAsUser: 7051
           volumeMounts:
@@ -178,6 +222,8 @@ spec:
               cpu: 100m
               memory: 200M
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             allowPrivilegeEscalation: false
             capabilities:
               add:
@@ -186,6 +232,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: false
+            runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
           volumeMounts:
@@ -230,5 +277,6 @@ spec:
               subPath: data
       securityContext:
         fsGroup: 2000
+        runAsGroup: 1000
         runAsNonRoot: true
         runAsUser: 1000
