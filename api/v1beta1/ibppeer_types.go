@@ -216,10 +216,6 @@ type PeerResources struct {
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	GRPCProxy *corev1.ResourceRequirements `json:"proxy,omitempty"`
 
-	// FluentD (Optional) is the resources provided to the fluentd container
-	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	FluentD *corev1.ResourceRequirements `json:"fluentd,omitempty"`
-
 	// CouchDB (Optional) is the resources provided to the couchdb container
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	CouchDB *corev1.ResourceRequirements `json:"couchdb,omitempty"`
@@ -276,14 +272,6 @@ type PeerImages struct {
 	// GRPCWebTag is the tag of the grpc web proxy image
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
 	GRPCWebTag string `json:"grpcwebTag,omitempty"`
-
-	// FluentdImage is the name of the fluentd logger image
-	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	FluentdImage string `json:"fluentdImage,omitempty"`
-
-	// FluentdTag is the tag of the fluentd logger image
-	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
-	FluentdTag string `json:"fluentdTag,omitempty"`
 
 	// CouchDBImage is the name of the couchdb image
 	// +operator-sdk:gen-csv:customresourcedefinitions.specDescriptors=true
