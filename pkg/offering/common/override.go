@@ -108,11 +108,12 @@ func GetPodAntiAffinity(orgName string) *corev1.PodAntiAffinity {
 	}
 }
 
-func GetPodSecurityContext(con container.Container) {
+func SetPodSecurityContext(con container.Container) {
 	secContext := con.SecurityContext
 	if secContext.SeccompProfile == nil {
 		secContext.SeccompProfile = &corev1.SeccompProfile{
 			Type: corev1.SeccompProfileTypeRuntimeDefault,
 		}
 	}
+	con.SecurityContext = secContext
 }
