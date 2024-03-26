@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/cloudflare/cfssl v1.4.1
-	github.com/docker/docker v24.0.7+incompatible
+	github.com/docker/docker v24.0.9+incompatible
 	github.com/go-logr/logr v1.4.1
 	github.com/go-test/deep v1.0.2
 	github.com/gogo/protobuf v1.3.2
