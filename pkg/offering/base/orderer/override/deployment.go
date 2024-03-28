@@ -318,8 +318,8 @@ func (o *Override) CommonDeploymentOverrides(instance *current.IBPOrderer, deplo
 	deployment.UpdateInitContainer(initCont)
 
 	// set seccompProfile to RuntimeDefault
-	common.GetPodSecurityContext(orderer)
-	common.GetPodSecurityContext(grpcProxy)
+	common.SetPodSecurityContext(orderer)
+	common.SetPodSecurityContext(grpcProxy)
 
 	return nil
 }

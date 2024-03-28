@@ -184,7 +184,7 @@ func (o *Override) CommonDeployment(instance *current.IBPCA, deployment *dep.Dep
 	}
 
 	// set seccompProfile to RuntimeDefault
-	common.GetPodSecurityContext(caCont)
+	common.SetPodSecurityContext(caCont)
 
 	return nil
 }
