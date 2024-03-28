@@ -612,6 +612,15 @@ chaincode:
           - IBP_BUILDER_SHARED_DIR
           - PEER_NAME
 
+        # Default builder for "k8s" chaincode packages.
+        # See https://github.com/hyperledgendary/fabric-builder-k8s
+      - name: k8s_builder
+        path: /opt/hyperledger/k8s_builder
+        propagateEnvironment:
+          - CORE_PEER_ID
+          - KUBERNETES_SERVICE_HOST
+          - KUBERNETES_SERVICE_PORT
+
         # Default builder for chaincode-as-a-service, included in fabric
         # opensource versions >= 2.4.2.  This is a "no-op" builder and will not
         # manage the lifecycle of pods, deployments, and services in k8s.  The
