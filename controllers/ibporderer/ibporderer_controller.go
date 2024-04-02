@@ -183,8 +183,8 @@ type ReconcileIBPOrderer struct {
 func (r *ReconcileIBPOrderer) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
 	var err error
 
-	reqLogger := log.WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
-
+	//reqLogger := log.WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
+	reqLogger := r.Config.Logger
 	// If orderer-restart-config configmap is the object being reconciled, reconcile the
 	// restart configmap.
 	if request.Name == "orderer-restart-config" {

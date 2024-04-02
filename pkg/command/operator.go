@@ -28,6 +28,7 @@ import (
 
 	k8sruntime "k8s.io/apimachinery/pkg/runtime"
 
+	"github.com/go-logr/zapr"
 	routev1 "github.com/openshift/api/route/v1"
 	"github.com/operator-framework/operator-lib/leader"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -45,16 +46,18 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering"
 	openshiftv1 "github.com/openshift/api/config/v1"
 
+	commonutility "github.com/IBM-Blockchain/fabric-operator/pkg/util"
+	uberzap "go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"k8s.io/apimachinery/pkg/types"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-
-	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 )
 
-var log = logf.Log.WithName("cmd_operator")
-
+var log *uberzap.SugaredLogger
+var c1 commonutility.Client
 var (
 	scheme   = k8sruntime.NewScheme()
 	setupLog = ctrl.Log.WithName("setup")
@@ -67,7 +70,7 @@ func init() {
 }
 
 func printVersion() {
-	log.Info(fmt.Sprintf("Go Version: %s", runtime.Version()))
+	log.Info("Go Version: %s", runtime.Version())
 	log.Info(fmt.Sprintf("Go OS/Arch: %s/%s", runtime.GOOS, runtime.GOARCH))
 }
 
@@ -102,12 +105,23 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	// be propagated through the whole operator, generating
 	// uniform and structured logs.
 	if operatorCfg.Logger != nil {
-		logf.SetLogger(*operatorCfg.Logger)
-		ctrl.SetLogger(*operatorCfg.Logger)
+		//logf.SetLogger(*operatorCfg.Logger)
+		ctrl.SetLogger(zap.New(zap.UseDevMode(false)))
+		log = operatorCfg.Logger.Sugar().Named("operator")
+		_ = err
+		log.Info("Installing operator in all namespace mode")
 	} else {
 		// Use the unstructured log formatter when running locally.
-		logf.SetLogger(zap.New(zap.UseDevMode(local)))
-		ctrl.SetLogger(zap.New(zap.UseDevMode(true)))
+		//logf.SetLogger(zap.New(zap.UseDevMode(false)))
+		ctrl.SetLogger(zap.New(zap.UseDevMode(false)))
+
+		// Create logger
+
+		//logm, err := util.SetupLogging("DEBUG")
+		log = operatorCfg.Logger.Sugar().Named("operator")
+		_ = err
+		log.Info("Installing operator in all namespace mode")
+
 	}
 
 	printVersion()
@@ -155,6 +169,18 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	}
 	flag.Parse()
 
+	cfg := uberzap.NewProductionConfig()
+	cfg.OutputPaths = []string{"stdout"}
+
+	cfg.Level.SetLevel(zapcore.DebugLevel)
+
+	zapLogger, err := cfg.Build()
+	if err != nil {
+		panic("failed to create logger: " + err.Error())
+	}
+
+	logger := zapr.NewLogger(zapLogger)
+
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
 		MetricsBindAddress: metricsAddr,
@@ -163,6 +189,7 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 		LeaderElectionID:        "c30dd930.ibp.com",
 		LeaderElectionNamespace: operatorNamespace,
 		Namespace:               watchNamespace,
+		Logger:                  logger,
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")

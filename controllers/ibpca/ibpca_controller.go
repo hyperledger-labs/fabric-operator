@@ -192,8 +192,7 @@ type ReconcileIBPCA struct {
 func (r *ReconcileIBPCA) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
 	var err error
 
-	reqLogger := log.WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
-
+	reqLogger := r.Config.Logger
 	// If ca-restart-config configmap is the object being reconciled, reconcile the
 	// restart configmap.
 	if request.Name == "ca-restart-config" {
