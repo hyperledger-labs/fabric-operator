@@ -169,19 +169,23 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	}
 	flag.Parse()
 
-	cfg := uberzap.NewProductionConfig()
-	cfg.OutputPaths = []string{"stdout"}
-
-	cfg.Level.SetLevel(zapcore.DebugLevel)
-
-	zapLogger, err := cfg.Build()
+	// Create a new logger with UTC format
+	config := uberzap.NewProductionConfig()
+	config.EncoderConfig.TimeKey = "timestamp"
+	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	logger, err := config.Build()
 	if err != nil {
-		panic("failed to create logger: " + err.Error())
+		panic(fmt.Sprintf("failed to initialize logger: %v", err))
 	}
+	log := zapr.NewLogger(logger)
 
-	logger := zapr.NewLogger(zapLogger)
+	// Log some messages
+	log.Info("Logging in UTC format", "time", time.Now().UTC())
 
-	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
+	// Example of logging with additional context
+	log.Info("Example with additional context", "key", "value")
+
+	mgr, err := ctrl.New(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
 		MetricsBindAddress: metricsAddr,
 		Port:               9443,
@@ -189,7 +193,7 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 		LeaderElectionID:        "c30dd930.ibp.com",
 		LeaderElectionNamespace: operatorNamespace,
 		Namespace:               watchNamespace,
-		Logger:                  logger,
+		Logger:                  log,
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")

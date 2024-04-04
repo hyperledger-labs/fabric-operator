@@ -19,6 +19,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -27,6 +29,7 @@ import (
 	cainit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca"
 	ordererinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer"
 	peerinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
@@ -71,13 +74,19 @@ func main() {
 	setDefaultConsoleDefinitions(operatorCfg)
 
 	operatorCfg.Operator.SetDefaults()
-
+	zaplogger, err := util.SetupLogging("DEBUG")
+	operatorCfg.Logger = zaplogger
+	if err != nil {
+		fmt.Print("error initiating the logger", err)
+		fmt.Print("Will exit Operator", err)
+		os.Exit(1)
+	}
 	if err := command.Operator(operatorCfg); err != nil {
 		log.Error(err, "failed to start operator")
 		time.Sleep(15 * time.Second)
 	}
 
-	// TODO
+	// // TODO
 	// if err = (&ibpca.IBPCAReconciler{
 	// 	Client: mgr.GetClient(),
 	// 	Log:    ctrl.Log.WithName("controllers").WithName("IBPCA"),
@@ -114,6 +123,7 @@ func main() {
 }
 
 func setDefaultCADefinitions(cfg *config.Config) {
+
 	cfg.CAInitConfig = &cainit.Config{
 		CADefaultConfigPath:    filepath.Join(defaultConfigs, "ca/ca.yaml"),
 		TLSCADefaultConfigPath: filepath.Join(defaultConfigs, "ca/tlsca.yaml"),
