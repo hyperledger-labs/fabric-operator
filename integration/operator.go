@@ -21,7 +21,6 @@ package integration
 import (
 	"context"
 	"fmt"
-	"os"
 	"path/filepath"
 
 	config "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
@@ -31,21 +30,24 @@ import (
 	cainit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca"
 	ordererinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer"
 	peerinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer"
-	uzap "go.uber.org/zap"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 )
 
 // GetOperatorConfig returns the operator configuration with the default templating files population
 // and with default versions set for components.
 func GetOperatorConfig(configs, caFiles, peerFiles, ordererFiles, consoleFiles string) *config.Config {
-	ulevel := uzap.NewAtomicLevelAt(2)
-	if os.Getenv("LOG_LEVEL") == "debug" {
-		ulevel = uzap.NewAtomicLevelAt(-1)
+	// ulevel := uzap.NewAtomicLevelAt(2)
+	// if os.Getenv("LOG_LEVEL") == "debug" {
+	// 	ulevel = uzap.NewAtomicLevelAt(-1)
+	// }
+	// level := zap.Level(&ulevel)
+	// logger := zap.New(zap.Opts(level))
+	zaplogger, err := util.SetupLogging("DEBUG")
+	if err != nil {
+		fmt.Print("error initiating the logger", err)
 	}
-	level := zap.Level(&ulevel)
-	logger := zap.New(zap.Opts(level))
 
 	cfg := &config.Config{
 		CAInitConfig: &cainit.Config{
@@ -119,7 +121,7 @@ func GetOperatorConfig(configs, caFiles, peerFiles, ordererFiles, consoleFiles s
 			NetworkPolicyIngressFile: filepath.Join(consoleFiles, "networkpolicy-ingress.yaml"),
 			NetworkPolicyDenyAllFile: filepath.Join(consoleFiles, "networkpolicy-denyall.yaml"),
 		},
-		Logger: &logger,
+		Logger: zaplogger,
 		Operator: config.Operator{
 			Restart: config.Restart{
 				Timeout: common.MustParseDuration("5m"),

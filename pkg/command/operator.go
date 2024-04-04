@@ -26,6 +26,7 @@ import (
 	"runtime"
 	"time"
 
+	"go.uber.org/zap/zapcore"
 	k8sruntime "k8s.io/apimachinery/pkg/runtime"
 
 	"github.com/go-logr/zapr"
@@ -46,18 +47,17 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering"
 	openshiftv1 "github.com/openshift/api/config/v1"
 
-	commonutility "github.com/IBM-Blockchain/fabric-operator/pkg/util"
-	uberzap "go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"k8s.io/apimachinery/pkg/types"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
-	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	uberzap "go.uber.org/zap"
+	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 )
 
-var log *uberzap.SugaredLogger
-var c1 commonutility.Client
+var log = logf.Log.WithName("cmd_operator")
+
 var (
 	scheme   = k8sruntime.NewScheme()
 	setupLog = ctrl.Log.WithName("setup")
@@ -70,7 +70,7 @@ func init() {
 }
 
 func printVersion() {
-	log.Info("Go Version: %s", runtime.Version())
+	log.Info(fmt.Sprintf("Go Version: %s", runtime.Version()))
 	log.Info(fmt.Sprintf("Go OS/Arch: %s/%s", runtime.GOOS, runtime.GOARCH))
 }
 
@@ -105,23 +105,24 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	// be propagated through the whole operator, generating
 	// uniform and structured logs.
 	if operatorCfg.Logger != nil {
-		//logf.SetLogger(*operatorCfg.Logger)
-		ctrl.SetLogger(zap.New(zap.UseDevMode(false)))
-		log = operatorCfg.Logger.Sugar().Named("operator")
-		_ = err
-		log.Info("Installing operator in all namespace mode")
+
+		config := uberzap.NewProductionConfig()
+		config.EncoderConfig.TimeKey = "timestamp"
+		config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+		logger, err := config.Build()
+		if err != nil {
+			panic(fmt.Sprintf("failed to initialize logger: %v", err))
+		}
+
+		// Wrap the zap.Logger with go-logr/zapr to satisfy the logr.Logger interface
+		log := zapr.NewLogger(logger)
+
+		logf.SetLogger(log)
+		ctrl.SetLogger(log)
 	} else {
 		// Use the unstructured log formatter when running locally.
-		//logf.SetLogger(zap.New(zap.UseDevMode(false)))
-		ctrl.SetLogger(zap.New(zap.UseDevMode(false)))
-
-		// Create logger
-
-		//logm, err := util.SetupLogging("DEBUG")
-		log = operatorCfg.Logger.Sugar().Named("operator")
-		_ = err
-		log.Info("Installing operator in all namespace mode")
-
+		logf.SetLogger(zap.New(zap.UseDevMode(local)))
+		ctrl.SetLogger(zap.New(zap.UseDevMode(true)))
 	}
 
 	printVersion()
@@ -169,23 +170,7 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	}
 	flag.Parse()
 
-	// Create a new logger with UTC format
-	config := uberzap.NewProductionConfig()
-	config.EncoderConfig.TimeKey = "timestamp"
-	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	logger, err := config.Build()
-	if err != nil {
-		panic(fmt.Sprintf("failed to initialize logger: %v", err))
-	}
-	log := zapr.NewLogger(logger)
-
-	// Log some messages
-	log.Info("Logging in UTC format", "time", time.Now().UTC())
-
-	// Example of logging with additional context
-	log.Info("Example with additional context", "key", "value")
-
-	mgr, err := ctrl.New(ctrl.GetConfigOrDie(), ctrl.Options{
+	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
 		MetricsBindAddress: metricsAddr,
 		Port:               9443,
@@ -193,7 +178,6 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 		LeaderElectionID:        "c30dd930.ibp.com",
 		LeaderElectionNamespace: operatorNamespace,
 		Namespace:               watchNamespace,
-		Logger:                  log,
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
