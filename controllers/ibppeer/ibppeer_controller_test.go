@@ -34,6 +34,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/controllers/mocks"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/common"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	corev1 "k8s.io/api/core/v1"
 	k8serror "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -128,6 +129,8 @@ var _ = Describe("ReconcileIBPPeer", func() {
 			mutex:    &sync.Mutex{},
 			Config:   &opconfig.Config{},
 		}
+		zaplogger, _ := util.SetupLogging("DEBUG")
+		reconciler.Config.Logger = zaplogger
 		request = reconcile.Request{
 			NamespacedName: types.NamespacedName{
 				Namespace: "test-namespace",
