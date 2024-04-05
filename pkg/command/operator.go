@@ -111,12 +111,10 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 		config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 		logger, err := config.Build()
 		if err != nil {
-			panic(fmt.Sprintf("failed to initialize logger: %v", err))
+			fmt.Sprintf("failed to initialize logger: %v", err)
 		}
 
-		// Wrap the zap.Logger with go-logr/zapr to satisfy the logr.Logger interface
 		log := zapr.NewLogger(logger)
-
 		logf.SetLogger(log)
 		ctrl.SetLogger(log)
 	} else {

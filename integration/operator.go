@@ -38,12 +38,6 @@ import (
 // GetOperatorConfig returns the operator configuration with the default templating files population
 // and with default versions set for components.
 func GetOperatorConfig(configs, caFiles, peerFiles, ordererFiles, consoleFiles string) *config.Config {
-	// ulevel := uzap.NewAtomicLevelAt(2)
-	// if os.Getenv("LOG_LEVEL") == "debug" {
-	// 	ulevel = uzap.NewAtomicLevelAt(-1)
-	// }
-	// level := zap.Level(&ulevel)
-	// logger := zap.New(zap.Opts(level))
 	zaplogger, err := util.SetupLogging("DEBUG")
 	if err != nil {
 		fmt.Print("error initiating the logger", err)

@@ -86,7 +86,7 @@ func main() {
 		time.Sleep(15 * time.Second)
 	}
 
-	// // TODO
+	// TODO
 	// if err = (&ibpca.IBPCAReconciler{
 	// 	Client: mgr.GetClient(),
 	// 	Log:    ctrl.Log.WithName("controllers").WithName("IBPCA"),
@@ -123,7 +123,6 @@ func main() {
 }
 
 func setDefaultCADefinitions(cfg *config.Config) {
-
 	cfg.CAInitConfig = &cainit.Config{
 		CADefaultConfigPath:    filepath.Join(defaultConfigs, "ca/ca.yaml"),
 		TLSCADefaultConfigPath: filepath.Join(defaultConfigs, "ca/tlsca.yaml"),

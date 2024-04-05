@@ -153,7 +153,6 @@ type ReconcileIBPConsole struct {
 func (r *ReconcileIBPConsole) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
 	var err error
 
-	//reqLogger := log.WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
 	reqLogger := r.Config.Logger
 	reqLogger.Info(fmt.Sprintf("Reconciling IBPConsole with update values of [ %+v ]", r.update.GetUpdateStackWithTrues()))
 
