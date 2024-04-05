@@ -43,6 +43,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/IBM-Blockchain/fabric-operator/version"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 	yaml "sigs.k8s.io/yaml"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -183,9 +184,10 @@ type ReconcileIBPOrderer struct {
 func (r *ReconcileIBPOrderer) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
 	var err error
 
-	reqLogger := r.Config.Logger
-	reqLogger.Info(fmt.Sprintf("Request.Namespace '%s' Request.Name '%s'", request.Namespace, request.Name))
-
+	reqLogger := r.Config.Logger.With(
+		zap.String("Request.Namespace", request.Namespace),
+		zap.String("Request.Name", request.Name),
+	)
 	// If orderer-restart-config configmap is the object being reconciled, reconcile the
 	// restart configmap.
 	if request.Name == "orderer-restart-config" {

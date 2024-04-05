@@ -39,6 +39,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -153,9 +154,10 @@ type ReconcileIBPConsole struct {
 func (r *ReconcileIBPConsole) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
 	var err error
 
-	reqLogger := r.Config.Logger
-	reqLogger.Info(fmt.Sprintf("Request.Namespace '%s' Request.Name '%s'", request.Namespace, request.Name))
-
+	reqLogger := r.Config.Logger.With(
+		zap.String("Request.Namespace", request.Namespace),
+		zap.String("Request.Name", request.Name),
+	)
 	reqLogger.Info(fmt.Sprintf("Reconciling IBPConsole with update values of [ %+v ]", r.update.GetUpdateStackWithTrues()))
 
 	// Fetch the IBPConsole instance

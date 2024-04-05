@@ -42,6 +42,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	"github.com/go-test/deep"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 	ctrl "sigs.k8s.io/controller-runtime"
 	yaml "sigs.k8s.io/yaml"
 
@@ -192,8 +193,10 @@ type ReconcileIBPCA struct {
 func (r *ReconcileIBPCA) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
 	var err error
 
-	reqLogger := r.Config.Logger
-	reqLogger.Info(fmt.Sprintf("Request.Namespace '%s' Request.Name '%s'", request.Namespace, request.Name))
+	reqLogger := r.Config.Logger.With(
+		zap.String("Request.Namespace", request.Namespace),
+		zap.String("Request.Name", request.Name),
+	)
 
 	// If ca-restart-config configmap is the object being reconciled, reconcile the
 	// restart configmap.
