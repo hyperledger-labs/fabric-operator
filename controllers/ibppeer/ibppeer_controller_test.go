@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"sync"
 
+	opconfig "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"k8s.io/utils/pointer"
@@ -125,6 +126,7 @@ var _ = Describe("ReconcileIBPPeer", func() {
 			scheme:   &runtime.Scheme{},
 			update:   map[string][]Update{},
 			mutex:    &sync.Mutex{},
+			Config:   &opconfig.Config{},
 		}
 		request = reconcile.Request{
 			NamespacedName: types.NamespacedName{

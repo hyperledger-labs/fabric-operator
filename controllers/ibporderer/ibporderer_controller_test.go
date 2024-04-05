@@ -33,6 +33,7 @@ import (
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	orderermocks "github.com/IBM-Blockchain/fabric-operator/controllers/ibporderer/mocks"
 	"github.com/IBM-Blockchain/fabric-operator/controllers/mocks"
+	opconfig "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/orderer/v1"
 	config "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer/config/v1"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/common"
@@ -122,6 +123,7 @@ var _ = Describe("ReconcileIBPOrderer", func() {
 			scheme:   &runtime.Scheme{},
 			update:   map[string][]Update{},
 			mutex:    &sync.Mutex{},
+			Config:   &opconfig.Config{},
 		}
 		request = reconcile.Request{
 			NamespacedName: types.NamespacedName{
