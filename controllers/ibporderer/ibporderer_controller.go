@@ -184,6 +184,8 @@ func (r *ReconcileIBPOrderer) Reconcile(ctx context.Context, request reconcile.R
 	var err error
 
 	reqLogger := r.Config.Logger
+	reqLogger.Info(fmt.Sprintf("Request.Namespace '%s' Request.Name '%s'", request.Namespace, request.Name))
+
 	// If orderer-restart-config configmap is the object being reconciled, reconcile the
 	// restart configmap.
 	if request.Name == "orderer-restart-config" {

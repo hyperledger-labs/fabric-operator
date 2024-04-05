@@ -154,6 +154,8 @@ func (r *ReconcileIBPConsole) Reconcile(ctx context.Context, request reconcile.R
 	var err error
 
 	reqLogger := r.Config.Logger
+	reqLogger.Info(fmt.Sprintf("Request.Namespace '%s' Request.Name '%s'", request.Namespace, request.Name))
+
 	reqLogger.Info(fmt.Sprintf("Reconciling IBPConsole with update values of [ %+v ]", r.update.GetUpdateStackWithTrues()))
 
 	// Fetch the IBPConsole instance

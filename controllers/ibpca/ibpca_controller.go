@@ -193,6 +193,8 @@ func (r *ReconcileIBPCA) Reconcile(ctx context.Context, request reconcile.Reques
 	var err error
 
 	reqLogger := r.Config.Logger
+	reqLogger.Info(fmt.Sprintf("Request.Namespace '%s' Request.Name '%s'", request.Namespace, request.Name))
+
 	// If ca-restart-config configmap is the object being reconciled, reconcile the
 	// restart configmap.
 	if request.Name == "ca-restart-config" {

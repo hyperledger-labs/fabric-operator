@@ -20,7 +20,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"time"
 
@@ -75,12 +74,10 @@ func main() {
 
 	operatorCfg.Operator.SetDefaults()
 	zaplogger, err := util.SetupLogging("DEBUG")
-	operatorCfg.Logger = zaplogger
 	if err != nil {
 		fmt.Print("error initiating the logger", err)
-		fmt.Print("Will exit Operator", err)
-		os.Exit(1)
 	}
+	operatorCfg.Logger = zaplogger
 	if err := command.Operator(operatorCfg); err != nil {
 		log.Error(err, "failed to start operator")
 		time.Sleep(15 * time.Second)

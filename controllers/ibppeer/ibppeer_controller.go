@@ -204,6 +204,7 @@ func (r *ReconcileIBPPeer) Reconcile(ctx context.Context, request reconcile.Requ
 	var err error
 
 	reqLogger := r.Config.Logger
+	reqLogger.Info(fmt.Sprintf("Request.Namespace '%s' Request.Name '%s'", request.Namespace, request.Name))
 	// If peer-restart-config configmap is the object being reconciled, reconcile the
 	// restart configmap.
 	if request.Name == "peer-restart-config" {
