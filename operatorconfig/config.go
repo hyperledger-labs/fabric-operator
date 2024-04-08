@@ -23,7 +23,7 @@ import (
 	ordererinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer"
 	peerinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering"
-	"github.com/go-logr/logr"
+	"go.uber.org/zap"
 )
 
 type Config struct {
@@ -33,7 +33,7 @@ type Config struct {
 	ConsoleInitConfig *ConsoleConfig
 	Offering          offering.Type
 	Operator          Operator
-	Logger            *logr.Logger
+	Logger            *zap.Logger
 }
 
 type ConsoleConfig struct {

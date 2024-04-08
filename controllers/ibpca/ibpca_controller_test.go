@@ -25,6 +25,7 @@ import (
 	"sync"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
+	opconfig "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
 	v1 "github.com/IBM-Blockchain/fabric-operator/pkg/apis/ca/v1"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/common"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
@@ -116,7 +117,10 @@ var _ = Describe("ReconcileIBPCA", func() {
 			scheme:   &runtime.Scheme{},
 			update:   map[string][]Update{},
 			mutex:    &sync.Mutex{},
+			Config:   &opconfig.Config{},
 		}
+		zaplogger, _ := util.SetupLogging("DEBUG")
+		reconciler.Config.Logger = zaplogger
 		request = reconcile.Request{
 			NamespacedName: types.NamespacedName{
 				Namespace: "test-namespace",
