@@ -19,6 +19,7 @@
 package main
 
 import (
+	"fmt"
 	"path/filepath"
 	"time"
 
@@ -27,6 +28,7 @@ import (
 	cainit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/ca"
 	ordererinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/orderer"
 	peerinit "github.com/IBM-Blockchain/fabric-operator/pkg/initializer/peer"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
@@ -71,7 +73,11 @@ func main() {
 	setDefaultConsoleDefinitions(operatorCfg)
 
 	operatorCfg.Operator.SetDefaults()
-
+	zaplogger, err := util.SetupLogging("DEBUG")
+	if err != nil {
+		fmt.Print("error initiating the logger", err)
+	}
+	operatorCfg.Logger = zaplogger
 	if err := command.Operator(operatorCfg); err != nil {
 		log.Error(err, "failed to start operator")
 		time.Sleep(15 * time.Second)
