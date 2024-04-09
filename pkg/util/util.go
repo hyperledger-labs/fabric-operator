@@ -41,6 +41,8 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/k8s/clientset"
 	routev1 "github.com/openshift/api/route/v1"
 	"github.com/pkg/errors"
+	uberzap "go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
@@ -941,4 +943,25 @@ func GetServerVersion() (*version.Info, error) {
 		return nil, errors.Wrap(err, "failed to get version")
 	}
 	return version, nil
+}
+
+func SetupLogging(loglevel string) (*uberzap.Logger, error) {
+	// set up logging
+	var level zapcore.Level
+	err := level.Set(loglevel)
+	if err != nil {
+		return nil, err
+	}
+	zapConfig := uberzap.NewProductionConfig()
+	zapConfig.Level = uberzap.NewAtomicLevelAt(level)
+	zapConfig.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	logger, err := zapConfig.Build()
+	defer logger.Sync()
+	if err != nil {
+		return nil, err
+	}
+	// redirect uses of standard logger
+	uberzap.RedirectStdLog(logger)
+
+	return logger, nil
 }

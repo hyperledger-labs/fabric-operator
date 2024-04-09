@@ -26,8 +26,10 @@ import (
 	"runtime"
 	"time"
 
+	"go.uber.org/zap/zapcore"
 	k8sruntime "k8s.io/apimachinery/pkg/runtime"
 
+	"github.com/go-logr/zapr"
 	routev1 "github.com/openshift/api/route/v1"
 	"github.com/operator-framework/operator-lib/leader"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -49,6 +51,7 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	uberzap "go.uber.org/zap"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 )
@@ -102,8 +105,20 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	// be propagated through the whole operator, generating
 	// uniform and structured logs.
 	if operatorCfg.Logger != nil {
-		logf.SetLogger(*operatorCfg.Logger)
-		ctrl.SetLogger(*operatorCfg.Logger)
+
+		config := uberzap.NewProductionConfig()
+		config.EncoderConfig.TimeKey = "timestamp"
+		config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+		logger, err := config.Build()
+		if err != nil {
+			return err
+		}
+
+		// Wrap the zap.Logger with go-logr/zapr to satisfy the logr.Logger interface
+		log := zapr.NewLogger(logger)
+
+		logf.SetLogger(log)
+		ctrl.SetLogger(log)
 	} else {
 		// Use the unstructured log formatter when running locally.
 		logf.SetLogger(zap.New(zap.UseDevMode(local)))
