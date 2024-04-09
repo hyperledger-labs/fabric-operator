@@ -406,12 +406,3 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 	}
 
 }
-
-func containsString(slice []metav1.GroupVersionForDiscovery, s string) bool {
-	for _, item := range slice {
-		if item.GroupVersion == s {
-			return true
-		}
-	}
-	return false
-}
