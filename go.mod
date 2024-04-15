@@ -1,11 +1,14 @@
 module github.com/IBM-Blockchain/fabric-operator
 
-go 1.20
+go 1.21
+
+toolchain go1.21.9
 
 require (
 	github.com/cloudflare/cfssl v1.4.1
 	github.com/docker/docker v24.0.9+incompatible
 	github.com/go-logr/logr v1.4.1
+	github.com/go-logr/zapr v0.4.0
 	github.com/go-test/deep v1.0.2
 	github.com/gogo/protobuf v1.3.2
 	github.com/hyperledger/fabric v0.0.0-20240123171006-370ebe56cea8
@@ -61,7 +64,6 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-kit/kit v0.10.0 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
-	github.com/go-logr/zapr v0.4.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.3 // indirect
 	github.com/go-openapi/jsonreference v0.19.3 // indirect
 	github.com/go-openapi/spec v0.19.5 // indirect
