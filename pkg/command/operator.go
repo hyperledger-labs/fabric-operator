@@ -28,7 +28,6 @@ import (
 	"time"
 
 	"go.uber.org/zap/zapcore"
-	"gopkg.in/yaml.v2"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8sruntime "k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -334,7 +333,7 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 
 	// Define your custom resource type
 	//customResourceName := "ibpconsoles"
-	customResourceNamespace := "ibmsupport"
+	//customResourceNamespace := "ibmsupport"
 	gvr := schema.GroupVersionResource{
 		Group:    "ibp.com",
 		Version:  "v1beta1",
@@ -342,7 +341,7 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 	}
 
 	// Retrieve the list of objects in your custom resource
-	list, err := dynamicClient.Resource(gvr).Namespace(customResourceNamespace).List(context.Background(), metav1.ListOptions{})
+	list, err := dynamicClient.Resource(gvr).Namespace(operatornamespace).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		panic(err.Error())
 	}
@@ -356,26 +355,21 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 
 	}
 	log.Info(fmt.Sprintf("Latest Console Tag is %s", console.GetImages().ConsoleTag))
-	m, err := util.GetConfigMap(clientset, operatornamespace, "ibm-hlfsupport-console-deployer")
-	data := m.Data
-	yamlstring := data["settings.yaml"]
-	var datamap map[string]interface{}
-	err = yaml.Unmarshal([]byte(yamlstring), &datamap)
+
+	// get the console deployment here
+
+	// Retrieve the deployment
+	deployment, err := clientset.AppsV1().Deployments(operatornamespace).Get(context.TODO(), consoleObjectName, v1.GetOptions{})
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
-	mustgathertag := ""
-	if otherimages, ok := datamap["otherImages"].(map[interface{}]interface{}); ok {
-		if mustgathertag, ok = otherimages["mustgatherTag"].(string); ok {
-			log.Info(fmt.Sprintf("Value of Mustgather tag is %s:", mustgathertag))
-		} else {
-			log.Info(fmt.Sprintf("Field C is not a string"))
-		}
-	}
+	existingConsoleDeploymentImageTag := strings.Split(deployment.Spec.Template.Spec.Containers[0].Image, ":")[1]
+
+	log.Info(fmt.Sprintf("Operator Binary Console Tag is %s and current Console Deployment tag is %s", console.GetImages().ConsoleTag, existingConsoleDeploymentImageTag))
 
 	//if the latest console tag and the mustgather tag are not same, then we will delete the below two configmaps
-	if console.GetImages().ConsoleTag != mustgathertag {
-		log.Info(fmt.Sprintf("Console Tag is %s and Mustgater tag is %s", console.GetImages().ConsoleTag, mustgathertag))
+	if console.GetImages().ConsoleTag != existingConsoleDeploymentImageTag {
+		log.Info(fmt.Sprintf("Will Start Applying the Fixpacks Existing Version %s to New Version %s ", existingConsoleDeploymentImageTag, console.GetImages().ConsoleTag))
 
 		// set the webhook image here as well
 		// Specify deployment namespace and name
