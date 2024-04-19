@@ -195,8 +195,8 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 
 	log.Info("Registering Components.")
 
-	//This Method Checks if MustgatherTag in ibm-hlfsupport-deployer configmap is same as the console tag in the operator
-	// binary (if it is not same, it delete the configmaps ibm-hlfsupport-console-deployer and ibm-hlfsupport-console-console)
+	//This Method Checks if Console deployment Tag in Console Deployment is same as the console tag in the operator
+	// binary (if it is not same, it delete the configmaps $consoleObject-deployer and $consoleObject-console)
 	CheckForFixPacks(config, operatorNamespace)
 
 	// Setup Scheme for all resources
