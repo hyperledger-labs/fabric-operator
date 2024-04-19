@@ -367,7 +367,7 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 
 	log.Info(fmt.Sprintf("Operator Binary Console Tag is %s and current Console Deployment tag is %s", console.GetImages().ConsoleTag, existingConsoleDeploymentImageTag))
 
-	//if the latest console tag and the mustgather tag are not same, then we will delete the below two configmaps
+	//if the latest console deployment tag and operator binary latest console tag are not same, then we will delete the below two configmaps
 	if console.GetImages().ConsoleTag != existingConsoleDeploymentImageTag {
 		log.Info(fmt.Sprintf("Will Start Applying the Fixpacks Existing Version %s to New Version %s ", existingConsoleDeploymentImageTag, console.GetImages().ConsoleTag))
 
