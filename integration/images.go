@@ -19,9 +19,9 @@
 package integration
 
 const (
-	FabricCAVersion    = "1.5.3"
-	FabricVersion      = "2.2.5"
-	FabricVersion24    = "2.4.3"
+	FabricCAVersion    = "1.5.10"
+	FabricVersion      = "2.2.15"
+	FabricVersion24    = "2.5.7"
 	InitImage          = "registry.access.redhat.com/ubi8/ubi-minimal"
 	InitTag            = "latest"
 	CaImage            = "hyperledger/fabric-ca"
@@ -35,7 +35,7 @@ const (
 	ConfigtxlatorImage = "hyperledger/fabric-tools"
 	ConfigtxlatorTag   = FabricVersion24
 	CouchdbImage       = "couchdb"
-	CouchdbTag         = "3.2.2"
+	CouchdbTag         = "3.3.3"
 	GrpcwebImage       = "ghcr.io/hyperledger-labs/grpc-web"
 	GrpcwebTag         = "latest"
 	ConsoleImage       = "ghcr.io/hyperledger-labs/fabric-console"
