@@ -1,6 +1,8 @@
 module github.com/IBM-Blockchain/fabric-operator
 
-go 1.20
+go 1.21
+
+toolchain go1.22.3
 
 require (
 	github.com/cloudflare/cfssl v1.4.1
@@ -10,7 +12,7 @@ require (
 	github.com/go-test/deep v1.0.2
 	github.com/gogo/protobuf v1.3.2
 	github.com/hyperledger/fabric v0.0.0-20240123171006-370ebe56cea8
-	github.com/hyperledger/fabric-ca v1.5.9
+	github.com/hyperledger/fabric-ca v1.5.10
 	github.com/hyperledger/fabric-lib-go v1.1.0
 	github.com/hyperledger/fabric-protos-go v0.3.3
 	github.com/imdario/mergo v0.3.12
