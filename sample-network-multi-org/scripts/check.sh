@@ -88,8 +88,8 @@ else
   echo -e "${SUCCESS} jq found:\t\t$(cat /tmp/cmdpath)"
 fi
 
-FABRIC_VERSION=2.5.7
-FABRIC_CA_VERSION=1.5.10
+FABRIC_VERSION=2.5.8
+FABRIC_CA_VERSION=1.5.11
 if ! command -v peer &> /tmp/cmdpath
 then
   echo "${WARN} Please install the Fabric CLI binaries; suggested install commands:"

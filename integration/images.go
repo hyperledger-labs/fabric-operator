@@ -19,9 +19,9 @@
 package integration
 
 const (
-	FabricCAVersion    = "1.5.10"
+	FabricCAVersion    = "1.5.11"
 	FabricVersion      = "2.2.15"
-	FabricVersion24    = "2.5.7"
+	FabricVersion24    = "2.5.8"
 	InitImage          = "registry.access.redhat.com/ubi8/ubi-minimal"
 	InitTag            = "latest"
 	CaImage            = "hyperledger/fabric-ca"

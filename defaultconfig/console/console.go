@@ -27,10 +27,10 @@ func GetImages() *deployer.ConsoleImages {
 		ConsoleInitImage:   "registry.access.redhat.com/ubi8/ubi-minimal",
 		ConsoleInitTag:     "latest",
 		ConfigtxlatorImage: "hyperledger/fabric-tools",
-		ConfigtxlatorTag:   "2.2.5",
+		ConfigtxlatorTag:   "2.5.8",
 		DeployerImage:      "ghcr.io/ibm-blockchain/fabric-deployer",
 		DeployerTag:        "latest",
 		CouchDBImage:       "couchdb",
-		CouchDBTag:         "3.2.2",
+		CouchDBTag:         "3.3.3",
 	}
 }

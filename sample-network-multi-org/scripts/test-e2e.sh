@@ -46,8 +46,8 @@ function destroyCluster() {
 }
 
 # fabric CLI binaries + config
-FABRIC_VERSION=2.5.7
-FABRIC_CA_VERSION=1.5.10
+FABRIC_VERSION=2.5.8
+FABRIC_CA_VERSION=1.5.11
 
 curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh | bash -s -- binary --fabric-version $FABRIC_VERSION --ca-version $FABRIC_CA_VERSION
 export PATH=${PWD}/bin:$PATH

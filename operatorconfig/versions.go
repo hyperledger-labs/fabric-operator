@@ -23,16 +23,16 @@ import "github.com/IBM-Blockchain/fabric-operator/pkg/apis/deployer"
 const (
 	InitImage       = "registry.access.redhat.com/ubi8/ubi-minimal"
 	LatestTag       = "latest"
-	FabricCAVersion = "1.5.10"
-	FabricVersion   = "2.5.7"
+	FabricCAVersion = "1.5.11"
+	FabricVersion   = "2.5.8"
 )
 
 func getDefaultVersions() *deployer.Versions {
 	return &deployer.Versions{
 		CA: map[string]deployer.VersionCA{
-			"1.5.10-1": {
+			"1.5.11-1": {
 				Default: true,
-				Version: "1.5.10-1",
+				Version: "1.5.11-1",
 				Image: deployer.CAImages{
 					CAInitImage: InitImage,
 					CAInitTag:   LatestTag,
@@ -42,9 +42,9 @@ func getDefaultVersions() *deployer.Versions {
 			},
 		},
 		Peer: map[string]deployer.VersionPeer{
-			"2.5.7-1": {
+			"2.5.8-1": {
 				Default: true,
-				Version: "2.5.7-1",
+				Version: "2.5.8-1",
 				Image: deployer.PeerImages{
 					PeerInitImage: InitImage,
 					PeerInitTag:   LatestTag,
@@ -58,9 +58,9 @@ func getDefaultVersions() *deployer.Versions {
 			},
 		},
 		Orderer: map[string]deployer.VersionOrderer{
-			"2.5.7-1": {
+			"2.5.8-1": {
 				Default: true,
-				Version: "2.5.7-1",
+				Version: "2.5.8-1",
 				Image: deployer.OrdererImages{
 					OrdererInitImage: InitImage,
 					OrdererInitTag:   LatestTag,

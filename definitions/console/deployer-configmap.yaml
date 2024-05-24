@@ -45,37 +45,37 @@ data:
     imagePullSecret: ""
     versions:
       ca:
-        1.5.10-1:
+        1.5.11-1:
           default: true
-          version: 1.5.10-1
+          version: 1.5.11-1
           image:
             caInitImage: registry.access.redhat.com/ubi8/ubi-minimal
             caInitTag: latest
             caImage: hyperledger/fabric-ca
-            caTag: 1.5.10
+            caTag: 1.5.11
 
       peer:
-        2.5.7-1:
+        2.5.8-1:
           default: true
-          version: 2.5.7-1
+          version: 2.5.8-1
           image:
             peerInitImage: registry.access.redhat.com/ubi8/ubi-minimal
             peerInitTag: latest
             peerImage: hyperledger/fabric-peer
-            peerTag: 2.5.7
+            peerTag: 2.5.8
             couchdbImage: couchdb
             couchdbTag: 3.3.3
             grpcwebImage: ghcr.io/hyperledger-labs/grpc-web
             grpcwebTag: latest
       orderer:
-        2.5.7-1:
+        2.5.8-1:
           default: true
-          version: 2.5.7-1
+          version: 2.5.8-1
           image:
             ordererInitImage: registry.access.redhat.com/ubi8/ubi-minimal
             ordererInitTag: latest
             ordererImage: hyperledger/fabric-orderer
-            ordererTag: 2.5.7
+            ordererTag: 2.5.8
             grpcwebImage: ghcr.io/hyperledger-labs/grpc-web
             grpcwebTag: latest
 
