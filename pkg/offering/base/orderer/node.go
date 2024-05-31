@@ -1574,6 +1574,9 @@ func (n *Node) FabricOrdererMigrationV2_5(instance *current.IBPOrderer) error {
 		return err
 	}
 
+	initOrderer.UsingHSMProxy = instance.UsingHSMProxy()
+
+
 	ordererConfig, err := v25ordererconfig.ReadOrdererFile(n.Config.OrdererInitConfig.OrdererV25File)
 	if err != nil {
 		return errors.Wrap(err, "failed to read v2.5.x default config file")
