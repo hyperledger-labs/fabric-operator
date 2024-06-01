@@ -22,4 +22,4 @@ metadata:
   name: networkpolicy-denyall
 spec:
   podSelector: {}
-  ingress: []
+  egress: []
