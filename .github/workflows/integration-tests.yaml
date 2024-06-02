@@ -27,7 +27,7 @@ env:
   KUBECONFIG_PATH: /tmp/kubeconfig.yaml
   OPERATOR_NAMESPACE: inttest
   DOCKERCONFIGJSON: ${{ secrets.DOCKERCONFIGJSON }}
-  GO_VER: "1.20"
+  GO_VER: "1.21"
 
 jobs:
   suite:
