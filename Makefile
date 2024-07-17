@@ -20,7 +20,7 @@ IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
 
 TAG ?= $(shell git rev-parse --short HEAD)
 ARCH ?= $(shell go env GOARCH)
-GO_VER ?= "1.20.10"
+GO_VER ?= "1.21.11"  # Go version bound by latest Go support in image ubi8/go-toolset
 OS = $(shell go env GOOS)
 BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
