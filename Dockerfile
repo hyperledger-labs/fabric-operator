@@ -1,7 +1,16 @@
 ARG GO_VER
 
 ########## Build operator binary ##########
-FROM registry.access.redhat.com/ubi8/go-toolset:$GO_VER as builder
+FROM registry.access.redhat.com/ubi8/ubi-minimal as builder
+
+ARG GO_VER
+ARG ARCH
+
+# gcc required for cgo
+RUN  microdnf install -y tar gzip gcc
+
+RUN curl -sL https://go.dev/dl/go${GO_VER}.linux-${ARCH}.tar.gz | tar zxf - -C /usr/local
+ENV PATH="/usr/local/go/bin:$PATH"
 
 COPY . /go/src/github.com/IBM-Blockchain/fabric-operator
 WORKDIR /go/src/github.com/IBM-Blockchain/fabric-operator
