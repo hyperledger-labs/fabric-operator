@@ -128,7 +128,7 @@ func (p *Profile) Block(channelID string, channelGroup *cb.ConfigGroup) *cb.Bloc
 
 	block := utils.NewBlock(0, nil)
 	block.Data = &cb.BlockData{Data: [][]byte{utils.MarshalOrPanic(envelope)}}
-	block.Header.DataHash, _ = utils.BlockDataHash(block.Data)
+	block.Header.DataHash = utils.BlockDataHash(block.Data)
 	block.Metadata.Metadata[cb.BlockMetadataIndex_LAST_CONFIG] = utils.MarshalOrPanic(&cb.Metadata{
 		Value: utils.MarshalOrPanic(&cb.LastConfig{Index: 0}),
 	})
