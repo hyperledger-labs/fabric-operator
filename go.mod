@@ -4,7 +4,7 @@ go 1.22.0
 
 require (
 	github.com/cloudflare/cfssl v1.4.1
-	github.com/docker/docker v26.1.4+incompatible
+	github.com/docker/docker v26.1.5+incompatible
 	github.com/go-logr/logr v1.4.1
 	github.com/go-logr/zapr v0.4.0
 	github.com/go-test/deep v1.0.2
