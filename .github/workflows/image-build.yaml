@@ -3,6 +3,7 @@ name: Build and Push Operator image
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   image:
