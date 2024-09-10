@@ -81,7 +81,7 @@ func NewApplicationOrgGroup(conf *Organization) (*cb.ConfigGroup, error) {
 	for _, anchorPeer := range conf.AnchorPeers {
 		anchorProtos = append(anchorProtos, &pb.AnchorPeer{
 			Host: anchorPeer.Host,
-			Port: int32(anchorPeer.Port),
+			Port: int32(anchorPeer.Port), // #nosec G115
 		})
 	}
 
