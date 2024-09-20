@@ -986,3 +986,4 @@ func DeleteConfigMapIfExists(clientset *kubernetes.Clientset, namespace, configM
 	}
 	return nil
 }
+
