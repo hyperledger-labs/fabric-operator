@@ -392,8 +392,8 @@ func CheckForFixPacks(config *rest.Config, operatornamespace string) {
 			panic(err.Error())
 		}
 
-		util.DeleteConfigMapIfExists(clientset, operatornamespace, consoleObjectName+"-console")
-		util.DeleteConfigMapIfExists(clientset, operatornamespace, consoleObjectName+"-deployer")
+		util.DeleteConfigMapIfExists(clientset, operatornamespace, consoleObjectName+"-console")  // #nosec G104
+		util.DeleteConfigMapIfExists(clientset, operatornamespace, consoleObjectName+"-deployer") // #nosec G104
 
 	} else {
 		log.Info("Looks like the operator was restarted...")
