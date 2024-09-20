@@ -24,16 +24,22 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 
 	"go.uber.org/zap/zapcore"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8sruntime "k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 
 	"github.com/go-logr/zapr"
 	routev1 "github.com/openshift/api/route/v1"
 	"github.com/operator-framework/operator-lib/leader"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/client-go/dynamic"
+	"k8s.io/client-go/kubernetes"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	"k8s.io/client-go/rest"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	"github.com/pkg/errors"
@@ -42,9 +48,11 @@ import (
 	apis "github.com/IBM-Blockchain/fabric-operator/api"
 	ibpv1beta1 "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
 	controller "github.com/IBM-Blockchain/fabric-operator/controllers"
+	"github.com/IBM-Blockchain/fabric-operator/defaultconfig/console"
 	oconfig "github.com/IBM-Blockchain/fabric-operator/operatorconfig"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/migrator"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering"
+	"github.com/IBM-Blockchain/fabric-operator/pkg/util"
 	openshiftv1 "github.com/openshift/api/config/v1"
 
 	"k8s.io/apimachinery/pkg/types"
@@ -52,6 +60,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	uberzap "go.uber.org/zap"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 )
@@ -169,7 +178,7 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 				"Enabling this will ensure there is only one active controller manager.")
 	}
 	flag.Parse()
-
+	config := ctrl.GetConfigOrDie()
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
 		MetricsBindAddress: metricsAddr,
@@ -185,6 +194,10 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	}
 
 	log.Info("Registering Components.")
+
+	//This Method Checks if Console deployment Tag in Console Deployment is same as the console tag in the operator
+	// binary (if it is not same, it delete the configmaps $consoleObject-deployer and $consoleObject-console)
+	CheckForFixPacks(config, operatorNamespace)
 
 	// Setup Scheme for all resources
 	if err := apis.AddToScheme(mgr.GetScheme()); err != nil {
@@ -311,4 +324,79 @@ func GetOperatorNamespace() (string, error) {
 	}
 
 	return operatorNamespace, nil
+}
+func CheckForFixPacks(config *rest.Config, operatornamespace string) {
+	clientset, err := kubernetes.NewForConfig(config)
+
+	// Create a dynamic client
+	dynamicClient := dynamic.NewForConfigOrDie(config)
+
+	// Define your custom resource type
+	//customResourceName := "ibpconsoles"
+	//customResourceNamespace := "ibmsupport"
+	gvr := schema.GroupVersionResource{
+		Group:    "ibp.com",
+		Version:  "v1beta1",
+		Resource: "ibpconsoles",
+	}
+
+	// Retrieve the list of objects in your custom resource
+	list, err := dynamicClient.Resource(gvr).Namespace(operatornamespace).List(context.Background(), metav1.ListOptions{})
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var consoleObjectName string
+	// Print the names of all objects
+	for _, obj := range list.Items {
+
+		consoleObjectName = obj.GetName()
+		// If you want to do something with the object, you can access it here
+
+	}
+	log.Info(fmt.Sprintf("Latest Console Tag is %s", console.GetImages().ConsoleTag))
+
+	// get the console deployment here
+
+	// Retrieve the deployment
+	deployment, err := clientset.AppsV1().Deployments(operatornamespace).Get(context.TODO(), consoleObjectName, v1.GetOptions{})
+	if err != nil {
+		panic(err.Error())
+	}
+	existingConsoleDeploymentImageTag := strings.Split(deployment.Spec.Template.Spec.Containers[0].Image, ":")[1]
+
+	log.Info(fmt.Sprintf("Operator Binary Console Tag is %s and current Console Deployment tag is %s", console.GetImages().ConsoleTag, existingConsoleDeploymentImageTag))
+
+	//if the latest console deployment tag and operator binary latest console tag are not same, then we will delete the below two configmaps
+	if console.GetImages().ConsoleTag != existingConsoleDeploymentImageTag {
+		log.Info(fmt.Sprintf("Will Start Applying the Fixpacks Existing Version %s to New Version %s ", existingConsoleDeploymentImageTag, console.GetImages().ConsoleTag))
+
+		// set the webhook image here as well
+		// Specify deployment namespace and name
+		namespace := "ibm-hlfsupport-infra"
+		deploymentName := "ibm-hlfsupport-webhook"
+
+		// Retrieve the deployment
+		deployment, err := clientset.AppsV1().Deployments(namespace).Get(context.TODO(), deploymentName, v1.GetOptions{})
+		if err != nil {
+			panic(err.Error())
+		}
+		existingwebhookimage := strings.Split(deployment.Spec.Template.Spec.Containers[0].Image, ":")[0]
+		existingwebhookimage = existingwebhookimage + ":" + console.GetImages().ConsoleTag
+
+		deployment.Spec.Template.Spec.Containers[0].Image = existingwebhookimage
+
+		// Update the deployment
+		_, err = clientset.AppsV1().Deployments(namespace).Update(context.TODO(), deployment, v1.UpdateOptions{})
+		if err != nil {
+			panic(err.Error())
+		}
+
+		util.DeleteConfigMapIfExists(clientset, operatornamespace, consoleObjectName+"-console")  // #nosec G104
+		util.DeleteConfigMapIfExists(clientset, operatornamespace, consoleObjectName+"-deployer") // #nosec G104
+
+	} else {
+		log.Info("Looks like the operator was restarted...")
+	}
+
 }
