@@ -59,7 +59,7 @@ _Fabric, Ahoy!_
 - Build a [multi-org](sample-network-multi-org) network on a local KIND development cluster. 
 - Build a [sample-network](sample-network) with Kube APIs.
 - Build a Network with the [Fabric Operations Console](https://github.com/hyperledger-labs/fabric-operations-console).
-- Automate your network with [Ansible Playbooks]([https://cloud.ibm.com/docs/blockchain?topic=blockchain-ansible](https://github.com/hyperledger-labs/fabric-ansible-collection)) and the Console REST APIs.
+- Automate your network with [Ansible Playbooks](https://github.com/hyperledger-labs/fabric-ansible-collection) and the Console REST APIs.
 
 
 ## Build the Fabric Operator
