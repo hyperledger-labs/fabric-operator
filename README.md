@@ -1,7 +1,7 @@
 # fabric-operator
 
 **fabric-operator** is an open-source, cloud-native [Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/)
-for managing Hyperledger Fabric networks on Kubernetes.  The operator follows the [CNCF Operator Pattern](link),
+for managing Hyperledger Fabric networks on Kubernetes. The operator follows the CNCF Operator Pattern,
 reducing the minutia of performing repetitive, detailed configuration tasks to automated activities performed under
 the guidance of software-based controllers.
 
@@ -58,8 +58,8 @@ _Fabric, Ahoy!_
 
 - Build a [multi-org](sample-network-multi-org) network on a local KIND development cluster. 
 - Build a [sample-network](sample-network) with Kube APIs.
-- [Build a Network](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-network) with the [Fabric Operations Console](https://github.com/hyperledger-labs/fabric-operations-console).
-- Automate your network with [Ansible Playbooks](https://cloud.ibm.com/docs/blockchain?topic=blockchain-ansible) and the Console REST APIs.
+- Build a Network with the [Fabric Operations Console](https://github.com/hyperledger-labs/fabric-operations-console).
+- Automate your network with [Ansible Playbooks]([https://cloud.ibm.com/docs/blockchain?topic=blockchain-ansible](https://github.com/hyperledger-labs/fabric-ansible-collection)) and the Console REST APIs.
 
 
 ## Build the Fabric Operator
