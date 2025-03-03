@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: explorer
+spec:
+  selector:
+    matchLabels:
+      app: explorer
+  template:
+    metadata:
+      labels:
+        app: explorer
+    spec:
+      volumes:
+        - name: fabricfiles
+          persistentVolumeClaim:
+            claimName: mypvc
+        - name: explorer-config
+          configMap:
+            name: explorer-config
+            items:
+              - key: config.json
+                path: config.json
+              - key: network.json
+                path: network.json
+        - name: secret-volume
+          secret:
+            secretName: explorer-secret
+      containers:
+        - name: explorer
+          image: hyperledger/explorer:latest
+          env:
+            - name: DATABASE_HOST
+              value: "explorerdb-service"
+            - name: DATABASE_DATABASE
+              value: "fabricexplorer"
+            - name: DATABASE_USERNAME
+              value: "hppoc"
+            - name: DATABASE_PASSWD
+              value: "password"
+            - name: LOG_LEVEL_APP
+              value: "debug"
+            - name: LOG_LEVEL_DB
+              value: "debug"
+            - name: LOG_LEVEL_CONSOLE
+              value: "info"
+            - name: LOG_CONSOLE_STDOUT
+              value: "true"
+            - name: DISCOVERY_AS_LOCALHOST
+              value: "false"
+          resources:
+            limits:
+              memory: "528Mi"
+              cpu: "400m"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            # - mountPath: /organizations
+            #   name: fabricfiles
+            #   subPath: organizations
+            - mountPath: /opt/explorer/app/platform/fabric/config.json
+              name: explorer-config
+              subPath: config.json
+            - mountPath: /opt/explorer/app/platform/fabric/test-network.json
+              name: explorer-config
+              subPath: network.json
+            - name: secret-volume
+              readOnly: true
+              mountPath: /organizations
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: explorer
+spec:
+  selector:
+    app: explorer
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: explorer
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: 60s
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: explorer.localho.st
+      http:
+        paths:
+          - backend:
+              service:
+                name: explorer
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - explorer.localho.st
