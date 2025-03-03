@@ -109,11 +109,11 @@ function absolute_path() {
 }
 
 function apply_kustomization() {
-  $KUSTOMIZE_BUILD $1 | envsubst | kubectl -n $NS apply -f -
+  $KUSTOMIZE_BUILD $1 | envsubst | kubectl apply -f -
 }
 
 function undo_kustomization() {
-  $KUSTOMIZE_BUILD $1 | envsubst | kubectl -n $NS delete --ignore-not-found=true -f -
+  $KUSTOMIZE_BUILD $1 | envsubst | kubectl delete --ignore-not-found=true -f -
 }
 
 function create_image_pull_secret() {
