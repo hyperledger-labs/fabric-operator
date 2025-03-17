@@ -36,8 +36,6 @@ spec:
               value: /crypto/ca/operations-cert.pem
             - name: FABRIC_CA_SERVER_OPERATIONS_TLS_KEY_FILE
               value: /crypto/ca/operations-key.pem
-            - name: FABRIC_CA_SERVER_COMPATIBILITY_MODE_V1_3
-              value: "true"
             - name: HOST_IP
               valueFrom:
                 fieldRef:
