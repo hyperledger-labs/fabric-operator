@@ -857,6 +857,9 @@ func GetPeer3() *Peer {
 	name := "ibppeer3"
 	cr := &current.IBPPeer{
 		Spec: current.IBPPeerSpec{
+			License: current.License{
+				Accept: true,
+			},
 			Domain:        integration.TestAutomation1IngressDomain,
 			FabricVersion: integration.FabricVersion + "-1",
 		},
