@@ -20,7 +20,7 @@ IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
 
 TAG ?= $(shell git rev-parse --short HEAD)
 ARCH ?= $(shell go env GOARCH)
-GO_VER ?= "1.23.1"
+GO_VER ?= "1.24.3"
 OS = $(shell go env GOOS)
 BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
