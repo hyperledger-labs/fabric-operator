@@ -20,7 +20,7 @@ IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
 
 TAG ?= $(shell git rev-parse --short HEAD)
 ARCH ?= $(shell go env GOARCH)
-GO_VER ?= "1.22.5"
+GO_VER ?= "1.24.3"
 OS = $(shell go env GOOS)
 BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
@@ -139,7 +139,7 @@ unkind:
 # Run integration tests.  Target a specific test package by specifying INT_TEST in the make env.
 # If INT_TEST is unspecified, run ALL tests (slow!!)
 integration-tests:
-	ginkgo -v -failFast -timeout $(INT_TEST_TIMEOUT) ./integration/$(INT_TEST_NAME)
+	ginkgo -v -fail-fast -timeout $(INT_TEST_TIMEOUT) ./integration/$(INT_TEST_NAME)
 
 # Run go fmt against code
 fmt:
