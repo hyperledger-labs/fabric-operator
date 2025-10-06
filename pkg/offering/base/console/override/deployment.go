@@ -202,6 +202,7 @@ func (o *Override) CommonDeployment(instance *current.IBPConsole, deployment *de
 					if set {
 						couchdb.AppendEnvIfMissing("COUCHDB_USER", couchdbUser)
 						couchdb.AppendEnvIfMissing("COUCHDB_PASSWORD", couchdbPassword)
+						couchdbContainer.AppendEnvIfMissing("SKIP_PERMISSIONS_UPDATE", "true")
 					}
 				}
 			}
