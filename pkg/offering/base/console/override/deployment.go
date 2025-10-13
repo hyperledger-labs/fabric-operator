@@ -202,7 +202,6 @@ func (o *Override) CommonDeployment(instance *current.IBPConsole, deployment *de
 					if set {
 						couchdb.AppendEnvIfMissing("COUCHDB_USER", couchdbUser)
 						couchdb.AppendEnvIfMissing("COUCHDB_PASSWORD", couchdbPassword)
-						couchdb.AppendEnvIfMissing("SKIP_PERMISSIONS_UPDATE", "true")
 					}
 				}
 			}
@@ -215,6 +214,7 @@ func (o *Override) CommonDeployment(instance *current.IBPConsole, deployment *de
 			couchdbTag = image.GetTag(arch, defaultimage.CouchDBDigest, images.CouchDBDigest)
 
 		}
+		couchdb.AppendEnvIfMissing("SKIP_PERMISSIONS_UPDATE", "true")
 		couchdb.SetImage(couchdbImage, couchdbTag)
 
 		if resourcesRequest != nil {
