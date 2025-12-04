@@ -361,8 +361,8 @@ github.com/hyperledger/fabric v0.0.0-20240618194258-7c3876255bf0 h1:IWNViWCrLReB
 github.com/hyperledger/fabric v0.0.0-20240618194258-7c3876255bf0/go.mod h1:kNGP0htTW6MAA5Psl/+9utzXGLXh2roCnu/25tnysOE=
 github.com/hyperledger/fabric-amcl v0.0.0-20230602173724-9e02669dceb2 h1:B1Nt8hKb//KvgGRprk0h1t4lCnwhE9/ryb1WqfZbV+M=
 github.com/hyperledger/fabric-amcl v0.0.0-20230602173724-9e02669dceb2/go.mod h1:X+DIyUsaTmalOpmpQfIvFZjKHQedrURQ5t4YqquX7lE=
-github.com/hyperledger/fabric-ca v1.5.13-0.20240620215654-493a48abb873 h1:uRnG/X5dgfToUf0SSG7ynJdqYkshv/YdjZpt3BRAa/s=
-github.com/hyperledger/fabric-ca v1.5.13-0.20240620215654-493a48abb873/go.mod h1:7sQUxfC8u5iiqCEQ11J6HuGW+EsfA4EBKJFJNluoGjY=
+github.com/hyperledger/fabric-ca v1.5.15 h1:55lQb2B/nWjpZZ8Ke/5dczoSh9juHT3OgrUFn640ks0=
+github.com/hyperledger/fabric-ca v1.5.15/go.mod h1:hNlaUH2hxoVHaapBdRPa2paSHaST+TCxbqQ5xNQQYfo=
 github.com/hyperledger/fabric-config v0.1.0 h1:TsR3y5xEoUmXWfp8tcDycjJhVvXEHiV5kfZIxuIte08=
 github.com/hyperledger/fabric-config v0.1.0/go.mod h1:aeDZ0moG/qKvwLjddcqYr8+58/oNaJy3HE0tI01546c=
 github.com/hyperledger/fabric-lib-go v1.1.2 h1:3eHwudGZC5Ex7go5UAzVKhpF34gypPZGfSZksBKLWvE=

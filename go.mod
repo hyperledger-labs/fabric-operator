@@ -10,7 +10,7 @@ require (
 	github.com/go-test/deep v1.0.2
 	github.com/gogo/protobuf v1.3.2
 	github.com/hyperledger/fabric v0.0.0-20240618194258-7c3876255bf0
-	github.com/hyperledger/fabric-ca v1.5.13-0.20240620215654-493a48abb873
+	github.com/hyperledger/fabric-ca v1.5.15
 	github.com/hyperledger/fabric-lib-go v1.1.2
 	github.com/hyperledger/fabric-protos-go v0.3.3
 	github.com/imdario/mergo v0.3.12
