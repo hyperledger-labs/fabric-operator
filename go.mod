@@ -159,6 +159,10 @@ replace (
 )
 
 replace (
+	// Fabric CA v1.5.16 requires idemix APIs that are not compatible with the
+	// previously pinned idemix version. Without this replace, the build fails
+	// due to BCCSP interface mismatches. Pinning all idemix modules to the same
+	// commit ensures consistent dependency resolution.
 	github.com/IBM/idemix => github.com/IBM/idemix v0.0.2-0.20231011101252-a4feda90f3f7
 	github.com/IBM/idemix/bccsp/schemes/aries => github.com/IBM/idemix/bccsp/schemes/aries v0.0.0-20231011101252-a4feda90f3f7
 	github.com/IBM/idemix/bccsp/schemes/weak-bb => github.com/IBM/idemix/bccsp/schemes/weak-bb v0.0.0-20231011101252-a4feda90f3f7
