@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: explorer-db
+spec:
+  selector:
+    matchLabels:
+      app: explorer-db
+  template:
+    metadata:
+      labels:
+        app: explorer-db
+    spec:
+      volumes:
+        - name: fabricfiles
+          persistentVolumeClaim:
+            claimName: mypvc
+        - name: secret-volume
+          secret:
+            secretName: explorer-secret    
+      containers:
+      - name: explorer-db
+        image: hyperledger/explorer-db:latest
+        env:
+          - name: DATABASE_DATABASE
+            value: fabricexplorer
+          - name: DATABASE_USERNAME
+            value: hppoc
+          - name: DATABASE_PASSWORD
+            value: password 
+        resources:
+          limits:
+            memory: "528Mi"
+            cpu: "400m"
+        ports:
+        - containerPort: 5432
+        volumeMounts: 
+            - name: secret-volume
+              readOnly: true
+              mountPath: /organizations
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: explorerdb-service
+spec:
+  selector:
+    app: explorer-db
+  ports:
+  - port: 5432
+    targetPort: 5432
+
