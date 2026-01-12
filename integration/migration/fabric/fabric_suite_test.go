@@ -54,8 +54,8 @@ const (
 	defaultCADef          = "../../../definitions/ca"
 	defaultOrdererDef     = "../../../definitions/orderer"
 	defaultConsoleDef     = "../../../definitions/console"
-	FabricBinaryVersion   = "2.2.3"
-	FabricCABinaryVersion = "1.5.1"
+	FabricBinaryVersion   = "2.5.9"
+	FabricCABinaryVersion = "1.5.12"
 	domain                = "localho.st"
 )
 
