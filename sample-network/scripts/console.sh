@@ -28,10 +28,11 @@ function console_up() {
   wait_for_deployment hlf-console
 
   local console_hostname=${NS}-hlf-console-console
-  local console_url="https://${CONSOLE_USERNAME}:${CONSOLE_PASSWORD}@${console_hostname}.${CONSOLE_DOMAIN}"
+  local console_url="https://${console_hostname}.${CONSOLE_DOMAIN}"
 
   log ""
   log "The Fabric Operations Console is available at ${console_url}"
+  log "Default user is \"${CONSOLE_USERNAME}\" with passworld \"${CONSOLE_PASSWORD}\""
   log ""
 
   # TODO: prepare an FoC bulk JSON import for the test network assets
