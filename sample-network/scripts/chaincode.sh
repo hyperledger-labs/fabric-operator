@@ -17,6 +17,34 @@
 # limitations under the License.
 #
 
+function set_ecr_image_tag() {
+  # converts local "/" separated image name to an appropriate ECR tag used in AWS_ECR_REPO
+  # Example: fabric-samples/asset-transfer-basic/chaincode-java:latest -> asset-transfer-basic_java_latest
+
+  local cc_local_image=$1
+  ECR_IMAGE_TAG=$(python -c 'import sys; p=sys.argv[1]; p=p.split("/")[-3:]; cc=p[1]; lang=p[-1].split("-")[-1]; tag="latest"; print(f"{cc}_{lang}_{tag}")' ${cc_local_image})
+}
+
+function ecr_load_image() {
+  local cc_local_image=$1
+
+  ecr_login      ${AWS_PROFILE} ${AWS_ACCOUNT}
+
+  local aws_ecr="${ECR_RESOURCE}/${AWS_ECR_REPO}"
+
+  set_ecr_image_tag ${cc_local_image}
+
+  CHAINCODE_IMAGE="${aws_ecr}:${ECR_IMAGE_TAG}"
+
+  push_fn "Tag chaincode image for ECR"
+  $CONTAINER_CLI tag ${cc_local_image} ${CHAINCODE_IMAGE}
+  pop_fn
+
+  push_fn "Load chaincode image into ECR"
+  $CONTAINER_CLI push "${CHAINCODE_IMAGE}"
+  pop_fn
+}
+
 # Convenience routine to "do everything" required to bring up a sample CC.
 function deploy_chaincode() {
   local cc_name=$1
@@ -33,8 +61,11 @@ function deploy_chaincode() {
 
   build_chaincode_image   ${cc_folder} ${CHAINCODE_IMAGE}
 
+  # push to container registry
   if [ "${CLUSTER_RUNTIME}" == "kind" ]; then
     kind_load_image       ${CHAINCODE_IMAGE}
+  elif [ "${CLUSTER_RUNTIME}" == "k3s" ] && [ "${CHAINCODE_REGISTRY}" == "ecr" ]; then
+    ecr_load_image        ${CHAINCODE_IMAGE}
   fi
 
   launch_chaincode        ${cc_name} ${CHAINCODE_ID} ${CHAINCODE_IMAGE}
