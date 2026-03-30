@@ -1,18 +1,18 @@
 module github.com/IBM-Blockchain/fabric-operator
 
-go 1.25.0
+go 1.25.8
 
 require (
 	github.com/cloudflare/cfssl v1.4.1
 	github.com/docker/docker v28.3.3+incompatible
-	github.com/go-logr/logr v1.4.1
+	github.com/go-logr/logr v1.4.3
 	github.com/go-logr/zapr v0.4.0
 	github.com/go-test/deep v1.0.2
 	github.com/gogo/protobuf v1.3.2
 	github.com/hyperledger/fabric v0.0.0-20240618194258-7c3876255bf0
 	github.com/hyperledger/fabric-ca v1.5.16
 	github.com/hyperledger/fabric-lib-go v1.1.2
-	github.com/hyperledger/fabric-protos-go v0.3.3
+	github.com/hyperledger/fabric-protos-go v0.3.8-0.20260320144734-ac19bf2e5e52
 	github.com/imdario/mergo v0.3.12
 	github.com/lib/pq v1.8.0
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.2.3
@@ -43,7 +43,7 @@ require (
 )
 
 require (
-	cloud.google.com/go/compute/metadata v0.3.0 // indirect
+	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	github.com/Azure/go-ntlmssp v0.0.0-20221128193559-754e69321358 // indirect
 	github.com/DataDog/zstd v1.5.6 // indirect
 	github.com/IBM/idemix/bccsp/schemes/aries v0.0.0-20231003085036-c4470b87b2d6 // indirect
@@ -131,7 +131,7 @@ require (
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/mod v0.35.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
-	golang.org/x/oauth2 v0.27.0 // indirect
+	golang.org/x/oauth2 v0.34.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/term v0.43.0 // indirect
@@ -139,9 +139,9 @@ require (
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.44.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240528184218-531527333157 // indirect
-	google.golang.org/grpc v1.65.0 // indirect
-	google.golang.org/protobuf v1.36.7 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260319201613-d00831a3d3e7 // indirect
+	google.golang.org/grpc v1.79.3 // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -153,7 +153,6 @@ require (
 )
 
 replace (
-	github.com/go-logr/logr => github.com/go-logr/logr v0.4.0
 	github.com/onsi/ginkgo/v2 => github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega => github.com/onsi/gomega v1.19.0
 )

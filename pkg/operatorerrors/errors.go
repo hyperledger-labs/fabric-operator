@@ -116,9 +116,7 @@ func IsBreakingError(err error, msg string, log logr.Logger) error {
 	}
 	_, breakingError := BreakingErrors[oerr.Code]
 	if breakingError {
-		if log != nil {
-			log.Error(err, fmt.Sprintf("Breaking Error: %s", msg))
-		}
+		log.Error(err, fmt.Sprintf("Breaking Error: %s", msg))
 		return nil
 	}
 	return err

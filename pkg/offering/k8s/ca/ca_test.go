@@ -25,6 +25,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -182,7 +183,7 @@ var _ = Describe("K8s CA", func() {
 			_, err := ca.Reconcile(instance, update)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("Code: 20 - failed to initialize ca: failed to init"))
-			Expect(operatorerrors.IsBreakingError(err, "msg", nil)).NotTo(HaveOccurred())
+			Expect(operatorerrors.IsBreakingError(err, "msg", logr.Discard())).NotTo(HaveOccurred())
 		})
 
 		It("returns an error if pvc manager fails to reconcile", func() {

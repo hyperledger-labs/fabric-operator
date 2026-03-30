@@ -32,6 +32,7 @@ import (
 	k8speer "github.com/IBM-Blockchain/fabric-operator/pkg/offering/k8s/peer"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
 	"github.com/IBM-Blockchain/fabric-operator/version"
+	"github.com/go-logr/logr"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
@@ -220,7 +221,7 @@ var _ = Describe("K8s Peer", func() {
 			_, err := peer.Reconcile(instance, update)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("Code: 22 - failed to initialize peer: open"))
-			Expect(operatorerrors.IsBreakingError(err, "msg", nil)).NotTo(HaveOccurred())
+			Expect(operatorerrors.IsBreakingError(err, "msg", logr.Discard())).NotTo(HaveOccurred())
 		})
 
 		It("does not return an error on a successful reconcile", func() {
