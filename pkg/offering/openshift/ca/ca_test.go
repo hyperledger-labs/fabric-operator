@@ -44,6 +44,7 @@ import (
 	"github.com/IBM-Blockchain/fabric-operator/pkg/offering/openshift/ca/override"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
 	"github.com/IBM-Blockchain/fabric-operator/version"
+	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -178,7 +179,7 @@ var _ = Describe("Openshift CA", func() {
 			_, err := ca.Reconcile(instance, update)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("Code: 20 - failed to initialize ca: failed to init"))
-			Expect(operatorerrors.IsBreakingError(err, "msg", nil)).NotTo(HaveOccurred())
+			Expect(operatorerrors.IsBreakingError(err, "msg", logr.Discard())).NotTo(HaveOccurred())
 		})
 
 		It("returns an error if pvc manager fails to reconcile", func() {
