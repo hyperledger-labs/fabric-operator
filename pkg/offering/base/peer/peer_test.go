@@ -29,6 +29,7 @@ import (
 	"math/big"
 	"time"
 
+	"github.com/go-logr/logr"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 
 	current "github.com/IBM-Blockchain/fabric-operator/api/v1beta1"
@@ -457,7 +458,7 @@ var _ = Describe("Base Peer", func() {
 			_, err := peer.Reconcile(instance, update)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("Code: 22 - failed to initialize peer: open"))
-			Expect(operatorerrors.IsBreakingError(err, "msg", nil)).NotTo(HaveOccurred())
+			Expect(operatorerrors.IsBreakingError(err, "msg", logr.Discard())).NotTo(HaveOccurred())
 		})
 
 		It("returns an error for invalid HSM endpoint", func() {
