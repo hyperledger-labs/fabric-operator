@@ -180,7 +180,7 @@ var _ = Describe("ReconcileIBPConsole", func() {
 			Expect(err).To(HaveOccurred())
 		})
 
-		It("sets the status to error if error occured during IBPConsole reconciliation", func() {
+		It("sets the status to error if error occurred during IBPConsole reconciliation", func() {
 			reconciler.SetStatus(instance, errors.New("ibpconsole error"))
 			Expect(instance.Status.Type).To(Equal(current.Error))
 			Expect(instance.Status.Message).To(Equal("ibpconsole error"))
