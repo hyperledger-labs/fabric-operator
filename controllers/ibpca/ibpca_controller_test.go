@@ -271,7 +271,7 @@ var _ = Describe("ReconcileIBPCA", func() {
 	})
 
 	Context("set status", func() {
-		It("sets the status to error if error occured during IBPCA reconciliation", func() {
+		It("sets the status to error if error occurred during IBPCA reconciliation", func() {
 			reconciler.SetStatus(instance, nil, errors.New("ibpca error"))
 			Expect(instance.Status.Type).To(Equal(current.Error))
 			Expect(instance.Status.Message).To(Equal("ibpca error"))
