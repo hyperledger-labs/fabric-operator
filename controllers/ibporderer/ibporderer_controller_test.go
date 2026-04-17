@@ -176,7 +176,7 @@ var _ = Describe("ReconcileIBPOrderer", func() {
 		})
 
 		Context("set status", func() {
-			It("sets the status to error if error occured during IBPOrderer reconciliation", func() {
+			It("sets the status to error if error occurred during IBPOrderer reconciliation", func() {
 				reconciler.SetStatus(instance, nil, errors.New("ibporderer error"))
 				Expect(instance.Status.Type).To(Equal(current.Error))
 				Expect(instance.Status.Message).To(Equal("ibporderer error"))
