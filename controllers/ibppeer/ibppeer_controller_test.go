@@ -628,7 +628,7 @@ var _ = Describe("ReconcileIBPPeer", func() {
 	})
 
 	Context("set status", func() {
-		It("sets the status to error if error occured during IPBPPeer reconciliation", func() {
+		It("sets the status to error if error occurred during IPBPPeer reconciliation", func() {
 			reconciler.SetStatus(instance, nil, errors.New("ibppeer error"))
 			Expect(instance.Status.Type).To(Equal(current.Error))
 			Expect(instance.Status.Message).To(Equal("ibppeer error"))
