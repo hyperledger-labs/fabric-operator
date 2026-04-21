@@ -53,6 +53,7 @@ import (
 	orderermocks "github.com/IBM-Blockchain/fabric-operator/pkg/offering/base/orderer/mocks"
 	"github.com/IBM-Blockchain/fabric-operator/pkg/operatorerrors"
 	"github.com/IBM-Blockchain/fabric-operator/version"
+	"github.com/go-logr/logr"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/pkg/errors"
@@ -505,7 +506,7 @@ var _ = Describe("Base Orderer Node", func() {
 			_, err := node.Reconcile(instance, update)
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("Code: 21 - failed to initialize orderer node"))
-			Expect(operatorerrors.IsBreakingError(err, "msg", nil)).NotTo(HaveOccurred())
+			Expect(operatorerrors.IsBreakingError(err, "msg", logr.Discard())).NotTo(HaveOccurred())
 		})
 
 		It("returns an error for invalid HSM endpoint", func() {
