@@ -28,7 +28,7 @@ env:
   KUBECONFIG_PATH: /tmp/kubeconfig.yaml
   OPERATOR_NAMESPACE: inttest
   DOCKERCONFIGJSON: ${{ secrets.DOCKERCONFIGJSON }}
-  GO_VER: "1.24"
+  GO_VER: "1.25"
 
 jobs:
   suite:
@@ -54,6 +54,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up go
         uses: actions/setup-go@v3
