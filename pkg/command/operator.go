@@ -207,6 +207,8 @@ func OperatorWithSignal(operatorCfg *oconfig.Config, signalHandler context.Conte
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 	utilruntime.Must(ibpv1beta1.AddToScheme(scheme))
 
+	// #nosec G118 -- Background context is intentional here to ensure cache sync and migration
+	// complete independently of parent context cancellation during operator initialization
 	go func() {
 		runtime.Gosched()
 		mgrSyncContext, mgrSyncContextCancel := context.WithTimeout(context.Background(), 30*time.Second)

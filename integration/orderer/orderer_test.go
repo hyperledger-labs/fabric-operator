@@ -941,7 +941,7 @@ func GetOrderer() (*Orderer, []Orderer) {
 			},
 			ConfigOverride: &runtime.RawExtension{Raw: configBytes},
 			DisableNodeOU:  pointer.Bool(true),
-			FabricVersion:  integration.FabricVersion + "-1",
+			FabricVersion:  integration.FabricVersion24 + "-1",
 		},
 	}
 	cr.Name = name
