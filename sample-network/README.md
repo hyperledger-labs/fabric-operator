@@ -40,6 +40,7 @@ For additional cluster options, see the detailed guidelines for:
 - [fabric-devenv](#vagrant-fabric-devenv): vagrant VM
 - [IKS](#iks)
 - [EKS](#eks)
+- [self-provisioned Kubernetes on AWS + ECR](#self-provisioned-kubernetes-on-aws--ecr)
 - [OCP](#ocp)
 
 
@@ -298,6 +299,44 @@ export TEST_NETWORK_INGRESS_DOMAIN=$(echo $INGRESS_IPADDR | tr -s '.' '-').nip.i
 
 For additional guidelines on configuring ingress and DNS, see [Considerations for Kubernetes Distributions](https://cloud.ibm.com/docs/blockchain-sw-252?topic=blockchain-sw-252-deploy-k8#console-deploy-k8-considerations).
 
+
+### Self-provisioned Kubernetes on AWS + ECR
+
+- This will push the chaincode images to AWS ECR (private authenticated container registry).
+- It will use AWS CLI for ECR related operations like login and push.
+- The same image will then be pulled from ECR by the chaincode deployed in `test-network` k8s namespace.
+
+**Prerequisites**:
+- All steps in [#EKS](#eks).
+- Make sure the AWS profile is configured with the correct AWS region and credentials for [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html).
+  - You could use `AmazonEC2ContainerRegistryFullAccess` for relaxed access, but this is not recommended.
+  - Refer to [ECR related AWS managed policies](https://docs.aws.amazon.com/AmazonECR/latest/userguide/security-iam-awsmanpol.html) for more information.
+- ECR repo as exported below under env var `TEST_NETWORK_AWS_ECR_REPO` exists in the correct region.
+
+And for ECR based container registry, export:
+
+```sh
+export TEST_NETWORK_CHAINCODE_REGISTRY="ecr"
+export TEST_NETWORK_AWS_PROFILE="default"
+export TEST_NETWORK_AWS_ACCOUNT="999999999999"
+export TEST_NETWORK_AWS_ECR_REPO="chaincodes"
+```
+
+For using this ECR registry with Kubernetes, create a secret in `test-network` namespace within your cluster:
+
+```sh
+export AWS_REGION=$(aws configure get region --profile ${TEST_NETWORK_AWS_PROFILE})
+
+kubectl create secret docker-registry regcred \
+  --docker-server="${TEST_NETWORK_AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com" \
+  --docker-username=AWS \
+  --docker-password="$(aws ecr get-login-password --region ${AWS_REGION})" \
+  --namespace=test-network
+```
+
+- Go ahead with the chaincode deployment now.
+- Test it out and make sure your cluster can pull images from the registry.
+  - If not, try mounting the secret as a volume in your deployments manually.
 
 ## Vagrant: fabric-devenv 
 
