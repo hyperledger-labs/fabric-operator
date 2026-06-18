@@ -16,4 +16,4 @@
 # limitations under the License.
 #
 ---
-kubectl -n $NS create rolebinding hlf-operator-rolebinding --clusterrole=hlf-operator-role --group=system:serviceaccounts:test-network --
+kubectl -n $NS create rolebinding hlf-operator-rolebinding --clusterrole=hlf-operator-role --group=system:serviceaccounts:$NS --

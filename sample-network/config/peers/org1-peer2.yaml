@@ -23,7 +23,7 @@ metadata:
 spec:
   version: "${FABRIC_VERSION}"
   domain: "${INGRESS_DOMAIN}"
-  peerExternalEndpoint: "test-network-org1-peer2-peer.${INGRESS_DOMAIN}:443"
+  peerExternalEndpoint: "${NS}-org1-peer2-peer.${INGRESS_DOMAIN}:443"
   license:
     accept: true
   action:
@@ -48,7 +48,7 @@ spec:
     enrollment:
       component:
         caname: ca
-        cahost: "test-network-org1-ca-ca.${INGRESS_DOMAIN}"
+        cahost: "${NS}-org1-ca-ca.${INGRESS_DOMAIN}"
         caport: "443"
         catls:
           cacert: "${ORG1_CA_CERT}"
@@ -56,7 +56,7 @@ spec:
         enrollsecret: "peer2pw"
       tls:
         caname: tlsca
-        cahost: "test-network-org1-ca-ca.${INGRESS_DOMAIN}"
+        cahost: "${NS}-org1-ca-ca.${INGRESS_DOMAIN}"
         caport: "443"
         catls:
           cacert: "${ORG1_CA_CERT}"
