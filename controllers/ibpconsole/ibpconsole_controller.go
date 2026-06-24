@@ -413,8 +413,7 @@ func (r *ReconcileIBPConsole) UpdateFunc(e event.UpdateEvent) bool {
 }
 
 func (r *ReconcileIBPConsole) SaveSpecState(instance *current.IBPConsole) error {
-	// #nosec G117 -- Password field in spec is intentionally marshaled for state tracking
-	data, err := yaml.Marshal(instance.Spec)
+	data, err := yaml.Marshal(instance.Spec) // #nosec G117 -- Password field in spec is intentionally marshaled for state tracking
 	if err != nil {
 		return err
 	}
