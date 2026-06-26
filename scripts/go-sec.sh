@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
-curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOPATH)/bin $RELEASE
+GOSEC_RELEASE="${RELEASE:-latest}"
+curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOPATH)/bin "${GOSEC_RELEASE}"
 
 gosec ./...
