@@ -36,7 +36,7 @@ import (
 var _ = Describe("chaincode launcher", func() {
 	AfterEach(func() {
 		// Set flag if a test falls
-		if CurrentGinkgoTestDescription().Failed {
+		if CurrentSpecReport().Failed() {
 			testFailed = true
 		}
 	})

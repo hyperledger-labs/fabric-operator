@@ -42,7 +42,7 @@ import (
 var _ = Describe("trigger orderer actions", func() {
 	AfterEach(func() {
 		// Set flag if a test falls
-		if CurrentGinkgoTestDescription().Failed {
+		if CurrentSpecReport().Failed() {
 			testFailed = true
 		}
 	})

@@ -71,7 +71,7 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 
 	AfterEach(func() {
 		// Set flag if a test falls
-		if CurrentGinkgoTestDescription().Failed {
+		if CurrentSpecReport().Failed() {
 			testFailed = true
 		}
 	})
@@ -85,7 +85,12 @@ var _ = Describe("Interaction between IBP-Operator and Kubernetes cluster", func
 
 			It("creates a IBPCA custom resource", func() {
 				By("setting the CR status to deploying", func() {
-					Eventually(ca.PollForCRStatus).Should((Equal(current.Deploying)))
+					// Deploying is a transient state on the way to Deployed, and the
+					// operator can pass through it faster than the polling interval, so
+					// a poll is not guaranteed to observe it.  Accept either rather than
+					// requiring the intermediate state to be sampled; the assertions
+					// that follow cover the deployment.
+					Eventually(ca.PollForCRStatus).Should(BeElementOf(current.Deploying, current.Deployed))
 				})
 
 				By("creating a service", func() {

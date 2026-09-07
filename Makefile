@@ -153,8 +153,11 @@ unkind:
 
 # Run integration tests.  Target a specific test package by specifying INT_TEST in the make env.
 # If INT_TEST is unspecified, run ALL tests (slow!!)
+#
+# Not fail-fast: one broken spec should not hide the state of the rest.  With
+# it, a suite reported "Ran 1 of 16 Specs" and said nothing about the other 15.
 integration-tests:
-	ginkgo -v -fail-fast -timeout $(INT_TEST_TIMEOUT) ./integration/$(INT_TEST_NAME)
+	ginkgo -v -timeout $(INT_TEST_TIMEOUT) ./integration/$(INT_TEST_NAME)
 
 # Run go fmt against code
 fmt:
