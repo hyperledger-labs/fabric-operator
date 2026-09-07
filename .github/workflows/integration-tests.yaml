@@ -76,9 +76,35 @@ jobs:
           kubectl kustomize config/crd | kubectl apply -f -
 
       - name: Run ${{ matrix.suite }} integration tests
-        run: make integration-tests
-#        run: |
-#          sleep 360 && kubectl --kubeconfig $KUBECONFIG_PATH describe pods --all-namespaces &
-#          make integration-tests
+        run: |
+          # Each suite deletes its namespace in AfterSuite, so by the time a
+          # later step runs there is nothing left to describe.  Sample the
+          # cluster while the tests run instead, into a file so the sampling
+          # does not bury the test output, and print it only on failure.
+          (
+            set +e
+            while true; do
+              echo "===== $(date -u +%H:%M:%SZ) ====="
+              kubectl --kubeconfig "${KUBECONFIG_PATH}" get pods -A -o wide
+              kubectl --kubeconfig "${KUBECONFIG_PATH}" get pods -A --no-headers \
+                | awk '$4 != "Running" && $4 != "Completed" { print $1, $2 }' \
+                | while read -r ns pod; do
+                    kubectl --kubeconfig "${KUBECONFIG_PATH}" -n "${ns}" describe pod "${pod}"
+                    kubectl --kubeconfig "${KUBECONFIG_PATH}" -n "${ns}" logs "${pod}" \
+                      --all-containers --prefix --tail=50
+                  done
+              sleep 30
+            done
+          ) > /tmp/cluster-state.log 2>&1 &
+          watcher=$!
+          trap 'kill "${watcher}" 2>/dev/null || true' EXIT
+
+          make integration-tests
         env:
           INT_TEST_NAME: ${{ matrix.suite }}
+
+      # Only reached when the suite above fails; see the comment there for why
+      # the state is sampled during the run rather than collected afterwards.
+      - name: Cluster state captured during the run
+        if: failure()
+        run: tail -n 1000 /tmp/cluster-state.log

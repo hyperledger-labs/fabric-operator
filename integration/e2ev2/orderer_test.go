@@ -69,7 +69,7 @@ var _ = Describe("orderer", func() {
 
 	AfterEach(func() {
 		// Set flag if a test falls
-		if CurrentGinkgoTestDescription().Failed {
+		if CurrentSpecReport().Failed() {
 			testFailed = true
 		}
 	})
