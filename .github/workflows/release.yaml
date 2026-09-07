@@ -5,10 +5,17 @@ on:
     branches: [v1.*]
   push:
     tags: [v1.*]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build and publish, e.g. v1.0.9-17"
+        required: true
+        type: string
 
 env:
-  # Consumed by the Makefile to derive the image VERSION from the release tag.
-  SEMREV_LABEL: ${{ github.ref_name }}
+  # Consumed by the Makefile to derive the image VERSION.  A tag push publishes
+  # the tag that triggered it; a manual run publishes the tag it was given.
+  SEMREV_LABEL: ${{ inputs.tag || github.ref_name }}
 
 permissions:
   contents: read
@@ -31,8 +38,25 @@ jobs:
       contents: read
       packages: write
     steps:
+      # Guard against a typo becoming a published image tag.  A tag that does
+      # not exist is caught by the checkout below.
+      - name: Check the requested tag
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          case "${TAG}" in
+            v1.*) echo "publishing ${TAG}" ;;
+            *) echo "::error::tag must match v1.* (got '${TAG}')"; exit 1 ;;
+          esac
+
+      # Empty ref means the ref for the triggering event, so tag pushes and pull
+      # requests are unaffected; a manual run builds the tag it was given, not
+      # the branch the workflow was dispatched from.
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.tag }}
 
       - name: Build
         run: |
@@ -62,6 +86,9 @@ jobs:
       contents: read
       packages: write
     steps:
+      # Deliberately not the tag being published: this needs the
+      # image-push-manifest target, which older tags predate.  Only the image
+      # names matter here and those come from SEMREV_LABEL, not the source.
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -81,6 +108,9 @@ jobs:
   create-release:
     name: Create GitHub Release
     needs: [manifest]
+    # Only for a tag push.  A manual run republishes images for a tag that has
+    # already been released, and must not rewrite its release notes.
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: write
