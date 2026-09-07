@@ -153,6 +153,10 @@ require (
 )
 
 replace (
+	// klog v2.8.0 and controller-runtime v0.9.0 are written against logr v0,
+	// where Logger is an interface and compares to nil.  logr v1 made it a
+	// struct, so raising it here stops those two compiling.
+	github.com/go-logr/logr => github.com/go-logr/logr v0.4.0
 	github.com/onsi/ginkgo/v2 => github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega => github.com/onsi/gomega v1.19.0
 )
