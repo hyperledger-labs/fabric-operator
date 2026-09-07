@@ -20,6 +20,8 @@ IMAGE ?= ghcr.io/hyperledger-labs/fabric-operator
 
 TAG ?= $(shell git rev-parse --short HEAD)
 ARCH ?= $(shell go env GOARCH)
+# Architectures combined into the multi-architecture manifest lists.
+ARCHS ?= amd64 arm64
 GO_VER ?= "1.24.3"
 OS = $(shell go env GOOS)
 BUILD_DATE = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -57,6 +59,19 @@ image-push:
 
 image-push-latest:
 	docker push $(IMAGE):latest-$(ARCH)
+
+# Combine the per-architecture images into multi-architecture manifest lists.
+#
+# The children of each list are the individually tagged per-architecture images
+# built above, so they are never left untagged in the registry.  Pushing a
+# multi-platform image in a single step instead leaves its children untagged,
+# where registry cleanup of untagged package versions deletes them and leaves
+# the tag resolving to a manifest list whose children 404 on pull.
+image-push-manifest:
+	docker buildx imagetools create -t $(IMAGE):$(VERSION) $(ARCHS:%=$(IMAGE):$(VERSION)-%)
+
+image-push-manifest-latest:
+	docker buildx imagetools create -t $(IMAGE):latest $(ARCHS:%=$(IMAGE):latest-%)
 
 #######################################
 #### part of autogenerate makefile ####
