@@ -26,15 +26,18 @@ on:
   workflow_dispatch:
 
 env:
-  GO_VER: "1.25"
+  # controller-tools v0.21.0, used by "make test" via controller-gen, requires
+  # go >= 1.26.0.  setup-go sets GOTOOLCHAIN=local, so the toolchain named here
+  # is the one that runs; it is not silently upgraded to satisfy a dependency.
+  GO_VER: "1.26"
 
 jobs:
   make-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: ${{ env.GO_VER }}
       - name: license header checks
