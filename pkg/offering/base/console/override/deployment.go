@@ -380,7 +380,7 @@ func (o *Override) CreateCouchdbContainer() container.Container {
 			},
 		},
 		LivenessProbe: &corev1.Probe{
-			Handler: corev1.Handler{
+			ProbeHandler: corev1.ProbeHandler{
 				TCPSocket: &corev1.TCPSocketAction{
 					Port: intstr.FromInt(5984),
 				},
@@ -390,7 +390,7 @@ func (o *Override) CreateCouchdbContainer() container.Container {
 			FailureThreshold:    5,
 		},
 		ReadinessProbe: &corev1.Probe{
-			Handler: corev1.Handler{
+			ProbeHandler: corev1.ProbeHandler{
 				TCPSocket: &corev1.TCPSocketAction{
 					Port: intstr.FromInt(5984),
 				},

@@ -188,8 +188,8 @@ func (o *Override) CreateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 	peerContainer.AppendEnvIfMissingOverrideIfPresent("CORE_PEER_TLS_ROOTCERT_FILE", certsData)
 
 	// Change the legacy LivenessProbe from /settings endpoint to tcp port 8080
-	if grpcwebContainer.LivenessProbe.Handler.TCPSocket == nil {
-		grpcwebContainer.LivenessProbe.Handler = corev1.Handler{
+	if grpcwebContainer.LivenessProbe.ProbeHandler.TCPSocket == nil {
+		grpcwebContainer.LivenessProbe.ProbeHandler = corev1.ProbeHandler{
 			TCPSocket: &corev1.TCPSocketAction{
 				Port: intstr.FromInt(8080),
 			},
@@ -197,8 +197,8 @@ func (o *Override) CreateDeployment(instance *current.IBPPeer, k8sDep *appsv1.De
 	}
 
 	// Change the legacy ReadinessProbe from /settings endpoint to tcp port 8080
-	if grpcwebContainer.ReadinessProbe.Handler.TCPSocket == nil {
-		grpcwebContainer.ReadinessProbe.Handler = corev1.Handler{
+	if grpcwebContainer.ReadinessProbe.ProbeHandler.TCPSocket == nil {
+		grpcwebContainer.ReadinessProbe.ProbeHandler = corev1.ProbeHandler{
 			TCPSocket: &corev1.TCPSocketAction{
 				Port: intstr.FromInt(8080),
 			},
