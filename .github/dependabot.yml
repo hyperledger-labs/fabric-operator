@@ -1,0 +1,62 @@
+# Dependabot configuration.
+#
+# Each ecosystem is checked once a week.  Updates are batched into one pull
+# request per ecosystem, with security updates and ordinary version updates
+# kept in separate pull requests so that a security fix is never held up by
+# an unrelated version bump.
+#
+# Actions in .github/workflows are pinned to commit SHAs with a trailing
+# version comment; Dependabot updates both the SHA and the comment together.
+#
+# Note that go.mod carries replace directives (logr, ginkgo, gomega, idemix)
+# that override any require-line bump Dependabot proposes for those modules.
+
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      github-actions-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
+
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      gomod-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      gomod-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      docker-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      docker-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
