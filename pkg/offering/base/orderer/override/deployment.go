@@ -115,8 +115,8 @@ func (o *Override) CreateDeployment(instance *current.IBPOrderer, k8sDep *appsv1
 	}
 
 	// Change the legacy LivenessProbe from /settings endpoint to tcp port 8080
-	if grpcWeb.LivenessProbe.Handler.TCPSocket == nil {
-		grpcWeb.LivenessProbe.Handler = corev1.Handler{
+	if grpcWeb.LivenessProbe.ProbeHandler.TCPSocket == nil {
+		grpcWeb.LivenessProbe.ProbeHandler = corev1.ProbeHandler{
 			TCPSocket: &corev1.TCPSocketAction{
 				Port: intstr.FromInt(8080),
 			},
@@ -124,8 +124,8 @@ func (o *Override) CreateDeployment(instance *current.IBPOrderer, k8sDep *appsv1
 	}
 
 	// Change the legacy ReadinessProbe from /settings endpoint to tcp port 8080
-	if grpcWeb.ReadinessProbe.Handler.TCPSocket == nil {
-		grpcWeb.ReadinessProbe.Handler = corev1.Handler{
+	if grpcWeb.ReadinessProbe.ProbeHandler.TCPSocket == nil {
+		grpcWeb.ReadinessProbe.ProbeHandler = corev1.ProbeHandler{
 			TCPSocket: &corev1.TCPSocketAction{
 				Port: intstr.FromInt(8080),
 			},
