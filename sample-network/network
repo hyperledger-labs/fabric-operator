@@ -91,6 +91,11 @@ context CONSOLE_IMAGE_LABEL       latest
 context DEPLOYER_IMAGE            ghcr.io/ibm-blockchain/fabric-deployer
 context DEPLOYER_IMAGE_LABEL      latest-amd64
 
+context AWS_PROFILE               default
+context AWS_ACCOUNT               999999999999
+context AWS_ECR_REPO              chaincodes
+context CHAINCODE_REGISTRY        default
+
 export FABRIC_OPERATOR_IMAGE=${OPERATOR_IMAGE}:${OPERATOR_IMAGE_LABEL}
 export FABRIC_CONSOLE_IMAGE=${CONSOLE_IMAGE}:${CONSOLE_IMAGE_LABEL}
 export FABRIC_DEPLOYER_IMAGE=${DEPLOYER_IMAGE}:${DEPLOYER_IMAGE_LABEL}
@@ -142,6 +147,7 @@ function print_help() {
 . scripts/test_network.sh
 . scripts/channel.sh
 . scripts/chaincode.sh
+. scripts/aws_ecr.sh
 
 # check for kind, kubectl, etc.
 check_prereqs
