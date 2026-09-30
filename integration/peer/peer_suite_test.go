@@ -47,8 +47,8 @@ func TestPeer(t *testing.T) {
 }
 
 const (
-	FabricBinaryVersion   = "2.2.3"
-	FabricCABinaryVersion = "1.5.1"
+	FabricBinaryVersion   = "2.5.9"
+	FabricCABinaryVersion = "1.5.12"
 	peerAdminUsername     = "peer-admin"
 	peerUsername          = "peer"
 )
