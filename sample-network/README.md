@@ -12,20 +12,47 @@ Feedback, comments, questions, etc. at Discord : [#fabric-kubernetes](https://di
 
 ![sample-network](../docs/images/fabric-operator-sample-network.png)
 
-## Prerequisites:
+## Essential Setup
 
-### General
+### Clone this repo
+
+Remeber to clone this repo and change to the `sample-network` directory
+
+```shell
+git clone https://github.com/hyperledger-labs/fabric-operator.git
+cd fabric-operator/sample-network
+```
+
+### Required Tools
+
+If you don't have these already, please install these first.
 
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [jq](https://stedolan.github.io/jq/)
 - [envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html) (`brew install gettext` on OSX)
-- [k9s](https://k9scli.io) (recommended)
-- Fabric binaries (peer, osnadmin, etc.) will be installed into the local `bin` folder.  Add these to your PATH:
 
+Note that the Fabric binaries (peer, osnadmin, etc.) will be installed for you into a local `bin` folder.  These should be added to your PATH:
 ```shell
 export PATH=$PWD:$PWD/bin:$PATH
 ```
 
+### Optional Tools
+
+These are optional but strongly recommended; especially if you want to run a local cluster.
+
+- [kind](https://kind.sigs.k8s.io/) if you want to create a cluster locally, see below for other options
+- [k9s](https://k9scli.io) (recommended, but not essential)
+- [just](https://github.com/casey/just#installation) to run all the comamnds here directly
+
+If you've run this tutorial before, there is a `justfile` that can used as a helpful 'cheatsheet' of the commands. If you have `just` installed then a `just everything` will setup everything!
+For all the available recipies just run `just`
+```shell
+Available recipes:
+    cluster    # Starts and configures a local KIND cluster
+    everything # Cluster and Fabric Network
+    network    # Installs and configures a sample Fabric Network
+    unkind     # Removes the local cluster
+```
 
 ### Kubernetes
 
@@ -63,9 +90,7 @@ export TEST_NETWORK_INGRESS_DOMAIN=test-network.example.com
 For additional guidelines on configuring ingress and DNS, see [Considerations for Kubernetes Distributions](https://cloud.ibm.com/docs/blockchain-sw-252?topic=blockchain-sw-252-deploy-k8#console-deploy-k8-considerations).
 
 
-
-
-## Sample Network
+## Starting the Sample Network
 
 Install the Nginx controller and Fabric CRDs:
 ```shell
@@ -82,8 +107,7 @@ Explore Kubernetes `Pods`, `Deployments`, `Services`, `Ingress`, etc.:
 kubectl -n test-network get all
 ```
 
-
-## Chaincode
+## Deploying Chaincode
 
 In the examples below, the `peer` binary will be used to invoke smart contracts on the org1-peer1 ledger.  Set the CLI context with:
 ```shell
