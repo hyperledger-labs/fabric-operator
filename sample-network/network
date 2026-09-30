@@ -49,6 +49,7 @@ context CLUSTER_IMAGE             kindest/node:v1.25.3  # Pin k8s to v1.25.x
 context KUBE_DNS_DOMAIN           ${NS}.svc.cluster.local
 context INGRESS_DOMAIN            localho.st
 context COREDNS_DOMAIN_OVERRIDE   true
+context PROMETHEUS_MONITORING     false
 context LOG_FILE                  network.log
 context DEBUG_FILE                network-debug.log
 context LOG_ERROR_LINES           1

@@ -38,10 +38,6 @@ function channel_command_group() {
 }
 
 function channel_up() {
-  set -x
-
-  enroll_org_admins
-
   create_channel_msp
   create_genesis_block
 
@@ -120,6 +116,7 @@ function enroll_org_admin() {
   CA_URL=https://${CA_AUTH}@${CA_HOST}:${CA_PORT}
 
   jq -r .tls.cert $CONNECTION_PROFILE | base64 -d >& $CA_DIR/tls-cert.pem
+  jq -r .tlsca.signcerts $CONNECTION_PROFILE | base64 -d >& $CA_DIR/tlsca-signcert.pem
 
   # enroll the admin user
   FABRIC_CA_CLIENT_HOME=${ORG_ADMIN_DIR} fabric-ca-client enroll --url ${CA_URL} --tls.certfiles ${CA_DIR}/tls-cert.pem

@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: org0-orderersnode2
+  namespace: monitoring
+spec:
+  namespaceSelector:
+    # todo: establish RBAC for visibility from system:serviceaccount:monitoring:prometheus-k8s
+    matchNames:
+      - ${NS}
+  selector:
+    matchLabels:
+      app: org0-orderersnode2
+  endpoints:
+    - port: operations
+      scheme: https
+
+      # The operations /metrics endpoint is secured by mTLS, and must be presented with a client certificate
+      # and key signed by the org CA.  In this example we will use the org admin TLS enrollment to connect
+      # to the endpoint. See https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-monitoring-prometheus
+      # for an example of creating a custom org enrollment for external monitors via ingress.
+      #
+      # tlsca-signcert.pem : temp/cas/$org-ca/tlsca-signcert.pem
+      # cert.pem : temp/enrollments/$org/users/org0admin/tls/signcerts/cert.pem
+      # key.pem : temp/enrollments/$org/users/org0admin/tls/keystore/key.pem
+      tlsConfig:
+        serverName: org0-orderersnode2
+        ca:
+          secret:
+            name: org0-servicemonitor-tls-secret
+            key: tlsca-signcert.pem
+        cert:
+          secret:
+            name: org0-servicemonitor-tls-secret
+            key: cert.pem
+        keySecret:
+          name: org0-servicemonitor-tls-secret
+          key: key.pem
+
+
